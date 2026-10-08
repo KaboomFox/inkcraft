@@ -35,10 +35,10 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-3c8636a7.js";
+            window.path_to_searchindex_js = "../../searchindex-aa589e80.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../../toc-518007dc.js"></script>
+        <script src="../../toc-631d94b1.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -181,38 +181,51 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="your-first-sew-out-on-a-brother"><a class="header" href="#your-first-sew-out-on-a-brother">Your first sew-out on a Brother</a></h1>
-<blockquote>
-<p><strong>Status: planned for M1.</strong> This tutorial is written ahead of the code so the first milestone has a
-clear finish line. Commands below will work once <code>stitch testsheet</code> ships (roadmap step M1.8).</p>
-</blockquote>
-<p>You will sew StitchCraft’s orientation and scale sheet (TS-01) on a Brother machine with a 200 × 200 mm
-hoop and check that size and direction are exactly right.</p>
+<p>You will sew StitchCraft’s orientation and scale sheet, TS-01, on a Brother machine with a 200 × 200 mm
+hoop, and check that its size and direction are exactly right. It takes about twenty minutes.</p>
 <h2 id="you-need"><a class="header" href="#you-need">You need</a></h2>
 <ul>
 <li>A Brother embroidery machine that reads PES files from a USB stick, and its 200 × 200 mm hoop.</li>
 <li>Medium-weight woven cotton, medium tear-away stabilizer, a 75/11 embroidery needle, 40 wt polyester
-thread, white bobbin thread.</li>
-<li>A ruler with millimetres.</li>
+thread (black shows the lines best), white bobbin thread.</li>
+<li>A ruler or calipers with millimetres.</li>
 </ul>
-<h2 id="1-generate-the-file"><a class="header" href="#1-generate-the-file">1. Generate the file</a></h2>
+<h2 id="1-write-the-file"><a class="header" href="#1-write-the-file">1. Write the file</a></h2>
 <pre><code class="language-console">$ stitch testsheet TS-01 --profile brother-200x200 -o TS-01.pes
+TS-01 · Orientation and scale
+  file      TS-01.pes (PES v1, 1587 bytes)
+  sha256    854cde9f533e3b6567afb570a0eb3d4547e7813f5649da97d27be104f8cd18c6
+  profile   brother-200x200 (Brother, 200 × 200 mm hoop)
+  size      120.0 × 120.0 mm
+  stitches  274 stitches, 7 jumps, 7 trims, 0 colour changes, 0 stops
+  threads   1. Black (#000000), shown as Brother PEC 20 "Black"
+after sewing, check:
+  - The F reads normally: not mirrored, not upside down, not turned.
+  - Each arm of the cross measures 100.0 ± 0.5 mm end to end, horizontally and vertically.
+  - The corner squares measure 10.0 mm on every side.
+  - Ticks are 10 mm apart; the long ticks mark the ends and the centre.
 </code></pre>
-<p>StitchCraft prints the file’s checksum, stitch count, colours and the expected sewing time, and writes
-<code>TS-01-expected.png</code> showing what you should get.</p>
+<p>That is real output: this page is regenerated from StitchCraft itself, so the checksum is the one your
+file will have. The checksum is how a sew-out report names exactly the bytes that were sewn. Every test
+sheet is in the <a href="../reference/test-sheets.html">test sheets reference</a>; <code>stitch testsheet --list</code> lists
+them too.</p>
 <h2 id="2-load-it-on-the-machine"><a class="header" href="#2-load-it-on-the-machine">2. Load it on the machine</a></h2>
-<p>Copy <code>TS-01.pes</code> to a USB stick, plug it into the machine and select the design. Check the machine shows
-it at about 100 × 100 mm and the “F” reads correctly on the screen.</p>
+<p>Copy <code>TS-01.pes</code> to a USB stick, plug it into the machine and select the design. The machine should show
+it at 120 × 120 mm, with an upright “F” in the top-left quarter. If it does not list the file at all,
+stop here and report that — it is the most important thing this sheet tests.</p>
 <h2 id="3-hoop-and-sew"><a class="header" href="#3-hoop-and-sew">3. Hoop and sew</a></h2>
-<p>Hoop the fabric and stabilizer drum-tight, attach the hoop, and sew.</p>
+<p>Hoop the fabric and stabilizer drum-tight, centre the design, attach the hoop, and sew. The machine sews
+the cross first, then the “F”, then the four corner squares, trimming between parts if it can.</p>
 <h2 id="4-check"><a class="header" href="#4-check">4. Check</a></h2>
 <ul>
-<li>The “F” is not mirrored or rotated.</li>
-<li>The long lines measure 100.0 ± 0.5 mm in both directions.</li>
-<li>The corner squares are square.</li>
+<li>The “F” reads normally: not mirrored, not upside down, not turned.</li>
+<li>Each arm of the cross measures 100.0 ± 0.5 mm end to end, horizontally and vertically.</li>
+<li>The corner squares measure 10.0 mm on every side.</li>
+<li>Ticks are 10 mm apart; the long ticks mark the ends and the centre.</li>
 </ul>
 <h2 id="5-tell-us"><a class="header" href="#5-tell-us">5. Tell us</a></h2>
-<p>File a <strong>Sew-out report</strong> on GitHub with front and back photos, a ruler in view, and your measurements
-(<a href="../../plan/machine-testing.html">machine testing</a>).</p>
+<p>File a <strong>Sew-out report</strong> on GitHub with photos of the front and back (a ruler in view), your measurements,
+and anything odd (<a href="../../plan/machine-testing.html">machine testing</a>).</p>
 
                     </main>
 

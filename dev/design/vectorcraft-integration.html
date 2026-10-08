@@ -35,7 +35,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-aa589e80.js";
+            window.path_to_searchindex_js = "../searchindex-476a85b1.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-631d94b1.js"></script>
@@ -200,7 +200,7 @@ below are to that commit; the <a href="compatibility-gate.html">compatibility ga
 <tr><td>Commands</td><td>Declarative <code>cmd!</code> registry: id, label, menu path, shortcut, params doc, <code>enabled</code>, <code>run</code>; reachable from UI, JSON control channel and MCP</td><td><code>crates/engine/src/cmd/*</code></td></tr>
 <tr><td>Headless CLI</td><td><code>vectorcraft-cli run [--in FILE] [--cmd ID [--params JSON]]... [--export FILE]...</code>, <code>convert</code>, <code>info</code>, <code>commands</code>, <code>mcp</code></td><td><code>apps/vectorcraft-cli/src/main.rs</code></td></tr>
 <tr><td>Control channel</td><td>JSON lines; <code>engine.execute</code>, <code>ui.menu.invoke</code>, <code>ui.dialog.set</code>, <code>ui.click</code>, <code>ui.screenshot {path?}</code> (needs a presented frame), <code>ui.render {path?, scale?}</code> (headless artboard render)</td><td><code>crates/ui-egui/src/control.rs</code></td></tr>
-<tr><td>Releases</td><td>Tags <code>v0.1.0</code> … <code>v0.6.0</code>; pushing the <code>release</code> branch drafts a GitHub Release; SemVer pre-releases (<code>-rc.1</code>) are flagged as pre-releases</td><td><code>.github/workflows/release.yml</code></td></tr>
+<tr><td>Releases</td><td>Tags <code>v0.1.0</code> … <code>v0.7.0</code>; pushing the <code>release</code> branch drafts a GitHub Release; SemVer pre-releases (<code>-rc.1</code>) are flagged as pre-releases</td><td><code>.github/workflows/release.yml</code></td></tr>
 </tbody>
 </table>
 </div>

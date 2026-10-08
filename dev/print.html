@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-aa589e80.js";
+            window.path_to_searchindex_js = "searchindex-476a85b1.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-631d94b1.js"></script>
@@ -2293,7 +2293,7 @@ below are to that commit; the <a href="#vectorcraft-compatibility-gate">compatib
 <tr><td>Commands</td><td>Declarative <code>cmd!</code> registry: id, label, menu path, shortcut, params doc, <code>enabled</code>, <code>run</code>; reachable from UI, JSON control channel and MCP</td><td><code>crates/engine/src/cmd/*</code></td></tr>
 <tr><td>Headless CLI</td><td><code>vectorcraft-cli run [--in FILE] [--cmd ID [--params JSON]]... [--export FILE]...</code>, <code>convert</code>, <code>info</code>, <code>commands</code>, <code>mcp</code></td><td><code>apps/vectorcraft-cli/src/main.rs</code></td></tr>
 <tr><td>Control channel</td><td>JSON lines; <code>engine.execute</code>, <code>ui.menu.invoke</code>, <code>ui.dialog.set</code>, <code>ui.click</code>, <code>ui.screenshot {path?}</code> (needs a presented frame), <code>ui.render {path?, scale?}</code> (headless artboard render)</td><td><code>crates/ui-egui/src/control.rs</code></td></tr>
-<tr><td>Releases</td><td>Tags <code>v0.1.0</code> … <code>v0.6.0</code>; pushing the <code>release</code> branch drafts a GitHub Release; SemVer pre-releases (<code>-rc.1</code>) are flagged as pre-releases</td><td><code>.github/workflows/release.yml</code></td></tr>
+<tr><td>Releases</td><td>Tags <code>v0.1.0</code> … <code>v0.7.0</code>; pushing the <code>release</code> branch drafts a GitHub Release; SemVer pre-releases (<code>-rc.1</code>) are flagged as pre-releases</td><td><code>.github/workflows/release.yml</code></td></tr>
 </tbody>
 </table>
 </div>
@@ -4044,7 +4044,7 @@ of code) · 🧵 machine checkpoint · 👤 owner action</p>
 <tr><td>M0.3 ✅</td><td>Workflows: <code>ci.yml</code>, <code>docs.yml</code>, <code>compat.yml</code> (discovery), <code>nightly.yml</code>; templates; Dependabot</td><td>First PR runs green on GitHub</td></tr>
 <tr><td>M0.4 ✅</td><td>mdBook site, design docs, ADRs, this roadmap, machine-testing protocol</td><td><code>mdbook build</code> and the docs check pass</td></tr>
 <tr><td>M0.5 👤 (partly ✅)</td><td>Create the GitHub repository, push, enable Pages (from the <code>gh-pages</code> branch) and branch protection with required checks <code>ci</code> and <code>docs</code>; replace <code>OWNER</code> in <code>CODEOWNERS</code> and <code>Cargo.toml</code> and add a contact to <code>CODE_OF_CONDUCT.md</code>; create the labels <code>golden-change</code>, <code>docs:refresh-shots</code>, <code>upstream-canary</code>, <code>upstream-prerelease</code>, <code>sewout</code>, <code>sewout:pass</code>, <code>sewout:tune</code>, <code>sewout:bug</code>, <code>good first issue</code></td><td>A test PR cannot merge while a check is red</td></tr>
-<tr><td>M0.6 🧪</td><td>VectorCraft “hello” plug-in: identity live effect built in CI for <code>wasm32-unknown-unknown</code>; Level A contract test against <code>vectorcraft-plugins</code> v0.6.0; measure fuel per output byte</td><td>Contract test green in <code>compat.yml</code>; budget numbers recorded in the integration doc</td></tr>
+<tr><td>M0.6 🧪</td><td>VectorCraft “hello” plug-in: identity live effect built in CI for <code>wasm32-unknown-unknown</code>; Level A contract test against the pinned stable <code>vectorcraft-plugins</code> (v0.6.0, now v0.7.0), <code>release</code> and <code>main</code>; measure fuel per output byte</td><td>Contract test green in <code>compat.yml</code> (done: green on every track, 2026-10-08); budget numbers recorded in the integration doc (open)</td></tr>
 <tr><td>M0.7 🧪</td><td>Geometry spike (<a href="#adr-0005-geometry-stack">ADR-0005</a> criteria)</td><td>ADR-0005 accepted or revised</td></tr>
 <tr><td>M0.8 🧪</td><td>Headless VectorCraft window in CI (Xvfb + Mesa) taking <code>ui.screenshot</code> twice with identical pixels</td><td>Decision recorded in the docs pipeline page</td></tr>
 </tbody>

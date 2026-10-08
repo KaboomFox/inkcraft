@@ -35,7 +35,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-0449c423.js";
+            window.path_to_searchindex_js = "../searchindex-3c8636a7.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-518007dc.js"></script>
@@ -203,7 +203,7 @@ so the rules hold without anyone having to remember them. Most are adopted from 
 <tr><td><strong>Clean room</strong></td><td>No GPL/AGPL licence text or Ink/Stitch source paths in code, fixtures or tests</td><td><code>xtask/src/cleanroom.rs</code></td><td><code>cargo xtask cleanroom</code> · CI</td></tr>
 <tr><td>Docs</td><td>Generated pages fresh, links and anchors valid, mentioned <code>cargo xtask</code> commands exist, ids exist</td><td><code>xtask/src/docs.rs</code></td><td><code>cargo xtask docs --check</code> · CI</td></tr>
 <tr><td>Docs images</td><td>Every image declared in <code>docs/shots.toml</code>, with alt text, and regenerating to the committed file</td><td><code>xtask/src/shots.rs</code></td><td><code>cargo xtask shots --check</code> · CI</td></tr>
-<tr><td>Conformance</td><td>Requirement/case consistency; all cases pass</td><td><code>xtask/src/conformance.rs</code></td><td><code>cargo xtask conformance</code> · CI</td></tr>
+<tr><td>Conformance</td><td>Requirement/case consistency; all cases pass; changed goldens need the <code>golden-change</code> label and a changelog line</td><td><code>xtask/src/conformance/</code>, <code>ci.yml</code>, <code>goldens.yml</code></td><td><code>cargo xtask conformance</code> · CI</td></tr>
 <tr><td>Dependencies</td><td>Licence allow-list (GPL family denied), advisories, duplicates, sources</td><td><code>deny.toml</code></td><td>CI (<code>cargo-deny</code>)</td></tr>
 <tr><td>Spelling</td><td>Typos in code, docs, commit-facing text</td><td><code>typos.toml</code></td><td>CI</td></tr>
 <tr><td>MSRV</td><td>Builds on the declared <code>rust-version</code></td><td>workspace <code>Cargo.toml</code></td><td>CI</td></tr>

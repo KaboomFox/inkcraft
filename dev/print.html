@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-0449c423.js";
+            window.path_to_searchindex_js = "searchindex-3c8636a7.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-518007dc.js"></script>
@@ -2440,15 +2440,39 @@ rationale = "Ink/Stitch #3395: compensation by buffering closed deliberate gaps.
 milestone = "M5"
 status = "planned"        # planned | active | retired
 </code></pre>
-<p>Rules, enforced by <code>cargo xtask conformance --check</code> in CI:</p>
+<p>Rules, enforced in CI:</p>
 <ul>
-<li>ids are unique and never reused; retired requirements stay in the file;</li>
-<li>an <code>active</code> requirement must have at least one passing case;</li>
-<li>a milestone cannot be closed while one of its requirements is <code>planned</code>;</li>
+<li>ids are unique and never reused; retired requirements stay in the file (<code>--check</code>);</li>
+<li>every case names existing requirements, and an <code>active</code> requirement has at least one case (<code>--check</code>)
+that passes (the run);</li>
+<li>a milestone cannot be closed while one of its requirements is <code>planned</code> (review);</li>
 <li>docs that mention a <code>REQ-…</code> id must refer to an existing one (part of <code>cargo xtask docs --check</code>).</li>
 </ul>
 <h2 id="cases"><a class="header" href="#cases">Cases</a></h2>
-<p><code>conformance/cases/&lt;area&gt;/&lt;name&gt;.toml</code>:</p>
+<p>Cases come in two forms, and the report treats them alike.</p>
+<p><strong>Rust tests named after a requirement.</strong> A test function named <code>req_&lt;area&gt;_&lt;nnn&gt;_&lt;what&gt;</code> is a case for
+<code>REQ-&lt;AREA&gt;-&lt;NNN&gt;</code>: <code>req_plan_002_stitch_lengths</code> proves <code>REQ-PLAN-002</code>, <code>req_fill_tat_006_gap_preserved</code>
+would prove <code>REQ-FILL-TAT-006</code>. The name is the link, so there is no list to keep in sync; <code>--check</code> finds
+them by scanning the source and rejects a name that points at no requirement. Use them for rules best
+shown with small hand-built inputs — an invariant’s violating and passing examples, a palette’s spot
+checks.</p>
+<p><strong>Data cases</strong>, <code>conformance/cases/&lt;area&gt;/&lt;name&gt;.toml</code>: an input, a profile and expectations, run by the
+suite in-process. Unknown fields are errors, so a typo cannot silently switch a check off. M1 has the
+<code>testsheet</code> kind:</p>
+<pre><code class="language-toml">id = "ts-10b"
+requirements = ["REQ-PLAN-001", "REQ-PLAN-002", "REQ-PLAN-003", "REQ-PLAN-005", "REQ-PLAN-006", "REQ-PRF-002", "REQ-FMT-001"]
+kind = "testsheet"
+sheet = "TS-10B"
+profile = "brother-200x200"
+
+[expect]
+size_mm = [190.0, 150.0]
+diagnostics = ["SC-W0702"]                       # exactly these codes, no others
+golden = ["golden/testsheets/TS-10B.pes"]        # byte for byte; the format comes from the extension
+</code></pre>
+<p>The plan invariants run on the sheet’s plan before anything else. The golden files are the very bytes
+sewn at the machine checkpoint, so a change to how a sheet sews cannot slip through unnoticed.</p>
+<p>From M3, <code>design</code> cases take an SVG or JSON design and parameters, and check generator properties:</p>
 <pre><code class="language-toml">id = "fill-tatami-gap-preserved"
 requirements = ["REQ-FILL-TAT-006", "REQ-FILL-TAT-007"]
 input = "fixtures/fill/c-shape-gap-1mm.svg"     # or an inline design
@@ -2519,16 +2543,22 @@ L4 of the issues review). Starts in M8.</p>
 linked from the requirements it validates (<code>physical = ["MC-1"]</code>), and a profile value can change only
 with such a record.</p>
 <h2 id="the-runner-and-its-report"><a class="header" href="#the-runner-and-its-report">The runner and its report</a></h2>
-<p><code>cargo xtask conformance</code> (also <code>stitch conformance run</code> for users who want to validate a machine
-profile) runs all cases and writes <code>target/conformance/</code>:</p>
+<p><code>cargo xtask conformance</code> runs every data case in-process and every Rust-test case through one <code>cargo test</code>, then writes <code>target/conformance/</code>:</p>
 <ul>
-<li><code>report.md</code> — the requirement × case matrix, failures first; posted to the PR as the job summary;</li>
-<li><code>report.json</code> — machine-readable results, consumed by the docs (requirement pages show their status);</li>
-<li><code>hashes.json</code> — output hashes for the <a href="#cross-platform-check">cross-platform determinism</a> job;</li>
-<li><code>diffs/</code> — for failing golden cases, before/after stitch renders and a side-by-side PNG.</li>
+<li><code>report.md</code> — the requirement × case matrix, failures first, requirements nobody tests yet folded
+away; in GitHub Actions it is appended to the job summary, so every pull request shows it;</li>
+<li><code>report.json</code> — machine-readable results, for the docs (requirement pages will show their status);</li>
+<li><code>hashes.json</code> — one SHA-256 per output, for the <a href="#cross-platform-check">cross-platform determinism</a> job;</li>
+<li>from M2.6, <code>diffs/</code> — for failing golden cases, before/after stitch renders and a side-by-side PNG.</li>
 </ul>
-<p><code>cargo xtask conformance --bless &lt;case&gt;</code> rewrites a golden file; CI refuses changed goldens unless the
-PR also carries the <code>golden-change</code> label and a line in <code>CHANGELOG.md</code>.</p>
+<p>It fails when a case fails or an active requirement has no passing case. <code>--filter &lt;text&gt;</code> runs only the
+cases whose id, test name or requirements contain the text (and skips the “every active requirement”
+rule, since the run is partial). <code>cargo xtask ci</code> runs the whole suite; the docs workflow runs <code>--check</code>.</p>
+<p><code>cargo xtask conformance --bless &lt;case&gt;</code> rewrites a data case’s golden files. CI refuses a pull request
+that changes files under <code>conformance/golden/</code> unless it carries the <code>golden-change</code> label and a line in
+<code>CHANGELOG.md</code>. For the canonical-plan goldens of the format tests, bless with
+<code>STITCHCRAFT_BLESS=1 cargo test -p stitchcraft-formats --test golden</code>. Later, <code>stitch conformance run</code>
+will let users validate a machine profile with the same cases.</p>
 <h2 id="gates"><a class="header" href="#gates">Gates</a></h2>
 <div class="table-wrapper">
 <table>
@@ -2613,7 +2643,7 @@ so the rules hold without anyone having to remember them. Most are adopted from 
 <tr><td><strong>Clean room</strong></td><td>No GPL/AGPL licence text or Ink/Stitch source paths in code, fixtures or tests</td><td><code>xtask/src/cleanroom.rs</code></td><td><code>cargo xtask cleanroom</code> · CI</td></tr>
 <tr><td>Docs</td><td>Generated pages fresh, links and anchors valid, mentioned <code>cargo xtask</code> commands exist, ids exist</td><td><code>xtask/src/docs.rs</code></td><td><code>cargo xtask docs --check</code> · CI</td></tr>
 <tr><td>Docs images</td><td>Every image declared in <code>docs/shots.toml</code>, with alt text, and regenerating to the committed file</td><td><code>xtask/src/shots.rs</code></td><td><code>cargo xtask shots --check</code> · CI</td></tr>
-<tr><td>Conformance</td><td>Requirement/case consistency; all cases pass</td><td><code>xtask/src/conformance.rs</code></td><td><code>cargo xtask conformance</code> · CI</td></tr>
+<tr><td>Conformance</td><td>Requirement/case consistency; all cases pass; changed goldens need the <code>golden-change</code> label and a changelog line</td><td><code>xtask/src/conformance/</code>, <code>ci.yml</code>, <code>goldens.yml</code></td><td><code>cargo xtask conformance</code> · CI</td></tr>
 <tr><td>Dependencies</td><td>Licence allow-list (GPL family denied), advisories, duplicates, sources</td><td><code>deny.toml</code></td><td>CI (<code>cargo-deny</code>)</td></tr>
 <tr><td>Spelling</td><td>Typos in code, docs, commit-facing text</td><td><code>typos.toml</code></td><td>CI</td></tr>
 <tr><td>MSRV</td><td>Builds on the declared <code>rust-version</code></td><td>workspace <code>Cargo.toml</code></td><td>CI</td></tr>
@@ -3766,7 +3796,7 @@ of code) · 🧵 machine checkpoint · 👤 owner action</p>
 <tr><td>M0.2 ✅</td><td><code>cargo xtask</code> gates: <code>ci</code>, <code>layers</code>, <code>docs --check</code>, <code>shots --check</code>, <code>cleanroom</code>, <code>unsafe-audit</code>, <code>filesize</code>, <code>wasm</code>, <code>conformance --check</code>, <code>compat discover</code>/<code>contract</code></td><td><code>cargo xtask ci</code> passes locally</td></tr>
 <tr><td>M0.3 ✅</td><td>Workflows: <code>ci.yml</code>, <code>docs.yml</code>, <code>compat.yml</code> (discovery), <code>nightly.yml</code>; templates; Dependabot</td><td>First PR runs green on GitHub</td></tr>
 <tr><td>M0.4 ✅</td><td>mdBook site, design docs, ADRs, this roadmap, machine-testing protocol</td><td><code>mdbook build</code> and the docs check pass</td></tr>
-<tr><td>M0.5 👤</td><td>Create the GitHub repository, push, enable Pages (from the <code>gh-pages</code> branch) and branch protection with required checks <code>ci</code> and <code>docs</code>; replace <code>OWNER</code> in <code>CODEOWNERS</code> and <code>Cargo.toml</code> and add a contact to <code>CODE_OF_CONDUCT.md</code>; create the labels <code>golden-change</code>, <code>docs:refresh-shots</code>, <code>upstream-canary</code>, <code>upstream-prerelease</code>, <code>sewout</code>, <code>sewout:pass</code>, <code>sewout:tune</code>, <code>sewout:bug</code>, <code>good first issue</code></td><td>A test PR cannot merge while a check is red</td></tr>
+<tr><td>M0.5 👤 (partly ✅)</td><td>Create the GitHub repository, push, enable Pages (from the <code>gh-pages</code> branch) and branch protection with required checks <code>ci</code> and <code>docs</code>; replace <code>OWNER</code> in <code>CODEOWNERS</code> and <code>Cargo.toml</code> and add a contact to <code>CODE_OF_CONDUCT.md</code>; create the labels <code>golden-change</code>, <code>docs:refresh-shots</code>, <code>upstream-canary</code>, <code>upstream-prerelease</code>, <code>sewout</code>, <code>sewout:pass</code>, <code>sewout:tune</code>, <code>sewout:bug</code>, <code>good first issue</code></td><td>A test PR cannot merge while a check is red</td></tr>
 <tr><td>M0.6 🧪</td><td>VectorCraft “hello” plug-in: identity live effect built in CI for <code>wasm32-unknown-unknown</code>; Level A contract test against <code>vectorcraft-plugins</code> v0.6.0; measure fuel per output byte</td><td>Contract test green in <code>compat.yml</code>; budget numbers recorded in the integration doc</td></tr>
 <tr><td>M0.7 🧪</td><td>Geometry spike (<a href="#adr-0005-geometry-stack">ADR-0005</a> criteria)</td><td>ADR-0005 accepted or revised</td></tr>
 <tr><td>M0.8 🧪</td><td>Headless VectorCraft window in CI (Xvfb + Mesa) taking <code>ui.screenshot</code> twice with identical pixels</td><td>Decision recorded in the docs pipeline page</td></tr>
@@ -3781,15 +3811,15 @@ of code) · 🧵 machine checkpoint · 👤 owner action</p>
 <tr><th>Step</th><th>Deliverable</th><th>Done when</th></tr>
 </thead>
 <tbody>
-<tr><td>M1.1</td><td><code>stitchcraft-core</code>: <code>Budget</code> and the diagnostics model (<code>Mm</code>, <code>Point</code>, <code>math</code> and <code>SplitMix64</code> with frozen reference values are already in the bootstrap)</td><td>unit tests; budget exhaustion is a diagnostic</td></tr>
-<tr><td>M1.2</td><td><code>stitchcraft-plan</code>: <code>Stitch</code>, <code>StitchKind</code>, <code>ColorBlock</code>, <code>StitchPlan</code>; invariant checker (<code>REQ-PLAN-001..007</code>)</td><td>each invariant has a violating and a passing case</td></tr>
-<tr><td>M1.3</td><td>Machine profiles + <code>brother-200x200</code>; hoop and comfort diagnostics <code>SC-E0701</code>/<code>SC-W0702</code> with rotate hint</td><td><code>REQ-PRF-001</code>, <code>REQ-PRF-002</code> active</td></tr>
-<tr><td>M1.4</td><td>Quantization (absolute, round-half-even); PEC stitch encoder with spec vectors</td><td><code>REQ-FMT-002</code> partial; encoder unit tests</td></tr>
-<tr><td>M1.5</td><td>PES v1 writer: header, PEC header, palette indices, thumbnails</td><td>golden files (<code>REQ-FMT-001</code>)</td></tr>
-<tr><td>M1.6</td><td>Brother PEC palette table + CIEDE2000 nearest colour</td><td><code>REQ-THREAD-001</code> spot checks</td></tr>
-<tr><td>M1.7</td><td>DST writer (header, ternary records, jump splitting, commands)</td><td>golden files; <code>REQ-FMT-007</code></td></tr>
-<tr><td>M1.8</td><td><code>stitch testsheet &lt;TS-xx&gt; --profile … -o file</code> (and <code>--list</code>), <code>stitch profiles</code>, <code>stitch explain</code>; the CLI moves to <code>clap</code> (<code>stitch inspect</code> needs the readers: M2.1)</td><td><code>trycmd</code> examples in the docs</td></tr>
-<tr><td>M1.9</td><td>Conformance runner v1: requirements × cases matrix, L0 + L1 goldens, job summary</td><td>report visible on PRs</td></tr>
+<tr><td>M1.1 ✅</td><td><code>stitchcraft-core</code>: <code>Budget</code> and the diagnostics model (<code>Mm</code>, <code>Point</code>, <code>math</code> and <code>SplitMix64</code> with frozen reference values are already in the bootstrap)</td><td>unit tests; budget exhaustion is a diagnostic</td></tr>
+<tr><td>M1.2 ✅</td><td><code>stitchcraft-plan</code>: <code>Stitch</code>, <code>StitchKind</code>, <code>ColorBlock</code>, <code>StitchPlan</code>; invariant checker (<code>REQ-PLAN-001..007</code>)</td><td>each invariant has a violating and a passing case</td></tr>
+<tr><td>M1.3 ✅</td><td>Machine profiles + <code>brother-200x200</code>; hoop and comfort diagnostics <code>SC-E0701</code>/<code>SC-W0702</code> with rotate hint</td><td><code>REQ-PRF-001</code>, <code>REQ-PRF-002</code> active</td></tr>
+<tr><td>M1.4 ✅</td><td>Quantization (absolute, round-half-even); PEC stitch encoder with spec vectors</td><td><code>REQ-FMT-002</code> partial; encoder unit tests</td></tr>
+<tr><td>M1.5 ✅</td><td>PES v1 writer: header, PEC header, palette indices, thumbnails</td><td>golden files (<code>REQ-FMT-001</code>)</td></tr>
+<tr><td>M1.6 ✅</td><td>Brother PEC palette table + CIEDE2000 nearest colour</td><td><code>REQ-THREAD-001</code> spot checks</td></tr>
+<tr><td>M1.7 ✅</td><td>DST writer (header, ternary records, jump splitting, commands)</td><td>golden files; <code>REQ-FMT-007</code></td></tr>
+<tr><td>M1.8 ✅</td><td><code>stitch testsheet &lt;TS-xx&gt; --profile … -o file</code> (and <code>--list</code>), <code>stitch profiles</code>, <code>stitch explain</code>; the CLI moves to <code>clap</code> (<code>stitch inspect</code> needs the readers: M2.1)</td><td><code>trycmd</code> examples in the docs</td></tr>
+<tr><td>M1.9 ✅</td><td>Conformance runner v1: requirements × cases matrix, L0 + L1 goldens, job summary</td><td>report visible on PRs</td></tr>
 <tr><td>M1.10</td><td>Docs: profile and format reference generated; tutorial “Sew your first test sheet”</td><td>docs check green</td></tr>
 <tr><td>MC-1 🧵</td><td>Sew <strong>TS-01</strong> (orientation, scale), <strong>TS-02</strong> (colour changes, stops, both trim encodings, jumps), <strong>TS-10A/B/C</strong> (150 and 190 mm frames) from PES v1; same TS-01 from DST if the machine reads DST</td><td>Sew-out report filed; profile values confirmed or changed; PES v6 decision made</td></tr>
 </tbody>

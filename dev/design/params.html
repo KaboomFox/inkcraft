@@ -35,10 +35,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-b316d6dc.js";
+            window.path_to_searchindex_js = "../searchindex-978d0931.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-2576b9cf.js"></script>
+        <script src="../toc-6cb0fb79.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -263,7 +263,7 @@ version and a registry schema version arrive with the first release, together wi
 </thead>
 <tbody>
 <tr><td><code>Length</code></td><td><code>Mm</code></td><td>finite, within <code>range</code>; units accepted on input: mm, in, pt</td><td><code>float</code>, unit <code>mm</code></td></tr>
-<tr><td><code>OptionalLength</code></td><td><code>Option&lt;Mm&gt;</code></td><td>as <code>Length</code>, or empty (the setting then comes from the document or the machine)</td><td><code>float</code>, unit <code>mm</code>, no default</td></tr>
+<tr><td><code>OptionalLength</code></td><td><code>Option&lt;Mm&gt;</code></td><td>as <code>Length</code>, or empty: the setting then comes from the document or the machine, or there is none. 0 or less counts as empty, as Ink/Stitch reads it</td><td><code>float</code>, unit <code>mm</code>, no default</td></tr>
 <tr><td><code>Angle</code></td><td>degrees, <code>f64</code></td><td>finite; normalized to (−180, 180]</td><td><code>float</code>, unit <code>deg</code></td></tr>
 <tr><td><code>Percent</code></td><td><code>f64</code></td><td>finite, within range</td><td><code>float</code>, unit <code>%</code></td></tr>
 <tr><td><code>Count</code></td><td><code>u32</code></td><td>whole, within range</td><td><code>int</code></td></tr>

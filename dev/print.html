@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-b316d6dc.js";
+            window.path_to_searchindex_js = "searchindex-978d0931.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-2576b9cf.js"></script>
+        <script src="toc-6cb0fb79.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -633,6 +633,7 @@ Arguments:
 <tr><td><a href="#sc-w0105"><code>SC-W0105</code></a></td><td>Warning</td><td>Unknown parameter preserved but ignored</td></tr>
 <tr><td><a href="#sc-w0401"><code>SC-W0401</code></a></td><td>Warning</td><td>Path too small for the shortest stitch; skipped</td></tr>
 <tr><td><a href="#sc-w0402"><code>SC-W0402</code></a></td><td>Warning</td><td>Stitch length below twice the shortest stitch; raised</td></tr>
+<tr><td><a href="#sc-w0403"><code>SC-W0403</code></a></td><td>Warning</td><td>Hand-placed stitch shorter than the shortest stitch; point left out</td></tr>
 <tr><td><a href="#sc-e0601"><code>SC-E0601</code></a></td><td>Error</td><td>Too many colour changes for the file format</td></tr>
 <tr><td><a href="#sc-e0602"><code>SC-E0602</code></a></td><td>Error</td><td>Design too large for the file format</td></tr>
 <tr><td><a href="#sc-e0603"><code>SC-E0603</code></a></td><td>Error</td><td>Machine file could not be read</td></tr>
@@ -708,6 +709,13 @@ more, every stitch then stays at or above the shortest stitch, whatever the dist
 corners.</p>
 <p>The message gives both lengths. Use a longer stitch length, or a shorter minimum if your machine
 sews shorter stitches well.</p>
+<h2 id="sc-w0403"><a class="header" href="#sc-w0403">SC-W0403</a></h2>
+<p><strong>Warning</strong> — Hand-placed stitch shorter than the shortest stitch; point left out</p>
+<p>Hand-placed stitches (manual stitch) shorter than the shortest stitch the machine sews well: the
+needle point that made each one too short was left out, so the stitch before it runs on to the
+next point. A part’s last point is always kept; the one before it goes instead.</p>
+<p>The message gives how many and the shortest of them. Move the nodes apart, or delete the extra
+ones.</p>
 <h2 id="sc-e0601"><a class="header" href="#sc-e0601">SC-E0601</a></h2>
 <p><strong>Error</strong> — Too many colour changes for the file format</p>
 <p>The file format can record only a limited number of colour changes and stops (PES: 255). This
@@ -808,6 +816,7 @@ numbers, <code>true</code>/<code>false</code>, strings and arrays instead, and <
 <tr><td><a href="#common-parameters">Common parameters</a></td><td>14</td><td>every stitch type</td></tr>
 <tr><td><a href="#running-parameters">Running parameters</a></td><td>5</td><td>Running stitch, Ripple stitch</td></tr>
 <tr><td><a href="#repeat-parameters">Repeat parameters</a></td><td>2</td><td>Running stitch, Ripple stitch, Zigzag stitch, Manual stitch</td></tr>
+<tr><td><a href="#manual-parameters">Manual parameters</a></td><td>1</td><td>Manual stitch</td></tr>
 </tbody>
 </table>
 </div>
@@ -829,6 +838,7 @@ numbers, <code>true</code>/<code>false</code>, strings and arrays instead, and <
 <tr><td><a href="#lock_start"><code>lock_start</code></a></td><td>Start lock</td><td>Common parameters</td></tr>
 <tr><td><a href="#lock_start_scale_mm"><code>lock_start_scale_mm</code></a></td><td>Start lock size</td><td>Common parameters</td></tr>
 <tr><td><a href="#lock_start_scale_percent"><code>lock_start_scale_percent</code></a></td><td>Start lock scale</td><td>Common parameters</td></tr>
+<tr><td><a href="#max_stitch_length_mm"><code>max_stitch_length_mm</code></a></td><td>Longest stitch</td><td>Manual parameters</td></tr>
 <tr><td><a href="#min_jump_stitch_length_mm"><code>min_jump_stitch_length_mm</code></a></td><td>Shortest jump</td><td>Common parameters</td></tr>
 <tr><td><a href="#min_stitch_length_mm"><code>min_stitch_length_mm</code></a></td><td>Shortest stitch</td><td>Common parameters</td></tr>
 <tr><td><a href="#random_seed"><code>random_seed</code></a></td><td>Random seed</td><td>Running parameters</td></tr>
@@ -947,7 +957,7 @@ separated by spaces.</p>
 <p><strong>Shortest stitch.</strong> Stitches shorter than this are merged into their neighbours, so the needle does not
 hammer one hole. Empty: the larger of the document’s setting and the machine’s minimum.</p>
 <ul>
-<li><strong>Accepts:</strong> a length from 0 to 10 mm, or empty</li>
+<li><strong>Accepts:</strong> a length from 0 to 10 mm, or empty (0 or less counts as empty)</li>
 <li><strong>Default:</strong> empty</li>
 <li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
 </ul>
@@ -955,7 +965,7 @@ hammer one hole. Empty: the larger of the document’s setting and the machine�
 <p><strong>Shortest jump.</strong> A move to the next element shorter than this is sewn straight on, without lock stitches or a
 jump. Empty: the document’s setting.</p>
 <ul>
-<li><strong>Accepts:</strong> a length from 0 to 20 mm, or empty</li>
+<li><strong>Accepts:</strong> a length from 0 to 20 mm, or empty (0 or less counts as empty)</li>
 <li><strong>Default:</strong> empty</li>
 <li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
 </ul>
@@ -1026,6 +1036,18 @@ the stitches: “1 0” makes every other stitch bold.</p>
 <ul>
 <li><strong>Accepts:</strong> 1 to 16 whole numbers from 0 to 10, separated by spaces</li>
 <li><strong>Default:</strong> <code>0</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated by `cargo xtask docs` from `ManualParams` in the parameter registry. Edit the declaration, not this page. -->
+<h1 id="manual-parameters"><a class="header" href="#manual-parameters">Manual parameters</a></h1>
+<p>Manual stitch: a needle point on every node of the path, for stitches placed by hand.</p>
+<p>Applies to Manual stitch.</p>
+<h2 id="manual-stitch"><a class="header" href="#manual-stitch">Manual stitch</a></h2>
+<h3 id="max_stitch_length_mm"><a class="header" href="#max_stitch_length_mm"><code>max_stitch_length_mm</code></a></h3>
+<p><strong>Longest stitch.</strong> Split stitches longer than this into equal parts. Empty, every stitch is sewn as drawn.</p>
+<ul>
+<li><strong>Accepts:</strong> a length from 0.1 to 25 mm, or empty (0 or less counts as empty)</li>
+<li><strong>Default:</strong> empty</li>
 <li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div>
@@ -1869,7 +1891,7 @@ version and a registry schema version arrive with the first release, together wi
 </thead>
 <tbody>
 <tr><td><code>Length</code></td><td><code>Mm</code></td><td>finite, within <code>range</code>; units accepted on input: mm, in, pt</td><td><code>float</code>, unit <code>mm</code></td></tr>
-<tr><td><code>OptionalLength</code></td><td><code>Option&lt;Mm&gt;</code></td><td>as <code>Length</code>, or empty (the setting then comes from the document or the machine)</td><td><code>float</code>, unit <code>mm</code>, no default</td></tr>
+<tr><td><code>OptionalLength</code></td><td><code>Option&lt;Mm&gt;</code></td><td>as <code>Length</code>, or empty: the setting then comes from the document or the machine, or there is none. 0 or less counts as empty, as Ink/Stitch reads it</td><td><code>float</code>, unit <code>mm</code>, no default</td></tr>
 <tr><td><code>Angle</code></td><td>degrees, <code>f64</code></td><td>finite; normalized to (−180, 180]</td><td><code>float</code>, unit <code>deg</code></td></tr>
 <tr><td><code>Percent</code></td><td><code>f64</code></td><td>finite, within range</td><td><code>float</code>, unit <code>%</code></td></tr>
 <tr><td><code>Count</code></td><td><code>u32</code></td><td>whole, within range</td><td><code>int</code></td></tr>
@@ -2042,6 +2064,7 @@ another.</p>
 <tr><td><code>SC-W0311</code></td><td>Warning</td><td>Spiral could not be connected in a narrow part; that part uses inner-to-outer contours</td><td>M7</td></tr>
 <tr><td><code>SC-W0401</code></td><td>Warning</td><td>Path too small for the shortest stitch; skipped</td><td>M3</td></tr>
 <tr><td><code>SC-W0402</code></td><td>Warning</td><td>Stitch length below twice the shortest stitch; raised to it, so even spacing never sews a stitch shorter than the shortest</td><td>M3</td></tr>
+<tr><td><code>SC-W0403</code></td><td>Warning</td><td>Hand-placed stitch shorter than the shortest stitch; point left out</td><td>M3</td></tr>
 <tr><td><code>SC-W0501</code></td><td>Warning</td><td>Travel could not stay inside the region; used tie-off, trim and tie-in</td><td>M5</td></tr>
 <tr><td><code>SC-E0601</code></td><td>Error</td><td>Too many colour changes for the file format</td><td>M1</td></tr>
 <tr><td><code>SC-E0602</code></td><td>Error</td><td>Design too large for the file format (coordinates or data exceed its fields)</td><td>M1</td></tr>
@@ -2385,13 +2408,20 @@ vary (<code>REQ-RUN-007</code>).</li>
 <h3 id="diagnostics-1"><a class="header" href="#diagnostics-1">Diagnostics</a></h3>
 <p><code>SC-W0401</code> part of the path too small for the shortest stitch (skipped); <code>SC-W0402</code> stitch length below
 twice the shortest stitch (raised).</p>
-<h2 id="manual-stitch"><a class="header" href="#manual-stitch">Manual stitch</a></h2>
+<h2 id="manual-stitch-1"><a class="header" href="#manual-stitch-1">Manual stitch</a></h2>
 <p>Every node of the path is a needle penetration, in order — for hand-placed stitches and imported stitch
-files. A curve gives only its end node: its control points are not stitched and it is not flattened.
-Segments longer than <code>max_stitch_length_mm</code> (if set) are split into the fewest equal parts no longer than
-it. Bean stitch applies; repeats do not. Lock stitches are added only when <code>force_lock_stitches</code> is set,
-as in Ink/Stitch (read at <code>d59c9ab</code>). Property: output nodes equal input nodes plus only the documented
-splits (<code>REQ-RUN-006</code>).</p>
+files. A curve gives only its end node: its control points are not stitched and it is not flattened. A
+node where the needle already is counts once, and a closed path comes back to its start. Segments longer
+than <code>max_stitch_length_mm</code> (if set) are split into the fewest equal parts no longer than it, but never
+into parts shorter than the shortest stitch. A value of 0 or less means “not set”, as in Ink/Stitch, so
+every stitch is then sewn as drawn. Bean stitch applies; repeats do not. Lock stitches are added
+only when <code>force_lock_stitches</code> is set, as in Ink/Stitch (read at <code>d59c9ab</code>).</p>
+<p>The shortest stitch holds here too: a node closer than it to the needle point before it is left out, so
+the stitch before runs on to the next node, and <code>SC-W0403</code> says how many. A part’s last node is always
+kept, leaving out the one before it instead. Ink/Stitch drops such points later, over the whole plan,
+without a word. A part that is a single point, or too small for one stitch, is not stitched (<code>SC-W0401</code>).</p>
+<p>Properties: needle points are the nodes in order plus only the documented splits (<code>REQ-RUN-006</code>); no
+stitch is shorter than the shortest stitch (<code>REQ-RUN-008</code>).</p>
 <h2 id="zigzag-stroke-p2-m7"><a class="header" href="#zigzag-stroke-p2-m7">Zigzag stroke (P2, M7)</a></h2>
 <p>A zigzag of width <code>stroke-width</code> (or the satin width parameters) centred on the path, with peak-to-peak
 spacing <code>zigzag_spacing_mm</code>, optional <code>zigzag_angle</code> (slanted zigzag), and
@@ -3874,7 +3904,7 @@ stitches once its stitch type or feature lands (see <em>Phase</em> and the param
 <tr><td><code>running_stitch_tolerance_mm</code></td><td>float</td><td>mm</td><td>0.2</td><td><code>running_stitch</code>, <code>ripple_stitch</code></td><td>P1 (M3)</td><td><a href="#running_stitch_tolerance_mm">registered</a></td></tr>
 <tr><td><code>enable_random_stitch_length</code></td><td>boolean</td><td>—</td><td>false</td><td><code>running_stitch</code>, <code>ripple_stitch</code></td><td>P1 (M3)</td><td><a href="#enable_random_stitch_length">registered</a></td></tr>
 <tr><td><code>random_stitch_length_jitter_percent</code></td><td>float</td><td>± %</td><td>10</td><td><code>running_stitch</code>, <code>ripple_stitch</code></td><td>P1 (M3)</td><td><a href="#random_stitch_length_jitter_percent">registered</a></td></tr>
-<tr><td><code>max_stitch_length_mm</code></td><td>float</td><td>mm</td><td>—</td><td><code>manual_stitch</code></td><td>P1 (M3)</td><td>planned</td></tr>
+<tr><td><code>max_stitch_length_mm</code></td><td>float</td><td>mm</td><td>—</td><td><code>manual_stitch</code></td><td>P1 (M3)</td><td><a href="#max_stitch_length_mm">registered</a></td></tr>
 <tr><td><code>zigzag_spacing_mm</code></td><td>string</td><td>mm</td><td>0.4</td><td><code>zigzag_stitch</code></td><td>P2 (M7)</td><td>planned</td></tr>
 <tr><td><code>stroke_pull_compensation_mm</code></td><td>float</td><td>mm (each side)</td><td>0</td><td><code>zigzag_stitch</code></td><td>P2 (M7)</td><td>planned</td></tr>
 <tr><td><code>zigzag_angle</code></td><td>float</td><td>°</td><td>0</td><td><code>zigzag_stitch</code></td><td>P2 (M7)</td><td>planned</td></tr>
@@ -4059,7 +4089,7 @@ stitches once its stitch type or feature lands (see <em>Phase</em> and the param
 </div>
 <p>Lock stitch identifiers (<code>lock_start</code>, <code>lock_end</code>): <code>half_stitch</code>, <code>arrow</code>, <code>back_forth</code>, <code>bowtie</code>, <code>cross</code>, <code>star</code>, <code>simple</code>, <code>triangle</code>, <code>zigzag</code>, <code>custom</code>. StitchCraft accepts every identifier; the shapes are its own
 designs with the same intent, a deviation recorded in the deviations ledger (<code>conformance/deviations.toml</code>).</p>
-<p><em>145 parameter declarations, 21 registered in StitchCraft.</em></p>
+<p><em>145 parameter declarations, 22 registered in StitchCraft.</em></p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="architecture-decision-records"><a class="header" href="#architecture-decision-records">Architecture decision records</a></h1>
 <p>Short records of decisions that shape the code, with their context and the alternatives we rejected.
@@ -4589,7 +4619,7 @@ of code) · 🧵 machine checkpoint · 👤 owner action</p>
 <tr><td>M3.3 ✅</td><td><code>Design</code> model; SVG adapter v1: paths, groups, transforms, viewBox units, colours, visibility (no <code>inkstitch:*</code> yet)</td><td><code>REQ-SVG-001</code>, <code>REQ-SVG-002</code> (fuzzed path data)</td></tr>
 <tr><td>M3.4 ✅</td><td>Running stitch: corners, even spacing, patterns, tolerance; stitch lengths measured straight</td><td><code>REQ-RUN-001..003</code></td></tr>
 <tr><td>M3.5 ✅</td><td>Repeats, bean stitch, random length</td><td><code>REQ-RUN-004</code>, <code>REQ-RUN-005</code>, <code>REQ-RUN-007</code></td></tr>
-<tr><td>M3.6</td><td>Manual stitch</td><td><code>REQ-RUN-006</code></td></tr>
+<tr><td>M3.6 ✅</td><td>Manual stitch</td><td><code>REQ-RUN-006</code>, <code>REQ-RUN-008</code></td></tr>
 <tr><td>M3.7</td><td>Lock stitches: types, scale, placement</td><td><code>REQ-LCK-001..003</code></td></tr>
 <tr><td>M3.8</td><td>Plan assembly: order, collapse, travel, tie-off/jump/trim/tie-in, stops, colour changes, commands</td><td><code>REQ-ASM-001..005</code></td></tr>
 <tr><td>M3.9</td><td>Finalize: split, merge, hoop, colour limits; <code>stitch plan in.svg -o out.pes --preview out.png --report out.json</code></td><td>end-to-end cases</td></tr>

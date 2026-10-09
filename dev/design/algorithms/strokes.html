@@ -35,10 +35,10 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-b316d6dc.js";
+            window.path_to_searchindex_js = "../../searchindex-978d0931.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../../toc-2576b9cf.js"></script>
+        <script src="../../toc-6cb0fb79.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -272,11 +272,18 @@ vary (<code>REQ-RUN-007</code>).</li>
 twice the shortest stitch (raised).</p>
 <h2 id="manual-stitch"><a class="header" href="#manual-stitch">Manual stitch</a></h2>
 <p>Every node of the path is a needle penetration, in order — for hand-placed stitches and imported stitch
-files. A curve gives only its end node: its control points are not stitched and it is not flattened.
-Segments longer than <code>max_stitch_length_mm</code> (if set) are split into the fewest equal parts no longer than
-it. Bean stitch applies; repeats do not. Lock stitches are added only when <code>force_lock_stitches</code> is set,
-as in Ink/Stitch (read at <code>d59c9ab</code>). Property: output nodes equal input nodes plus only the documented
-splits (<code>REQ-RUN-006</code>).</p>
+files. A curve gives only its end node: its control points are not stitched and it is not flattened. A
+node where the needle already is counts once, and a closed path comes back to its start. Segments longer
+than <code>max_stitch_length_mm</code> (if set) are split into the fewest equal parts no longer than it, but never
+into parts shorter than the shortest stitch. A value of 0 or less means “not set”, as in Ink/Stitch, so
+every stitch is then sewn as drawn. Bean stitch applies; repeats do not. Lock stitches are added
+only when <code>force_lock_stitches</code> is set, as in Ink/Stitch (read at <code>d59c9ab</code>).</p>
+<p>The shortest stitch holds here too: a node closer than it to the needle point before it is left out, so
+the stitch before runs on to the next node, and <code>SC-W0403</code> says how many. A part’s last node is always
+kept, leaving out the one before it instead. Ink/Stitch drops such points later, over the whole plan,
+without a word. A part that is a single point, or too small for one stitch, is not stitched (<code>SC-W0401</code>).</p>
+<p>Properties: needle points are the nodes in order plus only the documented splits (<code>REQ-RUN-006</code>); no
+stitch is shorter than the shortest stitch (<code>REQ-RUN-008</code>).</p>
 <h2 id="zigzag-stroke-p2-m7"><a class="header" href="#zigzag-stroke-p2-m7">Zigzag stroke (P2, M7)</a></h2>
 <p>A zigzag of width <code>stroke-width</code> (or the satin width parameters) centred on the path, with peak-to-peak
 spacing <code>zigzag_spacing_mm</code>, optional <code>zigzag_angle</code> (slanted zigzag), and

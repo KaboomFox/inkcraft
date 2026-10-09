@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-887a3ca9.js";
+            window.path_to_searchindex_js = "searchindex-87013c89.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-e34e2d93.js"></script>
+        <script src="toc-2576b9cf.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -796,7 +796,8 @@ numbers, <code>true</code>/<code>false</code>, strings and arrays instead, and <
 </thead>
 <tbody>
 <tr><td><a href="#common-parameters">Common parameters</a></td><td>14</td><td>every stitch type</td></tr>
-<tr><td><a href="#running-parameters">Running parameters</a></td><td>2</td><td>Running stitch, Ripple stitch</td></tr>
+<tr><td><a href="#running-parameters">Running parameters</a></td><td>5</td><td>Running stitch, Ripple stitch</td></tr>
+<tr><td><a href="#repeat-parameters">Repeat parameters</a></td><td>2</td><td>Running stitch, Ripple stitch, Zigzag stitch, Manual stitch</td></tr>
 </tbody>
 </table>
 </div>
@@ -807,6 +808,8 @@ numbers, <code>true</code>/<code>false</code>, strings and arrays instead, and <
 <tr><th>Key</th><th>Label</th><th>Group</th></tr>
 </thead>
 <tbody>
+<tr><td><a href="#bean_stitch_repeats"><code>bean_stitch_repeats</code></a></td><td>Bean stitch</td><td>Repeat parameters</td></tr>
+<tr><td><a href="#enable_random_stitch_length"><code>enable_random_stitch_length</code></a></td><td>Random stitch length</td><td>Running parameters</td></tr>
 <tr><td><a href="#force_lock_stitches"><code>force_lock_stitches</code></a></td><td>Always lock</td><td>Common parameters</td></tr>
 <tr><td><a href="#lock_custom_end"><code>lock_custom_end</code></a></td><td>Custom end lock</td><td>Common parameters</td></tr>
 <tr><td><a href="#lock_custom_start"><code>lock_custom_start</code></a></td><td>Custom start lock</td><td>Common parameters</td></tr>
@@ -818,6 +821,9 @@ numbers, <code>true</code>/<code>false</code>, strings and arrays instead, and <
 <tr><td><a href="#lock_start_scale_percent"><code>lock_start_scale_percent</code></a></td><td>Start lock scale</td><td>Common parameters</td></tr>
 <tr><td><a href="#min_jump_stitch_length_mm"><code>min_jump_stitch_length_mm</code></a></td><td>Shortest jump</td><td>Common parameters</td></tr>
 <tr><td><a href="#min_stitch_length_mm"><code>min_stitch_length_mm</code></a></td><td>Shortest stitch</td><td>Common parameters</td></tr>
+<tr><td><a href="#random_seed"><code>random_seed</code></a></td><td>Random seed</td><td>Running parameters</td></tr>
+<tr><td><a href="#random_stitch_length_jitter_percent"><code>random_stitch_length_jitter_percent</code></a></td><td>Length variation</td><td>Running parameters</td></tr>
+<tr><td><a href="#repeats"><code>repeats</code></a></td><td>Repeats</td><td>Repeat parameters</td></tr>
 <tr><td><a href="#running_stitch_length_mm"><code>running_stitch_length_mm</code></a></td><td>Stitch length</td><td>Running parameters</td></tr>
 <tr><td><a href="#running_stitch_tolerance_mm"><code>running_stitch_tolerance_mm</code></a></td><td>Curve tolerance</td><td>Running parameters</td></tr>
 <tr><td><a href="#stop_after"><code>stop_after</code></a></td><td>Stop after</td><td>Common parameters</td></tr>
@@ -963,6 +969,53 @@ more and shorter stitches.</p>
 <ul>
 <li><strong>Accepts:</strong> a length from 0.01 to 5 mm</li>
 <li><strong>Default:</strong> <code>0.2</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="enable_random_stitch_length"><a class="header" href="#enable_random_stitch_length"><code>enable_random_stitch_length</code></a></h3>
+<p><strong>Random stitch length.</strong> Vary the stitch lengths at random instead of spreading them evenly. Lines sewn close together
+then do not line their needle holes up, which avoids moiré patterns.</p>
+<ul>
+<li><strong>Accepts:</strong> true or false</li>
+<li><strong>Default:</strong> <code>false</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="random_stitch_length_jitter_percent"><a class="header" href="#random_stitch_length_jitter_percent"><code>random_stitch_length_jitter_percent</code></a></h3>
+<p><strong>Length variation.</strong> How much each stitch may be longer or shorter than the stitch length, in percent of it.</p>
+<ul>
+<li><strong>Accepts:</strong> a percentage from 0 to 100</li>
+<li><strong>Default:</strong> <code>10</code></li>
+<li><strong>Shown when</strong> <a href="#enable_random_stitch_length"><code>enable_random_stitch_length</code></a> is <code>true</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="random_seed"><a class="header" href="#random_seed"><code>random_seed</code></a></h3>
+<p><strong>Random seed.</strong> Where the random stitch lengths start: the same seed gives the same stitches, another seed others.
+Empty, each element gets its own.</p>
+<ul>
+<li><strong>Accepts:</strong> a number or any text, or empty to derive it from the element</li>
+<li><strong>Default:</strong> empty</li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated by `cargo xtask docs` from `RepeatParams` in the parameter registry. Edit the declaration, not this page. -->
+<h1 id="repeat-parameters"><a class="header" href="#repeat-parameters">Repeat parameters</a></h1>
+<p>Repeats and bean stitch: sewing a line more than once, for a bolder line or one that comes back.</p>
+<p>Applies to Running stitch, Ripple stitch, Zigzag stitch, Manual stitch.</p>
+<h2 id="repeats"><a class="header" href="#repeats">Repeats</a></h2>
+<h3 id="repeats-1"><a class="header" href="#repeats-1"><code>repeats</code></a></h3>
+<p><strong>Repeats.</strong> How many times to sew along the path: 2 goes there and back, 3 there, back and there again. An
+even number ends where the path starts, which suits a line that must come back.</p>
+<ul>
+<li><strong>Accepts:</strong> a whole number from 1 to 100</li>
+<li><strong>Default:</strong> <code>1</code></li>
+<li><strong>Applies to:</strong> Running stitch, Ripple stitch, Zigzag stitch</li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="bean_stitch_repeats"><a class="header" href="#bean_stitch_repeats"><code>bean_stitch_repeats</code></a></h3>
+<p><strong>Bean stitch.</strong> How many times to go back and forth over each stitch: 1 sews every stitch three times (there,
+back and there again), 2 five times. Several numbers separated by spaces are taken in turn along
+the stitches: “1 0” makes every other stitch bold.</p>
+<ul>
+<li><strong>Accepts:</strong> 1 to 16 whole numbers from 0 to 10, separated by spaces</li>
+<li><strong>Default:</strong> <code>0</code></li>
 <li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div>
@@ -2272,8 +2325,10 @@ more than the tolerance left after flattening, split that stitch at the path’s
 deviation, among those that leave both parts within the lengths above, and repeat. This bounds the
 visual error by <code>running_stitch_tolerance_mm</code> on any curve whose details are larger than the shortest
 stitch.</li>
-<li><strong>Random length</strong> (M3.5). With <code>enable_random_stitch_length</code>, each stitch length is drawn uniformly
-from <code>s × (1 ± jitter)</code>, then the span is rescaled to end on its corner. The seed makes it repeatable.</li>
+<li><strong>Random length.</strong> With <code>enable_random_stitch_length</code>, each stitch length is drawn uniformly from
+<code>s × (1 ± jitter)</code>, the first of each span a random fraction of that (a random phase, below), then the
+span is rescaled to end on its corner. The element’s own generator draws them, seeded with
+<code>random_seed</code>, so the same element and seed always give the same stitches.</li>
 </ol>
 <p><strong>When the rules disagree,</strong> the shortest stitch wins (a shorter stitch hammers one spot and can break the
 thread), then corners, then the tolerance. A part of the path that is a single point, shorter than the
@@ -2296,7 +2351,7 @@ treatment on every pass.</li>
 <li>Repeats apply to running, ripple and zigzag strokes; bean stitch to those and to manual stitch (the
 <a href="#inkstitch-compatibility-contract">compatibility contract</a> lists each parameter’s stitch types).</li>
 </ul>
-<h3 id="random-length-m35"><a class="header" href="#random-length-m35">Random length (M3.5)</a></h3>
+<h3 id="random-length"><a class="header" href="#random-length">Random length</a></h3>
 <p>Ink/Stitch draws each stitch from <code>s × (1 ± jitter)</code> and starts each stretch between corners at a random
 phase, its first stitch a random fraction of a drawn length, so rows sewn side by side with the same
 settings do not line their holes up. It does not rescale, so the last stitch before a corner is whatever
@@ -2309,8 +2364,12 @@ keeps the random phase, for the same reason.</p>
 for that is reported (<code>REQ-RUN-001</code>).</li>
 <li>Deviation from the source path ≤ tolerance, both ways, measured densely (<code>REQ-RUN-002</code>).</li>
 <li>Corners are penetration points unless that would make a stitch too short (<code>REQ-RUN-003</code>).</li>
-<li>Bean stitch: stitch count is exactly <code>n × (2b + 1)</code> for a span of n stitches (<code>REQ-RUN-004</code>).</li>
-<li>Repeats parity decides the exit point (<code>REQ-RUN-005</code>).</li>
+<li>Bean stitch sews each stitch <code>2b + 1</code> times, so a run of n stitches with b throughout has exactly
+<code>n × (2b + 1)</code>; the list runs on across repeats, each turnaround taking a step (<code>REQ-RUN-004</code>).</li>
+<li>Repeats alternate direction with no stitch in place; their parity decides the exit point
+(<code>REQ-RUN-005</code>).</li>
+<li>Random length: the same element and seed give the same stitches, another seed others, and the lengths
+vary (<code>REQ-RUN-007</code>).</li>
 </ul>
 <h3 id="diagnostics-1"><a class="header" href="#diagnostics-1">Diagnostics</a></h3>
 <p><code>SC-W0401</code> part of the path too small for the shortest stitch (skipped); <code>SC-W0402</code> stitch length below
@@ -3783,13 +3842,13 @@ stitches once its stitch type or feature lands (see <em>Phase</em> and the param
 <tbody>
 <tr><td><code>satin_column</code></td><td>toggle</td><td>—</td><td>—</td><td>all</td><td>P1 (M3)</td><td>planned</td></tr>
 <tr><td><code>stroke_method</code></td><td>combo</td><td>—</td><td>0</td><td>all</td><td>P1 (M3)</td><td>planned</td></tr>
-<tr><td><code>repeats</code></td><td>int</td><td>—</td><td>1</td><td><code>running_stitch</code>, <code>ripple_stitch</code>, <code>zigzag_stitch</code></td><td>P1 (M3)</td><td>planned</td></tr>
-<tr><td><code>bean_stitch_repeats</code></td><td>str</td><td>—</td><td>0</td><td><code>running_stitch</code>, <code>ripple_stitch</code>, <code>manual_stitch</code>, <code>zigzag_stitch</code></td><td>P1 (M3)</td><td>planned</td></tr>
+<tr><td><code>repeats</code></td><td>int</td><td>—</td><td>1</td><td><code>running_stitch</code>, <code>ripple_stitch</code>, <code>zigzag_stitch</code></td><td>P1 (M3)</td><td><a href="#repeats">registered</a></td></tr>
+<tr><td><code>bean_stitch_repeats</code></td><td>str</td><td>—</td><td>0</td><td><code>running_stitch</code>, <code>ripple_stitch</code>, <code>manual_stitch</code>, <code>zigzag_stitch</code></td><td>P1 (M3)</td><td><a href="#bean_stitch_repeats">registered</a></td></tr>
 <tr><td><code>manual_pattern_placement</code></td><td>boolean</td><td>—</td><td>false</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td><td>planned</td></tr>
 <tr><td><code>running_stitch_length_mm</code></td><td>string</td><td>mm</td><td>2.5</td><td><code>running_stitch</code>, <code>ripple_stitch</code></td><td>P1 (M3)</td><td><a href="#running_stitch_length_mm">registered</a></td></tr>
 <tr><td><code>running_stitch_tolerance_mm</code></td><td>float</td><td>mm</td><td>0.2</td><td><code>running_stitch</code>, <code>ripple_stitch</code></td><td>P1 (M3)</td><td><a href="#running_stitch_tolerance_mm">registered</a></td></tr>
-<tr><td><code>enable_random_stitch_length</code></td><td>boolean</td><td>—</td><td>false</td><td><code>running_stitch</code>, <code>ripple_stitch</code></td><td>P1 (M3)</td><td>planned</td></tr>
-<tr><td><code>random_stitch_length_jitter_percent</code></td><td>float</td><td>± %</td><td>10</td><td><code>running_stitch</code>, <code>ripple_stitch</code></td><td>P1 (M3)</td><td>planned</td></tr>
+<tr><td><code>enable_random_stitch_length</code></td><td>boolean</td><td>—</td><td>false</td><td><code>running_stitch</code>, <code>ripple_stitch</code></td><td>P1 (M3)</td><td><a href="#enable_random_stitch_length">registered</a></td></tr>
+<tr><td><code>random_stitch_length_jitter_percent</code></td><td>float</td><td>± %</td><td>10</td><td><code>running_stitch</code>, <code>ripple_stitch</code></td><td>P1 (M3)</td><td><a href="#random_stitch_length_jitter_percent">registered</a></td></tr>
 <tr><td><code>max_stitch_length_mm</code></td><td>float</td><td>mm</td><td>—</td><td><code>manual_stitch</code></td><td>P1 (M3)</td><td>planned</td></tr>
 <tr><td><code>zigzag_spacing_mm</code></td><td>string</td><td>mm</td><td>0.4</td><td><code>zigzag_stitch</code></td><td>P2 (M7)</td><td>planned</td></tr>
 <tr><td><code>stroke_pull_compensation_mm</code></td><td>float</td><td>mm (each side)</td><td>0</td><td><code>zigzag_stitch</code></td><td>P2 (M7)</td><td>planned</td></tr>
@@ -3813,7 +3872,7 @@ stitches once its stitch type or feature lands (see <em>Phase</em> and the param
 <tr><td><code>scale_end</code></td><td>float</td><td>%</td><td>0.0</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td><td>planned</td></tr>
 <tr><td><code>rotate_ripples</code></td><td>boolean</td><td>—</td><td>true</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td><td>planned</td></tr>
 <tr><td><code>join_style</code></td><td>dropdown</td><td>—</td><td>0</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td><td>planned</td></tr>
-<tr><td><code>random_seed</code></td><td>random_seed</td><td>—</td><td>—</td><td><code>running_stitch</code>, <code>ripple_stitch</code></td><td>P1 (M3)</td><td>planned</td></tr>
+<tr><td><code>random_seed</code></td><td>random_seed</td><td>—</td><td>—</td><td><code>running_stitch</code>, <code>ripple_stitch</code></td><td>P1 (M3)</td><td><a href="#random_seed">registered</a></td></tr>
 </tbody>
 </table>
 </div>
@@ -3975,7 +4034,7 @@ stitches once its stitch type or feature lands (see <em>Phase</em> and the param
 </div>
 <p>Lock stitch identifiers (<code>lock_start</code>, <code>lock_end</code>): <code>half_stitch</code>, <code>arrow</code>, <code>back_forth</code>, <code>bowtie</code>, <code>cross</code>, <code>star</code>, <code>simple</code>, <code>triangle</code>, <code>zigzag</code>, <code>custom</code>. StitchCraft accepts every identifier; the shapes are its own
 designs with the same intent, a deviation recorded in the deviations ledger (<code>conformance/deviations.toml</code>).</p>
-<p><em>145 parameter declarations, 16 registered in StitchCraft.</em></p>
+<p><em>145 parameter declarations, 21 registered in StitchCraft.</em></p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="architecture-decision-records"><a class="header" href="#architecture-decision-records">Architecture decision records</a></h1>
 <p>Short records of decisions that shape the code, with their context and the alternatives we rejected.
@@ -4504,7 +4563,7 @@ of code) · 🧵 machine checkpoint · 👤 owner action</p>
 <tr><td>M3.2 ✅</td><td>Diagnostics registry, <code>stitch explain</code>, generated diagnostics index</td><td>every registered code has a page and a case</td></tr>
 <tr><td>M3.3 ✅</td><td><code>Design</code> model; SVG adapter v1: paths, groups, transforms, viewBox units, colours, visibility (no <code>inkstitch:*</code> yet)</td><td><code>REQ-SVG-001</code>, <code>REQ-SVG-002</code> (fuzzed path data)</td></tr>
 <tr><td>M3.4 ✅</td><td>Running stitch: corners, even spacing, patterns, tolerance; stitch lengths measured straight</td><td><code>REQ-RUN-001..003</code></td></tr>
-<tr><td>M3.5</td><td>Repeats, bean stitch, random length</td><td><code>REQ-RUN-004</code>, <code>REQ-RUN-005</code></td></tr>
+<tr><td>M3.5 ✅</td><td>Repeats, bean stitch, random length</td><td><code>REQ-RUN-004</code>, <code>REQ-RUN-005</code>, <code>REQ-RUN-007</code></td></tr>
 <tr><td>M3.6</td><td>Manual stitch</td><td><code>REQ-RUN-006</code></td></tr>
 <tr><td>M3.7</td><td>Lock stitches: types, scale, placement</td><td><code>REQ-LCK-001..003</code></td></tr>
 <tr><td>M3.8</td><td>Plan assembly: order, collapse, travel, tie-off/jump/trim/tie-in, stops, colour changes, commands</td><td><code>REQ-ASM-001..005</code></td></tr>

@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-8b7f611c.js";
+            window.path_to_searchindex_js = "searchindex-c7121901.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-dc5674fc.js"></script>
@@ -372,6 +372,7 @@ cleaner results; StitchCraft warns beyond the profile’s comfort zone and refus
 Usage: stitch &lt;COMMAND&gt;
 
 Commands:
+  plan       Plan a design (SVG) for a machine and write the machine file, with a picture and a report if asked
   testsheet  Write a machine-checkpoint test sheet (docs/src/plan/machine-testing.md)
   inspect    Read a machine file (PES, PEC or DST) and describe it: size, stitches, threads, stitch lengths
   preview    Draw a machine file (PES, PEC or DST) as a picture of what it will sew (PNG)
@@ -391,8 +392,41 @@ Exit status: 0 done (warnings allowed) · 1 the design or file has errors (nothi
 error · 3 a file could not be read or written.
 
 Coming with the roadmap (docs/src/plan/roadmap.md):
-  stitch plan design.svg -o design.pes                      (M3)
   stitch export design.vectorcraft -o design.pes            (M6)
+</code></pre>
+<h2 id="stitch-plan"><a class="header" href="#stitch-plan">stitch plan</a></h2>
+<pre><code class="language-text">Plan a design (SVG) for a machine and write the machine file, with a picture and a report if asked
+
+Usage: stitch plan [OPTIONS] --output &lt;OUTPUT&gt; &lt;DESIGN&gt;
+
+Arguments:
+  &lt;DESIGN&gt;
+          The design (SVG)
+
+Options:
+  -o, --output &lt;OUTPUT&gt;
+          The machine file to write
+
+  -p, --profile &lt;PROFILE&gt;
+          The machine profile (see `stitch profiles`)
+          
+          [default: brother-200x200]
+
+      --format &lt;FORMAT&gt;
+          The file format; by default the output file's extension decides
+
+          Possible values:
+          - pes: Brother PES, version 1
+          - dst: Tajima DST
+
+      --preview &lt;PREVIEW&gt;
+          Also draw a picture of what the file will sew (PNG)
+
+      --report &lt;REPORT&gt;
+          Also write a report of the plan and what was said about it (JSON), even when nothing else is written
+
+  -h, --help
+          Print help (see a summary with '-h')
 </code></pre>
 <h2 id="stitch-testsheet"><a class="header" href="#stitch-testsheet">stitch testsheet</a></h2>
 <pre><code class="language-text">Write a machine-checkpoint test sheet (docs/src/plan/machine-testing.md)
@@ -633,6 +667,7 @@ Arguments:
 <tr><td><a href="#sc-w0403"><code>SC-W0403</code></a></td><td>Warning</td><td>Hand-placed stitch shorter than the shortest stitch; point left out</td></tr>
 <tr><td><a href="#sc-w0502"><code>SC-W0502</code></a></td><td>Warning</td><td>Lock stitch shorter than 0.2 mm; lengthened</td></tr>
 <tr><td><a href="#sc-w0503"><code>SC-W0503</code></a></td><td>Warning</td><td>Custom lock cannot be sewn as written</td></tr>
+<tr><td><a href="#sc-i0504"><code>SC-I0504</code></a></td><td>Info</td><td>Stitches shorter than the shortest stitch merged</td></tr>
 <tr><td><a href="#sc-w0505"><code>SC-W0505</code></a></td><td>Warning</td><td>Trim or stop after an element that sews nothing; left out</td></tr>
 <tr><td><a href="#sc-e0601"><code>SC-E0601</code></a></td><td>Error</td><td>Too many colour changes for the file format</td></tr>
 <tr><td><a href="#sc-e0602"><code>SC-E0602</code></a></td><td>Error</td><td>Design too large for the file format</td></tr>
@@ -641,6 +676,7 @@ Arguments:
 <tr><td><a href="#sc-i0605"><code>SC-I0605</code></a></td><td>Info</td><td>Long jumps cut in DST</td></tr>
 <tr><td><a href="#sc-e0701"><code>SC-E0701</code></a></td><td>Error</td><td>Design does not fit the hoop</td></tr>
 <tr><td><a href="#sc-w0702"><code>SC-W0702</code></a></td><td>Warning</td><td>Design is larger than the comfort zone</td></tr>
+<tr><td><a href="#sc-i0703"><code>SC-I0703</code></a></td><td>Info</td><td>Stitches longer than the machine’s longest stitch; split</td></tr>
 <tr><td><a href="#sc-e0801"><code>SC-E0801</code></a></td><td>Error</td><td>SVG could not be read</td></tr>
 <tr><td><a href="#sc-w0802"><code>SC-W0802</code></a></td><td>Warning</td><td>SVG feature ignored</td></tr>
 <tr><td><a href="#sc-i0805"><code>SC-I0805</code></a></td><td>Info</td><td>Object left out, as the file asks</td></tr>
@@ -745,6 +781,13 @@ drawn custom lock yet, and sews the half stitch in its place. Parts that are not
 longer than 10 m, are left out. If no step is left, the half stitch is sewn instead.</p>
 <p>The message says what was wrong. Write the lock as numbers, such as <code>1 -1 1 -1</code>, or choose
 another lock shape.</p>
+<h2 id="sc-i0504"><a class="header" href="#sc-i0504">SC-I0504</a></h2>
+<p><strong>Info</strong> — Stitches shorter than the shortest stitch merged</p>
+<p>Needle points less than the shortest stitch from the one before were left out, so the stitch before
+each runs on to the next and none is shorter than the machine sews well. This happens where one
+element’s stitching runs straight on into the next and they nearly touch: the stitch between them is
+whatever is left of the gap. Nothing visible changes.</p>
+<p>Nothing to do. If the count is large, check for elements drawn on top of each other.</p>
 <h2 id="sc-w0505"><a class="header" href="#sc-w0505">SC-W0505</a></h2>
 <p><strong>Warning</strong> — Trim or stop after an element that sews nothing; left out</p>
 <p>The element is set to trim or stop after it (<code>trim_after</code>, <code>stop_after</code>, or Ink/Stitch’s trim and
@@ -798,6 +841,13 @@ machine and hoop sew most accurately. Near the hoop’s edge fabric is held less
 designs pucker and shift more.</p>
 <p>The file was written. Rotate the design if the message says that brings it inside the comfort
 zone, use a firmer stabilizer, or scale the design down.</p>
+<h2 id="sc-i0703"><a class="header" href="#sc-i0703">SC-I0703</a></h2>
+<p><strong>Info</strong> — Stitches longer than the machine’s longest stitch; split</p>
+<p>Stitches longer than the machine’s longest stitch were split into equal parts, each no longer than
+it: a long stitch placed by hand, say, or a custom lock’s long step. A long loose stitch snags and
+sags; the machine may refuse it.</p>
+<p>To choose where the needle goes down instead, add nodes (manual stitch) or set
+<code>max_stitch_length_mm</code>.</p>
 <h2 id="sc-e0801"><a class="header" href="#sc-e0801">SC-E0801</a></h2>
 <p><strong>Error</strong> — SVG could not be read</p>
 <p>The SVG file could not be read: it is not well-formed XML, its root is not an <code>&lt;svg&gt;</code> element,
@@ -1600,7 +1650,7 @@ tools: stitchcraft-xtask (`xtask/`, run as `cargo xtask`)
 <tr><td><code>stitchcraft-core</code></td><td>L0</td><td><code>Mm</code>, <code>Point</code>, <code>Vec2</code>, tolerances, deterministic math (<code>libm</code> wrappers), <code>SplitMix64</code> RNG, <code>Budget</code>, <code>Diagnostic</code>/<code>Code</code>/<code>Severity</code></td><td>depend on any workspace crate</td></tr>
 <tr><td><code>stitchcraft-params</code></td><td>L0</td><td><code>params!</code>, <code>ParamSpec</code>, <code>ParamSet</code>, value parsing and validation, the registry audit (the list of declarations is <code>stitchcraft_engine::registry</code>)</td><td>know any stitch algorithm</td></tr>
 <tr><td><code>stitchcraft-plan</code></td><td>L1</td><td><code>Stitch</code>, <code>StitchKind</code>, <code>ColorBlock</code>, <code>StitchPlan</code>, <code>Thread</code>, palettes, <code>MachineProfile</code>, plan invariants</td><td>generate stitches; read/write files</td></tr>
-<tr><td><code>stitchcraft-engine</code></td><td>L2</td><td><code>Design</code>/<code>Element</code>/<code>Shape</code>, normalization, generators, plan assembly</td><td>depend on formats, render or any adapter</td></tr>
+<tr><td><code>stitchcraft-engine</code></td><td>L2</td><td><code>Design</code>/<code>Element</code>/<code>Shape</code>, normalization, generators, plan assembly, finalizing for the machine</td><td>depend on formats, render or any adapter</td></tr>
 <tr><td><code>stitchcraft-formats</code></td><td>L2</td><td>readers/writers (PES/PEC, DST, …), quantization, format limits</td><td>depend on engine (it encodes <em>plans</em>)</td></tr>
 <tr><td><code>stitchcraft-render</code></td><td>L2</td><td>CPU preview images of plans (thread look, simple look, overlays)</td><td>depend on engine</td></tr>
 <tr><td><code>stitchcraft-svg</code></td><td>L3</td><td>SVG → <code>Design</code> (geometry, styles, <code>inkstitch:*</code> attributes, commands), plan → SVG</td><td>contain stitch logic</td></tr>
@@ -1846,7 +1896,7 @@ change starts a new run.</p>
 </thead>
 <tbody>
 <tr><td><code>REQ-PLAN-001</code></td><td>Every position is finite and inside the profile’s hoop, centred on the origin.</td><td>M1</td></tr>
-<tr><td><code>REQ-PLAN-002</code></td><td>While sewing, every stitch is between the profile’s <code>min_stitch</code> (locks: 0.2 mm) and <code>max_stitch</code>.</td><td>M1</td></tr>
+<tr><td><code>REQ-PLAN-002</code></td><td>While sewing, every stitch is between the profile’s <code>min_stitch</code> (lock stitches, into or out of a lock point: 0.2 mm) and <code>max_stitch</code>.</td><td>M1</td></tr>
 <tr><td><code>REQ-PLAN-003</code></td><td>Every block sews at least one stitch; trims and stops happen where the needle is.</td><td>M1</td></tr>
 <tr><td><code>REQ-PLAN-004</code></td><td>A <code>Trim</code> is preceded by a tie-off and followed by a tie-in, when the element’s lock settings ask for them.</td><td>M3</td></tr>
 <tr><td><code>REQ-PLAN-005</code></td><td>While sewing, no stitch lands where the needle already is.</td><td>M1</td></tr>
@@ -2161,6 +2211,7 @@ another.</p>
 <tr><td><code>SC-W0501</code></td><td>Warning</td><td>Travel could not stay inside the region; used tie-off, trim and tie-in</td><td>M5</td></tr>
 <tr><td><code>SC-W0502</code></td><td>Warning</td><td>Lock stitch shorter than 0.2 mm; lengthened</td><td>M3</td></tr>
 <tr><td><code>SC-W0503</code></td><td>Warning</td><td>Custom lock cannot be sewn as written</td><td>M3</td></tr>
+<tr><td><code>SC-I0504</code></td><td>Info</td><td>Stitches shorter than the shortest stitch merged</td><td>M3</td></tr>
 <tr><td><code>SC-W0505</code></td><td>Warning</td><td>Trim or stop after an element that sews nothing; left out</td><td>M3</td></tr>
 <tr><td><code>SC-E0601</code></td><td>Error</td><td>Too many colour changes for the file format</td><td>M1</td></tr>
 <tr><td><code>SC-E0602</code></td><td>Error</td><td>Design too large for the file format (coordinates or data exceed its fields)</td><td>M1</td></tr>
@@ -2169,6 +2220,7 @@ another.</p>
 <tr><td><code>SC-I0605</code></td><td>Info</td><td>Long jumps cut in DST (machines cut the thread before three or more jump records in a row)</td><td>M3</td></tr>
 <tr><td><code>SC-E0701</code></td><td>Error</td><td>Design does not fit the hoop</td><td>M1</td></tr>
 <tr><td><code>SC-W0702</code></td><td>Warning</td><td>Design is larger than the comfort zone (the profile’s most accurate area)</td><td>M1</td></tr>
+<tr><td><code>SC-I0703</code></td><td>Info</td><td>Stitches longer than the machine’s longest stitch; split</td><td>M3</td></tr>
 <tr><td><code>SC-E0801</code></td><td>Error</td><td>SVG could not be read (with the parser’s position)</td><td>M3</td></tr>
 <tr><td><code>SC-W0802</code></td><td>Warning</td><td>SVG feature ignored (e.g. raster image, text not converted to paths)</td><td>M3</td></tr>
 <tr><td><code>SC-W0803</code></td><td>Warning</td><td><code>.vectorcraft</code> file from a newer VectorCraft format version; read best-effort</td><td>M6</td></tr>
@@ -2265,7 +2317,7 @@ file could need a large amount of memory. Reading charges the budget for each XM
 8 bytes of a transform or point list (<a href="#budgets">budgets</a>).</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="engine-pipeline"><a class="header" href="#engine-pipeline">Engine pipeline</a></h1>
-<!-- implements: crates/stitchcraft-engine/src/normalize/mod.rs, crates/stitchcraft-engine/src/generate.rs, crates/stitchcraft-engine/src/assemble.rs, crates/stitchcraft-engine/src/pipeline.rs -->
+<!-- implements: crates/stitchcraft-engine/src/normalize/mod.rs, crates/stitchcraft-engine/src/generate.rs, crates/stitchcraft-engine/src/assemble.rs, crates/stitchcraft-engine/src/finalize.rs, crates/stitchcraft-engine/src/pipeline.rs, apps/stitchcraft-cli/src/commands/plan.rs -->
 <p>From a <code>Design</code> to a checked <code>StitchPlan</code>. Each stage is a module in <code>stitchcraft-engine</code> with its
 own tests; stages communicate only through the types in the <a href="#data-model">data model</a>.</p>
 <pre><code class="language-text">Design ──▶ 1 normalize ──▶ 2 validate ──▶ 3 generate (per element) ──▶ 4 assemble ──▶ 5 finalize ──▶ 6 check ──▶ StitchPlan
@@ -2407,29 +2459,47 @@ is clear of the needle for an appliqué or a check, and sewing resumes with a ju
 </table>
 </div>
 <h2 id="5-finalize"><a class="header" href="#5-finalize">5. Finalize</a></h2>
-<p>Against the machine profile:</p>
+<p>Finalize fits the plan to the machine profile (<code>stitchcraft_engine::finalize</code>), and a plan that <code>plan</code>
+returns can be written as it is. Generators already sew within the machine’s limits. What is left to fit
+comes from joining groups and from settings the machine cannot follow.</p>
 <ol>
-<li><strong>Split</strong> <code>Normal</code> stitches longer than <code>profile.max_stitch</code> into equal parts.</li>
-<li><strong>Merge</strong> <code>Normal</code> stitches shorter than <code>min_stitch_len</code> (settings or profile, whichever is larger)
-into their neighbour, except lock stitches.</li>
-<li><strong>Remove</strong> consecutive duplicate positions.</li>
-<li><strong>Hoop:</strong> if the plan’s bounds after translation to the origin exceed the hoop → <code>SC-E0701</code> (with a
-rotate-to-fit hint when rotating 90° would fit); if they exceed the comfort zone → <code>SC-W0702</code>.</li>
-<li><strong>Colour limits:</strong> colour changes above the format maximum → <code>SC-E0601</code>.</li>
-<li>Append <code>End</code>.</li>
+<li><strong>The shortest stitch</strong> of each needle point is its element’s: the one its generator used, so finalize
+never thins what the generator spaced. That is the element’s <code>min_stitch_length_mm</code>, else the design’s
+<code>min_stitch_len</code>, and never shorter than the machine’s (<code>profile.min_stitch</code>). Where one element’s
+stitching runs straight on into the next, the stitch between them can be anything up to the collapse
+length, 0 included. Within each run of stitches, from where the needle lands to the next jump, trim or
+stop, a needle point less than its shortest stitch from the one before is left out. The stitch then
+runs on to the next point. The run’s first and last points and lock points always stay, and the points
+before them are left out instead. A point where the needle already is would sew in place, and it is
+left out too. A stitch into or out of a lock point is a lock stitch, whose shortest is 0.2 mm
+(<code>REQ-PLAN-002</code>). <code>SC-I0504</code> says how many points were left out (<code>REQ-FIN-001</code>).</li>
+<li><strong>The longest stitch.</strong> A stitch longer than <code>profile.max_stitch</code> is split into the fewest equal parts
+no longer than it (<code>SC-I0703</code>, <code>REQ-FIN-001</code>). Such a stitch comes from a stitch placed by hand, from
+a custom lock’s long step, or from a move sewn on under a <code>min_jump_stitch_length_mm</code> longer than the
+machine’s longest stitch. Each part counts against the design’s stitch budget.</li>
+<li><strong>Colour limits:</strong> colour changes and stops above what the profile’s format records → <code>SC-E0601</code>.</li>
+<li><strong>Hoop:</strong> a design larger than the hoop → <code>SC-E0701</code>, with a rotate-to-fit fix when rotating 90° would
+fit. When a design’s origin is far from its middle, a design smaller than the hoop can cross the
+hoop’s edge. That is <code>SC-E0701</code> as well. So is a stop position past the edge, which the message names. The size is
+the stitches’ own. For a design that cannot be sewn, <code>SC-E0701</code> is the only message about its size.
+Otherwise, larger than the comfort zone → <code>SC-W0702</code> (<code>REQ-FIN-002</code>).</li>
+<li>The end is the plan’s structure: the machine ends after the last block.</li>
 </ol>
+<p>After an error at any step, <code>plan</code> returns no plan, and the error’s diagnostic says why.</p>
 <p>Splitting jumps longer than a format can encode in one record is <em>not</em> done here: it is the encoder’s
 job, because the limit is a property of the file format, not of the machine.</p>
-<p>Ink/Stitch (read at <code>d59c9ab</code>) removes short stitches once, over the whole plan: a stitch no longer than
-the shortest stitch (the element’s <code>min_stitch_length_mm</code>, else its global 0.1 mm) from the last one kept
-is dropped, except lock stitches and the first stitch after a jump, stop, trim or colour change; nothing
-is split. StitchCraft’s floor is the machine’s (0.3 mm on the Brother), short stitches merge into their
-neighbour, and the running stitch already keeps the floor while it places stitches.</p>
+<p>Ink/Stitch (read at <code>d59c9ab</code>) removes short stitches once, over the whole plan: an entry no farther than
+its shortest stitch (the element’s <code>min_stitch_length_mm</code>, else a global 0.1 mm) from the last one kept
+is dropped. It keeps lock stitches, the stitch right after a jump, and stop, trim and colour-change
+entries. A jump itself can be dropped. Nothing is split. StitchCraft uses the same shortest stitch for
+each element as Ink/Stitch, but never one below the machine’s (0.3 mm on the Brother). It keeps the ends
+of each run and splits stitches the machine cannot sew: a deviation (<code>DEV-FIN-001</code>), because a file can
+sew differently in the two tools.</p>
 <h2 id="6-check"><a class="header" href="#6-check">6. Check</a></h2>
 <p>The plan invariant checker (<code>stitchcraft-plan::invariants</code>, the same code conformance level L0 runs)
-validates the result. A violation is a bug in StitchCraft: the CLI refuses to write the file, reports
-<code>SC-E0009 internal check failed</code> with a bug-report bundle, and the conformance suite has a case for every
-invariant.</p>
+validates the result. A violation is a bug in StitchCraft: <code>plan</code> returns no plan and reports
+<code>SC-E0009 internal check failed</code> (<code>REQ-FIN-003</code>). The command line then does not write a machine file,
+and from M3.10 it writes a bug-report bundle. The conformance suite has a case for every invariant.</p>
 <h2 id="7-incremental-and-parallel-planning"><a class="header" href="#7-incremental-and-parallel-planning">7. Incremental and parallel planning</a></h2>
 <ul>
 <li><strong>Cache:</strong> a group is keyed by (element shape hash, params hash, hints, seed, engine version). The
@@ -3824,6 +3894,9 @@ golden = "golden/fill-tatami-gap-preserved.csv"  # stitch list after quantizatio
 <code>conformance/fixtures/</code> (small, hand-written or generated, with a row in the fixtures index stating their
 origin and licence). Large real-world corpora live in a separate repository pinned by commit and
 SHA-256, downloaded by <code>cargo xtask corpus</code> — the same policy VectorCraft follows for its corpora.</p>
+<p>The engine’s cases build their small designs with <code>stitchcraft_testkit::designs</code>. It also reads a plan’s
+shape at a glance: <code>J L4 S5 L4</code> is a jump, 4 lock stitches, 5 needle points of stitching and 4 more lock
+stitches.</p>
 <h2 id="levels"><a class="header" href="#levels">Levels</a></h2>
 <h3 id="l0--plan-invariants-every-pr"><a class="header" href="#l0--plan-invariants-every-pr">L0 — Plan invariants (every PR)</a></h3>
 <p>The <a href="#plan-invariants">plan invariants</a> run on <em>every</em> plan the
@@ -5017,7 +5090,7 @@ of code) · 🧵 machine checkpoint · 👤 owner action</p>
 <tr><td>M3.6 ✅</td><td>Manual stitch</td><td><code>REQ-RUN-006</code>, <code>REQ-RUN-008</code></td></tr>
 <tr><td>M3.7 ✅</td><td>Lock stitches: every shape, its size and its place at either end of the stitching</td><td><code>REQ-LCK-002</code>, <code>REQ-LCK-004</code></td></tr>
 <tr><td>M3.8 ✅</td><td>Plan assembly: order, collapse, tie-off/jump/trim/tie-in (where <code>ties</code> says), stops, colour changes, the origin and stop position; <code>stitchcraft_engine::plan</code> sends each element to its generator</td><td><code>REQ-ASM-001..003</code>, <code>REQ-ASM-005</code>, <code>REQ-LCK-001</code>, <code>REQ-GEN-002</code></td></tr>
-<tr><td>M3.9</td><td>Finalize: split, merge, hoop, colour limits; <code>stitch plan in.svg -o out.pes --preview out.png --report out.json</code></td><td>end-to-end cases</td></tr>
+<tr><td>M3.9 ✅</td><td>Finalize: split, merge, hoop, colour limits, the plan check; <code>stitch plan in.svg -o out.pes --preview out.png --report out.json</code></td><td><code>REQ-FIN-001..003</code>; the <code>strokes</code> plan case, SVG to machine file</td></tr>
 <tr><td>M3.10</td><td><code>stitch bug-report</code> bundle</td><td>a bundle reproduces its plan byte for byte</td></tr>
 <tr><td>MC-2 🧵</td><td><strong>TS-03</strong> (running/bean lengths), <strong>TS-04</strong> (lock holding test), <strong>TS-02</strong> again with element-driven trims</td><td>report filed; min-stitch and lock defaults confirmed (<code>REQ-LCK-003</code>)</td></tr>
 </tbody>

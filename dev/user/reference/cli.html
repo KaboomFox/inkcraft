@@ -35,7 +35,7 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-8b7f611c.js";
+            window.path_to_searchindex_js = "../../searchindex-c7121901.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-dc5674fc.js"></script>
@@ -189,6 +189,7 @@
 Usage: stitch &lt;COMMAND&gt;
 
 Commands:
+  plan       Plan a design (SVG) for a machine and write the machine file, with a picture and a report if asked
   testsheet  Write a machine-checkpoint test sheet (docs/src/plan/machine-testing.md)
   inspect    Read a machine file (PES, PEC or DST) and describe it: size, stitches, threads, stitch lengths
   preview    Draw a machine file (PES, PEC or DST) as a picture of what it will sew (PNG)
@@ -208,8 +209,41 @@ Exit status: 0 done (warnings allowed) · 1 the design or file has errors (nothi
 error · 3 a file could not be read or written.
 
 Coming with the roadmap (docs/src/plan/roadmap.md):
-  stitch plan design.svg -o design.pes                      (M3)
   stitch export design.vectorcraft -o design.pes            (M6)
+</code></pre>
+<h2 id="stitch-plan"><a class="header" href="#stitch-plan">stitch plan</a></h2>
+<pre><code class="language-text">Plan a design (SVG) for a machine and write the machine file, with a picture and a report if asked
+
+Usage: stitch plan [OPTIONS] --output &lt;OUTPUT&gt; &lt;DESIGN&gt;
+
+Arguments:
+  &lt;DESIGN&gt;
+          The design (SVG)
+
+Options:
+  -o, --output &lt;OUTPUT&gt;
+          The machine file to write
+
+  -p, --profile &lt;PROFILE&gt;
+          The machine profile (see `stitch profiles`)
+          
+          [default: brother-200x200]
+
+      --format &lt;FORMAT&gt;
+          The file format; by default the output file's extension decides
+
+          Possible values:
+          - pes: Brother PES, version 1
+          - dst: Tajima DST
+
+      --preview &lt;PREVIEW&gt;
+          Also draw a picture of what the file will sew (PNG)
+
+      --report &lt;REPORT&gt;
+          Also write a report of the plan and what was said about it (JSON), even when nothing else is written
+
+  -h, --help
+          Print help (see a summary with '-h')
 </code></pre>
 <h2 id="stitch-testsheet"><a class="header" href="#stitch-testsheet">stitch testsheet</a></h2>
 <pre><code class="language-text">Write a machine-checkpoint test sheet (docs/src/plan/machine-testing.md)

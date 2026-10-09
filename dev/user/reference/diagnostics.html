@@ -35,7 +35,7 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-8b7f611c.js";
+            window.path_to_searchindex_js = "../../searchindex-c7121901.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-dc5674fc.js"></script>
@@ -202,6 +202,7 @@
 <tr><td><a href="#sc-w0403"><code>SC-W0403</code></a></td><td>Warning</td><td>Hand-placed stitch shorter than the shortest stitch; point left out</td></tr>
 <tr><td><a href="#sc-w0502"><code>SC-W0502</code></a></td><td>Warning</td><td>Lock stitch shorter than 0.2 mm; lengthened</td></tr>
 <tr><td><a href="#sc-w0503"><code>SC-W0503</code></a></td><td>Warning</td><td>Custom lock cannot be sewn as written</td></tr>
+<tr><td><a href="#sc-i0504"><code>SC-I0504</code></a></td><td>Info</td><td>Stitches shorter than the shortest stitch merged</td></tr>
 <tr><td><a href="#sc-w0505"><code>SC-W0505</code></a></td><td>Warning</td><td>Trim or stop after an element that sews nothing; left out</td></tr>
 <tr><td><a href="#sc-e0601"><code>SC-E0601</code></a></td><td>Error</td><td>Too many colour changes for the file format</td></tr>
 <tr><td><a href="#sc-e0602"><code>SC-E0602</code></a></td><td>Error</td><td>Design too large for the file format</td></tr>
@@ -210,6 +211,7 @@
 <tr><td><a href="#sc-i0605"><code>SC-I0605</code></a></td><td>Info</td><td>Long jumps cut in DST</td></tr>
 <tr><td><a href="#sc-e0701"><code>SC-E0701</code></a></td><td>Error</td><td>Design does not fit the hoop</td></tr>
 <tr><td><a href="#sc-w0702"><code>SC-W0702</code></a></td><td>Warning</td><td>Design is larger than the comfort zone</td></tr>
+<tr><td><a href="#sc-i0703"><code>SC-I0703</code></a></td><td>Info</td><td>Stitches longer than the machine’s longest stitch; split</td></tr>
 <tr><td><a href="#sc-e0801"><code>SC-E0801</code></a></td><td>Error</td><td>SVG could not be read</td></tr>
 <tr><td><a href="#sc-w0802"><code>SC-W0802</code></a></td><td>Warning</td><td>SVG feature ignored</td></tr>
 <tr><td><a href="#sc-i0805"><code>SC-I0805</code></a></td><td>Info</td><td>Object left out, as the file asks</td></tr>
@@ -314,6 +316,13 @@ drawn custom lock yet, and sews the half stitch in its place. Parts that are not
 longer than 10 m, are left out. If no step is left, the half stitch is sewn instead.</p>
 <p>The message says what was wrong. Write the lock as numbers, such as <code>1 -1 1 -1</code>, or choose
 another lock shape.</p>
+<h2 id="sc-i0504"><a class="header" href="#sc-i0504">SC-I0504</a></h2>
+<p><strong>Info</strong> — Stitches shorter than the shortest stitch merged</p>
+<p>Needle points less than the shortest stitch from the one before were left out, so the stitch before
+each runs on to the next and none is shorter than the machine sews well. This happens where one
+element’s stitching runs straight on into the next and they nearly touch: the stitch between them is
+whatever is left of the gap. Nothing visible changes.</p>
+<p>Nothing to do. If the count is large, check for elements drawn on top of each other.</p>
 <h2 id="sc-w0505"><a class="header" href="#sc-w0505">SC-W0505</a></h2>
 <p><strong>Warning</strong> — Trim or stop after an element that sews nothing; left out</p>
 <p>The element is set to trim or stop after it (<code>trim_after</code>, <code>stop_after</code>, or Ink/Stitch’s trim and
@@ -367,6 +376,13 @@ machine and hoop sew most accurately. Near the hoop’s edge fabric is held less
 designs pucker and shift more.</p>
 <p>The file was written. Rotate the design if the message says that brings it inside the comfort
 zone, use a firmer stabilizer, or scale the design down.</p>
+<h2 id="sc-i0703"><a class="header" href="#sc-i0703">SC-I0703</a></h2>
+<p><strong>Info</strong> — Stitches longer than the machine’s longest stitch; split</p>
+<p>Stitches longer than the machine’s longest stitch were split into equal parts, each no longer than
+it: a long stitch placed by hand, say, or a custom lock’s long step. A long loose stitch snags and
+sags; the machine may refuse it.</p>
+<p>To choose where the needle goes down instead, add nodes (manual stitch) or set
+<code>max_stitch_length_mm</code>.</p>
 <h2 id="sc-e0801"><a class="header" href="#sc-e0801">SC-E0801</a></h2>
 <p><strong>Error</strong> — SVG could not be read</p>
 <p>The SVG file could not be read: it is not well-formed XML, its root is not an <code>&lt;svg&gt;</code> element,

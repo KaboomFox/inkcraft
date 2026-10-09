@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-476a85b1.js";
+            window.path_to_searchindex_js = "searchindex-70193300.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-631d94b1.js"></script>
@@ -367,6 +367,7 @@ Usage: stitch &lt;COMMAND&gt;
 
 Commands:
   testsheet  Write a machine-checkpoint test sheet (docs/src/plan/machine-testing.md)
+  inspect    Read a machine file (PES, PEC or DST) and describe it: size, stitches, threads, stitch lengths
   profiles   List the built-in machine profiles
   explain    Explain a diagnostic code, such as SC-W0702
   help       Print this message or the help of the given subcommand(s)
@@ -378,11 +379,11 @@ Options:
   -V, --version
           Print version
 
-Exit status: 0 done (warnings allowed) · 1 the design has errors, nothing written · 2 usage error ·
-3 a file could not be read or written.
+Exit status: 0 done (warnings allowed) · 1 the design or file has errors (nothing written) · 2 usage
+error · 3 a file could not be read or written.
 
 Coming with the roadmap (docs/src/plan/roadmap.md):
-  stitch inspect FILE                                       (M2)
+  stitch preview design.pes -o design.png                   (M2)
   stitch plan design.svg -o design.pes                      (M3)
   stitch export design.vectorcraft -o design.pes            (M6)
 </code></pre>
@@ -414,6 +415,22 @@ Options:
 
   -h, --help
           Print help (see a summary with '-h')
+</code></pre>
+<h2 id="stitch-inspect"><a class="header" href="#stitch-inspect">stitch inspect</a></h2>
+<pre><code class="language-text">Read a machine file (PES, PEC or DST) and describe it: size, stitches, threads, stitch lengths
+
+Usage: stitch inspect [OPTIONS] &lt;FILE&gt;
+
+Arguments:
+  &lt;FILE&gt;
+          The machine file
+
+Options:
+  -p, --profile &lt;PROFILE&gt;
+          Also check the design against a machine profile, such as brother-200x200 (see `stitch profiles`)
+
+  -h, --help
+          Print help
 </code></pre>
 <h2 id="stitch-profiles"><a class="header" href="#stitch-profiles">stitch profiles</a></h2>
 <pre><code class="language-text">List the built-in machine profiles
@@ -542,6 +559,7 @@ Arguments:
 <tr><td><a href="#sc-e0010"><code>SC-E0010</code></a></td><td>Error</td><td>Nothing to stitch</td></tr>
 <tr><td><a href="#sc-e0601"><code>SC-E0601</code></a></td><td>Error</td><td>Too many colour changes for the file format</td></tr>
 <tr><td><a href="#sc-e0602"><code>SC-E0602</code></a></td><td>Error</td><td>Design too large for the file format</td></tr>
+<tr><td><a href="#sc-e0603"><code>SC-E0603</code></a></td><td>Error</td><td>Machine file could not be read</td></tr>
 <tr><td><a href="#sc-e0701"><code>SC-E0701</code></a></td><td>Error</td><td>Design does not fit the hoop</td></tr>
 <tr><td><a href="#sc-w0702"><code>SC-W0702</code></a></td><td>Warning</td><td>Design is larger than the comfort zone</td></tr>
 </tbody>
@@ -576,6 +594,13 @@ design has more, so the file was not written.</p>
 was not written. Within a real hoop this does not happen; it points at a design that is far
 larger than any hoop, or at stray objects far from the rest of the design.</p>
 <p>Check the design’s size and remove stray objects.</p>
+<h2 id="sc-e0603"><a class="header" href="#sc-e0603">SC-E0603</a></h2>
+<p><strong>Error</strong> — Machine file could not be read</p>
+<p>The machine file could not be read: it is not in the format its name or first bytes suggest, it
+ends early, or a record in it makes no sense. StitchCraft reads every file as if it could be
+damaged or hostile, so a bad file is reported, never half-read in silence.</p>
+<p>The message says where reading stopped. If the machine sews the file, it may be a format variant
+StitchCraft does not know yet: please report it with the file.</p>
 <h2 id="sc-e0701"><a class="header" href="#sc-e0701">SC-E0701</a></h2>
 <p><strong>Error</strong> — Design does not fit the hoop</p>
 <p>The design is wider or taller than the machine’s hoop, so the machine cannot sew it in one
@@ -1583,6 +1608,7 @@ dangling rung” for <code>SC-W0203</code>). Applied fixes go through the host�
 <tr><td><code>SC-W0501</code></td><td>Warning</td><td>Travel could not stay inside the region; used tie-off, trim and tie-in</td><td>M5</td></tr>
 <tr><td><code>SC-E0601</code></td><td>Error</td><td>Too many colour changes for the format</td><td>M1</td></tr>
 <tr><td><code>SC-E0602</code></td><td>Error</td><td>Design too large for the file format (coordinates or data exceed its fields)</td><td>M1</td></tr>
+<tr><td><code>SC-E0603</code></td><td>Error</td><td>Machine file could not be read (wrong format, truncated, or a record that makes no sense)</td><td>M2</td></tr>
 <tr><td><code>SC-E0701</code></td><td>Error</td><td>Design does not fit the hoop</td><td>M1</td></tr>
 <tr><td><code>SC-W0702</code></td><td>Warning</td><td>Design is larger than the profile’s comfort zone</td><td>M1</td></tr>
 <tr><td><code>SC-E0801</code></td><td>Error</td><td>SVG could not be read (with the parser’s position)</td><td>M3</td></tr>
@@ -2236,6 +2262,26 @@ that machine.</p>
 jumps then the final stitch for a sewn move (the thread lies the same way: the needle only goes down at the
 end). Header extents are measured in DST axes (y up) over every position the frame visits; <code>ST</code> counts the
 records before the end record.</p>
+<h2 id="reading"><a class="header" href="#reading">Reading</a></h2>
+<p><code>stitch inspect</code> and the round-trip tests read machine files back. Readers treat every file as possibly
+damaged or hostile: every offset and length is checked before use, the record count is capped at the stitch
+budget (2,000,000), positions must stay within ±10 m, and a problem is a typed error (<code>SC-E0603</code>) — never a
+panic and never a silent guess. Readers are literal: each record becomes one plan entry, so <code>inspect</code> shows
+what is in the file. Unusual but readable things (a thread index outside the palette, a thumbnail offset
+that points nowhere) become warnings in the result.</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Reader</th><th>Reads</th><th>What it has to infer</th></tr>
+</thead>
+<tbody>
+<tr><td>PES / PEC</td><td>the PEC block of any PES version (<code>#PES0001</code> … <code>#PES0060</code>), and bare <code>#PEC0001</code> files; the block must start with <code>LA:</code></td><td>A colour change to the same palette entry is a <strong>stop</strong> — the way PEC writes stops. Two blocks whose threads map to the same Brother colour read back as one block with a stop: PES v1 cannot tell them apart.</td></tr>
+<tr><td>DST</td><td>the header’s label and every record</td><td>A run of 2–8 consecutive jumps that returns to where it started is a <strong>trim</strong> (it moves the frame nowhere, so it can only mean that). Colours: none — each block gets a placeholder thread, and a stop reads as a colour change.</td></tr>
+</tbody>
+</table>
+</div>
+<p>Every reader survives every truncation and single-byte change of the golden files (a deterministic test
+that runs on every PR); coverage-guided fuzzing runs nightly from M2.5 (<code>REQ-FMT-006</code>).</p>
 <h2 id="later-formats"><a class="header" href="#later-formats">Later formats</a></h2>
 <div class="table-wrapper">
 <table>
@@ -4079,8 +4125,8 @@ of code) · 🧵 machine checkpoint · 👤 owner action</p>
 <tr><th>Step</th><th>Deliverable</th><th>Done when</th></tr>
 </thead>
 <tbody>
-<tr><td>M2.1</td><td>PES/PEC reader (bounded, typed errors); <code>stitch inspect file</code> (counts, bounds, colours)</td><td>round trip <code>REQ-FMT-002</code>; empty files <code>REQ-FMT-004</code></td></tr>
-<tr><td>M2.2</td><td>DST reader</td><td>same</td></tr>
+<tr><td>M2.1 ✅</td><td>PES/PEC reader (bounded, typed errors); <code>stitch inspect file</code> (counts, bounds, colours, stitch lengths, profile check)</td><td>empty files <code>REQ-FMT-004</code>; every truncation and byte flip handled</td></tr>
+<tr><td>M2.2 ✅</td><td>DST reader (trims inferred from cancelling jump runs)</td><td>same</td></tr>
 <tr><td>M2.3</td><td>Command round trip for every writer/reader pair</td><td><code>REQ-FMT-003</code> active</td></tr>
 <tr><td>M2.4</td><td>pyembroidery oracle job (pinned)</td><td><code>REQ-FMT-005</code> active</td></tr>
 <tr><td>M2.5</td><td><code>cargo-fuzz</code> targets for both readers; nightly job with persisted corpus</td><td><code>REQ-FMT-006</code>; 1 h fuzzing clean</td></tr>

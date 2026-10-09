@@ -35,7 +35,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-476a85b1.js";
+            window.path_to_searchindex_js = "../searchindex-70193300.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-631d94b1.js"></script>
@@ -237,8 +237,8 @@ of code) · 🧵 machine checkpoint · 👤 owner action</p>
 <tr><th>Step</th><th>Deliverable</th><th>Done when</th></tr>
 </thead>
 <tbody>
-<tr><td>M2.1</td><td>PES/PEC reader (bounded, typed errors); <code>stitch inspect file</code> (counts, bounds, colours)</td><td>round trip <code>REQ-FMT-002</code>; empty files <code>REQ-FMT-004</code></td></tr>
-<tr><td>M2.2</td><td>DST reader</td><td>same</td></tr>
+<tr><td>M2.1 ✅</td><td>PES/PEC reader (bounded, typed errors); <code>stitch inspect file</code> (counts, bounds, colours, stitch lengths, profile check)</td><td>empty files <code>REQ-FMT-004</code>; every truncation and byte flip handled</td></tr>
+<tr><td>M2.2 ✅</td><td>DST reader (trims inferred from cancelling jump runs)</td><td>same</td></tr>
 <tr><td>M2.3</td><td>Command round trip for every writer/reader pair</td><td><code>REQ-FMT-003</code> active</td></tr>
 <tr><td>M2.4</td><td>pyembroidery oracle job (pinned)</td><td><code>REQ-FMT-005</code> active</td></tr>
 <tr><td>M2.5</td><td><code>cargo-fuzz</code> targets for both readers; nightly job with persisted corpus</td><td><code>REQ-FMT-006</code>; 1 h fuzzing clean</td></tr>

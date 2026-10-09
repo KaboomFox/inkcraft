@@ -35,7 +35,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-476a85b1.js";
+            window.path_to_searchindex_js = "../searchindex-70193300.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-631d94b1.js"></script>
@@ -286,6 +286,26 @@ that machine.</p>
 jumps then the final stitch for a sewn move (the thread lies the same way: the needle only goes down at the
 end). Header extents are measured in DST axes (y up) over every position the frame visits; <code>ST</code> counts the
 records before the end record.</p>
+<h2 id="reading"><a class="header" href="#reading">Reading</a></h2>
+<p><code>stitch inspect</code> and the round-trip tests read machine files back. Readers treat every file as possibly
+damaged or hostile: every offset and length is checked before use, the record count is capped at the stitch
+budget (2,000,000), positions must stay within ±10 m, and a problem is a typed error (<code>SC-E0603</code>) — never a
+panic and never a silent guess. Readers are literal: each record becomes one plan entry, so <code>inspect</code> shows
+what is in the file. Unusual but readable things (a thread index outside the palette, a thumbnail offset
+that points nowhere) become warnings in the result.</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Reader</th><th>Reads</th><th>What it has to infer</th></tr>
+</thead>
+<tbody>
+<tr><td>PES / PEC</td><td>the PEC block of any PES version (<code>#PES0001</code> … <code>#PES0060</code>), and bare <code>#PEC0001</code> files; the block must start with <code>LA:</code></td><td>A colour change to the same palette entry is a <strong>stop</strong> — the way PEC writes stops. Two blocks whose threads map to the same Brother colour read back as one block with a stop: PES v1 cannot tell them apart.</td></tr>
+<tr><td>DST</td><td>the header’s label and every record</td><td>A run of 2–8 consecutive jumps that returns to where it started is a <strong>trim</strong> (it moves the frame nowhere, so it can only mean that). Colours: none — each block gets a placeholder thread, and a stop reads as a colour change.</td></tr>
+</tbody>
+</table>
+</div>
+<p>Every reader survives every truncation and single-byte change of the golden files (a deterministic test
+that runs on every PR); coverage-guided fuzzing runs nightly from M2.5 (<code>REQ-FMT-006</code>).</p>
 <h2 id="later-formats"><a class="header" href="#later-formats">Later formats</a></h2>
 <div class="table-wrapper">
 <table>

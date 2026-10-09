@@ -35,7 +35,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-978d0931.js";
+            window.path_to_searchindex_js = "../searchindex-280bfbd5.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-6cb0fb79.js"></script>
@@ -333,7 +333,8 @@ fill with generated tiles; circular fill. One step per type with its requirement
 (TS-11 sampler of the new types).</p>
 <h2 id="m8--inkstitch-interoperability"><a class="header" href="#m8--inkstitch-interoperability">M8 — Ink/Stitch interoperability</a></h2>
 <p>SVG adapter v2: every <code>inkstitch:*</code> attribute in the <a href="../design/inkstitch-compat-contract.html">compatibility contract</a>,
-command symbols, clones (<code>&lt;use&gt;</code>), ignore layers; <code>stitch import-inkstitch file.svg -o file.vectorcraft</code>;
+the command symbols not read yet (since M3 the adapter applies trim, stop and the ignore commands, and
+never stitches commands, connectors or helper paths: <code>REQ-SVG-003</code>), clones (<code>&lt;use&gt;</code>); <code>stitch import-inkstitch file.svg -o file.vectorcraft</code>;
 L3 differential conformance against a pinned Ink/Stitch with the deviations ledger. Ink/Stitch’s font
 library is part of that corpus: hundreds of real Ink/Stitch files, mostly satin, downloaded at a pinned
 commit by <code>cargo xtask corpus</code> and never committed, using only fonts whose licence allows it (OFL, CC0,

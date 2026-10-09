@@ -35,7 +35,7 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-978d0931.js";
+            window.path_to_searchindex_js = "../../searchindex-280bfbd5.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-6cb0fb79.js"></script>
@@ -208,6 +208,7 @@
 <tr><td><a href="#sc-w0702"><code>SC-W0702</code></a></td><td>Warning</td><td>Design is larger than the comfort zone</td></tr>
 <tr><td><a href="#sc-e0801"><code>SC-E0801</code></a></td><td>Error</td><td>SVG could not be read</td></tr>
 <tr><td><a href="#sc-w0802"><code>SC-W0802</code></a></td><td>Warning</td><td>SVG feature ignored</td></tr>
+<tr><td><a href="#sc-i0805"><code>SC-I0805</code></a></td><td>Info</td><td>Object left out, as the file asks</td></tr>
 <tr><td><a href="#sc-w0804"><code>SC-W0804</code></a></td><td>Warning</td><td>Element geometry invalid or out of range</td></tr>
 </tbody>
 </table>
@@ -341,6 +342,14 @@ simplified: text that is not converted to paths, raster images, clones (<code>&l
 elements, style sheets, or a gradient or pattern used as a colour.</p>
 <p>The message names the element and what was done. Convert text and clones to paths in the editor
 (in Inkscape: Path › Object to Path, Edit › Clone › Unlink Clone), and give shapes plain colours.</p>
+<h2 id="sc-i0805"><a class="header" href="#sc-i0805">SC-I0805</a></h2>
+<p><strong>Info</strong> — Object left out, as the file asks</p>
+<p>An object or a layer is left out because the file asks for it: an Ink/Stitch “ignore object” or
+“ignore layer” command, or the object’s Ink/Stitch setting <code>ignore_object</code>. Designs keep
+templates, placement lines and notes this way, in the drawing but out of the sew-out, and
+Ink/Stitch leaves them out too.</p>
+<p>The message names what was left out and why. To stitch it, delete the command’s symbol, or turn the
+setting off in Ink/Stitch’s parameters.</p>
 <h2 id="sc-w0804"><a class="header" href="#sc-w0804">SC-W0804</a></h2>
 <p><strong>Warning</strong> — Element geometry invalid or out of range</p>
 <p>An element’s geometry cannot be used: its path data has an error (the path is stitched up to the

@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-87013c89.js";
+            window.path_to_searchindex_js = "searchindex-b316d6dc.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-2576b9cf.js"></script>
@@ -637,6 +637,7 @@ Arguments:
 <tr><td><a href="#sc-e0602"><code>SC-E0602</code></a></td><td>Error</td><td>Design too large for the file format</td></tr>
 <tr><td><a href="#sc-e0603"><code>SC-E0603</code></a></td><td>Error</td><td>Machine file could not be read</td></tr>
 <tr><td><a href="#sc-w0604"><code>SC-W0604</code></a></td><td>Warning</td><td>Thread colours unknown</td></tr>
+<tr><td><a href="#sc-i0605"><code>SC-I0605</code></a></td><td>Info</td><td>Long jumps cut in DST</td></tr>
 <tr><td><a href="#sc-e0701"><code>SC-E0701</code></a></td><td>Error</td><td>Design does not fit the hoop</td></tr>
 <tr><td><a href="#sc-w0702"><code>SC-W0702</code></a></td><td>Warning</td><td>Design is larger than the comfort zone</td></tr>
 <tr><td><a href="#sc-e0801"><code>SC-E0801</code></a></td><td>Error</td><td>SVG could not be read</td></tr>
@@ -732,6 +733,15 @@ the next thread), so every thread has a placeholder colour — in previews, and 
 from this one, where the machine shows that colour at each thread change.</p>
 <p>The stitches are not affected. Load the threads the design needs, in the order the design’s
 author gives; StitchCraft cannot know them.</p>
+<h2 id="sc-i0605"><a class="header" href="#sc-i0605">SC-I0605</a></h2>
+<p><strong>Info</strong> — Long jumps cut in DST</p>
+<p>DST has no trim command: machines cut the thread when they meet three or more jump records in a
+row (a machine setting; three is the common one), and a jump longer than 24.2 mm takes three or
+more records. So the thread will be cut before such a jump, although the plan does not trim there.
+With a tie-off before the jump the cut is usually welcome: there is no jump thread to clip by hand.</p>
+<p>Nothing to do. Where an element’s ties are off, turn them on so its stitching holds when it is
+cut, or sew a PES file, where only trims cut. A machine set to another number of jump records cuts
+before other jumps: see its DST setting.</p>
 <h2 id="sc-e0701"><a class="header" href="#sc-e0701">SC-E0701</a></h2>
 <p><strong>Error</strong> — Design does not fit the hoop</p>
 <p>The design is wider or taller than the machine’s hoop, so the machine cannot sew it in one
@@ -2037,6 +2047,7 @@ another.</p>
 <tr><td><code>SC-E0602</code></td><td>Error</td><td>Design too large for the file format (coordinates or data exceed its fields)</td><td>M1</td></tr>
 <tr><td><code>SC-E0603</code></td><td>Error</td><td>Machine file could not be read (wrong format, truncated, or a record that makes no sense)</td><td>M2</td></tr>
 <tr><td><code>SC-W0604</code></td><td>Warning</td><td>Thread colours unknown (the file stores none, as DST never does; threads are placeholders)</td><td>M2</td></tr>
+<tr><td><code>SC-I0605</code></td><td>Info</td><td>Long jumps cut in DST (machines cut the thread before three or more jump records in a row)</td><td>M3</td></tr>
 <tr><td><code>SC-E0701</code></td><td>Error</td><td>Design does not fit the hoop</td><td>M1</td></tr>
 <tr><td><code>SC-W0702</code></td><td>Warning</td><td>Design is larger than the comfort zone (the profile’s most accurate area)</td><td>M1</td></tr>
 <tr><td><code>SC-E0801</code></td><td>Error</td><td>SVG could not be read (with the parser’s position)</td><td>M3</td></tr>
@@ -2757,11 +2768,21 @@ machines accept, and covered by a golden file.</p>
 </table>
 </div>
 <p>The third byte always has bits 0 and 1 set; bit 7 marks a jump (<code>0x83</code> with no other bits); <code>0xC3</code>
-is a colour change (and, by common convention, a stop); <code>0xF3</code> with zero displacement ends the design.
-DST has no trim command: a trim is three small jumps that cancel out — (+2, −2), (−4, +4), (+2, −2) units
-— which machines read as a trim; the same sequence pystitch writes, and readers (pystitch’s included)
-decode it as a trim. If a machine needs a different sequence, it becomes a profile setting validated on
-that machine.</p>
+is a colour change (and, by common convention, a stop); <code>0xF3</code> with zero displacement ends the design.</p>
+<p><strong>DST has no trim command.</strong> Machines count jump records in a row, and when there are as many as their
+setting, they cut the thread before the jumps — if something was sewn since it was last cut or changed
+(<code>REQ-FMT-008</code>). The setting is commonly three (it can be as high as five; Brother’s PR machines take 1 to
+8, matched by PE-DESIGN’s “number of jumps for trim”), and three is how pyembroidery reads DST too. So:</p>
+<ul>
+<li>a <strong>trim</strong> is three small jumps that cancel out — (+2, −2), (−4, +4), (+2, −2) units, the sequence
+pystitch writes — so the frame goes nowhere while the machine counts three;</li>
+<li>a <strong>jump longer than 24.2 mm</strong> takes three or more records, so it is a trim too, whether the plan asks
+for one or not. The writer says so: <code>SC-I0605</code> counts the places where its machines will cut the
+thread and the plan does not trim. With a tie-off before the jump the cut is usually welcome — there is no jump thread
+to clip; without one (an element whose <code>ties</code> are off), the stitching may unravel.</li>
+</ul>
+<p>A machine set to another count cuts before other jumps, and does not cut at a three-jump trim if set
+higher. A machine profile that writes DST records its count, validated on that machine.</p>
 <p>Moves longer than 12.1 mm are split evenly into several records by the encoder: all jumps for a jump, and
 jumps then the final stitch for a sewn move (the thread lies the same way: the needle only goes down at the
 end). Header extents are measured in DST axes (y up) over every position the frame visits; <code>ST</code> counts the
@@ -2780,7 +2801,7 @@ that points nowhere) become warnings in the result.</p>
 </thead>
 <tbody>
 <tr><td>PES / PEC</td><td>the PEC block of any PES version (<code>#PES0001</code> … <code>#PES0060</code>), and bare <code>#PEC0001</code> files; the block must start with <code>LA:</code></td><td>A colour change to the same palette entry is a <strong>stop</strong> — the way PEC writes stops. Two blocks whose threads map to the same Brother colour read back as one block with a stop: PES v1 cannot tell them apart.</td></tr>
-<tr><td>DST</td><td>the header’s label and every record</td><td>A run of 2–8 consecutive jumps that returns to where it started is a <strong>trim</strong> (it moves the frame nowhere, so it can only mean that). Colours: none — each block gets a placeholder thread, and a stop reads as a colour change.</td></tr>
+<tr><td>DST</td><td>the header’s label and every record</td><td>Three or more jumps in a row are a <strong>trim</strong> before them where something was sewn since the thread was last cut or changed, as DST machines read them (<code>REQ-FMT-008</code>); a trim’s own spelling at the start of the run — up to 8 jumps of at most 1 mm that end where they started — moves the frame nowhere and is not kept as jumps. Colours: none — each block gets a placeholder thread, and a stop reads as a colour change.</td></tr>
 </tbody>
 </table>
 </div>
@@ -2791,14 +2812,16 @@ that runs on every PR), and an hour of coverage-guided fuzzing every night (<cod
 long moves become several records), so a plan read back is not the same plan — it makes the machine do
 the same thing. <code>stitchcraft-testkit::equivalence</code> defines that: where the needle goes down, where the
 thread is cut, where the machine pauses. Every writer/reader pair keeps it on 256 random plans per PR (fixed
-seed) and 10,000 more each night (fresh seed). Fresh seeds paid off before this was even merged: they found a DST
-design whose split jump pieces cancelled exactly and read back as a trim, which is why trim runs must be
-made of jumps of at most 1 mm.</p>
+seed) and 10,000 more each night (fresh seed). DST is held to what its machines do with the plan
+(<code>equivalence::dst_events</code>): they cut the thread before long jumps the plan does not trim. Fresh seeds
+paid off before this was even merged: they found a DST design whose split jump pieces cancelled exactly,
+which is why only jumps of at most 1 mm make up a trim’s spelling.</p>
 <p><strong>Converting.</strong> <code>stitch convert</code> is a read followed by a write, so the converted file makes the machine do
-the same thing as the original: the round-trip guarantee above. Records carry over literally (a DST
-file’s 12 mm jump pieces stay separate jumps in a PES file), and what the new format cannot say is
-reported instead of guessed: a PES file made from a DST file names a placeholder black for every thread,
-because DST stores no colours (<code>SC-W0604</code>).</p>
+the same thing as the original: the round-trip guarantee above — except that a DST file cuts the thread
+before long jumps where a PES machine leaves a jump thread, which <code>SC-I0605</code> reports. Records carry over
+literally (a DST file’s 12 mm jump pieces stay separate jumps in a PES file), and what the new format
+cannot say is reported instead of guessed: a PES file made from a DST file names a placeholder black for
+every thread, because DST stores no colours (<code>SC-W0604</code>).</p>
 <h2 id="later-formats"><a class="header" href="#later-formats">Later formats</a></h2>
 <div class="table-wrapper">
 <table>
@@ -2830,6 +2853,7 @@ because DST stores no colours (<code>SC-W0604</code>).</p>
 <tr><td><code>REQ-FMT-005</code></td><td>Independent oracle: pyembroidery reads our files to the same stitches (CI job with a pinned version)</td></tr>
 <tr><td><code>REQ-FMT-006</code></td><td>Fuzzed readers never panic, never allocate beyond caps, always terminate</td></tr>
 <tr><td><code>REQ-FMT-007</code></td><td>Long moves are split within the format’s per-record limit</td></tr>
+<tr><td><code>REQ-FMT-008</code></td><td>DST is read as its machines sew it (three or more jumps in a row after sewing cut the thread), and writing DST reports where they will cut and the plan does not (<code>SC-I0605</code>)</td></tr>
 </tbody>
 </table>
 </div>
@@ -3440,14 +3464,15 @@ our files and must agree on every stitch; <code>cargo-fuzz</code> targets run ni
 (<a href="#conformance">formats</a>).</p>
 <h4 id="fuzzing"><a class="header" href="#fuzzing">Fuzzing</a></h4>
 <p><code>fuzz/</code> holds one target per reader (<code>read_pes</code>, <code>read_dst</code>, <code>read_svg</code>) and one for a file’s whole
-journey (<code>read_write_preview</code>: read, write in every format, read the PES file back, preview). Each target
+journey (<code>read_write_preview</code>: read, write in every format, read the files back, preview). Each target
 is one line; its body is in <code>stitchcraft-testkit::fuzz</code>, so every pull request runs the bodies on the
 seed files, every shortening of them and random or damaged bytes, on stable Rust and all three operating
 systems. The properties:</p>
 <ul>
 <li><strong>machine files</strong> (<code>REQ-FMT-006</code>): no panic; at most 2,000,000 entries and no position beyond ±10 m
-from any reader; a plan read from anything is written in every format, and its PES file reads back to a
-plan the machine sews the same way; a preview never panics;</li>
+from any reader; a plan read from anything is written in every format, and each file reads back to a
+plan the machine sews the same way (for DST, the way DST machines sew the plan: <code>REQ-FMT-008</code>); a
+preview never panics;</li>
 <li><strong>SVG</strong> (<code>REQ-SVG-002</code>): no panic; the reader refuses only with its own codes (<code>SC-E0801</code>,
 <code>SC-E0004</code>); what it reads is a valid design, with no point beyond ±10 m, and everything it says about
 the file is a warning.</li>

@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-7a0951d5.js";
+            window.path_to_searchindex_js = "searchindex-01fbfeaf.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-9f562a62.js"></script>
+        <script src="toc-dc5674fc.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -624,6 +624,7 @@ Arguments:
 <tr><td><a href="#sc-e0005"><code>SC-E0005</code></a></td><td>Error</td><td>Preview too large</td></tr>
 <tr><td><a href="#sc-e0009"><code>SC-E0009</code></a></td><td>Error</td><td>Internal check failed</td></tr>
 <tr><td><a href="#sc-e0010"><code>SC-E0010</code></a></td><td>Error</td><td>Nothing to stitch</td></tr>
+<tr><td><a href="#sc-w0011"><code>SC-W0011</code></a></td><td>Warning</td><td>Stitch type not sewn yet; element skipped</td></tr>
 <tr><td><a href="#sc-e0101"><code>SC-E0101</code></a></td><td>Error</td><td>Parameter has the wrong type or an unknown choice</td></tr>
 <tr><td><a href="#sc-w0102"><code>SC-W0102</code></a></td><td>Warning</td><td>Parameter clamped to its allowed range</td></tr>
 <tr><td><a href="#sc-w0105"><code>SC-W0105</code></a></td><td>Warning</td><td>Unknown parameter preserved but ignored</td></tr>
@@ -632,6 +633,7 @@ Arguments:
 <tr><td><a href="#sc-w0403"><code>SC-W0403</code></a></td><td>Warning</td><td>Hand-placed stitch shorter than the shortest stitch; point left out</td></tr>
 <tr><td><a href="#sc-w0502"><code>SC-W0502</code></a></td><td>Warning</td><td>Lock stitch shorter than 0.2 mm; lengthened</td></tr>
 <tr><td><a href="#sc-w0503"><code>SC-W0503</code></a></td><td>Warning</td><td>Custom lock cannot be sewn as written</td></tr>
+<tr><td><a href="#sc-w0505"><code>SC-W0505</code></a></td><td>Warning</td><td>Trim or stop after an element that sews nothing; left out</td></tr>
 <tr><td><a href="#sc-e0601"><code>SC-E0601</code></a></td><td>Error</td><td>Too many colour changes for the file format</td></tr>
 <tr><td><a href="#sc-e0602"><code>SC-E0602</code></a></td><td>Error</td><td>Design too large for the file format</td></tr>
 <tr><td><a href="#sc-e0603"><code>SC-E0603</code></a></td><td>Error</td><td>Machine file could not be read</td></tr>
@@ -672,6 +674,14 @@ wrong reaches your machine.</p>
 <p>The design has no stitches: it is empty, or every element was skipped (see the other messages).
 StitchCraft never writes an empty machine file, because some machines refuse or mishandle them.</p>
 <p>Add an element with an embroidery stitch type, or fix the errors reported for the elements.</p>
+<h2 id="sc-w0011"><a class="header" href="#sc-w0011">SC-W0011</a></h2>
+<p><strong>Warning</strong> — Stitch type not sewn yet; element skipped</p>
+<p>The element’s stitch type is one this version of StitchCraft does not sew yet, so the element was
+skipped; the rest of the design is planned. Running and manual stitches are sewn from milestone M3,
+satin columns from M4 and tatami fills from M5; the other stitch types follow
+(<code>docs/src/plan/roadmap.md</code>).</p>
+<p>The message names the stitch type. Choose one StitchCraft sews, or sew the element with another
+tool for now.</p>
 <h2 id="sc-e0101"><a class="header" href="#sc-e0101">SC-E0101</a></h2>
 <p><strong>Error</strong> — Parameter has the wrong type or an unknown choice</p>
 <p>A parameter’s value could not be understood: a number where a word was expected, a choice that
@@ -735,6 +745,12 @@ drawn custom lock yet, and sews the half stitch in its place. Parts that are not
 longer than 10 m, are left out. If no step is left, the half stitch is sewn instead.</p>
 <p>The message says what was wrong. Write the lock as numbers, such as <code>1 -1 1 -1</code>, or choose
 another lock shape.</p>
+<h2 id="sc-w0505"><a class="header" href="#sc-w0505">SC-W0505</a></h2>
+<p><strong>Warning</strong> — Trim or stop after an element that sews nothing; left out</p>
+<p>The element is set to trim or stop after it (<code>trim_after</code>, <code>stop_after</code>, or Ink/Stitch’s trim and
+stop commands), but it sews no stitch, so there is no place for the trim or the stop: it is left
+out, as Ink/Stitch leaves it out. Another message says why the element sews nothing.</p>
+<p>Make the element sew, or set the trim or stop on the element before it.</p>
 <h2 id="sc-e0601"><a class="header" href="#sc-e0601">SC-E0601</a></h2>
 <p><strong>Error</strong> — Too many colour changes for the file format</p>
 <p>The file format can record only a limited number of colour changes and stops (PES: 255). This
@@ -841,6 +857,7 @@ numbers, <code>true</code>/<code>false</code>, strings and arrays instead, and <
 </thead>
 <tbody>
 <tr><td><a href="#common-parameters">Common parameters</a></td><td>14</td><td>every stitch type</td></tr>
+<tr><td><a href="#stroke-parameters">Stroke parameters</a></td><td>1</td><td>Running stitch, Ripple stitch, Zigzag stitch, Manual stitch</td></tr>
 <tr><td><a href="#running-parameters">Running parameters</a></td><td>5</td><td>Running stitch, Ripple stitch</td></tr>
 <tr><td><a href="#repeat-parameters">Repeat parameters</a></td><td>2</td><td>Running stitch, Ripple stitch, Zigzag stitch, Manual stitch</td></tr>
 <tr><td><a href="#manual-parameters">Manual parameters</a></td><td>1</td><td>Manual stitch</td></tr>
@@ -874,6 +891,7 @@ numbers, <code>true</code>/<code>false</code>, strings and arrays instead, and <
 <tr><td><a href="#running_stitch_length_mm"><code>running_stitch_length_mm</code></a></td><td>Stitch length</td><td>Running parameters</td></tr>
 <tr><td><a href="#running_stitch_tolerance_mm"><code>running_stitch_tolerance_mm</code></a></td><td>Curve tolerance</td><td>Running parameters</td></tr>
 <tr><td><a href="#stop_after"><code>stop_after</code></a></td><td>Stop after</td><td>Common parameters</td></tr>
+<tr><td><a href="#stroke_method"><code>stroke_method</code></a></td><td>Method</td><td>Stroke parameters</td></tr>
 <tr><td><a href="#ties"><code>ties</code></a></td><td>Lock stitches</td><td>Common parameters</td></tr>
 <tr><td><a href="#trim_after"><code>trim_after</code></a></td><td>Trim after</td><td>Common parameters</td></tr>
 </tbody>
@@ -1007,6 +1025,20 @@ jump. Empty: the document’s setting.</p>
 <ul>
 <li><strong>Accepts:</strong> a length from 0 to 20 mm, or empty (0 or less counts as empty)</li>
 <li><strong>Default:</strong> empty</li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated by `cargo xtask docs` from `StrokeParams` in the parameter registry. Edit the declaration, not this page. -->
+<h1 id="stroke-parameters"><a class="header" href="#stroke-parameters">Stroke parameters</a></h1>
+<p>How a stroke is sewn.</p>
+<p>Applies to Running stitch, Ripple stitch, Zigzag stitch, Manual stitch.</p>
+<h2 id="stroke"><a class="header" href="#stroke">Stroke</a></h2>
+<h3 id="stroke_method"><a class="header" href="#stroke_method"><code>stroke_method</code></a></h3>
+<p><strong>Method.</strong> The stitch the path is sewn with: a running stitch along it, or a needle point on each of its
+nodes (manual stitch). Ripple and zigzag stitches arrive in later versions; until then an
+element set to one is skipped (<code>SC-W0011</code>).</p>
+<ul>
+<li><strong>Accepts:</strong> one of <code>running_stitch</code> (Running stitch), <code>ripple_stitch</code> (Ripple stitch), <code>zigzag_stitch</code> (Zigzag stitch), <code>manual_stitch</code> (Manual stitch)</li>
+<li><strong>Default:</strong> <code>running_stitch</code></li>
 <li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><!-- Generated by `cargo xtask docs` from `RunningParams` in the parameter registry. Edit the declaration, not this page. -->
@@ -1622,13 +1654,15 @@ GPL/AGPL/LGPL.</p>
 truth. The geometry choices are validated by spike M0.7 (<a href="#adr-0005-geometry-stack">ADR-0005</a>).</p>
 <h2 id="hosts-ports-and-adapters"><a class="header" href="#hosts-ports-and-adapters">Hosts: ports and adapters</a></h2>
 <p>The engine exposes one entry point and one input type:</p>
-<pre><code class="language-rust ignore">pub fn plan(design: &amp;Design, budget: &amp;Budget) -&gt; PlanOutcome;
+<pre><code class="language-rust ignore">pub fn plan(design: &amp;Design, profile: &amp;MachineProfile, budget: &amp;Budget) -&gt; PlanOutcome;   // since M3.8
 
 pub struct PlanOutcome {
-    pub plan: Option&lt;StitchPlan&gt;,   // None when an error diagnostic stopped planning
-    pub groups: Vec&lt;StitchGroup&gt;,   // per-element results, for previews and reports
+    pub plan: Option&lt;StitchPlan&gt;,   // None when nothing could be sewn
     pub diagnostics: Vec&lt;Diagnostic&gt;,
+    // per-element groups, for previews and reports, arrive with the VectorCraft plug-in (M6)
 }</code></pre>
+<p>The machine profile is an input because the shortest stitch a generator may sew is the machine’s, and
+finalizing (M3.9) fits the plan to the machine’s longest stitch and hoop.</p>
 <p>and a per-element entry point used by live previews:</p>
 <pre><code class="language-rust ignore">pub fn stitch_element(element: &amp;Element, context: &amp;ElementContext, budget: &amp;Budget) -&gt; ElementOutcome;</code></pre>
 <p>Adapters only translate:</p>
@@ -1719,6 +1753,13 @@ pub struct Element {
     pub params: ParamSet,            // as the host stores them; validated against the registry when planned
 }
 
+pub struct DesignSettings {          // since M3.8; Ink/Stitch keeps them in the document, read from M8
+    pub collapse_len: Mm,            // 3 mm: same-thread moves no longer than this are sewn on, not jumped
+    pub min_stitch_len: Option&lt;Mm&gt;,  // the design's shortest stitch, for elements that set none
+    pub origin: Option&lt;Point&gt;,       // where the hoop's centre goes; None: the centre of the stitches
+    pub stop_position: Option&lt;Point&gt;,// where the frame moves before each stop; None: it stays
+}
+
 pub enum Shape {
     Stroke(Path),                         // an outline: running stitch and the other stroke methods
     Fill { path: Path, rule: FillRule },  // an area: its boundary, and which parts are inside
@@ -1736,9 +1777,9 @@ diagnostic of their own, so a failed check is a bug in the adapter (<code>SC-E00
 <ul>
 <li><strong>satin shapes</strong>, two rails and rungs or a centre line and a width (M4, <a href="#satinshape">below</a>);</li>
 <li><strong>regions</strong>, fills normalized into polygons with holes (M5.1, <a href="#region">below</a>);</li>
-<li><strong>commands</strong>, start and end points, targets, trims and stops (M3.8, and M8 for Ink/Stitch’s command
-symbols);</li>
-<li><strong>design settings</strong>, the jump collapse length, the shortest stitch and the machine origin (M3.8).</li>
+<li><strong>commands</strong> attached to elements, start and end points and targets (M8, for Ink/Stitch’s command
+symbols); trims and stops are the element parameters <code>trim_after</code> and <code>stop_after</code>, and the origin and
+stop position are design settings (M3.8).</li>
 </ul>
 <h3 id="region"><a class="header" href="#region">Region</a></h3>
 <p><code>Region</code> is a set of <code>Polygon { exterior: Ring, holes: Vec&lt;Ring&gt; }</code> produced by the normalizer from
@@ -2099,6 +2140,7 @@ another.</p>
 <tr><td><code>SC-E0005</code></td><td>Error</td><td>Preview too large (over 4,096 pixels on a side at the requested scale)</td><td>M2</td></tr>
 <tr><td><code>SC-E0009</code></td><td>Error</td><td>Internal check failed (a StitchCraft bug; a bug-report bundle is written)</td><td>M1</td></tr>
 <tr><td><code>SC-E0010</code></td><td>Error</td><td>Nothing to stitch (no embroiderable elements)</td><td>M1</td></tr>
+<tr><td><code>SC-W0011</code></td><td>Warning</td><td>Stitch type not sewn yet; element skipped</td><td>M3</td></tr>
 <tr><td><code>SC-E0101</code></td><td>Error</td><td>Parameter has the wrong type or an unknown choice</td><td>M3</td></tr>
 <tr><td><code>SC-W0102</code></td><td>Warning</td><td>Parameter clamped to its allowed range</td><td>M3</td></tr>
 <tr><td><code>SC-W0105</code></td><td>Warning</td><td>Unknown parameter preserved but ignored</td><td>M3</td></tr>
@@ -2119,6 +2161,7 @@ another.</p>
 <tr><td><code>SC-W0501</code></td><td>Warning</td><td>Travel could not stay inside the region; used tie-off, trim and tie-in</td><td>M5</td></tr>
 <tr><td><code>SC-W0502</code></td><td>Warning</td><td>Lock stitch shorter than 0.2 mm; lengthened</td><td>M3</td></tr>
 <tr><td><code>SC-W0503</code></td><td>Warning</td><td>Custom lock cannot be sewn as written</td><td>M3</td></tr>
+<tr><td><code>SC-W0505</code></td><td>Warning</td><td>Trim or stop after an element that sews nothing; left out</td><td>M3</td></tr>
 <tr><td><code>SC-E0601</code></td><td>Error</td><td>Too many colour changes for the file format</td><td>M1</td></tr>
 <tr><td><code>SC-E0602</code></td><td>Error</td><td>Design too large for the file format (coordinates or data exceed its fields)</td><td>M1</td></tr>
 <tr><td><code>SC-E0603</code></td><td>Error</td><td>Machine file could not be read (wrong format, truncated, or a record that makes no sense)</td><td>M2</td></tr>
@@ -2209,7 +2252,7 @@ budget for each XML node, path segment and 8 bytes of a transform or point list
 (<a href="#budgets">budgets</a>).</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="engine-pipeline"><a class="header" href="#engine-pipeline">Engine pipeline</a></h1>
-<!-- implements: crates/stitchcraft-engine/src/normalize/mod.rs -->
+<!-- implements: crates/stitchcraft-engine/src/normalize/mod.rs, crates/stitchcraft-engine/src/generate.rs, crates/stitchcraft-engine/src/assemble.rs, crates/stitchcraft-engine/src/pipeline.rs -->
 <p>From a <code>Design</code> to a checked <code>StitchPlan</code>. Each stage is a module in <code>stitchcraft-engine</code> with its
 own tests; stages communicate only through the types in the <a href="#data-model">data model</a>.</p>
 <pre><code class="language-text">Design ──▶ 1 normalize ──▶ 2 validate ──▶ 3 generate (per element) ──▶ 4 assemble ──▶ 5 finalize ──▶ 6 check ──▶ StitchPlan
@@ -2245,17 +2288,17 @@ non-empty region; a running stitch needs a path longer than the minimum stitch l
 every element was skipped yields <code>SC-E0010</code>.</li>
 </ul>
 <h2 id="3-generate"><a class="header" href="#3-generate">3. Generate</a></h2>
-<p>Each element is turned into a <code>StitchGroup</code>:</p>
-<pre><code class="language-rust ignore">pub struct StitchGroup {
-    pub element: ElementId,
-    pub thread: Thread,
-    pub stitches: Vec&lt;(Point, Role)&gt;,   // normal stitches only; no jumps or commands yet
-    pub entry: Point,
-    pub exit: Point,
-    pub locks: LockSettings,
-    pub trim_after: bool,
-    pub stop_after: bool,
-}</code></pre>
+<p>Each element becomes stitch groups (<code>stitchcraft_engine::generate</code>): the needle points of each part of it
+that a jump may separate from the next, in sewing order. A stroke gives one group per subpath, and a part
+too small for a stitch gives none (<code>SC-W0401</code>). The element’s own settings stay with the element, and
+assembly reads them there: its thread, locks, trim and stop.</p>
+<p>The stitch type picks the generator. For a stroke it is <code>stroke_method</code>: <code>running_stitch</code> (the default)
+and <code>manual_stitch</code> are sewn from M3; the other stroke methods, satins and fills are skipped with
+<code>SC-W0011</code> until their milestones. An element whose parameters are wrong (<code>SC-E0101</code>) is skipped too, and
+the rest of the design still plans.</p>
+<p>Each element is generated with the shortest stitch for it: the larger of the machine’s (the profile’s
+<code>min_stitch</code>) and the element’s <code>min_stitch_length_mm</code>, or the design’s shortest stitch when the element
+sets none.</p>
 <p>Rules every generator follows:</p>
 <ul>
 <li><strong>Pure:</strong> output depends only on (normalized shape, typed params, hints, seed, budget).</li>
@@ -2266,63 +2309,87 @@ stay fast, and honours explicit
 start/end commands (<code>REQ-GEN-001</code>).</li>
 <li><strong>Seeded randomness:</strong> seed = <code>random_seed</code> parameter if set, else a hash of the element id; the PRNG
 is SplitMix64 from <code>stitchcraft-core</code> (<a href="#determinism-1">determinism</a>).</li>
-<li><strong>Budgeted:</strong> every inner loop charges work units; exhaustion returns <code>SC-E0004</code> and no stitches for
-this element.</li>
+<li><strong>Budgeted:</strong> every inner loop charges work units. Each element has the budget’s work to itself. One
+that runs out (<code>SC-E0004</code>) is skipped, and the others still plan. The stitch limit is for the whole
+design.</li>
 <li><strong>Roles:</strong> every stitch is tagged underlay, top, travel or lock, which previews colour-code and which
 later enables per-layer ordering.</li>
 </ul>
 <p>Generators are listed in <a href="design/algorithms/README.html">algorithms</a>.</p>
 <h2 id="4-plan-assembly"><a class="header" href="#4-plan-assembly">4. Plan assembly</a></h2>
-<p>Groups are joined into colour blocks in document order (host paint order, bottom first).</p>
+<p>Groups are joined into colour blocks in document order (host paint order, bottom first), by
+<code>stitchcraft_engine::assemble</code>.</p>
 <h3 id="ordering"><a class="header" href="#ordering">Ordering</a></h3>
 <ul>
 <li>Document order is kept: embroidery stacking follows the art’s stacking. Reordering for fewer colour
 changes is an explicit, separate tool (P3) because it changes what covers what.</li>
-<li>A thread change starts a new colour block with a <code>ColorChange</code>.</li>
+<li>A thread change starts a new colour block (<code>REQ-ASM-001</code>). Threads are compared by colour, as
+Ink/Stitch compares them: two names for one colour are one thread, and the block keeps the first.</li>
 </ul>
 <h3 id="connecting-consecutive-groups"><a class="header" href="#connecting-consecutive-groups">Connecting consecutive groups</a></h3>
-<p>With <code>d</code> the distance from the previous group’s exit to the next group’s entry:</p>
+<p>The needle sews straight on from one group to the next only when nothing separates them. With <code>d</code> the
+distance from where the needle is to the next group’s first needle point:</p>
 <div class="table-wrapper">
 <table>
 <thead>
-<tr><th>Condition</th><th>Connection</th></tr>
+<tr><th>Between two groups</th><th>Connection</th></tr>
 </thead>
 <tbody>
-<tr><td>Same colour, <code>d ≤ min_jump_stitch_length</code> (if set) or <code>d ≤ collapse_len</code> (default 3.0 mm), no <code>force_lock_stitches</code></td><td>Sewn directly (the jump “collapses” into stitches, split to the maximum stitch length)</td></tr>
-<tr><td>Same colour, travel path inside the next region exists and the next element hides it</td><td>Travel stitches along that path (role <code>travel</code>)</td></tr>
-<tr><td>Otherwise</td><td>Tie-off on the previous group → <code>Jump</code> → (<code>Trim</code> when <code>d</code> exceeds the profile’s trim threshold or the element says <code>trim_after</code>) → tie-in on the next group</td></tr>
-<tr><td>Colour change</td><td>Tie-off → <code>ColorChange</code> → tie-in</td></tr>
-<tr><td><code>stop_after</code></td><td>Tie-off → <code>Stop</code> → tie-in when sewing resumes</td></tr>
+<tr><td>Same thread, <code>d</code> no more than the earlier element’s <code>min_jump_stitch_length_mm</code> if it sets one, else the design’s collapse length (3 mm), and the earlier element does not force locks</td><td><strong>Sewn on:</strong> the next group’s first stitch starts where the needle is; finalize splits it if it is longer than the machine’s longest stitch</td></tr>
+<tr><td>Same thread, otherwise</td><td>Tie-off → <code>Jump</code> → tie-in (<code>REQ-ASM-002</code>)</td></tr>
+<tr><td>After an element’s last group, when it says <code>trim_after</code></td><td>Tie-off → <code>Trim</code> → <code>Jump</code> → tie-in (<code>REQ-ASM-003</code>)</td></tr>
+<tr><td>After an element’s last group, when it says <code>stop_after</code></td><td>Tie-off → <code>Jump</code> to the stop position, if the design has one → <code>Stop</code> → <code>Jump</code> → tie-in (<code>REQ-ASM-003</code>, <code>REQ-ASM-005</code>)</td></tr>
+<tr><td>Thread change</td><td>Tie-off → a new colour block → <code>Jump</code> → tie-in</td></tr>
+<tr><td>Before the design’s first group</td><td><code>Jump</code> → tie-in</td></tr>
+<tr><td>After the design’s last group</td><td>Tie-off</td></tr>
 </tbody>
 </table>
 </div>
-<p>Ink/Stitch (read at <code>d59c9ab</code>) joins same-colour groups within the collapse length with one direct
-stitch, and trims only when told to (<code>trim_after</code>, a trim command). StitchCraft splits that stitch to the
-machine’s longest stitch and also trims at the profile’s threshold: both differences come from the
-machine profile, and go into the deviations ledger with M3.8.</p>
+<p>An element that sews nothing, because it is skipped or too small for a stitch, has no place for its trim
+or stop. Both are left out, as Ink/Stitch leaves them out, and <code>SC-W0505</code> says so.</p>
+<p>A jump lands where sewing resumes, on the tie-in’s first point or on the group’s first point when it has
+no tie-in, and the needle goes down there before the first stitch. The jump’s own thread is the
+machine’s business: StitchCraft trims where an element’s <code>trim_after</code> is set, as Ink/Stitch does.
+Whether the reference machine also needs a trim on long jumps is test sheet TS-02’s question at MC-1. Its
+answer becomes a profile value.</p>
+<p>Ink/Stitch (read at <code>d59c9ab</code>) joins groups the same way: one stitch from one group to the next within
+the collapse length, locks and a jump beyond it. It sews that stitch as it is; StitchCraft’s finalize
+splits it if it is longer than the machine’s longest stitch, which only a <code>min_jump_stitch_length_mm</code>
+beyond that length can cause.</p>
 <h3 id="lock-stitches-ties"><a class="header" href="#lock-stitches-ties">Lock stitches (ties)</a></h3>
 <ul>
-<li><code>ties</code> selects where locks go: both, before (tie-in), after (tie-off) or neither.</li>
-<li><code>force_lock_stitches</code> adds locks even when the next group is close enough to collapse. In Ink/Stitch
-(read at <code>d59c9ab</code>) it also adds the tie-off when <code>ties</code> asks for none after, but never a tie-in.</li>
-<li>A group with fewer than two needle points is sewn without locks. Manual stitch is sewn without them
-unless <code>force_lock_stitches</code> is set.</li>
+<li>A tie-in goes only at the start of a group that the needle jumps to, the design’s first included. A
+tie-off goes only at the end of a group that a jump, trim, stop or thread change follows, or that ends
+the design. Groups sewn on from one to the next are sewn without locks between them (<code>REQ-LCK-001</code>).</li>
+<li><code>ties</code> says which of those an element’s groups get: both, the tie-in (before), the tie-off (after) or
+neither. <code>force_lock_stitches</code> adds the tie-off whatever <code>ties</code> says, never a tie-in. It also makes each
+group of the element end with a jump, and the tie-off is sewn there. That is Ink/Stitch’s rule (read at
+<code>d59c9ab</code>).</li>
+<li>Manual stitch is sewn without locks unless <code>force_lock_stitches</code> is set, because its points are placed
+by hand.</li>
+<li>A group with fewer than two needle points is sewn without locks: it has no stitch to lock.</li>
 <li><a href="#lock-stitches-1">Lock stitches</a> specifies the lock itself: its shape (<code>lock_start</code>, <code>lock_end</code>),
 its size and its shortest stitch (0.2 mm).</li>
 </ul>
+<h3 id="origin-and-stop-position"><a class="header" href="#origin-and-stop-position">Origin and stop position</a></h3>
+<p>The plan is in hoop coordinates: the design’s origin goes to the hoop’s centre, (0, 0), where the needle
+starts. The origin is the design’s own (Ink/Stitch’s origin command, read from M8) or else the centre of
+the box around every point where the needle goes down (<code>REQ-ASM-005</code>). A design’s stop position
+(Ink/Stitch’s stop position command) adds a jump to it before each <code>Stop</code>. At the stop position the frame
+is clear of the needle for an appliqué or a check, and sewing resumes with a jump back.</p>
 <h3 id="commands"><a class="header" href="#commands">Commands</a></h3>
 <div class="table-wrapper">
 <table>
 <thead>
-<tr><th>Command</th><th>Effect</th></tr>
+<tr><th>Command</th><th>Effect</th><th>From</th></tr>
 </thead>
 <tbody>
-<tr><td>Start / end point</td><td>Entry/exit hints for the generator</td></tr>
-<tr><td>Target point</td><td>Centre for circular fills and ripple targets</td></tr>
-<tr><td>Trim after, stop after</td><td>Flags on the group (see the connection table)</td></tr>
-<tr><td>Ignore object / ignore layer</td><td>The adapter drops the element (and says so in the report)</td></tr>
-<tr><td>Origin</td><td>The machine origin (encoders translate to it); default: centre of the design’s bounding box</td></tr>
-<tr><td>Stop position</td><td>A jump to this point before each <code>Stop</code>, so the frame moves out of the way</td></tr>
+<tr><td>Start / end point</td><td>Entry/exit hints for the generator (<code>REQ-GEN-001</code>)</td><td>M8</td></tr>
+<tr><td>Target point</td><td>Centre for circular fills and ripple targets</td><td>M7, M10</td></tr>
+<tr><td>Trim after, stop after</td><td><code>trim_after</code> and <code>stop_after</code> on the element’s last group (see the connection table). The SVG adapter reads Ink/Stitch’s trim and stop commands as these settings.</td><td>M3.8 (engine), M3 (adapter)</td></tr>
+<tr><td>Ignore object / ignore layer</td><td>The adapter drops the element and says so in the report (<code>REQ-ASM-004</code>)</td><td>M3</td></tr>
+<tr><td>Origin</td><td>The design setting <code>origin</code></td><td>M3.8 (engine), M8 (adapter)</td></tr>
+<tr><td>Stop position</td><td>The design setting <code>stop_position</code></td><td>M3.8 (engine), M8 (adapter)</td></tr>
 </tbody>
 </table>
 </div>
@@ -3944,7 +4011,7 @@ so the rules hold without anyone having to remember them. Most are adopted from 
 <tr><td>Cross-platform</td><td>Tests on Linux, macOS, Windows; identical conformance hashes</td><td><code>ci.yml</code></td><td>CI</td></tr>
 <tr><td>API docs</td><td>Rustdoc builds without warnings: no broken, ambiguous or private intra-doc links</td><td><code>cargo xtask ci</code> (<code>RUSTDOCFLAGS=-D warnings</code>)</td><td><code>cargo xtask ci</code> · CI</td></tr>
 <tr><td><strong>Public API review</strong></td><td>Changes to a library crate’s public API show in the PR diff, as a change to its <code>public-api.txt</code></td><td><code>xtask/src/api.rs</code> (cargo-public-api, pinned)</td><td><code>cargo xtask api --check</code> · CI</td></tr>
-<tr><td><strong>Coverage ratchet</strong></td><td>No crate’s line coverage drops below its floor; floors only go up</td><td><code>conformance/coverage.toml</code>, <code>xtask/src/coverage.rs</code> (cargo-llvm-cov)</td><td><code>cargo xtask coverage</code> · CI job</td></tr>
+<tr><td><strong>Coverage ratchet</strong></td><td>No crate’s line coverage drops below its floor, and floors only go up. A crate below its floor has its untested lines named on the pull request</td><td><code>conformance/coverage.toml</code>, <code>xtask/src/coverage.rs</code> (cargo-llvm-cov)</td><td><code>cargo xtask coverage</code> · CI job</td></tr>
 <tr><td><strong>Mutation testing</strong></td><td>Tests notice changed behaviour: every mutant in the lines a pull request changes is noticed or a listed equivalent; no crate gets more mutants no test notices than recorded, and records only go down</td><td><code>.cargo/mutants.toml</code>, <code>conformance/mutation.toml</code>, <code>xtask/src/mutants.rs</code></td><td><code>mutants.yml</code> · changed lines every PR · everything weekly</td></tr>
 <tr><td><strong>Fuzzing</strong></td><td>Readers never panic, respect their caps and terminate; anything read round-trips and previews</td><td><code>fuzz/</code>, <code>stitchcraft-testkit::fuzz</code> (<a href="#fuzzing">conformance</a>)</td><td>bodies every PR · an hour nightly</td></tr>
 </tbody>
@@ -4161,7 +4228,7 @@ stitches once its stitch type or feature lands (see <em>Phase</em> and the param
 </thead>
 <tbody>
 <tr><td><code>satin_column</code></td><td>toggle</td><td>—</td><td>—</td><td>all</td><td>P1 (M3)</td><td>planned</td></tr>
-<tr><td><code>stroke_method</code></td><td>combo</td><td>—</td><td>0</td><td>all</td><td>P1 (M3)</td><td>planned</td></tr>
+<tr><td><code>stroke_method</code></td><td>combo</td><td>—</td><td>0</td><td>all</td><td>P1 (M3)</td><td><a href="#stroke_method">registered</a></td></tr>
 <tr><td><code>repeats</code></td><td>int</td><td>—</td><td>1</td><td><code>running_stitch</code>, <code>ripple_stitch</code>, <code>zigzag_stitch</code></td><td>P1 (M3)</td><td><a href="#repeats">registered</a></td></tr>
 <tr><td><code>bean_stitch_repeats</code></td><td>str</td><td>—</td><td>0</td><td><code>running_stitch</code>, <code>ripple_stitch</code>, <code>manual_stitch</code>, <code>zigzag_stitch</code></td><td>P1 (M3)</td><td><a href="#bean_stitch_repeats">registered</a></td></tr>
 <tr><td><code>manual_pattern_placement</code></td><td>boolean</td><td>—</td><td>false</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td><td>planned</td></tr>
@@ -4404,7 +4471,7 @@ patterns, stitch plan or sew stack, and legacy names Ink/Stitch’s updater rewr
 </tbody>
 </table>
 </div>
-<p><em>145 parameter declarations, 22 registered in StitchCraft.</em></p>
+<p><em>145 parameter declarations, 23 registered in StitchCraft.</em></p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="architecture-decision-records"><a class="header" href="#architecture-decision-records">Architecture decision records</a></h1>
 <p>Short records of decisions that shape the code, with their context and the alternatives we rejected.
@@ -4936,7 +5003,7 @@ of code) · 🧵 machine checkpoint · 👤 owner action</p>
 <tr><td>M3.5 ✅</td><td>Repeats, bean stitch, random length</td><td><code>REQ-RUN-004</code>, <code>REQ-RUN-005</code>, <code>REQ-RUN-007</code></td></tr>
 <tr><td>M3.6 ✅</td><td>Manual stitch</td><td><code>REQ-RUN-006</code>, <code>REQ-RUN-008</code></td></tr>
 <tr><td>M3.7 ✅</td><td>Lock stitches: every shape, its size and its place at either end of the stitching</td><td><code>REQ-LCK-002</code>, <code>REQ-LCK-004</code></td></tr>
-<tr><td>M3.8</td><td>Plan assembly: order, collapse, travel, tie-off/jump/trim/tie-in (where <code>ties</code> says), stops, colour changes, commands</td><td><code>REQ-ASM-001..005</code>, <code>REQ-LCK-001</code></td></tr>
+<tr><td>M3.8 ✅</td><td>Plan assembly: order, collapse, tie-off/jump/trim/tie-in (where <code>ties</code> says), stops, colour changes, the origin and stop position; <code>stitchcraft_engine::plan</code> sends each element to its generator</td><td><code>REQ-ASM-001..003</code>, <code>REQ-ASM-005</code>, <code>REQ-LCK-001</code>, <code>REQ-GEN-002</code></td></tr>
 <tr><td>M3.9</td><td>Finalize: split, merge, hoop, colour limits; <code>stitch plan in.svg -o out.pes --preview out.png --report out.json</code></td><td>end-to-end cases</td></tr>
 <tr><td>M3.10</td><td><code>stitch bug-report</code> bundle</td><td>a bundle reproduces its plan byte for byte</td></tr>
 <tr><td>MC-2 🧵</td><td><strong>TS-03</strong> (running/bean lengths), <strong>TS-04</strong> (lock holding test), <strong>TS-02</strong> again with element-driven trims</td><td>report filed; min-stitch and lock defaults confirmed (<code>REQ-LCK-003</code>)</td></tr>
@@ -5007,8 +5074,9 @@ fill with generated tiles; circular fill. One step per type with its requirement
 <p>SVG adapter v2:</p>
 <ul>
 <li>every <code>inkstitch:*</code> attribute in the <a href="#inkstitch-compatibility-contract">compatibility contract</a></li>
-<li>the command symbols not read yet. Since M3 the adapter applies trim, stop and the ignore commands, and
-it never stitches commands, connectors or helper paths (<code>REQ-SVG-003</code>).</li>
+<li>the command symbols not read yet, such as start and end points (<code>REQ-GEN-001</code>). The origin and stop
+position commands go into the design settings. Since M3 the adapter applies trim, stop and the ignore
+commands, and it never stitches commands, connectors or helper paths (<code>REQ-SVG-003</code>).</li>
 <li>clones (<code>&lt;use&gt;</code>)</li>
 <li>custom locks drawn as SVG paths, which the adapter reads for the engine. Until then they sew the half
 stitch, with <code>SC-W0503</code>.</li>

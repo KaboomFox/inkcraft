@@ -35,10 +35,10 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-7a0951d5.js";
+            window.path_to_searchindex_js = "../../searchindex-01fbfeaf.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../../toc-9f562a62.js"></script>
+        <script src="../../toc-dc5674fc.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -193,6 +193,7 @@
 <tr><td><a href="#sc-e0005"><code>SC-E0005</code></a></td><td>Error</td><td>Preview too large</td></tr>
 <tr><td><a href="#sc-e0009"><code>SC-E0009</code></a></td><td>Error</td><td>Internal check failed</td></tr>
 <tr><td><a href="#sc-e0010"><code>SC-E0010</code></a></td><td>Error</td><td>Nothing to stitch</td></tr>
+<tr><td><a href="#sc-w0011"><code>SC-W0011</code></a></td><td>Warning</td><td>Stitch type not sewn yet; element skipped</td></tr>
 <tr><td><a href="#sc-e0101"><code>SC-E0101</code></a></td><td>Error</td><td>Parameter has the wrong type or an unknown choice</td></tr>
 <tr><td><a href="#sc-w0102"><code>SC-W0102</code></a></td><td>Warning</td><td>Parameter clamped to its allowed range</td></tr>
 <tr><td><a href="#sc-w0105"><code>SC-W0105</code></a></td><td>Warning</td><td>Unknown parameter preserved but ignored</td></tr>
@@ -201,6 +202,7 @@
 <tr><td><a href="#sc-w0403"><code>SC-W0403</code></a></td><td>Warning</td><td>Hand-placed stitch shorter than the shortest stitch; point left out</td></tr>
 <tr><td><a href="#sc-w0502"><code>SC-W0502</code></a></td><td>Warning</td><td>Lock stitch shorter than 0.2 mm; lengthened</td></tr>
 <tr><td><a href="#sc-w0503"><code>SC-W0503</code></a></td><td>Warning</td><td>Custom lock cannot be sewn as written</td></tr>
+<tr><td><a href="#sc-w0505"><code>SC-W0505</code></a></td><td>Warning</td><td>Trim or stop after an element that sews nothing; left out</td></tr>
 <tr><td><a href="#sc-e0601"><code>SC-E0601</code></a></td><td>Error</td><td>Too many colour changes for the file format</td></tr>
 <tr><td><a href="#sc-e0602"><code>SC-E0602</code></a></td><td>Error</td><td>Design too large for the file format</td></tr>
 <tr><td><a href="#sc-e0603"><code>SC-E0603</code></a></td><td>Error</td><td>Machine file could not be read</td></tr>
@@ -241,6 +243,14 @@ wrong reaches your machine.</p>
 <p>The design has no stitches: it is empty, or every element was skipped (see the other messages).
 StitchCraft never writes an empty machine file, because some machines refuse or mishandle them.</p>
 <p>Add an element with an embroidery stitch type, or fix the errors reported for the elements.</p>
+<h2 id="sc-w0011"><a class="header" href="#sc-w0011">SC-W0011</a></h2>
+<p><strong>Warning</strong> — Stitch type not sewn yet; element skipped</p>
+<p>The element’s stitch type is one this version of StitchCraft does not sew yet, so the element was
+skipped; the rest of the design is planned. Running and manual stitches are sewn from milestone M3,
+satin columns from M4 and tatami fills from M5; the other stitch types follow
+(<code>docs/src/plan/roadmap.md</code>).</p>
+<p>The message names the stitch type. Choose one StitchCraft sews, or sew the element with another
+tool for now.</p>
 <h2 id="sc-e0101"><a class="header" href="#sc-e0101">SC-E0101</a></h2>
 <p><strong>Error</strong> — Parameter has the wrong type or an unknown choice</p>
 <p>A parameter’s value could not be understood: a number where a word was expected, a choice that
@@ -304,6 +314,12 @@ drawn custom lock yet, and sews the half stitch in its place. Parts that are not
 longer than 10 m, are left out. If no step is left, the half stitch is sewn instead.</p>
 <p>The message says what was wrong. Write the lock as numbers, such as <code>1 -1 1 -1</code>, or choose
 another lock shape.</p>
+<h2 id="sc-w0505"><a class="header" href="#sc-w0505">SC-W0505</a></h2>
+<p><strong>Warning</strong> — Trim or stop after an element that sews nothing; left out</p>
+<p>The element is set to trim or stop after it (<code>trim_after</code>, <code>stop_after</code>, or Ink/Stitch’s trim and
+stop commands), but it sews no stitch, so there is no place for the trim or the stop: it is left
+out, as Ink/Stitch leaves it out. Another message says why the element sews nothing.</p>
+<p>Make the element sew, or set the trim or stop on the element before it.</p>
 <h2 id="sc-e0601"><a class="header" href="#sc-e0601">SC-E0601</a></h2>
 <p><strong>Error</strong> — Too many colour changes for the file format</p>
 <p>The file format can record only a limited number of colour changes and stops (PES: 255). This

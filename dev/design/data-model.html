@@ -35,10 +35,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-7a0951d5.js";
+            window.path_to_searchindex_js = "../searchindex-01fbfeaf.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-9f562a62.js"></script>
+        <script src="../toc-dc5674fc.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -214,6 +214,13 @@ pub struct Element {
     pub params: ParamSet,            // as the host stores them; validated against the registry when planned
 }
 
+pub struct DesignSettings {          // since M3.8; Ink/Stitch keeps them in the document, read from M8
+    pub collapse_len: Mm,            // 3 mm: same-thread moves no longer than this are sewn on, not jumped
+    pub min_stitch_len: Option&lt;Mm&gt;,  // the design's shortest stitch, for elements that set none
+    pub origin: Option&lt;Point&gt;,       // where the hoop's centre goes; None: the centre of the stitches
+    pub stop_position: Option&lt;Point&gt;,// where the frame moves before each stop; None: it stays
+}
+
 pub enum Shape {
     Stroke(Path),                         // an outline: running stitch and the other stroke methods
     Fill { path: Path, rule: FillRule },  // an area: its boundary, and which parts are inside
@@ -231,9 +238,9 @@ diagnostic of their own, so a failed check is a bug in the adapter (<code>SC-E00
 <ul>
 <li><strong>satin shapes</strong>, two rails and rungs or a centre line and a width (M4, <a href="#satinshape">below</a>);</li>
 <li><strong>regions</strong>, fills normalized into polygons with holes (M5.1, <a href="#region">below</a>);</li>
-<li><strong>commands</strong>, start and end points, targets, trims and stops (M3.8, and M8 for Ink/Stitch’s command
-symbols);</li>
-<li><strong>design settings</strong>, the jump collapse length, the shortest stitch and the machine origin (M3.8).</li>
+<li><strong>commands</strong> attached to elements, start and end points and targets (M8, for Ink/Stitch’s command
+symbols); trims and stops are the element parameters <code>trim_after</code> and <code>stop_after</code>, and the origin and
+stop position are design settings (M3.8).</li>
 </ul>
 <h3 id="region"><a class="header" href="#region">Region</a></h3>
 <p><code>Region</code> is a set of <code>Polygon { exterior: Ring, holes: Vec&lt;Ring&gt; }</code> produced by the normalizer from

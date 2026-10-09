@@ -35,7 +35,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-2ede5721.js";
+            window.path_to_searchindex_js = "../searchindex-606ccffa.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-e486a7f9.js"></script>
@@ -201,45 +201,39 @@ Deltas are differences of quantized absolutes, so rounding never accumulates.</l
 asymmetric “F” with a ruler) proves orientation and scale on the machine.</li>
 </ul>
 <h2 id="engine-input-design-stitchcraft-engine"><a class="header" href="#engine-input-design-stitchcraft-engine">Engine input: <code>Design</code> (<code>stitchcraft-engine</code>)</a></h2>
-<pre><code class="language-rust ignore">pub struct Design {
-    pub elements: Vec&lt;Element&gt;,       // stitching order (host paint order, bottom first)
-    pub settings: DesignSettings,
-    pub profile: MachineProfile,
-}
+<p>Hosts translate their documents into a <code>Design</code> (<code>stitchcraft_engine::design</code>), so the engine never sees a
+host document and every host gets the same stitches for the same design. Since M3.3:</p>
+<pre><code class="language-rust ignore">pub struct Design { elements: Vec&lt;Element&gt;, pub settings: DesignSettings }   // checked by Design::new
 
 pub struct Element {
-    pub id: ElementId,               // stable host id: "svg:path123", "vc:42"
-    pub name: Option&lt;String&gt;,
+    pub id: ElementId,               // stable host id: "svg:path123:fill", "vc:42"
+    pub name: Option&lt;String&gt;,        // the name the user gave it (Inkscape's label)
     pub shape: Shape,
     pub thread: Thread,
-    pub params: ParamSet,            // validated against the registry for `shape`'s stitch types
-    pub commands: Commands,
+    pub params: ParamSet,            // as the host stores them; validated against the registry when planned
 }
 
 pub enum Shape {
-    Region(Region),                  // fills: one or more polygons with holes, fill rule resolved
-    Path(StrokePath),                // running/bean/manual/zigzag/ripple
-    Satin(SatinShape),               // two rails + rungs, or a centre line + width
+    Stroke(Path),                         // an outline: running stitch and the other stroke methods
+    Fill { path: Path, rule: FillRule },  // an area: its boundary, and which parts are inside
 }
 
-pub struct Commands {
-    pub start: Option&lt;Point&gt;,         // "starting point" command
-    pub end: Option&lt;Point&gt;,           // "ending point" command
-    pub target: Option&lt;Point&gt;,        // ripple/circular target
-    pub trim_after: bool,
-    pub stop_after: bool,
-    pub ignore: bool,
-}
-
-pub struct DesignSettings {
-    pub collapse_len: Mm,             // jumps shorter than this become stitches (default 3.0 mm)
-    pub min_stitch_len: Mm,           // shorter stitches are merged (default 0.1 mm; profile may raise it)
-    pub origin: Option&lt;Point&gt;,        // machine origin; default: centre of the design's bounds
-    pub stop_position: Option&lt;Point&gt;,
-}</code></pre>
-<p>Invariants: element ids are unique; regions are valid (no self-intersections, rings closed,
-orientation normalized: outer counter-clockwise in y-down screen space is <em>not</em> assumed — the
-normalizer orients explicitly); every coordinate is finite and within ±10,000 mm.</p>
+pub struct Path { pub subpaths: Vec&lt;Subpath&gt; }   // in millimetres, y down
+pub struct Subpath { pub start: Point, pub segments: Vec&lt;Segment&gt;, pub closed: bool }
+pub enum Segment { Line(Point), Quad(Point, Point), Cubic(Point, Point, Point) }</code></pre>
+<p>Elements are in stitching order: the host’s paint order, bottom first. Geometry stays exact, curves with
+their control points, and the generators flatten it with the tolerance their parameters give.</p>
+<p>Invariants, checked by <code>Design::new</code>: element ids are unique, and every point is finite and within
+±10,000 mm, the reach of machine-file coordinates. Adapters drop what they cannot represent with a
+diagnostic of their own, so a failed check is a bug in the adapter (<code>SC-E0009</code>).</p>
+<p>Still to come, each with the step that needs it:</p>
+<ul>
+<li><strong>satin shapes</strong>, two rails and rungs or a centre line and a width (M4, <a href="#satinshape">below</a>);</li>
+<li><strong>regions</strong>, fills normalized into polygons with holes (M5.1, <a href="#region">below</a>);</li>
+<li><strong>commands</strong>, start and end points, targets, trims and stops (M3.8, and M8 for Ink/Stitch’s command
+symbols);</li>
+<li><strong>design settings</strong>, the jump collapse length, the shortest stitch and the machine origin (M3.8).</li>
+</ul>
 <h3 id="region"><a class="header" href="#region">Region</a></h3>
 <p><code>Region</code> is a set of <code>Polygon { exterior: Ring, holes: Vec&lt;Ring&gt; }</code> produced by the normalizer from
 the host’s paths and fill rule (even-odd or non-zero). Curves are flattened with the element’s

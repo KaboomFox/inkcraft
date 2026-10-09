@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-01fbfeaf.js";
+            window.path_to_searchindex_js = "searchindex-8b7f611c.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-dc5674fc.js"></script>
@@ -2189,7 +2189,8 @@ out. The engine never sees SVG (<a href="#hosts-ports-and-adapters">architecture
 that paints becomes one element per paint. A fill becomes an area and a stroke becomes an outline.
 A <code>&lt;line&gt;</code> has no fill.</li>
 <li><strong>Order.</strong> Elements follow document order, which is SVG’s paint order and the sewing order. A
-shape’s two paints follow its <code>paint-order</code>.</li>
+shape’s fill is sewn before its stroke, as Ink/Stitch sews them, and the outline covers the fill’s edge.
+When <code>paint-order</code> paints the stroke first, <code>SC-W0802</code> says the fill is sewn first.</li>
 <li><strong>Groups.</strong> <code>&lt;g&gt;</code>, <code>&lt;a&gt;</code> and the child a <code>&lt;switch&gt;</code> chooses pass their transform and style to their
 children.</li>
 <li><strong>Ids.</strong> An element’s id is <code>svg:&lt;label&gt;:fill</code> or <code>svg:&lt;label&gt;:stroke</code>. The label is the SVG
@@ -2207,11 +2208,19 @@ is the same on every platform (<a href="#determinism-1">determinism</a>).</li>
 An error in the data ends the path at the error.</li>
 <li>Positions are exact to within a micrometre (<code>REQ-SVG-001</code>). Any path data reads without failing the
 adapter, and fuzzing checks it (<code>REQ-SVG-002</code>).</li>
+<li>A length may have spaces around it. One that does not read is 0, as in a viewer, and <code>SC-W0804</code> names
+it.</li>
 </ul>
 <h2 id="colour-and-visibility"><a class="header" href="#colour-and-visibility">Colour and visibility</a></h2>
 <ul>
 <li><code>fill</code>, <code>stroke</code>, <code>color</code> and <code>currentColor</code> give the thread colour. A gradient gives its first colour
-and a pattern its fallback colour, each with a warning.</li>
+and a pattern its fallback colour, each with a warning. A gradient of one colour, such as an Inkscape
+swatch, gives that colour without one.</li>
+<li>Colours read as editors write them. Keywords such as <code>currentcolor</code> may be in any case. An ICC colour
+after the sRGB one, which Inkscape’s colour-managed picker writes, is left for the sRGB colour.</li>
+<li>A declaration that does not read gives way to the next one, as in CSS: the last valid one in <code>style</code>,
+else a valid presentation attribute. When none of an element’s paints reads, the inherited paint
+stays, and <code>SC-W0802</code> names the value.</li>
 <li><code>display: none</code> hides an element and everything in it. A hidden or fully transparent paint is left
 out, as a viewer leaves it out. The insides of <code>&lt;defs&gt;</code>, <code>&lt;symbol&gt;</code>, <code>&lt;marker&gt;</code>, <code>&lt;pattern&gt;</code>,
 <code>&lt;clipPath&gt;</code> and <code>&lt;mask&gt;</code> are never drawn.</li>
@@ -2246,10 +2255,14 @@ that are not read yet.</li>
 </li>
 <li><code>SC-E0801</code> refuses a file that is not SVG, or that is larger than the adapter reads.</li>
 </ul>
-<h2 id="limits"><a class="header" href="#limits">Limits</a></h2>
-<p>A file is at most 64 MiB with a million XML nodes, and it does not declare XML entities. Reading charges the
-budget for each XML node, path segment and 8 bytes of a transform or point list
-(<a href="#budgets">budgets</a>).</p>
+<h2 id="text-and-limits"><a class="header" href="#text-and-limits">Text and limits</a></h2>
+<p>A file is UTF-8 text, or ISO-8859-1 when its XML declaration says so, which the adapter turns into UTF-8.
+A file in any other encoding is refused when it has a byte outside ASCII.</p>
+<p>A file is at most 64 MiB with a million XML nodes. Illustrator declares its namespaces as XML entities,
+and an entity whose value is plain text is read. A file is refused when an entity’s value holds markup or
+other entities, or when its references would expand the file past 64 MiB. Without both rules a small
+file could need a large amount of memory. Reading charges the budget for each XML node, path segment and
+8 bytes of a transform or point list (<a href="#budgets">budgets</a>).</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="engine-pipeline"><a class="header" href="#engine-pipeline">Engine pipeline</a></h1>
 <!-- implements: crates/stitchcraft-engine/src/normalize/mod.rs, crates/stitchcraft-engine/src/generate.rs, crates/stitchcraft-engine/src/assemble.rs, crates/stitchcraft-engine/src/pipeline.rs -->

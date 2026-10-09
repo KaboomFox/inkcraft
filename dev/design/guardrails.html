@@ -35,7 +35,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-606ccffa.js";
+            window.path_to_searchindex_js = "../searchindex-9eb47192.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-e486a7f9.js"></script>
@@ -212,7 +212,7 @@ so the rules hold without anyone having to remember them. Most are adopted from 
 <tr><td>API docs</td><td>Rustdoc builds without warnings: no broken, ambiguous or private intra-doc links</td><td><code>cargo xtask ci</code> (<code>RUSTDOCFLAGS=-D warnings</code>)</td><td><code>cargo xtask ci</code> · CI</td></tr>
 <tr><td><strong>Public API review</strong></td><td>Changes to a library crate’s public API show in the PR diff, as a change to its <code>public-api.txt</code></td><td><code>xtask/src/api.rs</code> (cargo-public-api, pinned)</td><td><code>cargo xtask api --check</code> · CI</td></tr>
 <tr><td><strong>Coverage ratchet</strong></td><td>No crate’s line coverage drops below its floor; floors only go up</td><td><code>conformance/coverage.toml</code>, <code>xtask/src/coverage.rs</code> (cargo-llvm-cov)</td><td><code>cargo xtask coverage</code> · CI job</td></tr>
-<tr><td><strong>Mutation testing</strong></td><td>Tests notice changed behaviour: no crate gets more mutants no test notices than recorded; records only go down</td><td><code>.cargo/mutants.toml</code>, <code>conformance/mutation.toml</code>, <code>xtask/src/mutants.rs</code></td><td><code>mutants.yml</code> · weekly</td></tr>
+<tr><td><strong>Mutation testing</strong></td><td>Tests notice changed behaviour: every mutant in the lines a pull request changes is noticed or a listed equivalent; no crate gets more mutants no test notices than recorded, and records only go down</td><td><code>.cargo/mutants.toml</code>, <code>conformance/mutation.toml</code>, <code>xtask/src/mutants.rs</code></td><td><code>mutants.yml</code> · changed lines every PR · everything weekly</td></tr>
 <tr><td><strong>Fuzzing</strong></td><td>Readers never panic, respect their caps and terminate; anything read round-trips and previews</td><td><code>fuzz/</code>, <code>stitchcraft-testkit::fuzz</code> (<a href="conformance.html#fuzzing">conformance</a>)</td><td>bodies every PR · an hour nightly</td></tr>
 </tbody>
 </table>

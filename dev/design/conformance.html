@@ -35,7 +35,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-606ccffa.js";
+            window.path_to_searchindex_js = "../searchindex-9eb47192.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-e486a7f9.js"></script>
@@ -381,7 +381,7 @@ will let users validate a machine profile with the same cases.</p>
 <tr><th>When</th><th>What must pass</th></tr>
 </thead>
 <tbody>
-<tr><td>Every PR</td><td>L0, L1 (no fuzzing), L2 with fixed seeds, <code>--check</code> rules, cross-platform hashes, coverage floors</td></tr>
+<tr><td>Every PR</td><td>L0, L1 (no fuzzing), L2 with fixed seeds, <code>--check</code> rules, cross-platform hashes, coverage floors, mutants in the changed lines</td></tr>
 <tr><td>Nightly</td><td>L1 fuzzing, L2 fresh seeds, L3 differential</td></tr>
 <tr><td>Weekly</td><td>Mutation testing of every shipped crate, against the recorded counts</td></tr>
 <tr><td>Milestone close</td><td>All requirements of the milestone <code>active</code> and green; its machine checkpoint signed off</td></tr>
@@ -400,6 +400,12 @@ holds, per crate, how many mutants no test notices: the weekly run fails when a 
 <code>cargo xtask mutants --record</code> only lowers the counts. The weekly job summary lists every missed mutant,
 which is the to-do list for better tests. Each mutant is judged by its own crate’s tests
 (<code>.cargo/mutants.toml</code>), so each crate answers for its own code.</p>
+<p>New code answers for itself at once: every pull request runs the mutants in the lines it changes
+(<code>cargo mutants --in-diff</code>, minutes rather than the full run’s quarter of an hour per part), and
+<code>cargo xtask mutants --changed</code> fails for any that no test notices. The exception is an <em>equivalent</em>
+mutant, which changes nothing a test could observe; it is listed under <code>[[equivalent]]</code> in
+<code>conformance/mutation.toml</code> with its file, its description, the source line it changes and why, so a
+listed equivalent stops counting as one as soon as its line changes.</p>
 
                     </main>
 

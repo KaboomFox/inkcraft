@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-280bfbd5.js";
+            window.path_to_searchindex_js = "searchindex-85dedfbb.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-6cb0fb79.js"></script>
+        <script src="toc-eddbe1a2.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -269,12 +269,8 @@ stop here and report that — it is the most important thing this sheet tests.</
 <p>Hoop the fabric and stabilizer drum-tight, centre the design, attach the hoop, and sew. The machine sews
 the cross first, then the “F”, then the four corner squares, trimming between parts if it can.</p>
 <h2 id="5-check"><a class="header" href="#5-check">5. Check</a></h2>
-<ul>
-<li>The “F” reads normally: not mirrored, not upside down, not turned.</li>
-<li>Each arm of the cross measures 100.0 ± 0.5 mm end to end, horizontally and vertically.</li>
-<li>The corner squares measure 10.0 mm on every side.</li>
-<li>Ticks are 10 mm apart; the long ticks mark the ends and the centre.</li>
-</ul>
+<p>Measure the sew-out against the <a href="#ts-01--orientation-and-scale">TS-01 checks</a>.
+<code>stitch testsheet</code> printed the same list when it wrote the file.</p>
 <h2 id="6-tell-us"><a class="header" href="#6-tell-us">6. Tell us</a></h2>
 <p>File a <strong>Sew-out report</strong> on GitHub with photos of the front and back (a ruler in view), your measurements,
 and anything odd (<a href="#machine-testing-protocol">machine testing</a>).</p>
@@ -1128,12 +1124,16 @@ our own words and never carry Ink/Stitch’s code (<a href="#adr-0012-read-inkst
 and the <a href="#vectorcraft-compatibility-gate">compatibility gate</a>.</li>
 <li>Quality: <a href="#conformance-testing">conformance</a>, <a href="#determinism-1">determinism</a>, <a href="#guardrails">guardrails</a>,
 <a href="#documentation-pipeline">docs pipeline</a>.</li>
-<li>File compatibility: the <a href="#inkstitch-compatibility-contract">Ink/Stitch compatibility contract</a>.</li>
+<li>File compatibility: <a href="#svg-input">SVG input</a> and the
+<a href="#inkstitch-compatibility-contract">Ink/Stitch compatibility contract</a>.</li>
 <li>Decisions: <a href="design/adr/README.html">ADRs</a>.</li>
 </ol>
 <h2 id="keeping-these-pages-true"><a class="header" href="#keeping-these-pages-true">Keeping these pages true</a></h2>
 <ul>
-<li>A design page changes in the same PR as the behaviour it describes.</li>
+<li>A design page changes in the same PR as the behaviour it describes. The comment
+<code>&lt;!-- implements: … --&gt;</code> below its title names the source files it describes. <code>cargo xtask docs for PATH</code> lists the
+pages for a file. <code>cargo xtask docs --check</code> fails when a branch changes those files and leaves the
+page as it was, unless a commit message on the branch says <code>Design-reviewed: &lt;page&gt;</code>.</li>
 <li>Pages cite requirement ids (<code>REQ-…</code>) and diagnostic codes (<code>SC-…</code>); the docs check fails on unknown ids.</li>
 <li>Facts about Ink/Stitch and VectorCraft name the commit they were checked against.</li>
 </ul>
@@ -1493,6 +1493,7 @@ constant).</li>
 </ol>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="architecture"><a class="header" href="#architecture">Architecture</a></h1>
+<!-- implements: crates/stitchcraft-engine/src/lib.rs, apps/stitchcraft-cli/src/*.rs, apps/stitchcraft-cli/src/commands/mod.rs, apps/stitchcraft-cli/src/commands/profiles.rs -->
 <p>This page is the map of the code: which crate owns what, which way dependencies point, and where a
 new piece of code belongs. If you are about to add a file and are not sure where, the
 <a href="#where-does-my-code-go">decision table</a> at the end answers it.</p>
@@ -1650,6 +1651,7 @@ absolute: in wasm a panic aborts the module and VectorCraft reports the plug-in 
 </div>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="data-model"><a class="header" href="#data-model">Data model</a></h1>
+<!-- implements: crates/stitchcraft-core/src/lib.rs, crates/stitchcraft-core/src/units.rs, crates/stitchcraft-core/src/element.rs, crates/stitchcraft-core/src/rect.rs, crates/stitchcraft-core/src/budget.rs, crates/stitchcraft-plan/src/*.rs, crates/stitchcraft-plan/src/palette/**, crates/stitchcraft-plan/src/profiles/**, crates/stitchcraft-engine/src/design.rs -->
 <p>The types every crate shares. Code sketches are illustrative (<code>ignore</code>); the crates’ rustdoc is the
 API reference once the types exist. Invariants listed here are checked in code (constructors return
 <code>Result</code>) and by conformance level L0.</p>
@@ -1818,6 +1820,7 @@ steps) so a budget behaves identically on every machine. Exhaustion yields <code
 element; other elements still plan.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="parameter-registry"><a class="header" href="#parameter-registry">Parameter registry</a></h1>
+<!-- implements: crates/stitchcraft-params/src/**, crates/stitchcraft-engine/src/registry.rs, crates/stitchcraft-engine/src/common.rs -->
 <p>Every embroidery parameter is declared <strong>once</strong>, next to the generator that uses it. Everything
 else that needs to know about parameters is generated from that declaration:</p>
 <pre><code class="language-text">                        ┌──▶ typed params struct used by the generator
@@ -1971,9 +1974,9 @@ fails if any family’s manifest exceeds 64 parameters or 64 KiB, so adding a pa
 the limit is caught in the PR, not by a user. When VectorCraft supports richer schemas (ABI v2 RFC),
 groups and conditions are emitted as well.</p>
 <h2 id="presets"><a class="header" href="#presets">Presets</a></h2>
-<p>A preset is a named partial <code>ParamSet</code> (<code>"denim"</code>, <code>"knit, light"</code>) stored as TOML in
-<code>crates/stitchcraft-params/presets/</code>, validated by the same code as user input, and documented by a
-generated page. In VectorCraft, users can also save appearance (including embroidery live effects) as
+<p>A preset is a named partial <code>ParamSet</code> (<code>"denim"</code>, <code>"knit, light"</code>) stored as a TOML file in a
+<code>presets</code> directory of the parameters crate. The same code as user input validates it, and a generated
+page documents it. In VectorCraft, users can also save appearance (including embroidery live effects) as
 Graphic Styles.</p>
 <h2 id="versioning-and-migration"><a class="header" href="#versioning-and-migration">Versioning and migration</a></h2>
 <p>The registry has a schema version. A breaking change (renamed key, changed unit) ships a migration
@@ -1981,6 +1984,7 @@ function <code>vN → vN+1</code> and a conformance case with an old-format inpu
 preserved on round trips where the host allows it, and reported once as <code>SC-W0105</code>.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="diagnostics"><a class="header" href="#diagnostics">Diagnostics</a></h1>
+<!-- implements: crates/stitchcraft-core/src/diag.rs, crates/stitchcraft-core/src/text.rs, apps/stitchcraft-cli/src/commands/explain.rs -->
 <p>A diagnostic is a problem with the user’s design or input, explained in the user’s terms, with a
 stable code. Diagnostics are values: the engine collects them and keeps planning whatever it can.
 Errors in the Rust sense (<code>Result</code>) are reserved for failures to do the work at all
@@ -2091,7 +2095,81 @@ another.</p>
 </table>
 </div>
 <div style="break-before: page; page-break-before: always;"></div>
+<h1 id="svg-input"><a class="header" href="#svg-input">SVG input</a></h1>
+<!-- implements: crates/stitchcraft-svg/src/** -->
+<p>The SVG adapter, <code>stitchcraft-svg</code>, turns an SVG file into a <a href="#engine-input-design-stitchcraft-engine"><code>Design</code></a>
+and a list of warnings. It reads what an SVG viewer draws, in millimetres, and reports what it leaves
+out. The engine never sees SVG (<a href="#hosts-ports-and-adapters">architecture</a>).</p>
+<h2 id="what-becomes-an-element"><a class="header" href="#what-becomes-an-element">What becomes an element</a></h2>
+<ul>
+<li><strong>Shapes.</strong> Each <code>&lt;path&gt;</code>, <code>&lt;rect&gt;</code>, <code>&lt;circle&gt;</code>, <code>&lt;ellipse&gt;</code>, <code>&lt;line&gt;</code>, <code>&lt;polyline&gt;</code> and <code>&lt;polygon&gt;</code>
+that paints becomes one element per paint. A fill becomes an area and a stroke becomes an outline.
+A <code>&lt;line&gt;</code> has no fill.</li>
+<li><strong>Order.</strong> Elements follow document order, which is SVG’s paint order and the sewing order. A
+shape’s two paints follow its <code>paint-order</code>.</li>
+<li><strong>Groups.</strong> <code>&lt;g&gt;</code>, <code>&lt;a&gt;</code> and the child a <code>&lt;switch&gt;</code> chooses pass their transform and style to their
+children.</li>
+<li><strong>Ids.</strong> An element’s id is <code>svg:&lt;label&gt;:fill</code> or <code>svg:&lt;label&gt;:stroke</code>. The label is the SVG
+element’s <code>id</code>, or <code>&lt;tag&gt;@&lt;n&gt;</code> for the n-th element of that kind. A repeated id gets <code>~2</code>, <code>~3</code> and
+so on. The adapter’s own diagnostics name the SVG element as <code>svg:&lt;label&gt;</code>.</li>
+<li><strong>Names.</strong> An <code>inkscape:label</code> becomes the element’s name.</li>
+</ul>
+<h2 id="geometry-and-units"><a class="header" href="#geometry-and-units">Geometry and units</a></h2>
+<ul>
+<li>The root’s <code>width</code>, <code>height</code>, <code>viewBox</code> and <code>preserveAspectRatio</code> map user units to millimetres. A
+user unit is a CSS pixel, 1/96 inch, unless they say otherwise.</li>
+<li>Transforms compose through every ancestor. The matrices use <code>stitchcraft_core::math</code>, so the result
+is the same on every platform (<a href="#determinism-1">determinism</a>).</li>
+<li>Path data is read as SVG viewers draw it, arcs included. An arc becomes cubic curves of at most 30°.
+An error in the data ends the path at the error.</li>
+<li>Positions are exact to within a micrometre (<code>REQ-SVG-001</code>). Any path data reads without failing the
+adapter, and fuzzing checks it (<code>REQ-SVG-002</code>).</li>
+</ul>
+<h2 id="colour-and-visibility"><a class="header" href="#colour-and-visibility">Colour and visibility</a></h2>
+<ul>
+<li><code>fill</code>, <code>stroke</code>, <code>color</code> and <code>currentColor</code> give the thread colour. A gradient gives its first colour
+and a pattern its fallback colour, each with a warning.</li>
+<li><code>display: none</code> hides an element and everything in it. A hidden or fully transparent paint is left
+out, as a viewer leaves it out. The insides of <code>&lt;defs&gt;</code>, <code>&lt;symbol&gt;</code>, <code>&lt;marker&gt;</code>, <code>&lt;pattern&gt;</code>,
+<code>&lt;clipPath&gt;</code> and <code>&lt;mask&gt;</code> are never drawn.</li>
+</ul>
+<h2 id="inkstitch-objects"><a class="header" href="#inkstitch-objects">Ink/Stitch objects</a></h2>
+<p>An Ink/Stitch SVG has 3 kinds of object that Ink/Stitch reads and does not sew. The adapter sews none of
+them (<code>REQ-SVG-003</code>).</p>
+<ul>
+<li><strong>Commands.</strong> The <code>trim</code> and <code>stop</code> commands turn on the object’s <code>trim_after</code> and <code>stop_after</code>. The
+<code>ignore_object</code> and <code>ignore_layer</code> commands leave out an object or a layer, as the
+<code>inkstitch:ignore_object</code> setting does, and <code>SC-I0805</code> lists each object left out. The
+<a href="#commands-1">command table</a> gives what the adapter does with each of the
+12 commands.</li>
+<li><strong>Connectors</strong> tie a command to its object.</li>
+<li><strong>Helper paths</strong> have one of Ink/Stitch’s start markers. They steer the stitches of other objects.</li>
+</ul>
+<p><code>SC-W0802</code> reports a connector that ties no command, a helper path, and a command that the adapter does
+not apply yet. The module docs of <code>crates/stitchcraft-svg/src/inkstitch.rs</code> describe how the adapter
+finds these objects, with the Ink/Stitch files they were read from.</p>
+<h2 id="reports"><a class="header" href="#reports">Reports</a></h2>
+<ul>
+<li><code>SC-W0802</code> reports a feature that is not stitched. Text, images, clones, nested <code>&lt;svg&gt;</code> elements and
+style sheets are such features. So are clipping, masks, filters, markers and the Ink/Stitch settings
+that are not read yet.</li>
+<li><code>SC-W0804</code> reports geometry that cannot be used:
+<ul>
+<li>path data with an error, stitched up to the error</li>
+<li>a transform that does not parse, left out with its contents</li>
+<li>an element that draws nothing</li>
+<li>a point more than 10 m from the origin</li>
+</ul>
+</li>
+<li><code>SC-E0801</code> refuses a file that is not SVG, or that is larger than the adapter reads.</li>
+</ul>
+<h2 id="limits"><a class="header" href="#limits">Limits</a></h2>
+<p>A file is at most 64 MiB with a million XML nodes, and it does not declare XML entities. Reading charges the
+budget for each XML node, path segment and 8 bytes of a transform or point list
+(<a href="#budgets">budgets</a>).</p>
+<div style="break-before: page; page-break-before: always;"></div>
 <h1 id="engine-pipeline"><a class="header" href="#engine-pipeline">Engine pipeline</a></h1>
+<!-- implements: crates/stitchcraft-engine/src/normalize/mod.rs -->
 <p>From a <code>Design</code> to a checked <code>StitchPlan</code>. Each stage is a module in <code>stitchcraft-engine</code> with its
 own tests; stages communicate only through the types in the <a href="#data-model">data model</a>.</p>
 <pre><code class="language-text">Design ──▶ 1 normalize ──▶ 2 validate ──▶ 3 generate (per element) ──▶ 4 assemble ──▶ 5 finalize ──▶ 6 check ──▶ StitchPlan
@@ -2329,6 +2407,7 @@ rests on is welcome when it helps the next reader check it again
 (<a href="#adr-0012-read-inkstitchs-source-never-copy-it">ADR-0012</a>).</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="stroke-generators"><a class="header" href="#stroke-generators">Stroke generators</a></h1>
+<!-- implements: crates/stitchcraft-engine/src/generators/**, crates/stitchcraft-engine/src/normalize/stroke.rs -->
 <p>Strokes follow a path. Shape: <code>StrokePath</code> (an ordered list of polylines, corners marked, from the
 normalizer). Phase P1 (M3) unless noted.</p>
 <h2 id="running-stitch-1"><a class="header" href="#running-stitch-1">Running stitch</a></h2>
@@ -2713,6 +2792,7 @@ umfahren,” <em>Mathematische Annalen</em> 6, 1873.</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="machine-formats"><a class="header" href="#machine-formats">Machine formats</a></h1>
+<!-- implements: crates/stitchcraft-formats/src/**, apps/stitchcraft-cli/src/commands/convert.rs, apps/stitchcraft-cli/src/commands/inspect.rs -->
 <p><code>stitchcraft-formats</code> encodes a <code>StitchPlan</code> into machine files and decodes machine files into plans.
 PES (Brother) and DST (Tajima) come first because the first target machine is a Brother and DST is the
 lingua franca every machine and digitizer reads.</p>
@@ -2905,6 +2985,7 @@ its origin where StitchCraft keeps the machine origin, so both readings are comp
 needle-down.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="rendering-previews"><a class="header" href="#rendering-previews">Rendering previews</a></h1>
+<!-- implements: crates/stitchcraft-render/src/**, apps/stitchcraft-cli/src/commands/preview.rs -->
 <p><code>stitchcraft-render</code> draws a stitch plan as a PNG image: for <code>stitch preview</code>, for the images in these
 docs, and for conformance diffs. Two promises shape it:</p>
 <ul>
@@ -2996,6 +3077,7 @@ this renderer is for files, the command line and the docs.</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="vectorcraft-integration"><a class="header" href="#vectorcraft-integration">VectorCraft integration</a></h1>
+<!-- implements: apps/stitchcraft-vc-plugin/src/**, crates/stitchcraft-vectorcraft/src/** -->
 <p>How StitchCraft lives inside <a href="https://github.com/storytold/vectorcraft">VectorCraft</a>: what VectorCraft
 offers today, how we use it without changing VectorCraft (phase 1), what we propose upstream
 (phase 2), and how an in-tree integration would look (phase 3).</p>
@@ -3390,6 +3472,7 @@ changes before release. VectorCraft runs its gates locally rather than on every 
 ours.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="conformance-testing"><a class="header" href="#conformance-testing">Conformance testing</a></h1>
+<!-- implements: crates/stitchcraft-testkit/src/** -->
 <p>When behaviour is specified only by its implementation, fixes for one input break another and nobody
 can say what “correct” means. StitchCraft specifies behaviour as <strong>requirements</strong>, proves each with <strong>cases</strong>, and reports the result
 as a <strong>matrix</strong> on every pull request. Code is written to make cases pass, not the other way round
@@ -3618,6 +3701,7 @@ mutant, which changes nothing a test could observe; it is listed under <code>[[e
 listed equivalent stops counting as one as soon as its line changes.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="determinism-1"><a class="header" href="#determinism-1">Determinism</a></h1>
+<!-- implements: crates/stitchcraft-core/src/math.rs, crates/stitchcraft-core/src/rng.rs -->
 <p><strong>Same input, same version ⇒ byte-identical machine file and preview, on Linux, macOS, Windows and
 wasm32.</strong> This makes golden-file conformance possible, makes bug reports reproducible, makes caches
 safe, and means the docs images regenerated in CI match the ones on a contributor’s laptop.</p>
@@ -3681,11 +3765,13 @@ so the rules hold without anyone having to remember them. Most are adopted from 
 <tr><td>WebAssembly</td><td>L0–L3 crates and the plug-in build for <code>wasm32-unknown-unknown</code></td><td><code>xtask/src/wasm.rs</code></td><td><code>cargo xtask wasm</code> · CI</td></tr>
 <tr><td><strong>Movable into VectorCraft</strong></td><td>Every package is <code>stitchcraft-*</code>; crates inherit only workspace keys VectorCraft defines; tooling works from its own folder on StitchCraft’s packages (<a href="#adr-0011-stitchcraft-can-move-into-vectorcrafts-repository">ADR-0011</a>)</td><td><code>xtask/src/layers.rs</code>, <code>xtask/src/util.rs</code>, <code>xtask/src/join.rs</code></td><td><code>move</code> job in <code>compat.yml</code> · daily and on PRs touching manifests or tooling</td></tr>
 <tr><td><strong>No GPL code</strong></td><td>No GPL/AGPL licence text and no pasted Python source anywhere in the repository, documents included (<a href="#adr-0012-read-inkstitchs-source-never-copy-it">ADR-0012</a>)</td><td><code>xtask/src/cleanroom.rs</code></td><td><code>cargo xtask cleanroom</code> · CI</td></tr>
-<tr><td>Docs</td><td>Generated pages fresh, links and anchors valid, mentioned <code>cargo xtask</code> commands exist, ids exist</td><td><code>xtask/src/docs.rs</code></td><td><code>cargo xtask docs --check</code> · CI</td></tr>
+<tr><td>Docs</td><td>Generated pages fresh, links and anchors valid, mentioned <code>cargo xtask</code> commands exist, ids exist, no long sentence on two pages, every repository path named exists</td><td><code>xtask/src/docs.rs</code>, <code>xtask/src/docs_audit.rs</code></td><td><code>cargo xtask docs --check</code> · CI</td></tr>
+<tr><td><strong>Design pages follow the code</strong></td><td>Every source file of a crate or app is on a page’s <code>implements</code> comment, and a branch that changes those files changes the page too or records a <code>Design-reviewed:</code> line</td><td><code>xtask/src/design_map.rs</code>, <code>.claude/settings.json</code> (names the pages after each edit)</td><td><code>cargo xtask docs --check</code> · CI</td></tr>
 <tr><td>Docs images</td><td>Every image declared in <code>docs/shots.toml</code>, with alt text, and regenerating to the committed file</td><td><code>xtask/src/shots.rs</code></td><td><code>cargo xtask shots --check</code> · CI</td></tr>
 <tr><td>Conformance</td><td>Requirement/case consistency; all cases pass; changed goldens need the <code>golden-change</code> label and a changelog line</td><td><code>xtask/src/conformance/</code>, <code>ci.yml</code>, <code>goldens.yml</code></td><td><code>cargo xtask conformance</code> · CI</td></tr>
 <tr><td>Dependencies</td><td>Licence allow-list (GPL family denied), advisories, duplicates, sources</td><td><code>deny.toml</code></td><td>CI (<code>cargo-deny</code>)</td></tr>
 <tr><td>Spelling</td><td>Typos in code, docs, commit-facing text</td><td><code>typos.toml</code></td><td>CI</td></tr>
+<tr><td><strong>Prose</strong></td><td>New Markdown lines follow the <a href="#writing-style">writing style</a>: the house rules and ai-tells, a style for phrasing that machine-written text overuses</td><td><code>.vale.ini</code>, <code>.vale/styles/</code>, <code>xtask/src/prose.rs</code> (Vale)</td><td><code>cargo xtask prose</code> · CI</td></tr>
 <tr><td>MSRV</td><td>Builds on the declared <code>rust-version</code></td><td>workspace <code>Cargo.toml</code></td><td>CI</td></tr>
 <tr><td>Cross-platform</td><td>Tests on Linux, macOS, Windows; identical conformance hashes</td><td><code>ci.yml</code></td><td>CI</td></tr>
 <tr><td>API docs</td><td>Rustdoc builds without warnings: no broken, ambiguous or private intra-doc links</td><td><code>cargo xtask ci</code> (<code>RUSTDOCFLAGS=-D warnings</code>)</td><td><code>cargo xtask ci</code> · CI</td></tr>
@@ -4779,6 +4865,7 @@ installed with Ink/Stitch, read in their own format; appliqué workflow, design 
 in-tree VectorCraft crate if wanted.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="machine-testing-protocol"><a class="header" href="#machine-testing-protocol">Machine testing protocol</a></h1>
+<!-- implements: crates/stitchcraft-engine/src/testsheets/**, apps/stitchcraft-cli/src/commands/testsheet.rs -->
 <p>Automated tests prove the files are what we intend. Only a machine proves they sew well. This page is
 the protocol for <strong>machine checkpoints</strong> (MC-1 … MC-7) on the reference machine: a Brother home
 embroidery machine with a 200 × 200 mm (8 × 8 in) hoop, designs normally kept to about 150 mm (6 in).</p>
@@ -4910,6 +4997,7 @@ changes follow playbooks, and every behaviour has a requirement and a test.</p>
 <tr><td>Add a machine format</td><td><a href="#playbook-add-a-machine-format">New format</a></td></tr>
 <tr><td>Add a diagnostic</td><td><a href="#playbook-add-a-diagnostic">New diagnostic</a></td></tr>
 <tr><td>Review a PR</td><td><a href="#review-checklist">Review checklist</a></td></tr>
+<tr><td>Write docs, messages or help text</td><td><a href="#writing-style">Writing style</a></td></tr>
 </tbody>
 </table>
 </div>
@@ -5029,6 +5117,7 @@ problem and the fix.</li>
 <p><strong>Docs and UX</strong></p>
 <ul>
 <li><input disabled="" type="checkbox"> User-facing docs updated in this PR; help text in the registry reads well for an embroiderer.</li>
+<li><input disabled="" type="checkbox"> New prose follows the <a href="#writing-style">writing style</a>, and <code>cargo xtask prose</code> passes.</li>
 <li><input disabled="" type="checkbox"> Shots refreshed if pictures should change; alt text is meaningful.</li>
 <li><input disabled="" type="checkbox"> Messages are specific, actionable and free of internal jargon.</li>
 </ul>
@@ -5036,6 +5125,79 @@ problem and the fix.</li>
 <ul>
 <li><input disabled="" type="checkbox"> If the change affects what sews, it is listed for the next machine checkpoint.</li>
 </ul>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="writing-style"><a class="header" href="#writing-style">Writing style</a></h1>
+<p>These rules hold for StitchCraft’s prose: docs, messages, help text and CHANGELOG entries. The docs
+have 3 kinds of reader. Embroiderers and contributors read them, and AI agents load them as context.
+Plain sentences serve all three, and they cost an agent fewer words.</p>
+<p><code>cargo xtask prose</code> checks every Markdown line that a branch adds. It runs <a href="https://vale.sh">Vale</a>
+with two styles from <code>.vale/styles</code>:</p>
+<ul>
+<li><strong>StitchCraft</strong>, the house rules. It checks the projects’ names and statements that give software a
+mind.</li>
+<li><strong>ai-tells</strong>, phrasing and punctuation that machine-written text overuses, from
+<a href="https://github.com/tbhb/vale-ai-tells">vale-ai-tells</a> (MIT). The rules are kept in the repository as
+their authors wrote them.</li>
+</ul>
+<p>Lines that a branch does not touch are not checked. Older pages follow the rules when they are
+rewritten.</p>
+<h2 id="rules"><a class="header" href="#rules">Rules</a></h2>
+<ul>
+<li><strong>State the fact first.</strong> Start with what the software does: “The reader leaves connectors out.” Put
+the reason after it. Give a reason only when someone has confirmed it.</li>
+<li><strong>Give one idea per sentence.</strong> A sentence that needs a semicolon or a dash is two sentences. Use a
+list for 3 or more items.</li>
+<li><strong>Say what software does.</strong> It reads, writes, sews, skips and reports. It does not know, want, decide
+or carry.</li>
+<li><strong>Use one name for one thing.</strong> Take the name from the glossary below, and do not swap in a synonym
+for variety.</li>
+<li><strong>Give the number.</strong> Write “0.3 mm” or “3 jump records” in place of “very short” or “several”.</li>
+<li><strong>Cut filler.</strong> Delete words such as <code>simply</code>, <code>just</code>, <code>note that</code> and <code>in order to</code>.</li>
+<li><strong>Write plain statements.</strong> Avoid contrast formulas such as “X, not Y”, a colon that sets up a reveal,
+slogans and dramatic fragments.</li>
+<li><strong>Keep dashes out of prose.</strong> Use a comma, a full stop or brackets in place of an em dash. Write a
+range with “to”: “M3.1 to M3.5”, “0.1 to 25 mm”.</li>
+<li><strong>Name a thing or a task in a heading.</strong> “Lock stitches” and “Convert a file” are good headings. A
+question or a “How it works” heading is not.</li>
+<li><strong>Describe the current design.</strong> History goes in <code>CHANGELOG.md</code> and Git. A design page says how the
+code works today.</li>
+<li><strong>Keep each fact on one page.</strong> Other pages link to it. <code>cargo xtask docs --check</code> reports a sentence
+of 12 or more words that is on 2 pages.</li>
+<li><strong>Spell in British English</strong>, as the code does: colour, centre, millimetre.</li>
+</ul>
+<p>A rule can have an exception. To accept a match, turn the rule off around the lines with a comment,
+and give the reason in the same comment:</p>
+<pre><code class="language-markdown">&lt;!-- A field name and its value, as the machine shows them. --&gt;
+&lt;!-- vale ai-tells.ColonUsage = NO --&gt;
+Format: PES version 1
+&lt;!-- vale ai-tells.ColonUsage = YES --&gt;
+</code></pre>
+<h2 id="glossary-1"><a class="header" href="#glossary-1">Glossary</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Use</th><th>For</th><th>Do not use</th></tr>
+</thead>
+<tbody>
+<tr><td>design</td><td>what is embroidered: its elements and settings</td><td>artwork, pattern (for the whole)</td></tr>
+<tr><td>element</td><td>one object of the design, sewn as a unit</td><td>object, shape (for the element)</td></tr>
+<tr><td>stitch plan, plan</td><td>the needle positions and commands, in sewing order</td><td>stitch list, stitch file</td></tr>
+<tr><td>needle point</td><td>one place where the needle goes through the fabric</td><td>penetration, drop</td></tr>
+<tr><td>stitch</td><td>the thread between two needle points</td><td>step</td></tr>
+<tr><td>jump</td><td>a move of the frame without sewing</td><td>travel (for a jump)</td></tr>
+<tr><td>trim</td><td>a cut of the thread</td><td>cut (in prose about plans)</td></tr>
+<tr><td>stop</td><td>a pause of the machine</td><td>halt, pause command</td></tr>
+<tr><td>colour change</td><td>a change to the next thread</td><td>thread change</td></tr>
+<tr><td>colour block</td><td>the stitches sewn with one thread</td><td>colour section</td></tr>
+<tr><td>lock stitches</td><td>the tie-in at the start of a run and the tie-off at its end</td><td>knots, tacks</td></tr>
+<tr><td>machine file</td><td>a PES or DST file</td><td>embroidery file, export</td></tr>
+<tr><td>sew-out</td><td>sewing a design on a machine to check it</td><td>test run</td></tr>
+<tr><td>test sheet</td><td>a design made to test one thing on a machine</td><td>sampler</td></tr>
+<tr><td>hoop</td><td>the frame the fabric is stretched in</td><td>frame (for the hoop)</td></tr>
+<tr><td>Ink/Stitch, StitchCraft, VectorCraft, pyembroidery</td><td>the projects, spelled their way</td><td><code>Inkstitch</code>, <code>Stitchcraft</code></td></tr>
+</tbody>
+</table>
+</div>
 
                     </main>
 

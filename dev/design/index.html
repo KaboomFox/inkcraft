@@ -35,10 +35,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-280bfbd5.js";
+            window.path_to_searchindex_js = "../searchindex-85dedfbb.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-6cb0fb79.js"></script>
+        <script src="../toc-eddbe1a2.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -194,12 +194,16 @@ our own words and never carry Ink/Stitch’s code (<a href="adr/0012-read-dont-c
 and the <a href="compatibility-gate.html">compatibility gate</a>.</li>
 <li>Quality: <a href="conformance.html">conformance</a>, <a href="determinism.html">determinism</a>, <a href="guardrails.html">guardrails</a>,
 <a href="docs-pipeline.html">docs pipeline</a>.</li>
-<li>File compatibility: the <a href="inkstitch-compat-contract.html">Ink/Stitch compatibility contract</a>.</li>
+<li>File compatibility: <a href="svg-input.html">SVG input</a> and the
+<a href="inkstitch-compat-contract.html">Ink/Stitch compatibility contract</a>.</li>
 <li>Decisions: <a href="adr/README.html">ADRs</a>.</li>
 </ol>
 <h2 id="keeping-these-pages-true"><a class="header" href="#keeping-these-pages-true">Keeping these pages true</a></h2>
 <ul>
-<li>A design page changes in the same PR as the behaviour it describes.</li>
+<li>A design page changes in the same PR as the behaviour it describes. The comment
+<code>&lt;!-- implements: … --&gt;</code> below its title names the source files it describes. <code>cargo xtask docs for PATH</code> lists the
+pages for a file. <code>cargo xtask docs --check</code> fails when a branch changes those files and leaves the
+page as it was, unless a commit message on the branch says <code>Design-reviewed: &lt;page&gt;</code>.</li>
 <li>Pages cite requirement ids (<code>REQ-…</code>) and diagnostic codes (<code>SC-…</code>); the docs check fails on unknown ids.</li>
 <li>Facts about Ink/Stitch and VectorCraft name the commit they were checked against.</li>
 </ul>

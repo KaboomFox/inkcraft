@@ -35,10 +35,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-9eb47192.js";
+            window.path_to_searchindex_js = "../searchindex-b4f2a931.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-e486a7f9.js"></script>
+        <script src="../toc-d2fe63c9.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -209,8 +209,9 @@ changes follow playbooks, and every behaviour has a requirement and a test.</p>
 </div>
 <h2 id="ground-rules"><a class="header" href="#ground-rules">Ground rules</a></h2>
 <ul>
-<li><strong>Clean room:</strong> never read or copy Ink/Stitch source code (GPL-3.0). Work from the design docs,
-public documentation and papers (<a href="../design/adr/0001-license-and-clean-room.html">ADR-0001</a>).</li>
+<li><strong>Never copy GPL code:</strong> Ink/Stitch’s source (GPL-3.0) may be read to understand its behaviour, but
+nothing from it is copied or transliterated. Write the behaviour into the design docs in your own
+words and code from them (<a href="../design/adr/0012-read-dont-copy.html">ADR-0012</a>).</li>
 <li><strong>No panics, no <code>unsafe</code>, deterministic output</strong> — the lints will tell you
 (<a href="../design/guardrails.html">guardrails</a>).</li>
 <li><strong>One roadmap step per PR</strong>, its id in the title; requirements and cases first.</li>

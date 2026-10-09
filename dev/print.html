@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-9eb47192.js";
+            window.path_to_searchindex_js = "searchindex-b4f2a931.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-e486a7f9.js"></script>
+        <script src="toc-d2fe63c9.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -978,8 +978,8 @@ jump. Empty: the document’s setting.</p>
 <p>The plug-in itself ships in milestone M6; until then this table tracks the ABI contract spike (M0.6).</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="design-documents"><a class="header" href="#design-documents">Design documents</a></h1>
-<p>These pages are the specification StitchCraft is built from. They are written clean-room: they describe
-behaviour and published algorithms in our own words (<a href="#adr-0001-mit-or-apache-20-clean-room-from-inkstitch">ADR-0001</a>).</p>
+<p>These pages are the specification StitchCraft is built from. They describe behaviour and algorithms in
+our own words and never carry Ink/Stitch’s code (<a href="#adr-0012-read-inkstitchs-source-never-copy-it">ADR-0012</a>).</p>
 <h2 id="reading-order"><a class="header" href="#reading-order">Reading order</a></h2>
 <ol>
 <li><a href="#stitchcraft--technical-design-document">Technical design document</a> — the whole system in 25 minutes.</li>
@@ -1100,11 +1100,11 @@ screenshot pipeline drive.</li>
 </ul>
 <h3 id="33-licence-and-clean-room"><a class="header" href="#33-licence-and-clean-room">3.3 Licence and clean room</a></h3>
 <p>Ink/Stitch is GPL-3.0; VectorCraft forbids GPL code in its tree. StitchCraft is <strong>MIT OR
-Apache-2.0</strong> and is written <strong>clean-room</strong>: the design docs in this folder describe <em>behaviour</em>
-(inputs, outputs, parameters, published algorithms); implementers work from these docs and public
-references and never read or transliterate Ink/Stitch source. Parameter names are kept identical to
-Ink/Stitch’s SVG attributes because that is the interoperability contract. See
-<a href="#adr-0001-mit-or-apache-20-clean-room-from-inkstitch">ADR-0001</a>.</p>
+Apache-2.0</strong> and never copies GPL code: the design docs in this folder describe <em>behaviour</em> (inputs,
+outputs, parameters, algorithms) in our own words, and implementers work from these docs. Ink/Stitch’s
+source may be read to understand its behaviour, never copied or transliterated. Parameter names are kept
+identical to Ink/Stitch’s SVG attributes because that is the interoperability contract. See
+<a href="#adr-0001-mit-or-apache-20-clean-room-from-inkstitch">ADR-0001</a> and <a href="#adr-0012-read-inkstitchs-source-never-copy-it">ADR-0012</a>.</p>
 <h2 id="4-requirements"><a class="header" href="#4-requirements">4. Requirements</a></h2>
 <h3 id="41-functional-scope-by-phase"><a class="header" href="#41-functional-scope-by-phase">4.1 Functional scope by phase</a></h3>
 <div class="table-wrapper">
@@ -1199,6 +1199,8 @@ Ink/Stitch’s SVG attributes because that is the interoperability contract. See
 <tr><td><a href="#adr-0008-conformance-first-development">0008</a></td><td>Conformance-first development: requirement IDs and cases before code</td></tr>
 <tr><td><a href="#adr-0009-adopt-vectorcrafts-conventions-improve-the-ones-that-drift">0009</a></td><td>Adopt VectorCraft’s proven conventions; improve the ones that drift</td></tr>
 <tr><td><a href="#adr-0010-coded-diagnostics-with-explanation-pages">0010</a></td><td>Every user-facing problem is a coded diagnostic with an explanation page</td></tr>
+<tr><td><a href="#adr-0011-stitchcraft-can-move-into-vectorcrafts-repository">0011</a></td><td>StitchCraft can move into VectorCraft’s repository as a folder</td></tr>
+<tr><td><a href="#adr-0012-read-inkstitchs-source-never-copy-it">0012</a></td><td>Ink/Stitch’s source may be read, never copied</td></tr>
 </tbody>
 </table>
 </div>
@@ -1335,7 +1337,7 @@ milestone signed off.</p>
 <tr><td>R2</td><td>ABI v1 budgets too small for full previews</td><td>Budget-aware coarse previews; full fidelity in CLI; ABI v2 overlay proposal</td></tr>
 <tr><td>R3</td><td>ArtCraft declines ABI v2</td><td>Plug-in still works on v1; optional in-tree integration in a fork</td></tr>
 <tr><td>R4</td><td>Polygon offset/boolean robustness</td><td>Spike M0.7; input sanitizing; fuzzing; fallback to diagnostics, never panics</td></tr>
-<tr><td>R5</td><td>Clean-room discipline slips</td><td>Process in ADR-0001; <code>cargo xtask cleanroom</code>; review checklist</td></tr>
+<tr><td>R5</td><td>Copied GPL code slips in</td><td>Design docs first, in our own words (ADR-0012); <code>cargo xtask cleanroom</code>; review checklist</td></tr>
 <tr><td>R6</td><td>Cross-platform float differences</td><td><code>libm</code>, no FMA-sensitive formulas in quantization, cross-platform hash CI</td></tr>
 <tr><td>R7</td><td>Scope: the compatibility contract is large</td><td>Phases; compatibility contract tracks coverage; post-1.0 items explicit</td></tr>
 <tr><td>R8</td><td>Brother trim behaviour varies by model</td><td>Profile flag; MC-1 tests both encodings</td></tr>
@@ -2151,10 +2153,12 @@ budget without <code>SC-E0004</code>.</li>
 <li><strong>Monotonicity where meaningful:</strong> denser spacing never yields fewer stitches; larger shapes never
 yield fewer stitches.</li>
 </ol>
-<h2 id="clean-room-sources"><a class="header" href="#clean-room-sources">Clean-room sources</a></h2>
-<p>Each page cites only public material: embroidery practice (the terms every digitizer uses), published
-algorithms and papers, and the behaviour documented on Ink/Stitch’s public website. No Ink/Stitch
-source code is used (<a href="#adr-0001-mit-or-apache-20-clean-room-from-inkstitch">ADR-0001</a>).</p>
+<h2 id="sources"><a class="header" href="#sources">Sources</a></h2>
+<p>Each page rests on embroidery practice (the terms every digitizer uses), published algorithms and papers,
+Ink/Stitch’s documentation and, where the documentation is silent, Ink/Stitch’s behaviour as its source
+shows it. Pages describe all of it in our own words and never copy code; a link to the source a statement
+rests on is welcome when it helps the next reader check it again
+(<a href="#adr-0012-read-inkstitchs-source-never-copy-it">ADR-0012</a>).</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="stroke-generators"><a class="header" href="#stroke-generators">Stroke generators</a></h1>
 <p>Strokes follow a path. Shape: <code>StrokePath</code> (an ordered list of polylines, corners marked, from the
@@ -3436,7 +3440,7 @@ so the rules hold without anyone having to remember them. Most are adopted from 
 <tr><td><strong>Module size</strong></td><td>Rust files warn above 800 lines, fail above 1,500 (generated files exempt)</td><td><code>xtask/src/filesize.rs</code></td><td><code>cargo xtask filesize</code> · CI</td></tr>
 <tr><td>WebAssembly</td><td>L0–L3 crates and the plug-in build for <code>wasm32-unknown-unknown</code></td><td><code>xtask/src/wasm.rs</code></td><td><code>cargo xtask wasm</code> · CI</td></tr>
 <tr><td><strong>Movable into VectorCraft</strong></td><td>Every package is <code>stitchcraft-*</code>; crates inherit only workspace keys VectorCraft defines; tooling works from its own folder on StitchCraft’s packages (<a href="#adr-0011-stitchcraft-can-move-into-vectorcrafts-repository">ADR-0011</a>)</td><td><code>xtask/src/layers.rs</code>, <code>xtask/src/util.rs</code>, <code>xtask/src/join.rs</code></td><td><code>move</code> job in <code>compat.yml</code> · daily and on PRs touching manifests or tooling</td></tr>
-<tr><td><strong>Clean room</strong></td><td>No GPL/AGPL licence text or Ink/Stitch source paths anywhere in the repository, documents included</td><td><code>xtask/src/cleanroom.rs</code></td><td><code>cargo xtask cleanroom</code> · CI</td></tr>
+<tr><td><strong>No GPL code</strong></td><td>No GPL/AGPL licence text and no pasted Python source anywhere in the repository, documents included (<a href="#adr-0012-read-inkstitchs-source-never-copy-it">ADR-0012</a>)</td><td><code>xtask/src/cleanroom.rs</code></td><td><code>cargo xtask cleanroom</code> · CI</td></tr>
 <tr><td>Docs</td><td>Generated pages fresh, links and anchors valid, mentioned <code>cargo xtask</code> commands exist, ids exist</td><td><code>xtask/src/docs.rs</code></td><td><code>cargo xtask docs --check</code> · CI</td></tr>
 <tr><td>Docs images</td><td>Every image declared in <code>docs/shots.toml</code>, with alt text, and regenerating to the committed file</td><td><code>xtask/src/shots.rs</code></td><td><code>cargo xtask shots --check</code> · CI</td></tr>
 <tr><td>Conformance</td><td>Requirement/case consistency; all cases pass; changed goldens need the <code>golden-change</code> label and a changelog line</td><td><code>xtask/src/conformance/</code>, <code>ci.yml</code>, <code>goldens.yml</code></td><td><code>cargo xtask conformance</code> · CI</td></tr>
@@ -3867,7 +3871,7 @@ supersedes the old one.</p>
 <tr><th>ADR</th><th>Title</th><th>Status</th></tr>
 </thead>
 <tbody>
-<tr><td><a href="#adr-0001-mit-or-apache-20-clean-room-from-inkstitch">0001</a></td><td>MIT OR Apache-2.0, clean-room from Ink/Stitch</td><td>Accepted</td></tr>
+<tr><td><a href="#adr-0001-mit-or-apache-20-clean-room-from-inkstitch">0001</a></td><td>MIT OR Apache-2.0, clean-room from Ink/Stitch</td><td>Accepted (decision 2 replaced by 0012)</td></tr>
 <tr><td><a href="#adr-0002-host-agnostic-engine-vectorcraft-abi-v1-plug-in-first">0002</a></td><td>Host-agnostic engine; VectorCraft ABI v1 plug-in first</td><td>Accepted</td></tr>
 <tr><td><a href="#adr-0003-one-parameter-registry-generates-everything">0003</a></td><td>One parameter registry generates everything</td><td>Accepted</td></tr>
 <tr><td><a href="#adr-0004-determinism-by-construction">0004</a></td><td>Determinism by construction</td><td>Accepted</td></tr>
@@ -3878,6 +3882,7 @@ supersedes the old one.</p>
 <tr><td><a href="#adr-0009-adopt-vectorcrafts-conventions-improve-the-ones-that-drift">0009</a></td><td>Adopt VectorCraft’s conventions; improve the ones that drift</td><td>Accepted</td></tr>
 <tr><td><a href="#adr-0010-coded-diagnostics-with-explanation-pages">0010</a></td><td>Coded diagnostics with explanation pages</td><td>Accepted</td></tr>
 <tr><td><a href="#adr-0011-stitchcraft-can-move-into-vectorcrafts-repository">0011</a></td><td>StitchCraft can move into VectorCraft’s repository</td><td>Accepted</td></tr>
+<tr><td><a href="#adr-0012-read-inkstitchs-source-never-copy-it">0012</a></td><td>Read Ink/Stitch’s source, never copy it</td><td>Accepted</td></tr>
 </tbody>
 </table>
 </div>
@@ -3885,7 +3890,7 @@ supersedes the old one.</p>
 from the file’s status line.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="adr-0001-mit-or-apache-20-clean-room-from-inkstitch"><a class="header" href="#adr-0001-mit-or-apache-20-clean-room-from-inkstitch">ADR-0001: MIT OR Apache-2.0, clean-room from Ink/Stitch</a></h1>
-<p><strong>Status:</strong> Accepted · 2026-10-08</p>
+<p><strong>Status:</strong> Accepted · 2026-10-08 · decision 2 replaced by <a href="#adr-0012-read-inkstitchs-source-never-copy-it">ADR-0012</a></p>
 <h2 id="context"><a class="header" href="#context">Context</a></h2>
 <p>Ink/Stitch, the behaviour reference, is GPL-3.0. VectorCraft, the host, is MIT OR Apache-2.0 and its
 <code>AGENTS.md</code> forbids GPL/AGPL code in its tree. A port of Ink/Stitch’s Python to Rust would be a
@@ -3898,7 +3903,8 @@ around it is permissively licensed.</p>
 <li>It is a <strong>clean-room</strong> implementation. The design documents in <code>docs/src/design/</code> describe behaviour
 — inputs, outputs, parameters, published algorithms — in our own words. Implementers work from these
 documents, public embroidery knowledge, published papers and Ink/Stitch’s public user documentation,
-and <strong>never open, copy or transliterate Ink/Stitch source code</strong>.</li>
+and <strong>never open, copy or transliterate Ink/Stitch source code</strong>. <em>Replaced by
+<a href="#adr-0012-read-inkstitchs-source-never-copy-it">ADR-0012</a>: the source may be read, never copied.</em></li>
 <li><strong>Interoperability is preserved:</strong> parameter names, their meanings and defaults, method identifiers
 and command names match Ink/Stitch’s SVG attributes, because reading and writing the same files is the
 point (<a href="#inkstitch-compatibility-contract">compatibility contract</a>).</li>
@@ -3915,9 +3921,10 @@ uses the program, it does not copy it.</li>
 <li>We cannot take shortcuts by translating Ink/Stitch’s algorithms; we design them, which the quality goals
 require anyway.</li>
 <li>Our documents describe Ink/Stitch only by its public behaviour, documentation and file format, never
-by its code.</li>
+by its code. <em>(ADR-0012: they may describe behaviour its source shows, in our own words.)</em></li>
 <li><code>cargo xtask cleanroom</code> fails on GPL licence text and on Ink/Stitch source paths anywhere in the
-repository, documents included; the review checklist asks about provenance.</li>
+repository, documents included; the review checklist asks about provenance. <em>(ADR-0012: source paths
+are allowed, so documents can link what they read.)</em></li>
 </ul>
 <h2 id="alternatives-considered"><a class="header" href="#alternatives-considered">Alternatives considered</a></h2>
 <ul>
@@ -4251,6 +4258,52 @@ without merging tables, but it departs from VectorCraft’s convention and repea
 every crate. <code>compat join</code> merges the tables instead.</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div>
+<h1 id="adr-0012-read-inkstitchs-source-never-copy-it"><a class="header" href="#adr-0012-read-inkstitchs-source-never-copy-it">ADR-0012: Read Ink/Stitch’s source, never copy it</a></h1>
+<p><strong>Status:</strong> Accepted · 2026-10-08</p>
+<h2 id="context-11"><a class="header" href="#context-11">Context</a></h2>
+<p><a href="#adr-0001-mit-or-apache-20-clean-room-from-inkstitch">ADR-0001</a> made StitchCraft a strict clean room: nobody working on it
+opened Ink/Stitch’s source. What that protects is the MIT OR Apache-2.0 licence: a port of GPL-3.0 code
+would be a derivative work, and VectorCraft, where StitchCraft may move
+(<a href="#adr-0011-stitchcraft-can-move-into-vectorcrafts-repository">ADR-0011</a>), takes no GPL code. But copyright covers code, not
+behaviour or algorithms: reading a program does not make a work derivative, copying it does.
+VectorCraft draws the line in the same place. Its <code>AGENTS.md</code> (at <code>dcc0de7</code>) says “Never copy GPL/AGPL
+code (Inkscape, lib2geom…)”, and keeps its never-read rule for Adobe software, whose terms forbid
+reverse engineering.</p>
+<p>The strict rule has a cost. Ink/Stitch’s documentation is silent on many details that decide whether a
+file behaves the same in both tools (edge cases of parameters, how lists repeat, the font files), and
+guessing them makes interoperability bugs.</p>
+<h2 id="decision-10"><a class="header" href="#decision-10">Decision</a></h2>
+<ol>
+<li>Ink/Stitch’s source, like any GPL/AGPL code, may be read to understand its behaviour. Nothing from
+it is copied, pasted, transliterated or closely paraphrased into StitchCraft, and no GPL code, text or
+data file enters the repository.</li>
+<li>Behaviour is written into our design docs in our own words, and code is written from those docs, as
+before. A design statement may link the Ink/Stitch source it rests on when that helps the next reader
+check it again; no link is required.</li>
+<li>This replaces decision 2 of ADR-0001. Its other decisions stand: the licence, interoperability through
+Ink/Stitch’s names and defaults, the things never copied, format facts from pyembroidery with
+attribution, and Ink/Stitch as a black-box oracle.</li>
+</ol>
+<h2 id="consequences-11"><a class="header" href="#consequences-11">Consequences</a></h2>
+<ul>
+<li>Interoperability details can be checked against what Ink/Stitch actually does instead of inferred from
+its documentation.</li>
+<li>The risk moves from “never seen” to “never copied”: code written right after reading another
+implementation tends to mirror its structure even when no line is copied. Writing the design doc first,
+in our own words, and implementing from it is the guard; the review checklist asks that nothing was
+copied.</li>
+<li><code>cargo xtask cleanroom</code> still fails on GPL licence text and on pasted Python source. It no longer fails
+on Ink/Stitch file paths, so a design doc can link the source it read.</li>
+</ul>
+<h2 id="alternatives-considered-6"><a class="header" href="#alternatives-considered-6">Alternatives considered</a></h2>
+<ul>
+<li><strong>Keep the strict clean room:</strong> the cleanest provenance, but it leaves interoperability details to
+guesswork, and it is stricter than VectorCraft, the host whose licence sets the constraint. Rejected.</li>
+<li><strong>Require a pinned citation for everything learned from the source</strong>, checked by the gate: traceable,
+but more process than VectorCraft asks for, and a link only helps where a statement may need checking
+again. Rejected: links are welcome, not required.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div>
 <h1 id="roadmap-small-steps-to-the-final-project"><a class="header" href="#roadmap-small-steps-to-the-final-project">Roadmap: small steps to the final project</a></h1>
 <p>Each <strong>step</strong> is one pull request: small, reviewable, with its tests, conformance cases and docs. Each
 <strong>milestone</strong> ends with green gates and, where it produces something sewable, a <strong>machine checkpoint</strong>
@@ -4567,8 +4620,9 @@ changes follow playbooks, and every behaviour has a requirement and a test.</p>
 </div>
 <h2 id="ground-rules"><a class="header" href="#ground-rules">Ground rules</a></h2>
 <ul>
-<li><strong>Clean room:</strong> never read or copy Ink/Stitch source code (GPL-3.0). Work from the design docs,
-public documentation and papers (<a href="#adr-0001-mit-or-apache-20-clean-room-from-inkstitch">ADR-0001</a>).</li>
+<li><strong>Never copy GPL code:</strong> Ink/Stitch’s source (GPL-3.0) may be read to understand its behaviour, but
+nothing from it is copied or transliterated. Write the behaviour into the design docs in your own
+words and code from them (<a href="#adr-0012-read-inkstitchs-source-never-copy-it">ADR-0012</a>).</li>
 <li><strong>No panics, no <code>unsafe</code>, deterministic output</strong> — the lints will tell you
 (<a href="#guardrails">guardrails</a>).</li>
 <li><strong>One roadmap step per PR</strong>, its id in the title; requirements and cases first.</li>
@@ -4582,7 +4636,7 @@ gates catch anything you miss.</p>
 <ol>
 <li><strong>Design page first.</strong> Add or extend the section in <code>docs/src/design/algorithms/</code> with: purpose,
 parameters (registry keys; Ink/Stitch names where they exist), the algorithm in your own words,
-properties, diagnostics, references. Clean room: public sources only.</li>
+properties, diagnostics, references. Never copy code (<a href="#adr-0012-read-inkstitchs-source-never-copy-it">ADR-0012</a>).</li>
 <li><strong>Requirements.</strong> Add <code>REQ-…</code> entries to <code>conformance/requirements.toml</code> with <code>status = "planned"</code> and
 the milestone.</li>
 <li><strong>Cases.</strong> Add cases under <code>conformance/cases/&lt;area&gt;/</code>: typical shapes, the degenerate corpus entries
@@ -4674,7 +4728,7 @@ problem and the fix.</li>
 </ul>
 <p><strong>Provenance</strong></p>
 <ul>
-<li><input disabled="" type="checkbox"> Clean room: the author confirms no Ink/Stitch source was consulted; algorithms cite public sources.</li>
+<li><input disabled="" type="checkbox"> Nothing was copied, pasted or transliterated from Ink/Stitch or other GPL/AGPL code; behaviour is in the design docs in our own words.</li>
 <li><input disabled="" type="checkbox"> New data tables (palettes, format constants) cite their source.</li>
 </ul>
 <p><strong>Docs and UX</strong></p>

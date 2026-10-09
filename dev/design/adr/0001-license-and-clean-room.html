@@ -35,10 +35,10 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-9eb47192.js";
+            window.path_to_searchindex_js = "../../searchindex-b4f2a931.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../../toc-e486a7f9.js"></script>
+        <script src="../../toc-d2fe63c9.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -181,7 +181,7 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="adr-0001-mit-or-apache-20-clean-room-from-inkstitch"><a class="header" href="#adr-0001-mit-or-apache-20-clean-room-from-inkstitch">ADR-0001: MIT OR Apache-2.0, clean-room from Ink/Stitch</a></h1>
-<p><strong>Status:</strong> Accepted · 2026-10-08</p>
+<p><strong>Status:</strong> Accepted · 2026-10-08 · decision 2 replaced by <a href="0012-read-dont-copy.html">ADR-0012</a></p>
 <h2 id="context"><a class="header" href="#context">Context</a></h2>
 <p>Ink/Stitch, the behaviour reference, is GPL-3.0. VectorCraft, the host, is MIT OR Apache-2.0 and its
 <code>AGENTS.md</code> forbids GPL/AGPL code in its tree. A port of Ink/Stitch’s Python to Rust would be a
@@ -194,7 +194,8 @@ around it is permissively licensed.</p>
 <li>It is a <strong>clean-room</strong> implementation. The design documents in <code>docs/src/design/</code> describe behaviour
 — inputs, outputs, parameters, published algorithms — in our own words. Implementers work from these
 documents, public embroidery knowledge, published papers and Ink/Stitch’s public user documentation,
-and <strong>never open, copy or transliterate Ink/Stitch source code</strong>.</li>
+and <strong>never open, copy or transliterate Ink/Stitch source code</strong>. <em>Replaced by
+<a href="0012-read-dont-copy.html">ADR-0012</a>: the source may be read, never copied.</em></li>
 <li><strong>Interoperability is preserved:</strong> parameter names, their meanings and defaults, method identifiers
 and command names match Ink/Stitch’s SVG attributes, because reading and writing the same files is the
 point (<a href="../inkstitch-compat-contract.html">compatibility contract</a>).</li>
@@ -211,9 +212,10 @@ uses the program, it does not copy it.</li>
 <li>We cannot take shortcuts by translating Ink/Stitch’s algorithms; we design them, which the quality goals
 require anyway.</li>
 <li>Our documents describe Ink/Stitch only by its public behaviour, documentation and file format, never
-by its code.</li>
+by its code. <em>(ADR-0012: they may describe behaviour its source shows, in our own words.)</em></li>
 <li><code>cargo xtask cleanroom</code> fails on GPL licence text and on Ink/Stitch source paths anywhere in the
-repository, documents included; the review checklist asks about provenance.</li>
+repository, documents included; the review checklist asks about provenance. <em>(ADR-0012: source paths
+are allowed, so documents can link what they read.)</em></li>
 </ul>
 <h2 id="alternatives-considered"><a class="header" href="#alternatives-considered">Alternatives considered</a></h2>
 <ul>

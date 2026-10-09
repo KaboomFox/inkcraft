@@ -35,10 +35,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-9eb47192.js";
+            window.path_to_searchindex_js = "../searchindex-b4f2a931.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-e486a7f9.js"></script>
+        <script src="../toc-d2fe63c9.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -186,7 +186,7 @@ gates catch anything you miss.</p>
 <ol>
 <li><strong>Design page first.</strong> Add or extend the section in <code>docs/src/design/algorithms/</code> with: purpose,
 parameters (registry keys; Ink/Stitch names where they exist), the algorithm in your own words,
-properties, diagnostics, references. Clean room: public sources only.</li>
+properties, diagnostics, references. Never copy code (<a href="../design/adr/0012-read-dont-copy.html">ADR-0012</a>).</li>
 <li><strong>Requirements.</strong> Add <code>REQ-…</code> entries to <code>conformance/requirements.toml</code> with <code>status = "planned"</code> and
 the milestone.</li>
 <li><strong>Cases.</strong> Add cases under <code>conformance/cases/&lt;area&gt;/</code>: typical shapes, the degenerate corpus entries

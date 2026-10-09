@@ -35,10 +35,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-9eb47192.js";
+            window.path_to_searchindex_js = "../searchindex-b4f2a931.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-e486a7f9.js"></script>
+        <script src="../toc-d2fe63c9.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -279,11 +279,11 @@ screenshot pipeline drive.</li>
 </ul>
 <h3 id="33-licence-and-clean-room"><a class="header" href="#33-licence-and-clean-room">3.3 Licence and clean room</a></h3>
 <p>Ink/Stitch is GPL-3.0; VectorCraft forbids GPL code in its tree. StitchCraft is <strong>MIT OR
-Apache-2.0</strong> and is written <strong>clean-room</strong>: the design docs in this folder describe <em>behaviour</em>
-(inputs, outputs, parameters, published algorithms); implementers work from these docs and public
-references and never read or transliterate Ink/Stitch source. Parameter names are kept identical to
-Ink/Stitch’s SVG attributes because that is the interoperability contract. See
-<a href="adr/0001-license-and-clean-room.html">ADR-0001</a>.</p>
+Apache-2.0</strong> and never copies GPL code: the design docs in this folder describe <em>behaviour</em> (inputs,
+outputs, parameters, algorithms) in our own words, and implementers work from these docs. Ink/Stitch’s
+source may be read to understand its behaviour, never copied or transliterated. Parameter names are kept
+identical to Ink/Stitch’s SVG attributes because that is the interoperability contract. See
+<a href="adr/0001-license-and-clean-room.html">ADR-0001</a> and <a href="adr/0012-read-dont-copy.html">ADR-0012</a>.</p>
 <h2 id="4-requirements"><a class="header" href="#4-requirements">4. Requirements</a></h2>
 <h3 id="41-functional-scope-by-phase"><a class="header" href="#41-functional-scope-by-phase">4.1 Functional scope by phase</a></h3>
 <div class="table-wrapper">
@@ -378,6 +378,8 @@ Ink/Stitch’s SVG attributes because that is the interoperability contract. See
 <tr><td><a href="adr/0008-conformance-first.html">0008</a></td><td>Conformance-first development: requirement IDs and cases before code</td></tr>
 <tr><td><a href="adr/0009-adopt-vectorcraft-conventions.html">0009</a></td><td>Adopt VectorCraft’s proven conventions; improve the ones that drift</td></tr>
 <tr><td><a href="adr/0010-diagnostics-with-codes.html">0010</a></td><td>Every user-facing problem is a coded diagnostic with an explanation page</td></tr>
+<tr><td><a href="adr/0011-movable-into-vectorcraft.html">0011</a></td><td>StitchCraft can move into VectorCraft’s repository as a folder</td></tr>
+<tr><td><a href="adr/0012-read-dont-copy.html">0012</a></td><td>Ink/Stitch’s source may be read, never copied</td></tr>
 </tbody>
 </table>
 </div>
@@ -514,7 +516,7 @@ milestone signed off.</p>
 <tr><td>R2</td><td>ABI v1 budgets too small for full previews</td><td>Budget-aware coarse previews; full fidelity in CLI; ABI v2 overlay proposal</td></tr>
 <tr><td>R3</td><td>ArtCraft declines ABI v2</td><td>Plug-in still works on v1; optional in-tree integration in a fork</td></tr>
 <tr><td>R4</td><td>Polygon offset/boolean robustness</td><td>Spike M0.7; input sanitizing; fuzzing; fallback to diagnostics, never panics</td></tr>
-<tr><td>R5</td><td>Clean-room discipline slips</td><td>Process in ADR-0001; <code>cargo xtask cleanroom</code>; review checklist</td></tr>
+<tr><td>R5</td><td>Copied GPL code slips in</td><td>Design docs first, in our own words (ADR-0012); <code>cargo xtask cleanroom</code>; review checklist</td></tr>
 <tr><td>R6</td><td>Cross-platform float differences</td><td><code>libm</code>, no FMA-sensitive formulas in quantization, cross-platform hash CI</td></tr>
 <tr><td>R7</td><td>Scope: the compatibility contract is large</td><td>Phases; compatibility contract tracks coverage; post-1.0 items explicit</td></tr>
 <tr><td>R8</td><td>Brother trim behaviour varies by model</td><td>Profile flag; MC-1 tests both encodings</td></tr>

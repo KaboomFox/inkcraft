@@ -35,10 +35,10 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-b4f2a931.js";
+            window.path_to_searchindex_js = "../../searchindex-887a3ca9.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../../toc-d2fe63c9.js"></script>
+        <script src="../../toc-e34e2d93.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -189,43 +189,88 @@ normalizer). Phase P1 (M3) unless noted.</p>
 <code>running_stitch_tolerance_mm</code>, <code>repeats</code>, <code>bean_stitch_repeats</code>, <code>enable_random_stitch_length</code>,
 <code>random_stitch_length_jitter_percent</code>, <code>random_seed</code>.</p>
 <h3 id="placement"><a class="header" href="#placement">Placement</a></h3>
+<p>A stitch is the straight line between two needle points, so placement measures along the path but
+checks straight. “The shortest stitch” is the one <a href="../engine-pipeline.html#5-finalize">Finalize</a> enforces
+(settings or profile, whichever is larger).</p>
 <ol>
-<li><strong>Split at corners.</strong> Corners marked by the normalizer (turning angle &gt; 30°) always receive a needle
-penetration, so sharp shapes stay sharp.</li>
-<li><strong>Even spacing per span.</strong> For a span of arc length <code>L</code> between corners and target length <code>s</code>,
-place <code>n = ceil(L / s − ε)</code> stitches spaced <code>L / n</code> apart along the arc. Every stitch is at most <code>s</code>
-and the last one is never a short leftover — the classic even-division rule digitizers use.</li>
-<li><strong>Respect the curve.</strong> If the chord between two consecutive needle points strays from the curve by
-more than the tolerance, split that stitch at the point of maximum deviation and repeat. This bounds
-the visual error by <code>running_stitch_tolerance_mm</code> on any curve.</li>
-<li><strong>Patterns.</strong> With several lengths (<code>"2.5 1.0"</code>) the lengths repeat along the path; each span still
-ends exactly on its corner by scaling its stitches proportionally.</li>
-<li><strong>Random length.</strong> With <code>enable_random_stitch_length</code>, each stitch length is drawn uniformly from
-<code>s × (1 ± jitter)</code>, then the span is rescaled to end on its corner. The seed makes it repeatable.</li>
+<li><strong>Flatten.</strong> The normalizer turns the path into polylines within a tenth of the tolerance (the other
+nine tenths are left for the stitches) and marks its corners: joins between segments where the path
+turns by more than 30°. A curve’s own bend is never a corner, however tight.</li>
+<li><strong>Split at corners.</strong> Every corner gets a needle penetration, so sharp shapes stay sharp, unless it is
+closer than the shortest stitch, along the path, to the previous penetration or to the end: then the
+spans on either side of it are joined.</li>
+<li><strong>Even spacing per span.</strong> For a span of length <code>L</code> between corners and target length <code>s</code>, place
+<code>n = ceil(L / s − ε)</code> stitches spaced <code>L / n</code> apart along the path. Every stitch is at most <code>s</code> and the
+last one is never a short leftover — the classic even-division rule digitizers use. With several
+lengths (<code>"2.5 1.0"</code>) the lengths repeat along the path, carrying on from span to span; each span takes
+as many as it needs and scales them by one factor to end exactly on its corner. Lengths below twice
+the shortest stitch are raised to it (<code>SC-W0402</code>), so a span longer than the longest length scales its
+stitches by more than a half and keeps each at or above the shortest stitch; in a shorter span, a
+stitch scaled below it joins its shorter neighbour.</li>
+<li><strong>Measure straight.</strong> Where the path bends back on itself within less than the shortest stitch (a
+cusp, a tight loop, a curl at an end), two points far apart along it can be close in a straight line.
+Going along the needle points: one closer than the shortest stitch to the last one kept is dropped; a
+corner drops the points kept since the previous corner instead, and is dropped itself if that is not
+enough; the end drops whatever it takes, corners too. A drop lengthens the stitch over it, and one
+longer than the longest length is split where the path is half its length from its start (at most
+the longest length), as often as needed. When only the start is left and the end is too close to it
+(a small closed loop), the stitch goes by way of the point of the path farthest from both ends; if
+even that is closer than the shortest stitch, the part is not stitched (<code>SC-W0401</code>).</li>
+<li><strong>Respect the curve.</strong> If the chord between two consecutive needle points strays from the path by
+more than the tolerance left after flattening, split that stitch at the path’s point of greatest
+deviation, among those that leave both parts within the lengths above, and repeat. This bounds the
+visual error by <code>running_stitch_tolerance_mm</code> on any curve whose details are larger than the shortest
+stitch.</li>
+<li><strong>Random length</strong> (M3.5). With <code>enable_random_stitch_length</code>, each stitch length is drawn uniformly
+from <code>s × (1 ± jitter)</code>, then the span is rescaled to end on its corner. The seed makes it repeatable.</li>
 </ol>
+<p><strong>When the rules disagree,</strong> the shortest stitch wins (a shorter stitch hammers one spot and can break the
+thread), then corners, then the tolerance. A part of the path that is a single point, shorter than the
+shortest stitch, or lying all within it of its ends, is not stitched (<code>SC-W0401</code>). Only arithmetic and square roots are used, so
+every platform places the same stitches.</p>
+<p><strong>Compared with Ink/Stitch:</strong> the same parameters, meanings and defaults; the placement differs in four
+documented ways, <code>DEV-RUN-001</code> to <code>DEV-RUN-004</code> in the deviations ledger (<code>conformance/deviations.toml</code>).</p>
 <h3 id="repeats-and-bean-stitch"><a class="header" href="#repeats-and-bean-stitch">Repeats and bean stitch</a></h3>
 <ul>
 <li><code>repeats = k</code> sews the path k times, alternating direction; odd k ends at the far end, even k returns
-to the start (useful for travel that must come back).</li>
+to the start (useful for travel that must come back). Each pass starts where the last one ended, so a
+turnaround is not a stitch in place.</li>
 <li><code>bean_stitch_repeats = b</code> replaces every stitch A→B with A→B→A→B… (2b+1 passes), producing the thick
 “triple stitch” line at b = 1. A list (<code>"1 0"</code>) alternates bean and plain stitches.</li>
+<li><strong>Order, as in Ink/Stitch</strong> (read at <code>d59c9ab</code>): bean stitch applies after repeats, to every stitch of
+every pass, with the list running on from pass to pass. Ink/Stitch repeats the turnaround point, so
+the turnaround takes one step of the list; StitchCraft counts that step too, without sewing it, so a
+file sews the same in both. With a two-value list, each stretch of the path then gets the same
+treatment on every pass.</li>
+<li>Repeats apply to running, ripple and zigzag strokes; bean stitch to those and to manual stitch (the
+<a href="../inkstitch-compat-contract.html">compatibility contract</a> lists each parameter’s stitch types).</li>
 </ul>
+<h3 id="random-length-m35"><a class="header" href="#random-length-m35">Random length (M3.5)</a></h3>
+<p>Ink/Stitch draws each stitch from <code>s × (1 ± jitter)</code> and starts each stretch between corners at a random
+phase, its first stitch a random fraction of a drawn length, so rows sewn side by side with the same
+settings do not line their holes up. It does not rescale, so the last stitch before a corner is whatever
+is left. StitchCraft rescales each span to end on its corner (placement, step 6: no short leftover) and
+keeps the random phase, for the same reason.</p>
 <h3 id="properties-conformance"><a class="header" href="#properties-conformance">Properties (conformance)</a></h3>
 <ul>
-<li>Every top stitch ≤ <code>s × (1 + jitter)</code> + 1 µm, and ≥ the minimum stitch length unless the path is
-shorter than it (<code>REQ-RUN-001</code>).</li>
-<li>Maximum deviation from the source curve ≤ tolerance (measured densely) (<code>REQ-RUN-002</code>).</li>
-<li>Corners are penetration points (<code>REQ-RUN-003</code>).</li>
+<li>Stitches are spread evenly between corners; every stitch, measured straight, is at most
+<code>s × (1 + jitter)</code> + 1 µm for the longest length <code>s</code> and at least the shortest stitch; a part too small
+for that is reported (<code>REQ-RUN-001</code>).</li>
+<li>Deviation from the source path ≤ tolerance, both ways, measured densely (<code>REQ-RUN-002</code>).</li>
+<li>Corners are penetration points unless that would make a stitch too short (<code>REQ-RUN-003</code>).</li>
 <li>Bean stitch: stitch count is exactly <code>n × (2b + 1)</code> for a span of n stitches (<code>REQ-RUN-004</code>).</li>
 <li>Repeats parity decides the exit point (<code>REQ-RUN-005</code>).</li>
 </ul>
 <h3 id="diagnostics"><a class="header" href="#diagnostics">Diagnostics</a></h3>
-<p><code>SC-W0401</code> path shorter than the minimum stitch length (skipped); <code>SC-W0402</code> stitch length below the
-profile minimum (clamped).</p>
+<p><code>SC-W0401</code> part of the path too small for the shortest stitch (skipped); <code>SC-W0402</code> stitch length below
+twice the shortest stitch (raised).</p>
 <h2 id="manual-stitch"><a class="header" href="#manual-stitch">Manual stitch</a></h2>
 <p>Every node of the path is a needle penetration, in order — for hand-placed stitches and imported stitch
-files. Segments longer than <code>max_stitch_length_mm</code> (if set) are split evenly. Bean stitch applies.
-Property: output nodes equal input nodes plus only the documented splits (<code>REQ-RUN-006</code>).</p>
+files. A curve gives only its end node: its control points are not stitched and it is not flattened.
+Segments longer than <code>max_stitch_length_mm</code> (if set) are split into the fewest equal parts no longer than
+it. Bean stitch applies; repeats do not. Lock stitches are added only when <code>force_lock_stitches</code> is set,
+as in Ink/Stitch (read at <code>d59c9ab</code>). Property: output nodes equal input nodes plus only the documented
+splits (<code>REQ-RUN-006</code>).</p>
 <h2 id="zigzag-stroke-p2-m7"><a class="header" href="#zigzag-stroke-p2-m7">Zigzag stroke (P2, M7)</a></h2>
 <p>A zigzag of width <code>stroke-width</code> (or the satin width parameters) centred on the path, with peak-to-peak
 spacing <code>zigzag_spacing_mm</code>, optional <code>zigzag_angle</code> (slanted zigzag), and

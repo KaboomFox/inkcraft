@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-b4f2a931.js";
+            window.path_to_searchindex_js = "searchindex-887a3ca9.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-d2fe63c9.js"></script>
+        <script src="toc-e34e2d93.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -631,6 +631,8 @@ Arguments:
 <tr><td><a href="#sc-e0101"><code>SC-E0101</code></a></td><td>Error</td><td>Parameter has the wrong type or an unknown choice</td></tr>
 <tr><td><a href="#sc-w0102"><code>SC-W0102</code></a></td><td>Warning</td><td>Parameter clamped to its allowed range</td></tr>
 <tr><td><a href="#sc-w0105"><code>SC-W0105</code></a></td><td>Warning</td><td>Unknown parameter preserved but ignored</td></tr>
+<tr><td><a href="#sc-w0401"><code>SC-W0401</code></a></td><td>Warning</td><td>Path too small for the shortest stitch; skipped</td></tr>
+<tr><td><a href="#sc-w0402"><code>SC-W0402</code></a></td><td>Warning</td><td>Stitch length below twice the shortest stitch; raised</td></tr>
 <tr><td><a href="#sc-e0601"><code>SC-E0601</code></a></td><td>Error</td><td>Too many colour changes for the file format</td></tr>
 <tr><td><a href="#sc-e0602"><code>SC-E0602</code></a></td><td>Error</td><td>Design too large for the file format</td></tr>
 <tr><td><a href="#sc-e0603"><code>SC-E0603</code></a></td><td>Error</td><td>Machine file could not be read</td></tr>
@@ -689,6 +691,22 @@ warning.</p>
 or Ink/Stitch, or one for a stitch type StitchCraft does not support yet. It was kept, so saving
 the design does not lose it, but it does not change the stitches.</p>
 <p>The Ink/Stitch compatibility page says when each Ink/Stitch parameter is supported.</p>
+<h2 id="sc-w0401"><a class="header" href="#sc-w0401">SC-W0401</a></h2>
+<p><strong>Warning</strong> — Path too small for the shortest stitch; skipped</p>
+<p>A part of a stroke is too small for the shortest stitch the machine sews well, so it was left out:
+one stitch that short would hammer one spot of the fabric and could break the thread. The part is
+a single point (a stray node), shorter than the shortest stitch, or longer but curled up so that
+all of it lies within the shortest stitch of its ends: a tiny closed loop, say.</p>
+<p>The message gives the part’s length and the shortest stitch. Enlarge the part, join it to its
+neighbour, or delete it if it is a stray.</p>
+<h2 id="sc-w0402"><a class="header" href="#sc-w0402">SC-W0402</a></h2>
+<p><strong>Warning</strong> — Stitch length below twice the shortest stitch; raised</p>
+<p>The running stitch length is shorter than twice the shortest stitch, so it was lengthened to
+twice the shortest stitch. Stitches are spread evenly between corners; at half the length or
+more, every stitch then stays at or above the shortest stitch, whatever the distance between
+corners.</p>
+<p>The message gives both lengths. Use a longer stitch length, or a shorter minimum if your machine
+sews shorter stitches well.</p>
 <h2 id="sc-e0601"><a class="header" href="#sc-e0601">SC-E0601</a></h2>
 <p><strong>Error</strong> — Too many colour changes for the file format</p>
 <p>The file format can record only a limited number of colour changes and stops (PES: 255). This
@@ -778,6 +796,7 @@ numbers, <code>true</code>/<code>false</code>, strings and arrays instead, and <
 </thead>
 <tbody>
 <tr><td><a href="#common-parameters">Common parameters</a></td><td>14</td><td>every stitch type</td></tr>
+<tr><td><a href="#running-parameters">Running parameters</a></td><td>2</td><td>Running stitch, Ripple stitch</td></tr>
 </tbody>
 </table>
 </div>
@@ -799,6 +818,8 @@ numbers, <code>true</code>/<code>false</code>, strings and arrays instead, and <
 <tr><td><a href="#lock_start_scale_percent"><code>lock_start_scale_percent</code></a></td><td>Start lock scale</td><td>Common parameters</td></tr>
 <tr><td><a href="#min_jump_stitch_length_mm"><code>min_jump_stitch_length_mm</code></a></td><td>Shortest jump</td><td>Common parameters</td></tr>
 <tr><td><a href="#min_stitch_length_mm"><code>min_stitch_length_mm</code></a></td><td>Shortest stitch</td><td>Common parameters</td></tr>
+<tr><td><a href="#running_stitch_length_mm"><code>running_stitch_length_mm</code></a></td><td>Stitch length</td><td>Running parameters</td></tr>
+<tr><td><a href="#running_stitch_tolerance_mm"><code>running_stitch_tolerance_mm</code></a></td><td>Curve tolerance</td><td>Running parameters</td></tr>
 <tr><td><a href="#stop_after"><code>stop_after</code></a></td><td>Stop after</td><td>Common parameters</td></tr>
 <tr><td><a href="#ties"><code>ties</code></a></td><td>Lock stitches</td><td>Common parameters</td></tr>
 <tr><td><a href="#trim_after"><code>trim_after</code></a></td><td>Trim after</td><td>Common parameters</td></tr>
@@ -920,6 +941,28 @@ jump. Empty: the document’s setting.</p>
 <ul>
 <li><strong>Accepts:</strong> a length from 0 to 20 mm, or empty</li>
 <li><strong>Default:</strong> empty</li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><!-- Generated by `cargo xtask docs` from `RunningParams` in the parameter registry. Edit the declaration, not this page. -->
+<h1 id="running-parameters"><a class="header" href="#running-parameters">Running parameters</a></h1>
+<p>Running stitch: single stitches along the path, for outlines, details and travel.</p>
+<p>Applies to Running stitch, Ripple stitch.</p>
+<h2 id="running-stitch"><a class="header" href="#running-stitch">Running stitch</a></h2>
+<h3 id="running_stitch_length_mm"><a class="header" href="#running_stitch_length_mm"><code>running_stitch_length_mm</code></a></h3>
+<p><strong>Stitch length.</strong> How long each stitch is. Between corners the stitches are spread evenly, so each one is at most
+this long. Several lengths separated by spaces sew as a repeating pattern: “2.5 1” sews long,
+short, long, short.</p>
+<ul>
+<li><strong>Accepts:</strong> 1 to 16 lengths from 0.1 to 25 mm, separated by spaces</li>
+<li><strong>Default:</strong> <code>2.5</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="running_stitch_tolerance_mm"><a class="header" href="#running_stitch_tolerance_mm"><code>running_stitch_tolerance_mm</code></a></h3>
+<p><strong>Curve tolerance.</strong> How far a stitch may stray from a curve. A smaller tolerance follows curves more closely, with
+more and shorter stitches.</p>
+<ul>
+<li><strong>Accepts:</strong> a length from 0.01 to 5 mm</li>
+<li><strong>Default:</strong> <code>0.2</code></li>
 <li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div>
@@ -1431,7 +1474,7 @@ GPL/AGPL/LGPL.</p>
 <tr><th>Need</th><th>Crate</th><th>Licence</th><th>Where</th></tr>
 </thead>
 <tbody>
-<tr><td>Curves, flattening, affine</td><td><code>kurbo</code> 0.13</td><td>MIT/Apache</td><td>core, engine, adapters</td></tr>
+<tr><td>Curves, affine (strokes are flattened by the engine, for determinism)</td><td><code>kurbo</code> 0.13</td><td>MIT/Apache</td><td>core, engine, adapters</td></tr>
 <tr><td>Polygon booleans, offsets</td><td><code>i_overlay</code> 9</td><td>MIT/Apache</td><td>engine</td></tr>
 <tr><td>Spatial index</td><td><code>rstar</code> 0.13</td><td>MIT/Apache</td><td>engine</td></tr>
 <tr><td>Graphs</td><td><code>petgraph</code> 0.8</td><td>MIT/Apache</td><td>engine</td></tr>
@@ -1802,6 +1845,12 @@ in the <a href="#inkstitch-compatibility-contract">compatibility contract</a> de
 equals Ink/Stitch’s default, so an SVG that omits the attribute stitches the same way in both
 tools. Better starting values for new objects come from <a href="#presets">presets</a> and machine profiles,
 never from changing a default.</li>
+<li><strong>A key belongs to its stitch types.</strong> Ink/Stitch gives some keys to several elements with their own
+defaults: <code>running_stitch_tolerance_mm</code> is 0.2 mm on a stroke and 0.1 mm on a satin or a fill. The
+contract is per key and stitch type, so the contract page matches a declaration with the rows for the
+stitch types it applies to, and a declaration for a stitch type Ink/Stitch does not give the key is
+reported. Declaring a key again for other stitch types (satins in M4, fills in M5) also needs lookups
+by key and stitch type: <code>find</code> by key alone returns the first declaration.</li>
 </ol>
 <h2 id="generated-outputs"><a class="header" href="#generated-outputs">Generated outputs</a></h2>
 <div class="table-wrapper">
@@ -1928,8 +1977,8 @@ another.</p>
 <tr><td><code>SC-W0305</code></td><td>Warning</td><td>Region too small for fill rows; outlined with running stitch instead</td><td>M5</td></tr>
 <tr><td><code>SC-W0307</code></td><td>Warning</td><td>Region split into parts that are not connected; parts joined with trims</td><td>M5</td></tr>
 <tr><td><code>SC-W0311</code></td><td>Warning</td><td>Spiral could not be connected in a narrow part; that part uses inner-to-outer contours</td><td>M7</td></tr>
-<tr><td><code>SC-W0401</code></td><td>Warning</td><td>Path shorter than the minimum stitch length; skipped</td><td>M3</td></tr>
-<tr><td><code>SC-W0402</code></td><td>Warning</td><td>Stitch length below the profile minimum; raised to the minimum</td><td>M3</td></tr>
+<tr><td><code>SC-W0401</code></td><td>Warning</td><td>Path too small for the shortest stitch; skipped</td><td>M3</td></tr>
+<tr><td><code>SC-W0402</code></td><td>Warning</td><td>Stitch length below twice the shortest stitch; raised to it, so even spacing never sews a stitch shorter than the shortest</td><td>M3</td></tr>
 <tr><td><code>SC-W0501</code></td><td>Warning</td><td>Travel could not stay inside the region; used tie-off, trim and tie-in</td><td>M5</td></tr>
 <tr><td><code>SC-E0601</code></td><td>Error</td><td>Too many colour changes for the file format</td><td>M1</td></tr>
 <tr><td><code>SC-E0602</code></td><td>Error</td><td>Design too large for the file format (coordinates or data exceed its fields)</td><td>M1</td></tr>
@@ -1955,9 +2004,14 @@ own tests; stages communicate only through the types in the <a href="#data-model
 <h2 id="1-normalize"><a class="header" href="#1-normalize">1. Normalize</a></h2>
 <p>Per element, independent of the others:</p>
 <ul>
-<li><strong>Flatten curves</strong> with the element’s tolerance (default 0.1 mm for fills, <code>running_stitch_tolerance_mm</code>
-for strokes) using <code>kurbo</code>’s adaptive flattening. Corners (turning angle above 30°) are marked so
-running stitches land exactly on them.</li>
+<li><strong>Flatten curves</strong> with the element’s tolerance (default 0.1 mm for fills, a tenth of
+<code>running_stitch_tolerance_mm</code> for strokes). Strokes are halved (de Casteljau) until each piece’s
+control points lie within the tolerance of its chord (<code>stitchcraft_engine::normalize::stroke</code>), using
+only arithmetic and square roots so that every platform gets the same points. <code>kurbo</code>’s adaptive
+flattening is not used for this: in 0.13 it calls <code>powf</code> (<code>CubicBez::to_quads</code>) and <code>hypot</code>
+(<code>QuadBez::estimate_subdiv</code>) from the platform’s maths library, whose last bits differ between
+systems (<a href="#determinism-1">determinism</a>). Corners, joins between segments that turn by more than 30°,
+are marked so running stitches land exactly on them; a curve’s own bend is never a corner.</li>
 <li><strong>Regions:</strong> resolve the fill rule into valid polygons with holes (<code>i_overlay</code>), snap to a 1 µm grid
 first so near-coincident vertices become coincident, drop rings under the minimum area (<code>SC-W0303</code>),
 orient rings explicitly.</li>
@@ -2027,6 +2081,10 @@ changes is an explicit, separate tool (P3) because it changes what covers what.<
 </tbody>
 </table>
 </div>
+<p>Ink/Stitch (read at <code>d59c9ab</code>) joins same-colour groups within the collapse length with one direct
+stitch, and trims only when told to (<code>trim_after</code>, a trim command). StitchCraft splits that stitch to the
+machine’s longest stitch and also trims at the profile’s threshold: both differences come from the
+machine profile, and go into the deviations ledger with M3.8.</p>
 <h3 id="lock-stitches-ties"><a class="header" href="#lock-stitches-ties">Lock stitches (ties)</a></h3>
 <ul>
 <li><code>ties</code> selects where locks go: both, before (tie-in), after (tie-off) or neither.</li>
@@ -2037,7 +2095,15 @@ definitions with the same intent (<a href="#method-identifiers">compatibility co
 steps are scaled by <code>lock_*_scale_mm</code> (an absolute size), shapes drawn as paths by
 <code>lock_*_scale_percent</code> (relative to their own size); the half stitch is sized from the first stitch.
 A custom lock (<code>lock_custom_start</code>, <code>lock_custom_end</code>) is either kind.</li>
-<li><code>force_lock_stitches</code> adds locks even when the next group is close enough to collapse.</li>
+<li><code>force_lock_stitches</code> adds locks even when the next group is close enough to collapse. In Ink/Stitch
+(read at <code>d59c9ab</code>) it also adds the tie-off when <code>ties</code> asks for none after, but never a tie-in.</li>
+<li>A group of fewer than two stitches gets no locks. Manual stitch gets none unless <code>force_lock_stitches</code>
+is set.</li>
+<li>Ink/Stitch’s half stitch goes back and forth towards the first needle point at least 0.5 mm away, by
+fractions of that distance capped at 1.5 mm, and ignores both scale parameters; its tie-off leaves out
+its first point, which is the group’s last stitch. Its settings window shows <code>lock_*_scale_mm</code> only for
+back-and-forth and custom locks and <code>lock_*_scale_percent</code> only for drawn shapes and custom locks;
+StitchCraft’s parameter registry should show them the same way (M3.7).</li>
 <li>Lock stitches must be ≥ 0.2 mm long so the needle does not hit the same hole; shorter computed locks
 are scaled up, never dropped silently.</li>
 </ul>
@@ -2071,6 +2137,11 @@ rotate-to-fit hint when rotating 90° would fit); if they exceed the comfort zon
 </ol>
 <p>Splitting jumps longer than a format can encode in one record is <em>not</em> done here: it is the encoder’s
 job, because the limit is a property of the file format, not of the machine.</p>
+<p>Ink/Stitch (read at <code>d59c9ab</code>) removes short stitches once, over the whole plan: a stitch no longer than
+the shortest stitch (the element’s <code>min_stitch_length_mm</code>, else its global 0.1 mm) from the last one kept
+is dropped, except lock stitches and the first stitch after a jump, stop, trim or colour change; nothing
+is split. StitchCraft’s floor is the machine’s (0.3 mm on the Brother), short stitches merge into their
+neighbour, and the running stitch already keeps the floor while it places stitches.</p>
 <h2 id="6-check"><a class="header" href="#6-check">6. Check</a></h2>
 <p>The plan invariant checker (<code>stitchcraft-plan::invariants</code>, the same code conformance level L0 runs)
 validates the result. A violation is a bug in StitchCraft: the CLI refuses to write the file, reports
@@ -2163,49 +2234,94 @@ rests on is welcome when it helps the next reader check it again
 <h1 id="stroke-generators"><a class="header" href="#stroke-generators">Stroke generators</a></h1>
 <p>Strokes follow a path. Shape: <code>StrokePath</code> (an ordered list of polylines, corners marked, from the
 normalizer). Phase P1 (M3) unless noted.</p>
-<h2 id="running-stitch"><a class="header" href="#running-stitch">Running stitch</a></h2>
+<h2 id="running-stitch-1"><a class="header" href="#running-stitch-1">Running stitch</a></h2>
 <p>The workhorse: outlines, details, travel, underlay.</p>
 <p><strong>Parameters:</strong> <code>running_stitch_length_mm</code> (one length or a repeating pattern of lengths, <code>LengthList</code>),
 <code>running_stitch_tolerance_mm</code>, <code>repeats</code>, <code>bean_stitch_repeats</code>, <code>enable_random_stitch_length</code>,
 <code>random_stitch_length_jitter_percent</code>, <code>random_seed</code>.</p>
 <h3 id="placement"><a class="header" href="#placement">Placement</a></h3>
+<p>A stitch is the straight line between two needle points, so placement measures along the path but
+checks straight. “The shortest stitch” is the one <a href="#5-finalize">Finalize</a> enforces
+(settings or profile, whichever is larger).</p>
 <ol>
-<li><strong>Split at corners.</strong> Corners marked by the normalizer (turning angle &gt; 30°) always receive a needle
-penetration, so sharp shapes stay sharp.</li>
-<li><strong>Even spacing per span.</strong> For a span of arc length <code>L</code> between corners and target length <code>s</code>,
-place <code>n = ceil(L / s − ε)</code> stitches spaced <code>L / n</code> apart along the arc. Every stitch is at most <code>s</code>
-and the last one is never a short leftover — the classic even-division rule digitizers use.</li>
-<li><strong>Respect the curve.</strong> If the chord between two consecutive needle points strays from the curve by
-more than the tolerance, split that stitch at the point of maximum deviation and repeat. This bounds
-the visual error by <code>running_stitch_tolerance_mm</code> on any curve.</li>
-<li><strong>Patterns.</strong> With several lengths (<code>"2.5 1.0"</code>) the lengths repeat along the path; each span still
-ends exactly on its corner by scaling its stitches proportionally.</li>
-<li><strong>Random length.</strong> With <code>enable_random_stitch_length</code>, each stitch length is drawn uniformly from
-<code>s × (1 ± jitter)</code>, then the span is rescaled to end on its corner. The seed makes it repeatable.</li>
+<li><strong>Flatten.</strong> The normalizer turns the path into polylines within a tenth of the tolerance (the other
+nine tenths are left for the stitches) and marks its corners: joins between segments where the path
+turns by more than 30°. A curve’s own bend is never a corner, however tight.</li>
+<li><strong>Split at corners.</strong> Every corner gets a needle penetration, so sharp shapes stay sharp, unless it is
+closer than the shortest stitch, along the path, to the previous penetration or to the end: then the
+spans on either side of it are joined.</li>
+<li><strong>Even spacing per span.</strong> For a span of length <code>L</code> between corners and target length <code>s</code>, place
+<code>n = ceil(L / s − ε)</code> stitches spaced <code>L / n</code> apart along the path. Every stitch is at most <code>s</code> and the
+last one is never a short leftover — the classic even-division rule digitizers use. With several
+lengths (<code>"2.5 1.0"</code>) the lengths repeat along the path, carrying on from span to span; each span takes
+as many as it needs and scales them by one factor to end exactly on its corner. Lengths below twice
+the shortest stitch are raised to it (<code>SC-W0402</code>), so a span longer than the longest length scales its
+stitches by more than a half and keeps each at or above the shortest stitch; in a shorter span, a
+stitch scaled below it joins its shorter neighbour.</li>
+<li><strong>Measure straight.</strong> Where the path bends back on itself within less than the shortest stitch (a
+cusp, a tight loop, a curl at an end), two points far apart along it can be close in a straight line.
+Going along the needle points: one closer than the shortest stitch to the last one kept is dropped; a
+corner drops the points kept since the previous corner instead, and is dropped itself if that is not
+enough; the end drops whatever it takes, corners too. A drop lengthens the stitch over it, and one
+longer than the longest length is split where the path is half its length from its start (at most
+the longest length), as often as needed. When only the start is left and the end is too close to it
+(a small closed loop), the stitch goes by way of the point of the path farthest from both ends; if
+even that is closer than the shortest stitch, the part is not stitched (<code>SC-W0401</code>).</li>
+<li><strong>Respect the curve.</strong> If the chord between two consecutive needle points strays from the path by
+more than the tolerance left after flattening, split that stitch at the path’s point of greatest
+deviation, among those that leave both parts within the lengths above, and repeat. This bounds the
+visual error by <code>running_stitch_tolerance_mm</code> on any curve whose details are larger than the shortest
+stitch.</li>
+<li><strong>Random length</strong> (M3.5). With <code>enable_random_stitch_length</code>, each stitch length is drawn uniformly
+from <code>s × (1 ± jitter)</code>, then the span is rescaled to end on its corner. The seed makes it repeatable.</li>
 </ol>
+<p><strong>When the rules disagree,</strong> the shortest stitch wins (a shorter stitch hammers one spot and can break the
+thread), then corners, then the tolerance. A part of the path that is a single point, shorter than the
+shortest stitch, or lying all within it of its ends, is not stitched (<code>SC-W0401</code>). Only arithmetic and square roots are used, so
+every platform places the same stitches.</p>
+<p><strong>Compared with Ink/Stitch:</strong> the same parameters, meanings and defaults; the placement differs in four
+documented ways, <code>DEV-RUN-001</code> to <code>DEV-RUN-004</code> in the deviations ledger (<code>conformance/deviations.toml</code>).</p>
 <h3 id="repeats-and-bean-stitch"><a class="header" href="#repeats-and-bean-stitch">Repeats and bean stitch</a></h3>
 <ul>
 <li><code>repeats = k</code> sews the path k times, alternating direction; odd k ends at the far end, even k returns
-to the start (useful for travel that must come back).</li>
+to the start (useful for travel that must come back). Each pass starts where the last one ended, so a
+turnaround is not a stitch in place.</li>
 <li><code>bean_stitch_repeats = b</code> replaces every stitch A→B with A→B→A→B… (2b+1 passes), producing the thick
 “triple stitch” line at b = 1. A list (<code>"1 0"</code>) alternates bean and plain stitches.</li>
+<li><strong>Order, as in Ink/Stitch</strong> (read at <code>d59c9ab</code>): bean stitch applies after repeats, to every stitch of
+every pass, with the list running on from pass to pass. Ink/Stitch repeats the turnaround point, so
+the turnaround takes one step of the list; StitchCraft counts that step too, without sewing it, so a
+file sews the same in both. With a two-value list, each stretch of the path then gets the same
+treatment on every pass.</li>
+<li>Repeats apply to running, ripple and zigzag strokes; bean stitch to those and to manual stitch (the
+<a href="#inkstitch-compatibility-contract">compatibility contract</a> lists each parameter’s stitch types).</li>
 </ul>
+<h3 id="random-length-m35"><a class="header" href="#random-length-m35">Random length (M3.5)</a></h3>
+<p>Ink/Stitch draws each stitch from <code>s × (1 ± jitter)</code> and starts each stretch between corners at a random
+phase, its first stitch a random fraction of a drawn length, so rows sewn side by side with the same
+settings do not line their holes up. It does not rescale, so the last stitch before a corner is whatever
+is left. StitchCraft rescales each span to end on its corner (placement, step 6: no short leftover) and
+keeps the random phase, for the same reason.</p>
 <h3 id="properties-conformance"><a class="header" href="#properties-conformance">Properties (conformance)</a></h3>
 <ul>
-<li>Every top stitch ≤ <code>s × (1 + jitter)</code> + 1 µm, and ≥ the minimum stitch length unless the path is
-shorter than it (<code>REQ-RUN-001</code>).</li>
-<li>Maximum deviation from the source curve ≤ tolerance (measured densely) (<code>REQ-RUN-002</code>).</li>
-<li>Corners are penetration points (<code>REQ-RUN-003</code>).</li>
+<li>Stitches are spread evenly between corners; every stitch, measured straight, is at most
+<code>s × (1 + jitter)</code> + 1 µm for the longest length <code>s</code> and at least the shortest stitch; a part too small
+for that is reported (<code>REQ-RUN-001</code>).</li>
+<li>Deviation from the source path ≤ tolerance, both ways, measured densely (<code>REQ-RUN-002</code>).</li>
+<li>Corners are penetration points unless that would make a stitch too short (<code>REQ-RUN-003</code>).</li>
 <li>Bean stitch: stitch count is exactly <code>n × (2b + 1)</code> for a span of n stitches (<code>REQ-RUN-004</code>).</li>
 <li>Repeats parity decides the exit point (<code>REQ-RUN-005</code>).</li>
 </ul>
 <h3 id="diagnostics-1"><a class="header" href="#diagnostics-1">Diagnostics</a></h3>
-<p><code>SC-W0401</code> path shorter than the minimum stitch length (skipped); <code>SC-W0402</code> stitch length below the
-profile minimum (clamped).</p>
+<p><code>SC-W0401</code> part of the path too small for the shortest stitch (skipped); <code>SC-W0402</code> stitch length below
+twice the shortest stitch (raised).</p>
 <h2 id="manual-stitch"><a class="header" href="#manual-stitch">Manual stitch</a></h2>
 <p>Every node of the path is a needle penetration, in order — for hand-placed stitches and imported stitch
-files. Segments longer than <code>max_stitch_length_mm</code> (if set) are split evenly. Bean stitch applies.
-Property: output nodes equal input nodes plus only the documented splits (<code>REQ-RUN-006</code>).</p>
+files. A curve gives only its end node: its control points are not stitched and it is not flattened.
+Segments longer than <code>max_stitch_length_mm</code> (if set) are split into the fewest equal parts no longer than
+it. Bean stitch applies; repeats do not. Lock stitches are added only when <code>force_lock_stitches</code> is set,
+as in Ink/Stitch (read at <code>d59c9ab</code>). Property: output nodes equal input nodes plus only the documented
+splits (<code>REQ-RUN-006</code>).</p>
 <h2 id="zigzag-stroke-p2-m7"><a class="header" href="#zigzag-stroke-p2-m7">Zigzag stroke (P2, M7)</a></h2>
 <p>A zigzag of width <code>stroke-width</code> (or the satin width parameters) centred on the path, with peak-to-peak
 spacing <code>zigzag_spacing_mm</code>, optional <code>zigzag_angle</code> (slanted zigzag), and
@@ -3647,12 +3763,12 @@ stitches once its stitch type or feature lands (see <em>Phase</em> and the param
 <tr><td><code>force_lock_stitches</code></td><td>boolean</td><td>—</td><td>false</td><td>all</td><td>P1 (M3)</td><td><a href="#force_lock_stitches">registered</a></td></tr>
 <tr><td><code>lock_start</code></td><td>combo</td><td>—</td><td>half_stitch</td><td>all</td><td>P1 (M3)</td><td><a href="#lock_start">deviates</a></td></tr>
 <tr><td><code>lock_custom_start</code></td><td>string</td><td>—</td><td>—</td><td><code>custom</code></td><td>P1 (M3)</td><td><a href="#lock_custom_start">registered</a></td></tr>
-<tr><td><code>lock_start_scale_mm</code></td><td>float</td><td>mm</td><td>0.7</td><td>all</td><td>P1 (M3)</td><td><a href="#lock_start_scale_mm">registered</a></td></tr>
-<tr><td><code>lock_start_scale_percent</code></td><td>float</td><td>%</td><td>100</td><td>all</td><td>P1 (M3)</td><td><a href="#lock_start_scale_percent">registered</a></td></tr>
+<tr><td><code>lock_start_scale_mm</code></td><td>float</td><td>mm</td><td>0.7</td><td><code>back_forth</code>, <code>custom</code></td><td>P1 (M3)</td><td><a href="#lock_start_scale_mm">registered</a></td></tr>
+<tr><td><code>lock_start_scale_percent</code></td><td>float</td><td>%</td><td>100</td><td><code>arrow</code>, <code>bowtie</code>, <code>cross</code>, <code>star</code>, <code>simple</code>, <code>triangle</code>, <code>zigzag</code>, <code>custom</code></td><td>P1 (M3)</td><td><a href="#lock_start_scale_percent">registered</a></td></tr>
 <tr><td><code>lock_end</code></td><td>combo</td><td>—</td><td>half_stitch</td><td>all</td><td>P1 (M3)</td><td><a href="#lock_end">deviates</a></td></tr>
 <tr><td><code>lock_custom_end</code></td><td>string</td><td>—</td><td>—</td><td><code>custom</code></td><td>P1 (M3)</td><td><a href="#lock_custom_end">registered</a></td></tr>
-<tr><td><code>lock_end_scale_mm</code></td><td>float</td><td>mm</td><td>0.7</td><td>all</td><td>P1 (M3)</td><td><a href="#lock_end_scale_mm">registered</a></td></tr>
-<tr><td><code>lock_end_scale_percent</code></td><td>float</td><td>%</td><td>100</td><td>all</td><td>P1 (M3)</td><td><a href="#lock_end_scale_percent">registered</a></td></tr>
+<tr><td><code>lock_end_scale_mm</code></td><td>float</td><td>mm</td><td>0.7</td><td><code>back_forth</code>, <code>custom</code></td><td>P1 (M3)</td><td><a href="#lock_end_scale_mm">registered</a></td></tr>
+<tr><td><code>lock_end_scale_percent</code></td><td>float</td><td>%</td><td>100</td><td><code>arrow</code>, <code>bowtie</code>, <code>cross</code>, <code>star</code>, <code>simple</code>, <code>triangle</code>, <code>zigzag</code>, <code>custom</code></td><td>P1 (M3)</td><td><a href="#lock_end_scale_percent">registered</a></td></tr>
 <tr><td><code>trim_after</code></td><td>boolean</td><td>—</td><td>false</td><td>all</td><td>P1 (M3)</td><td><a href="#trim_after">registered</a></td></tr>
 <tr><td><code>stop_after</code></td><td>boolean</td><td>—</td><td>false</td><td>all</td><td>P1 (M3)</td><td><a href="#stop_after">registered</a></td></tr>
 </tbody>
@@ -3670,8 +3786,8 @@ stitches once its stitch type or feature lands (see <em>Phase</em> and the param
 <tr><td><code>repeats</code></td><td>int</td><td>—</td><td>1</td><td><code>running_stitch</code>, <code>ripple_stitch</code>, <code>zigzag_stitch</code></td><td>P1 (M3)</td><td>planned</td></tr>
 <tr><td><code>bean_stitch_repeats</code></td><td>str</td><td>—</td><td>0</td><td><code>running_stitch</code>, <code>ripple_stitch</code>, <code>manual_stitch</code>, <code>zigzag_stitch</code></td><td>P1 (M3)</td><td>planned</td></tr>
 <tr><td><code>manual_pattern_placement</code></td><td>boolean</td><td>—</td><td>false</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td><td>planned</td></tr>
-<tr><td><code>running_stitch_length_mm</code></td><td>string</td><td>mm</td><td>2.5</td><td><code>running_stitch</code>, <code>ripple_stitch</code></td><td>P1 (M3)</td><td>planned</td></tr>
-<tr><td><code>running_stitch_tolerance_mm</code></td><td>float</td><td>mm</td><td>0.2</td><td><code>running_stitch</code>, <code>ripple_stitch</code></td><td>P1 (M3)</td><td>planned</td></tr>
+<tr><td><code>running_stitch_length_mm</code></td><td>string</td><td>mm</td><td>2.5</td><td><code>running_stitch</code>, <code>ripple_stitch</code></td><td>P1 (M3)</td><td><a href="#running_stitch_length_mm">registered</a></td></tr>
+<tr><td><code>running_stitch_tolerance_mm</code></td><td>float</td><td>mm</td><td>0.2</td><td><code>running_stitch</code>, <code>ripple_stitch</code></td><td>P1 (M3)</td><td><a href="#running_stitch_tolerance_mm">registered</a></td></tr>
 <tr><td><code>enable_random_stitch_length</code></td><td>boolean</td><td>—</td><td>false</td><td><code>running_stitch</code>, <code>ripple_stitch</code></td><td>P1 (M3)</td><td>planned</td></tr>
 <tr><td><code>random_stitch_length_jitter_percent</code></td><td>float</td><td>± %</td><td>10</td><td><code>running_stitch</code>, <code>ripple_stitch</code></td><td>P1 (M3)</td><td>planned</td></tr>
 <tr><td><code>max_stitch_length_mm</code></td><td>float</td><td>mm</td><td>—</td><td><code>manual_stitch</code></td><td>P1 (M3)</td><td>planned</td></tr>
@@ -3859,7 +3975,7 @@ stitches once its stitch type or feature lands (see <em>Phase</em> and the param
 </div>
 <p>Lock stitch identifiers (<code>lock_start</code>, <code>lock_end</code>): <code>half_stitch</code>, <code>arrow</code>, <code>back_forth</code>, <code>bowtie</code>, <code>cross</code>, <code>star</code>, <code>simple</code>, <code>triangle</code>, <code>zigzag</code>, <code>custom</code>. StitchCraft accepts every identifier; the shapes are its own
 designs with the same intent, a deviation recorded in the deviations ledger (<code>conformance/deviations.toml</code>).</p>
-<p><em>145 parameter declarations, 14 registered in StitchCraft.</em></p>
+<p><em>145 parameter declarations, 16 registered in StitchCraft.</em></p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="architecture-decision-records"><a class="header" href="#architecture-decision-records">Architecture decision records</a></h1>
 <p>Short records of decisions that shape the code, with their context and the alternatives we rejected.
@@ -4030,6 +4146,9 @@ permissively licensed and robust on degenerate input.</p>
 </tbody>
 </table>
 </div>
+<p><strong>Revised in M3.4:</strong> strokes are not flattened with <code>kurbo</code>. Its <code>flatten</code> in 0.13 calls <code>powf</code> and
+<code>hypot</code> from the platform’s maths library, so the engine halves curves itself with arithmetic and square
+roots (<a href="#1-normalize">engine pipeline › Normalize</a>).</p>
 <h2 id="spike-m07-acceptance-criteria"><a class="header" href="#spike-m07-acceptance-criteria">Spike M0.7 acceptance criteria</a></h2>
 <ol>
 <li>Booleans and offsets of 10,000 random polygons with holes, plus the degenerate corpus: no panic, no
@@ -4384,8 +4503,8 @@ of code) · 🧵 machine checkpoint · 👤 owner action</p>
 <tr><td>M3.1 ✅</td><td>Parameter registry (<code>params!</code>, <code>ParamSet</code>, validation, generated reference + JSON Schema)</td><td><code>REQ-PRM-001</code>, <code>REQ-PRM-002</code>; <code>docs --check</code> covers params</td></tr>
 <tr><td>M3.2 ✅</td><td>Diagnostics registry, <code>stitch explain</code>, generated diagnostics index</td><td>every registered code has a page and a case</td></tr>
 <tr><td>M3.3 ✅</td><td><code>Design</code> model; SVG adapter v1: paths, groups, transforms, viewBox units, colours, visibility (no <code>inkstitch:*</code> yet)</td><td><code>REQ-SVG-001</code>, <code>REQ-SVG-002</code> (fuzzed path data)</td></tr>
-<tr><td>M3.4</td><td>Running stitch: corners, even spacing, tolerance</td><td><code>REQ-RUN-001..003</code></td></tr>
-<tr><td>M3.5</td><td>Patterns, repeats, bean stitch, random length</td><td><code>REQ-RUN-004</code>, <code>REQ-RUN-005</code></td></tr>
+<tr><td>M3.4 ✅</td><td>Running stitch: corners, even spacing, patterns, tolerance; stitch lengths measured straight</td><td><code>REQ-RUN-001..003</code></td></tr>
+<tr><td>M3.5</td><td>Repeats, bean stitch, random length</td><td><code>REQ-RUN-004</code>, <code>REQ-RUN-005</code></td></tr>
 <tr><td>M3.6</td><td>Manual stitch</td><td><code>REQ-RUN-006</code></td></tr>
 <tr><td>M3.7</td><td>Lock stitches: types, scale, placement</td><td><code>REQ-LCK-001..003</code></td></tr>
 <tr><td>M3.8</td><td>Plan assembly: order, collapse, travel, tie-off/jump/trim/tie-in, stops, colour changes, commands</td><td><code>REQ-ASM-001..005</code></td></tr>

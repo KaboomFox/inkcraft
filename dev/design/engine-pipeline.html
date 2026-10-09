@@ -35,10 +35,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-b4f2a931.js";
+            window.path_to_searchindex_js = "../searchindex-887a3ca9.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-d2fe63c9.js"></script>
+        <script src="../toc-e34e2d93.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -190,9 +190,14 @@ own tests; stages communicate only through the types in the <a href="data-model.
 <h2 id="1-normalize"><a class="header" href="#1-normalize">1. Normalize</a></h2>
 <p>Per element, independent of the others:</p>
 <ul>
-<li><strong>Flatten curves</strong> with the element’s tolerance (default 0.1 mm for fills, <code>running_stitch_tolerance_mm</code>
-for strokes) using <code>kurbo</code>’s adaptive flattening. Corners (turning angle above 30°) are marked so
-running stitches land exactly on them.</li>
+<li><strong>Flatten curves</strong> with the element’s tolerance (default 0.1 mm for fills, a tenth of
+<code>running_stitch_tolerance_mm</code> for strokes). Strokes are halved (de Casteljau) until each piece’s
+control points lie within the tolerance of its chord (<code>stitchcraft_engine::normalize::stroke</code>), using
+only arithmetic and square roots so that every platform gets the same points. <code>kurbo</code>’s adaptive
+flattening is not used for this: in 0.13 it calls <code>powf</code> (<code>CubicBez::to_quads</code>) and <code>hypot</code>
+(<code>QuadBez::estimate_subdiv</code>) from the platform’s maths library, whose last bits differ between
+systems (<a href="determinism.html">determinism</a>). Corners, joins between segments that turn by more than 30°,
+are marked so running stitches land exactly on them; a curve’s own bend is never a corner.</li>
 <li><strong>Regions:</strong> resolve the fill rule into valid polygons with holes (<code>i_overlay</code>), snap to a 1 µm grid
 first so near-coincident vertices become coincident, drop rings under the minimum area (<code>SC-W0303</code>),
 orient rings explicitly.</li>
@@ -262,6 +267,10 @@ changes is an explicit, separate tool (P3) because it changes what covers what.<
 </tbody>
 </table>
 </div>
+<p>Ink/Stitch (read at <code>d59c9ab</code>) joins same-colour groups within the collapse length with one direct
+stitch, and trims only when told to (<code>trim_after</code>, a trim command). StitchCraft splits that stitch to the
+machine’s longest stitch and also trims at the profile’s threshold: both differences come from the
+machine profile, and go into the deviations ledger with M3.8.</p>
 <h3 id="lock-stitches-ties"><a class="header" href="#lock-stitches-ties">Lock stitches (ties)</a></h3>
 <ul>
 <li><code>ties</code> selects where locks go: both, before (tie-in), after (tie-off) or neither.</li>
@@ -272,7 +281,15 @@ definitions with the same intent (<a href="inkstitch-compat-contract.html#method
 steps are scaled by <code>lock_*_scale_mm</code> (an absolute size), shapes drawn as paths by
 <code>lock_*_scale_percent</code> (relative to their own size); the half stitch is sized from the first stitch.
 A custom lock (<code>lock_custom_start</code>, <code>lock_custom_end</code>) is either kind.</li>
-<li><code>force_lock_stitches</code> adds locks even when the next group is close enough to collapse.</li>
+<li><code>force_lock_stitches</code> adds locks even when the next group is close enough to collapse. In Ink/Stitch
+(read at <code>d59c9ab</code>) it also adds the tie-off when <code>ties</code> asks for none after, but never a tie-in.</li>
+<li>A group of fewer than two stitches gets no locks. Manual stitch gets none unless <code>force_lock_stitches</code>
+is set.</li>
+<li>Ink/Stitch’s half stitch goes back and forth towards the first needle point at least 0.5 mm away, by
+fractions of that distance capped at 1.5 mm, and ignores both scale parameters; its tie-off leaves out
+its first point, which is the group’s last stitch. Its settings window shows <code>lock_*_scale_mm</code> only for
+back-and-forth and custom locks and <code>lock_*_scale_percent</code> only for drawn shapes and custom locks;
+StitchCraft’s parameter registry should show them the same way (M3.7).</li>
 <li>Lock stitches must be ≥ 0.2 mm long so the needle does not hit the same hole; shorter computed locks
 are scaled up, never dropped silently.</li>
 </ul>
@@ -306,6 +323,11 @@ rotate-to-fit hint when rotating 90° would fit); if they exceed the comfort zon
 </ol>
 <p>Splitting jumps longer than a format can encode in one record is <em>not</em> done here: it is the encoder’s
 job, because the limit is a property of the file format, not of the machine.</p>
+<p>Ink/Stitch (read at <code>d59c9ab</code>) removes short stitches once, over the whole plan: a stitch no longer than
+the shortest stitch (the element’s <code>min_stitch_length_mm</code>, else its global 0.1 mm) from the last one kept
+is dropped, except lock stitches and the first stitch after a jump, stop, trim or colour change; nothing
+is split. StitchCraft’s floor is the machine’s (0.3 mm on the Brother), short stitches merge into their
+neighbour, and the running stitch already keeps the floor while it places stitches.</p>
 <h2 id="6-check"><a class="header" href="#6-check">6. Check</a></h2>
 <p>The plan invariant checker (<code>stitchcraft-plan::invariants</code>, the same code conformance level L0 runs)
 validates the result. A violation is a bug in StitchCraft: the CLI refuses to write the file, reports

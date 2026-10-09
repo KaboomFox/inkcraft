@@ -35,10 +35,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-b4f2a931.js";
+            window.path_to_searchindex_js = "../searchindex-887a3ca9.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-d2fe63c9.js"></script>
+        <script src="../toc-e34e2d93.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -214,12 +214,12 @@ stitches once its stitch type or feature lands (see <em>Phase</em> and the param
 <tr><td><code>force_lock_stitches</code></td><td>boolean</td><td>—</td><td>false</td><td>all</td><td>P1 (M3)</td><td><a href="../user/reference/params/common.html#force_lock_stitches">registered</a></td></tr>
 <tr><td><code>lock_start</code></td><td>combo</td><td>—</td><td>half_stitch</td><td>all</td><td>P1 (M3)</td><td><a href="../user/reference/params/common.html#lock_start">deviates</a></td></tr>
 <tr><td><code>lock_custom_start</code></td><td>string</td><td>—</td><td>—</td><td><code>custom</code></td><td>P1 (M3)</td><td><a href="../user/reference/params/common.html#lock_custom_start">registered</a></td></tr>
-<tr><td><code>lock_start_scale_mm</code></td><td>float</td><td>mm</td><td>0.7</td><td>all</td><td>P1 (M3)</td><td><a href="../user/reference/params/common.html#lock_start_scale_mm">registered</a></td></tr>
-<tr><td><code>lock_start_scale_percent</code></td><td>float</td><td>%</td><td>100</td><td>all</td><td>P1 (M3)</td><td><a href="../user/reference/params/common.html#lock_start_scale_percent">registered</a></td></tr>
+<tr><td><code>lock_start_scale_mm</code></td><td>float</td><td>mm</td><td>0.7</td><td><code>back_forth</code>, <code>custom</code></td><td>P1 (M3)</td><td><a href="../user/reference/params/common.html#lock_start_scale_mm">registered</a></td></tr>
+<tr><td><code>lock_start_scale_percent</code></td><td>float</td><td>%</td><td>100</td><td><code>arrow</code>, <code>bowtie</code>, <code>cross</code>, <code>star</code>, <code>simple</code>, <code>triangle</code>, <code>zigzag</code>, <code>custom</code></td><td>P1 (M3)</td><td><a href="../user/reference/params/common.html#lock_start_scale_percent">registered</a></td></tr>
 <tr><td><code>lock_end</code></td><td>combo</td><td>—</td><td>half_stitch</td><td>all</td><td>P1 (M3)</td><td><a href="../user/reference/params/common.html#lock_end">deviates</a></td></tr>
 <tr><td><code>lock_custom_end</code></td><td>string</td><td>—</td><td>—</td><td><code>custom</code></td><td>P1 (M3)</td><td><a href="../user/reference/params/common.html#lock_custom_end">registered</a></td></tr>
-<tr><td><code>lock_end_scale_mm</code></td><td>float</td><td>mm</td><td>0.7</td><td>all</td><td>P1 (M3)</td><td><a href="../user/reference/params/common.html#lock_end_scale_mm">registered</a></td></tr>
-<tr><td><code>lock_end_scale_percent</code></td><td>float</td><td>%</td><td>100</td><td>all</td><td>P1 (M3)</td><td><a href="../user/reference/params/common.html#lock_end_scale_percent">registered</a></td></tr>
+<tr><td><code>lock_end_scale_mm</code></td><td>float</td><td>mm</td><td>0.7</td><td><code>back_forth</code>, <code>custom</code></td><td>P1 (M3)</td><td><a href="../user/reference/params/common.html#lock_end_scale_mm">registered</a></td></tr>
+<tr><td><code>lock_end_scale_percent</code></td><td>float</td><td>%</td><td>100</td><td><code>arrow</code>, <code>bowtie</code>, <code>cross</code>, <code>star</code>, <code>simple</code>, <code>triangle</code>, <code>zigzag</code>, <code>custom</code></td><td>P1 (M3)</td><td><a href="../user/reference/params/common.html#lock_end_scale_percent">registered</a></td></tr>
 <tr><td><code>trim_after</code></td><td>boolean</td><td>—</td><td>false</td><td>all</td><td>P1 (M3)</td><td><a href="../user/reference/params/common.html#trim_after">registered</a></td></tr>
 <tr><td><code>stop_after</code></td><td>boolean</td><td>—</td><td>false</td><td>all</td><td>P1 (M3)</td><td><a href="../user/reference/params/common.html#stop_after">registered</a></td></tr>
 </tbody>
@@ -237,8 +237,8 @@ stitches once its stitch type or feature lands (see <em>Phase</em> and the param
 <tr><td><code>repeats</code></td><td>int</td><td>—</td><td>1</td><td><code>running_stitch</code>, <code>ripple_stitch</code>, <code>zigzag_stitch</code></td><td>P1 (M3)</td><td>planned</td></tr>
 <tr><td><code>bean_stitch_repeats</code></td><td>str</td><td>—</td><td>0</td><td><code>running_stitch</code>, <code>ripple_stitch</code>, <code>manual_stitch</code>, <code>zigzag_stitch</code></td><td>P1 (M3)</td><td>planned</td></tr>
 <tr><td><code>manual_pattern_placement</code></td><td>boolean</td><td>—</td><td>false</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td><td>planned</td></tr>
-<tr><td><code>running_stitch_length_mm</code></td><td>string</td><td>mm</td><td>2.5</td><td><code>running_stitch</code>, <code>ripple_stitch</code></td><td>P1 (M3)</td><td>planned</td></tr>
-<tr><td><code>running_stitch_tolerance_mm</code></td><td>float</td><td>mm</td><td>0.2</td><td><code>running_stitch</code>, <code>ripple_stitch</code></td><td>P1 (M3)</td><td>planned</td></tr>
+<tr><td><code>running_stitch_length_mm</code></td><td>string</td><td>mm</td><td>2.5</td><td><code>running_stitch</code>, <code>ripple_stitch</code></td><td>P1 (M3)</td><td><a href="../user/reference/params/running.html#running_stitch_length_mm">registered</a></td></tr>
+<tr><td><code>running_stitch_tolerance_mm</code></td><td>float</td><td>mm</td><td>0.2</td><td><code>running_stitch</code>, <code>ripple_stitch</code></td><td>P1 (M3)</td><td><a href="../user/reference/params/running.html#running_stitch_tolerance_mm">registered</a></td></tr>
 <tr><td><code>enable_random_stitch_length</code></td><td>boolean</td><td>—</td><td>false</td><td><code>running_stitch</code>, <code>ripple_stitch</code></td><td>P1 (M3)</td><td>planned</td></tr>
 <tr><td><code>random_stitch_length_jitter_percent</code></td><td>float</td><td>± %</td><td>10</td><td><code>running_stitch</code>, <code>ripple_stitch</code></td><td>P1 (M3)</td><td>planned</td></tr>
 <tr><td><code>max_stitch_length_mm</code></td><td>float</td><td>mm</td><td>—</td><td><code>manual_stitch</code></td><td>P1 (M3)</td><td>planned</td></tr>
@@ -426,7 +426,7 @@ stitches once its stitch type or feature lands (see <em>Phase</em> and the param
 </div>
 <p>Lock stitch identifiers (<code>lock_start</code>, <code>lock_end</code>): <code>half_stitch</code>, <code>arrow</code>, <code>back_forth</code>, <code>bowtie</code>, <code>cross</code>, <code>star</code>, <code>simple</code>, <code>triangle</code>, <code>zigzag</code>, <code>custom</code>. StitchCraft accepts every identifier; the shapes are its own
 designs with the same intent, a deviation recorded in the deviations ledger (<code>conformance/deviations.toml</code>).</p>
-<p><em>145 parameter declarations, 14 registered in StitchCraft.</em></p>
+<p><em>145 parameter declarations, 16 registered in StitchCraft.</em></p>
 
                     </main>
 

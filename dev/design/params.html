@@ -35,10 +35,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-b4f2a931.js";
+            window.path_to_searchindex_js = "../searchindex-887a3ca9.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-d2fe63c9.js"></script>
+        <script src="../toc-e34e2d93.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -302,6 +302,12 @@ in the <a href="inkstitch-compat-contract.html">compatibility contract</a> devia
 equals Ink/Stitch’s default, so an SVG that omits the attribute stitches the same way in both
 tools. Better starting values for new objects come from <a href="#presets">presets</a> and machine profiles,
 never from changing a default.</li>
+<li><strong>A key belongs to its stitch types.</strong> Ink/Stitch gives some keys to several elements with their own
+defaults: <code>running_stitch_tolerance_mm</code> is 0.2 mm on a stroke and 0.1 mm on a satin or a fill. The
+contract is per key and stitch type, so the contract page matches a declaration with the rows for the
+stitch types it applies to, and a declaration for a stitch type Ink/Stitch does not give the key is
+reported. Declaring a key again for other stitch types (satins in M4, fills in M5) also needs lookups
+by key and stitch type: <code>find</code> by key alone returns the first declaration.</li>
 </ol>
 <h2 id="generated-outputs"><a class="header" href="#generated-outputs">Generated outputs</a></h2>
 <div class="table-wrapper">

@@ -35,7 +35,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-712d0b9e.js";
+            window.path_to_searchindex_js = "../searchindex-7c2cac0f.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-e486a7f9.js"></script>
@@ -188,8 +188,9 @@ a retired one.</li>
 explanation: what it means, why it matters for the sew-out, how to fix it, an example.</li>
 <li><strong>Emit it</strong> where the problem is detected, with the element, a location when there is one, a
 specific message (“0.18 mm tall; rows are 0.25 mm apart”) and a fix hint or applicable fix.</li>
-<li><strong>Trigger it</strong> from a conformance case (<code>expect.diagnostics = ["SC-W0305"]</code>). The registry test fails
-until a case does.</li>
+<li><strong>Trigger it</strong> in a test named <code>diag_sc_w0305_&lt;what&gt;</code>, in the crate that emits it: produce the code
+from real input through the public API and assert the whole text a user reads (<code>d.to_string()</code> and
+the fix). <code>cargo xtask conformance --check</code> fails until such a test exists.</li>
 <li><strong>Regenerate docs:</strong> <code>cargo xtask docs</code> adds the explanation page; consider a shot showing the
 problem and the fix.</li>
 </ol>

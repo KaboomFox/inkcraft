@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-712d0b9e.js";
+            window.path_to_searchindex_js = "searchindex-7c2cac0f.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-e486a7f9.js"></script>
@@ -1860,8 +1860,9 @@ whose letter disagrees with its severity, or whose explanation is missing. From 
 <li><code>cargo xtask docs</code> generates the <strong>diagnostics index</strong> (one page per code, like <code>rustc</code>’s error index);</li>
 <li><code>stitch explain SC-W0702</code> prints the explanation in the terminal;</li>
 <li>the VectorCraft plug-in links each message to its page;</li>
-<li>a test fails when a code has no explanation, no triggering conformance case, or a case triggers a
-code that is not registered.</li>
+<li><code>cargo xtask conformance</code> fails when a code has no <code>diag_sc_&lt;code&gt;_&lt;what&gt;</code> test that produces it from
+real input and checks the text a user reads, or when such a test names a code that is not registered
+(<a href="#cases">conformance</a>); the registry’s own tests fail when a code has no explanation.</li>
 </ul>
 <p>That last rule is what keeps error paths alive: a message that no test ever renders can ship with a
 typo in its formatting and nobody sees it until a user does.</p>
@@ -3172,6 +3173,13 @@ would prove <code>REQ-FILL-TAT-006</code>. The name is the link, so there is no 
 them by scanning the source and rejects a name that points at no requirement. Use them for rules best
 shown with small hand-built inputs — an invariant’s violating and passing examples, a palette’s spot
 checks.</p>
+<p><strong>Rust tests named after a diagnostic code.</strong> A test function named <code>diag_sc_&lt;e|w|i&gt;&lt;nnnn&gt;_&lt;what&gt;</code> is a
+case for the code <code>SC-&lt;E|W|I&gt;&lt;NNNN&gt;</code>: it produces the code from real input through the public API and
+checks the full text a user reads, message and fix (<code>diag_sc_e0701_a_design_larger_than_the_hoop_names_both_sizes</code>).
+Every registered code needs one: <code>--check</code> fails for a code without a <code>diag_</code> case and for a <code>diag_</code> name
+that points at no registered code, and the run fails when a code’s cases do not pass. The report lists
+the codes in a table of their own. This is what keeps error paths alive
+(<a href="#the-registry">diagnostics</a>).</p>
 <p><strong>Data cases</strong>, <code>conformance/cases/&lt;area&gt;/&lt;name&gt;.toml</code>: an input, a profile and expectations, run by the
 suite in-process. Unknown fields are errors, so a typo cannot silently switch a check off. M1 has the
 <code>testsheet</code> kind:</p>
@@ -4287,7 +4295,7 @@ of code) · 🧵 machine checkpoint · 👤 owner action</p>
 </thead>
 <tbody>
 <tr><td>M3.1 ✅</td><td>Parameter registry (<code>params!</code>, <code>ParamSet</code>, validation, generated reference + JSON Schema)</td><td><code>REQ-PRM-001</code>, <code>REQ-PRM-002</code>; <code>docs --check</code> covers params</td></tr>
-<tr><td>M3.2</td><td>Diagnostics registry, <code>stitch explain</code>, generated diagnostics index</td><td>every registered code has a page and a case</td></tr>
+<tr><td>M3.2 ✅</td><td>Diagnostics registry, <code>stitch explain</code>, generated diagnostics index</td><td>every registered code has a page and a case</td></tr>
 <tr><td>M3.3</td><td><code>Design</code> model; SVG adapter v1: paths, groups, transforms, viewBox units, colours, visibility (no <code>inkstitch:*</code> yet)</td><td><code>REQ-SVG-001</code>, <code>REQ-SVG-002</code> (fuzzed path data)</td></tr>
 <tr><td>M3.4</td><td>Running stitch: corners, even spacing, tolerance</td><td><code>REQ-RUN-001..003</code></td></tr>
 <tr><td>M3.5</td><td>Patterns, repeats, bean stitch, random length</td><td><code>REQ-RUN-004</code>, <code>REQ-RUN-005</code></td></tr>
@@ -4602,8 +4610,9 @@ a retired one.</li>
 explanation: what it means, why it matters for the sew-out, how to fix it, an example.</li>
 <li><strong>Emit it</strong> where the problem is detected, with the element, a location when there is one, a
 specific message (“0.18 mm tall; rows are 0.25 mm apart”) and a fix hint or applicable fix.</li>
-<li><strong>Trigger it</strong> from a conformance case (<code>expect.diagnostics = ["SC-W0305"]</code>). The registry test fails
-until a case does.</li>
+<li><strong>Trigger it</strong> in a test named <code>diag_sc_w0305_&lt;what&gt;</code>, in the crate that emits it: produce the code
+from real input through the public API and assert the whole text a user reads (<code>d.to_string()</code> and
+the fix). <code>cargo xtask conformance --check</code> fails until such a test exists.</li>
 <li><strong>Regenerate docs:</strong> <code>cargo xtask docs</code> adds the explanation page; consider a shot showing the
 problem and the fix.</li>
 </ol>

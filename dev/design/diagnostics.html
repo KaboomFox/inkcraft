@@ -35,7 +35,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-712d0b9e.js";
+            window.path_to_searchindex_js = "../searchindex-7c2cac0f.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-e486a7f9.js"></script>
@@ -225,8 +225,9 @@ whose letter disagrees with its severity, or whose explanation is missing. From 
 <li><code>cargo xtask docs</code> generates the <strong>diagnostics index</strong> (one page per code, like <code>rustc</code>’s error index);</li>
 <li><code>stitch explain SC-W0702</code> prints the explanation in the terminal;</li>
 <li>the VectorCraft plug-in links each message to its page;</li>
-<li>a test fails when a code has no explanation, no triggering conformance case, or a case triggers a
-code that is not registered.</li>
+<li><code>cargo xtask conformance</code> fails when a code has no <code>diag_sc_&lt;code&gt;_&lt;what&gt;</code> test that produces it from
+real input and checks the text a user reads, or when such a test names a code that is not registered
+(<a href="conformance.html#cases">conformance</a>); the registry’s own tests fail when a code has no explanation.</li>
 </ul>
 <p>That last rule is what keeps error paths alive: a message that no test ever renders can ship with a
 typo in its formatting and nobody sees it until a user does.</p>

@@ -35,7 +35,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-712d0b9e.js";
+            window.path_to_searchindex_js = "../searchindex-7c2cac0f.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-e486a7f9.js"></script>
@@ -228,6 +228,13 @@ would prove <code>REQ-FILL-TAT-006</code>. The name is the link, so there is no 
 them by scanning the source and rejects a name that points at no requirement. Use them for rules best
 shown with small hand-built inputs — an invariant’s violating and passing examples, a palette’s spot
 checks.</p>
+<p><strong>Rust tests named after a diagnostic code.</strong> A test function named <code>diag_sc_&lt;e|w|i&gt;&lt;nnnn&gt;_&lt;what&gt;</code> is a
+case for the code <code>SC-&lt;E|W|I&gt;&lt;NNNN&gt;</code>: it produces the code from real input through the public API and
+checks the full text a user reads, message and fix (<code>diag_sc_e0701_a_design_larger_than_the_hoop_names_both_sizes</code>).
+Every registered code needs one: <code>--check</code> fails for a code without a <code>diag_</code> case and for a <code>diag_</code> name
+that points at no registered code, and the run fails when a code’s cases do not pass. The report lists
+the codes in a table of their own. This is what keeps error paths alive
+(<a href="diagnostics.html#the-registry">diagnostics</a>).</p>
 <p><strong>Data cases</strong>, <code>conformance/cases/&lt;area&gt;/&lt;name&gt;.toml</code>: an input, a profile and expectations, run by the
 suite in-process. Unknown fields are errors, so a typo cannot silently switch a check off. M1 has the
 <code>testsheet</code> kind:</p>

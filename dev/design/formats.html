@@ -35,10 +35,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-85dedfbb.js";
+            window.path_to_searchindex_js = "../searchindex-7a0951d5.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-eddbe1a2.js"></script>
+        <script src="../toc-9f562a62.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -309,11 +309,18 @@ that points nowhere) become warnings in the result.</p>
 <tr><th>Reader</th><th>Reads</th><th>What it has to infer</th></tr>
 </thead>
 <tbody>
-<tr><td>PES / PEC</td><td>the PEC block of any PES version (<code>#PES0001</code> … <code>#PES0060</code>), and bare <code>#PEC0001</code> files; the block must start with <code>LA:</code></td><td>A colour change to the same palette entry is a <strong>stop</strong> — the way PEC writes stops. Two blocks whose threads map to the same Brother colour read back as one block with a stop: PES v1 cannot tell them apart.</td></tr>
+<tr><td>PES / PEC</td><td>the PEC block of any PES version (<code>#PES0001</code> … <code>#PES0060</code>), and bare <code>#PEC0001</code> files; the block must start with <code>LA:</code></td><td>A colour change to the same palette entry is a <strong>stop</strong>, as PEC writes stops. Blocks whose threads map to one Brother colour read back as one block with a stop, because PES v1 cannot tell them apart. Whether the stitch data starts with the <strong>origin field</strong> (below).</td></tr>
 <tr><td>DST</td><td>the header’s label and every record</td><td>Three or more jumps in a row are a <strong>trim</strong> before them where something was sewn since the thread was last cut or changed, as DST machines read them (<code>REQ-FMT-008</code>); a trim’s own spelling at the start of the run — up to 8 jumps of at most 1 mm that end where they started — moves the frame nowhere and is not kept as jumps. Colours: none — each block gets a placeholder thread, and a stop reads as a colour change.</td></tr>
 </tbody>
 </table>
 </div>
+<p><strong>The PEC origin field</strong> (<code>REQ-FMT-009</code>). Brother’s software, pystitch and StitchCraft write 4 bytes
+before the first record, shaped like a long jump on both axes. They hold the offset from the corner of
+the box that the header’s width and height give to the start of the design. pyembroidery 1.4.32 to
+1.5.1 leave the field out, and their first record is often a long jump that looks the same. The reader
+takes the 4 bytes as the field only if the design read after them fits that box, and otherwise reads them
+as the first record, with a warning that Brother machines expect the field. Files from pyembroidery
+1.5.1 itself test both cases (<code>conformance/oracle/write_pes.py</code>).</p>
 <p>Every reader survives every truncation and single-byte change of the golden files (a deterministic test
 that runs on every PR), and an hour of coverage-guided fuzzing every night (<code>REQ-FMT-006</code>;
 <a href="conformance.html#fuzzing">fuzzing</a>).</p>
@@ -377,7 +384,7 @@ needle-down.</p>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../design/algorithms/fills.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../design/algorithms/locks.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
@@ -391,7 +398,7 @@ needle-down.</p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../design/algorithms/fills.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../design/algorithms/locks.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 

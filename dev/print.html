@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-85dedfbb.js";
+            window.path_to_searchindex_js = "searchindex-7a0951d5.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-eddbe1a2.js"></script>
+        <script src="toc-9f562a62.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -630,6 +630,8 @@ Arguments:
 <tr><td><a href="#sc-w0401"><code>SC-W0401</code></a></td><td>Warning</td><td>Path too small for the shortest stitch; skipped</td></tr>
 <tr><td><a href="#sc-w0402"><code>SC-W0402</code></a></td><td>Warning</td><td>Stitch length below twice the shortest stitch; raised</td></tr>
 <tr><td><a href="#sc-w0403"><code>SC-W0403</code></a></td><td>Warning</td><td>Hand-placed stitch shorter than the shortest stitch; point left out</td></tr>
+<tr><td><a href="#sc-w0502"><code>SC-W0502</code></a></td><td>Warning</td><td>Lock stitch shorter than 0.2 mm; lengthened</td></tr>
+<tr><td><a href="#sc-w0503"><code>SC-W0503</code></a></td><td>Warning</td><td>Custom lock cannot be sewn as written</td></tr>
 <tr><td><a href="#sc-e0601"><code>SC-E0601</code></a></td><td>Error</td><td>Too many colour changes for the file format</td></tr>
 <tr><td><a href="#sc-e0602"><code>SC-E0602</code></a></td><td>Error</td><td>Design too large for the file format</td></tr>
 <tr><td><a href="#sc-e0603"><code>SC-E0603</code></a></td><td>Error</td><td>Machine file could not be read</td></tr>
@@ -713,6 +715,26 @@ needle point that made each one too short was left out, so the stitch before it 
 next point. A part’s last point is always kept; the one before it goes instead.</p>
 <p>The message gives how many and the shortest of them. Move the nodes apart, or delete the extra
 ones.</p>
+<h2 id="sc-w0502"><a class="header" href="#sc-w0502">SC-W0502</a></h2>
+<p><strong>Warning</strong> — Lock stitch shorter than 0.2 mm; lengthened</p>
+<p>A lock stitch would have been shorter than 0.2 mm, the shortest stitch a lock may have. The needle
+would go back into the hole it just left, which can cut the thread and does not lock it. Each such
+step of a lock made of steps (back and forth, or a custom lock written as numbers) was lengthened
+to 0.2 mm, and a drawn lock was enlarged until its shortest stitch is 0.2 mm long. A lock of steps
+follows the stitching. Where a sharp turn would fold it onto itself, it was sewn straight along the
+first (or last) stitch.</p>
+<p>The message says which lock, and by how much. Set a larger lock size (<code>lock_start_scale_mm</code>,
+<code>lock_end_scale_mm</code>) or scale (<code>lock_start_scale_percent</code>, <code>lock_end_scale_percent</code>), or write
+longer custom steps.</p>
+<h2 id="sc-w0503"><a class="header" href="#sc-w0503">SC-W0503</a></h2>
+<p><strong>Warning</strong> — Custom lock cannot be sewn as written</p>
+<p>The lock is set to custom, but its shape cannot be sewn as written. A custom lock is numbers
+separated by spaces, the steps the needle takes along the stitching in sizes of
+<code>lock_*_scale_mm</code>, or an SVG path that draws it. StitchCraft sews the numbers. It does not sew a
+drawn custom lock yet, and sews the half stitch in its place. Parts that are not numbers, and steps
+longer than 10 m, are left out. If no step is left, the half stitch is sewn instead.</p>
+<p>The message says what was wrong. Write the lock as numbers, such as <code>1 -1 1 -1</code>, or choose
+another lock shape.</p>
 <h2 id="sc-e0601"><a class="header" href="#sc-e0601">SC-E0601</a></h2>
 <p><strong>Error</strong> — Too many colour changes for the file format</p>
 <p>The file format can record only a limited number of colour changes and stops (PES: 255). This
@@ -882,64 +904,77 @@ go straight on to it without one.</p>
 <li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
 </ul>
 <h3 id="lock_start"><a class="header" href="#lock_start"><code>lock_start</code></a></h3>
-<p><strong>Start lock.</strong> The shape of the lock stitches at the start. A half stitch (back and forth along the first
-stitch) is the least visible.</p>
+<p><strong>Start lock.</strong> The shape of the lock stitches at the start. The half stitch goes back and forth over the first
+half of the first stitch, which hides it. The other shapes are larger and grip more.</p>
 <ul>
 <li><strong>Accepts:</strong> one of <code>half_stitch</code> (Half stitch), <code>arrow</code> (Arrow), <code>back_forth</code> (Back and forth), <code>bowtie</code> (Bowtie), <code>cross</code> (Cross), <code>star</code> (Star), <code>simple</code> (Simple), <code>triangle</code> (Triangle), <code>zigzag</code> (Zigzag), <code>custom</code> (Custom)</li>
 <li><strong>Default:</strong> <code>half_stitch</code></li>
-<li><strong>Ink/Stitch:</strong> same key; StitchCraft differs (DEV-LCK-001): Every Ink/Stitch lock id is accepted, but the shapes behind the ids are StitchCraft’s own designs with the same intent, so lock stitches differ in detail.</li>
+<li><strong>Ink/Stitch:</strong> same key; StitchCraft differs (DEV-LCK-001): Each Ink/Stitch lock id is accepted, with StitchCraft’s own shapes behind the ids and the same intent. The half stitch goes forth and back twice over half the first stitch, and back_forth twice over one step, where Ink/Stitch’s go out two steps and back. The drawn shapes are new. A custom lock drawn as an SVG path sews the half stitch, with SC-W0503, until M8.</li>
 </ul>
 <h3 id="lock_custom_start"><a class="header" href="#lock_custom_start"><code>lock_custom_start</code></a></h3>
-<p><strong>Custom start lock.</strong> The shape of a custom start lock: an SVG path, or back-and-forth steps written as numbers
-separated by spaces.</p>
+<p><strong>Custom start lock.</strong> The steps a custom start lock takes along the stitching before it starts, as numbers separated
+by spaces, each a number of <code>lock_start_scale_mm</code>. Positive steps go into the stitching. The
+last step ends where the stitching starts, and <code>1 -1 1 -1</code> goes forth and back twice. Ink/Stitch
+also takes an SVG path that draws the lock. StitchCraft does not sew those yet, and sews the
+half stitch in its place (<code>SC-W0503</code>).</p>
 <ul>
 <li><strong>Accepts:</strong> text of at most 4096 bytes</li>
 <li><strong>Default:</strong> empty</li>
 <li><strong>Shown when</strong> <a href="#lock_start"><code>lock_start</code></a> is <code>custom</code></li>
-<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+<li><strong>Ink/Stitch:</strong> same key; StitchCraft differs (DEV-LCK-002): Locks of steps follow the stitching round its corners, as Ink/Stitch’s custom steps do. They differ in 2 places. Past the end of stitching shorter than the lock, they go straight on from the last stitch, where Ink/Stitch puts the rest of the lock on the last needle point. Where following a sharp turn would sew a stitch shorter than 0.2 mm, the lock is sewn straight along the first (or last) stitch, with SC-W0502, where Ink/Stitch follows the turn.</li>
 </ul>
 <h3 id="lock_start_scale_mm"><a class="header" href="#lock_start_scale_mm"><code>lock_start_scale_mm</code></a></h3>
-<p><strong>Start lock size.</strong> How large a start lock made of back-and-forth steps is, in millimetres.</p>
+<p><strong>Start lock size.</strong> How long each step of a start lock made of steps (back and forth, or custom) is.</p>
 <ul>
 <li><strong>Accepts:</strong> a length from 0.1 to 10 mm</li>
 <li><strong>Default:</strong> <code>0.7</code></li>
+<li><strong>Shown when</strong> <a href="#lock_start"><code>lock_start</code></a> is <code>back_forth</code> or <code>custom</code></li>
 <li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
 </ul>
 <h3 id="lock_start_scale_percent"><a class="header" href="#lock_start_scale_percent"><code>lock_start_scale_percent</code></a></h3>
-<p><strong>Start lock scale.</strong> How large a start lock drawn as a path is, in percent of the shape’s own size.</p>
+<p><strong>Start lock scale.</strong> How large a drawn start lock is, in percent of its own size: at 100 % it reaches about
+1.4 mm along the stitching.</p>
 <ul>
 <li><strong>Accepts:</strong> a percentage from 10 to 500</li>
 <li><strong>Default:</strong> <code>100</code></li>
+<li><strong>Shown when</strong> <a href="#lock_start"><code>lock_start</code></a> is <code>arrow</code>, <code>bowtie</code>, <code>cross</code>, <code>star</code>, <code>simple</code>, <code>triangle</code>, <code>zigzag</code> or <code>custom</code></li>
 <li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
 </ul>
 <h3 id="lock_end"><a class="header" href="#lock_end"><code>lock_end</code></a></h3>
-<p><strong>End lock.</strong> The shape of the lock stitches at the end.</p>
+<p><strong>End lock.</strong> The shape of the lock stitches at the end. The half stitch goes back and forth over the last
+half of the last stitch, which hides it. The other shapes are larger and grip more.</p>
 <ul>
 <li><strong>Accepts:</strong> one of <code>half_stitch</code> (Half stitch), <code>arrow</code> (Arrow), <code>back_forth</code> (Back and forth), <code>bowtie</code> (Bowtie), <code>cross</code> (Cross), <code>star</code> (Star), <code>simple</code> (Simple), <code>triangle</code> (Triangle), <code>zigzag</code> (Zigzag), <code>custom</code> (Custom)</li>
 <li><strong>Default:</strong> <code>half_stitch</code></li>
-<li><strong>Ink/Stitch:</strong> same key; StitchCraft differs (DEV-LCK-001): Every Ink/Stitch lock id is accepted, but the shapes behind the ids are StitchCraft’s own designs with the same intent, so lock stitches differ in detail.</li>
+<li><strong>Ink/Stitch:</strong> same key; StitchCraft differs (DEV-LCK-001): Each Ink/Stitch lock id is accepted, with StitchCraft’s own shapes behind the ids and the same intent. The half stitch goes forth and back twice over half the first stitch, and back_forth twice over one step, where Ink/Stitch’s go out two steps and back. The drawn shapes are new. A custom lock drawn as an SVG path sews the half stitch, with SC-W0503, until M8.</li>
 </ul>
 <h3 id="lock_custom_end"><a class="header" href="#lock_custom_end"><code>lock_custom_end</code></a></h3>
-<p><strong>Custom end lock.</strong> The shape of a custom end lock: an SVG path, or back-and-forth steps written as numbers
-separated by spaces.</p>
+<p><strong>Custom end lock.</strong> The steps a custom end lock takes along the stitching after it ends, as numbers separated by
+spaces, each a number of <code>lock_end_scale_mm</code>. Positive steps go back into the stitching. The
+first step starts where the stitching ends, and <code>1 -1 1 -1</code> goes back and forth twice.
+Ink/Stitch also takes an SVG path that draws the lock. StitchCraft does not sew those yet, and
+sews the half stitch in its place (<code>SC-W0503</code>).</p>
 <ul>
 <li><strong>Accepts:</strong> text of at most 4096 bytes</li>
 <li><strong>Default:</strong> empty</li>
 <li><strong>Shown when</strong> <a href="#lock_end"><code>lock_end</code></a> is <code>custom</code></li>
-<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+<li><strong>Ink/Stitch:</strong> same key; StitchCraft differs (DEV-LCK-002): Locks of steps follow the stitching round its corners, as Ink/Stitch’s custom steps do. They differ in 2 places. Past the end of stitching shorter than the lock, they go straight on from the last stitch, where Ink/Stitch puts the rest of the lock on the last needle point. Where following a sharp turn would sew a stitch shorter than 0.2 mm, the lock is sewn straight along the first (or last) stitch, with SC-W0502, where Ink/Stitch follows the turn.</li>
 </ul>
 <h3 id="lock_end_scale_mm"><a class="header" href="#lock_end_scale_mm"><code>lock_end_scale_mm</code></a></h3>
-<p><strong>End lock size.</strong> How large an end lock made of back-and-forth steps is, in millimetres.</p>
+<p><strong>End lock size.</strong> How long each step of an end lock made of steps (back and forth, or custom) is.</p>
 <ul>
 <li><strong>Accepts:</strong> a length from 0.1 to 10 mm</li>
 <li><strong>Default:</strong> <code>0.7</code></li>
+<li><strong>Shown when</strong> <a href="#lock_end"><code>lock_end</code></a> is <code>back_forth</code> or <code>custom</code></li>
 <li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
 </ul>
 <h3 id="lock_end_scale_percent"><a class="header" href="#lock_end_scale_percent"><code>lock_end_scale_percent</code></a></h3>
-<p><strong>End lock scale.</strong> How large an end lock drawn as a path is, in percent of the shape’s own size.</p>
+<p><strong>End lock scale.</strong> How large a drawn end lock is, in percent of its own size: at 100 % it reaches about 1.4 mm
+along the stitching.</p>
 <ul>
 <li><strong>Accepts:</strong> a percentage from 10 to 500</li>
 <li><strong>Default:</strong> <code>100</code></li>
+<li><strong>Shown when</strong> <a href="#lock_end"><code>lock_end</code></a> is <code>arrow</code>, <code>bowtie</code>, <code>cross</code>, <code>star</code>, <code>simple</code>, <code>triangle</code>, <code>zigzag</code> or <code>custom</code></li>
 <li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
 </ul>
 <h2 id="trims-and-stops"><a class="header" href="#trims-and-stops">Trims and stops</a></h2>
@@ -1787,8 +1822,9 @@ change starts a new run.</p>
 <p>Palettes are static tables (the Brother PEC palette first) of <code>PaletteEntry { index, name, color, matchable }</code>. Nearest-colour matching uses CIEDE2000 in CIELAB (D65), through <code>stitchcraft_core::math</code>
 so it is deterministic, with ties going to the lower index; it is tested against the 34 reference pairs
 of Sharma, Wu &amp; Dalal (2005). Entries that are not threads — Brother’s applique steps 62–64 — are never
-matched. Tables carry their source in the module docs and a row in <code>NOTICE</code> (the PEC palette as published
-in MIT-licensed pyembroidery). Thread catalogues (brand and number) arrive with M11.</p>
+matched. Each table names its source in its module docs and in a row of <code>NOTICE</code>. The PEC palette is the one
+MIT-licensed pyembroidery publishes, with the names of entries 62 and 63 from its fork pystitch. Thread
+catalogues (brand and number) arrive with M11.</p>
 <h2 id="machine-profiles-1"><a class="header" href="#machine-profiles-1">Machine profiles</a></h2>
 <pre><code class="language-rust ignore">pub struct MachineProfile {
     pub id: &amp;'static str,            // "brother-200x200"
@@ -1855,15 +1891,17 @@ embroiderer. The real declaration of the settings every stitch type shares, in
         /// The shape of a custom start lock: …
         lock_custom_start: Text = "", label "Custom start lock", when lock_start == "custom";
 
-        /// The size of start-lock shapes that are measured in millimetres.
-        lock_start_scale_mm: Length = "0.7", label "Start lock size", range (0.1, 10.0);
+        /// How long each step of a start lock made of steps (back and forth, or custom) is.
+        lock_start_scale_mm: Length = "0.7", label "Start lock size", range (0.1, 10.0),
+            when lock_start in SIZED_IN_MM;
         …
     }
 }</code></pre>
 <p>Each parameter is <code>key: Kind = "default", label "Label"</code>, followed by what its kind needs and what is
 not the usual: <code>range (min, max)</code> for numbers and lists, <code>options [...]</code> or <code>choices CONST</code> for choices,
-<code>applies</code> when it covers fewer stitch types than its struct, <code>when other == "value"</code> when a user interface
-shows it only then, <code>origin</code> (default <code>Origin::InkStitch</code>) and <code>stability</code> (default <code>Stability::Stable</code>).
+<code>applies</code> when it covers fewer stitch types than its struct, <code>when other == "value"</code> (or
+<code>when other in VALUES</code>, a list of them) when a user interface shows it only then, <code>origin</code> (default
+<code>Origin::InkStitch</code>) and <code>stability</code> (default <code>Stability::Stable</code>).
 A combination a kind does not take does not compile. Defaults are written as a design stores them, so
 they are checked by the same code as a design’s values. The grammar is in the <code>macros</code> module’s
 documentation.</p>
@@ -1887,7 +1925,7 @@ generator’s parameters is one line there). <code>stitchcraft-params</code> kno
     pub default: &amp;'static str,      // as a design stores it; "" for an empty optional value
     pub group: &amp;'static str,        // UI and docs section
     pub applies_to: &amp;'static [StitchType],
-    pub visible_when: Option&lt;Condition&gt;,   // e.g. lock_custom_start only when lock_start == custom
+    pub visible_when: Option&lt;Condition&gt;,   // another key and the values it shows this for: lock_custom_start only for lock_start custom
     pub stability: Stability,       // Stable | Experimental | Deprecated { use_instead }
     pub origin: Origin,             // InkStitch | InkStitchDeviates { deviation } | StitchCraft
 }</code></pre>
@@ -2079,6 +2117,8 @@ another.</p>
 <tr><td><code>SC-W0402</code></td><td>Warning</td><td>Stitch length below twice the shortest stitch; raised to it, so even spacing never sews a stitch shorter than the shortest</td><td>M3</td></tr>
 <tr><td><code>SC-W0403</code></td><td>Warning</td><td>Hand-placed stitch shorter than the shortest stitch; point left out</td><td>M3</td></tr>
 <tr><td><code>SC-W0501</code></td><td>Warning</td><td>Travel could not stay inside the region; used tie-off, trim and tie-in</td><td>M5</td></tr>
+<tr><td><code>SC-W0502</code></td><td>Warning</td><td>Lock stitch shorter than 0.2 mm; lengthened</td><td>M3</td></tr>
+<tr><td><code>SC-W0503</code></td><td>Warning</td><td>Custom lock cannot be sewn as written</td><td>M3</td></tr>
 <tr><td><code>SC-E0601</code></td><td>Error</td><td>Too many colour changes for the file format</td><td>M1</td></tr>
 <tr><td><code>SC-E0602</code></td><td>Error</td><td>Design too large for the file format (coordinates or data exceed its fields)</td><td>M1</td></tr>
 <tr><td><code>SC-E0603</code></td><td>Error</td><td>Machine file could not be read (wrong format, truncated, or a record that makes no sense)</td><td>M2</td></tr>
@@ -2263,24 +2303,12 @@ machine profile, and go into the deviations ledger with M3.8.</p>
 <h3 id="lock-stitches-ties"><a class="header" href="#lock-stitches-ties">Lock stitches (ties)</a></h3>
 <ul>
 <li><code>ties</code> selects where locks go: both, before (tie-in), after (tie-off) or neither.</li>
-<li><code>lock_start</code> / <code>lock_end</code> choose a lock shape by id; <code>half_stitch</code> (stitch back and forth along the
-path by a fraction of the first stitch) is the default; other ids map to StitchCraft’s own shape
-definitions with the same intent (<a href="#method-identifiers">compatibility contract</a>).</li>
-<li>Shapes are defined in a unit frame aligned with the path direction. Shapes made of back-and-forth
-steps are scaled by <code>lock_*_scale_mm</code> (an absolute size), shapes drawn as paths by
-<code>lock_*_scale_percent</code> (relative to their own size); the half stitch is sized from the first stitch.
-A custom lock (<code>lock_custom_start</code>, <code>lock_custom_end</code>) is either kind.</li>
 <li><code>force_lock_stitches</code> adds locks even when the next group is close enough to collapse. In Ink/Stitch
 (read at <code>d59c9ab</code>) it also adds the tie-off when <code>ties</code> asks for none after, but never a tie-in.</li>
-<li>A group of fewer than two stitches gets no locks. Manual stitch gets none unless <code>force_lock_stitches</code>
-is set.</li>
-<li>Ink/Stitch’s half stitch goes back and forth towards the first needle point at least 0.5 mm away, by
-fractions of that distance capped at 1.5 mm, and ignores both scale parameters; its tie-off leaves out
-its first point, which is the group’s last stitch. Its settings window shows <code>lock_*_scale_mm</code> only for
-back-and-forth and custom locks and <code>lock_*_scale_percent</code> only for drawn shapes and custom locks;
-StitchCraft’s parameter registry should show them the same way (M3.7).</li>
-<li>Lock stitches must be ≥ 0.2 mm long so the needle does not hit the same hole; shorter computed locks
-are scaled up, never dropped silently.</li>
+<li>A group with fewer than two needle points is sewn without locks. Manual stitch is sewn without them
+unless <code>force_lock_stitches</code> is set.</li>
+<li><a href="#lock-stitches-1">Lock stitches</a> specifies the lock itself: its shape (<code>lock_start</code>, <code>lock_end</code>),
+its size and its shortest stitch (0.2 mm).</li>
 </ul>
 <h3 id="commands"><a class="header" href="#commands">Commands</a></h3>
 <div class="table-wrapper">
@@ -2358,10 +2386,11 @@ conformance suite checks.</p>
 <tr><td><a href="#stroke-generators">Strokes</a></td><td>running, bean, manual, random-length, zigzag stroke, ripple</td></tr>
 <tr><td><a href="#satin-generators">Satin</a></td><td>satin column, E-stitch, S-stitch, zigzag satin, underlays</td></tr>
 <tr><td><a href="#fill-generators">Fills</a></td><td>tatami, contour, meander, circular, guided, linear gradient, tartan, cross stitch</td></tr>
+<tr><td><a href="#lock-stitches-1">Lock stitches</a></td><td>the tie-in and tie-off at the ends of an element’s stitching</td></tr>
 </tbody>
 </table>
 </div>
-<p>Lock stitches, travel and the joining of elements are part of
+<p>Travel and the joining of elements, and which ends get a lock, are part of
 <a href="#4-plan-assembly">plan assembly</a>.</p>
 <h2 id="the-generator-contract"><a class="header" href="#the-generator-contract">The generator contract</a></h2>
 <pre><code class="language-rust ignore">pub trait Generator {
@@ -2791,6 +2820,138 @@ umfahren,” <em>Mathematische Annalen</em> 6, 1873.</li>
 <li>D. Hilbert, “Über die stetige Abbildung einer Linie auf ein Flächenstück,” <em>Mathematische Annalen</em> 38, 1891.</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div>
+<h1 id="lock-stitches-1"><a class="header" href="#lock-stitches-1">Lock stitches</a></h1>
+<!-- implements: crates/stitchcraft-engine/src/locks/** -->
+<p>A lock, or tie, is a few small stitches where an element’s stitching starts (the tie-in) or ends (the
+tie-off). The lock stops the thread from pulling out when it is trimmed or the needle jumps on.
+<a href="#lock-stitches-ties">Plan assembly</a> puts locks at the ends of groups, as <code>ties</code>,
+<code>force_lock_stitches</code>, jumps and trims say. This page specifies the lock itself:
+<code>stitchcraft_engine::locks</code>, phase P1 (M3.7).</p>
+<p><strong>Parameters:</strong> <code>lock_start</code> and <code>lock_end</code> (the shape), <code>lock_custom_start</code>, <code>lock_custom_end</code>,
+<code>lock_start_scale_mm</code>, <code>lock_end_scale_mm</code>, <code>lock_start_scale_percent</code>, <code>lock_end_scale_percent</code>
+(<a href="#lock-stitches">reference</a>).</p>
+<h2 id="placement-1"><a class="header" href="#placement-1">Placement</a></h2>
+<p>The anchor is the group’s first needle point for a tie-in and its last for a tie-off. A group with no
+needle point other than the anchor has no stitch to lock, and assembly sews it without one.</p>
+<ul>
+<li><strong>Steps</strong> are distances along the stitching from the anchor, positive into it. A lock of steps follows
+the stitching round its corners. It lies on the stitches that come after it, and they cover it. A
+negative distance goes straight back along the first stitch, before the anchor. Past the end of
+stitching shorter than the lock, the lock goes straight on from the last stitch.</li>
+<li><strong>A drawn lock</strong> lies in a frame at the anchor. Its x axis runs along the stitch from the anchor to the
+next needle point at another place, pointing into the stitching. Its y axis is a quarter turn from x.</li>
+</ul>
+<p>A sharp turn can bring two needle points of a lock of steps closer together than the steps between them.
+When following the stitching would sew a stitch shorter than 0.2 mm, the lock is sewn straight along the
+first stitch, in the frame, and <code>SC-W0502</code> says so.</p>
+<h2 id="tie-in-and-tie-off"><a class="header" href="#tie-in-and-tie-off">Tie-in and tie-off</a></h2>
+<p>A lock is sewn in the same order at both ends. At a tie-off, into the stitching is back along it.</p>
+<ul>
+<li>A <strong>tie-in</strong> leads into the anchor. The needle sews the lock from its first point, and the group’s first
+needle point follows.</li>
+<li>A <strong>tie-off</strong> leaves from the anchor: the group’s last needle point, then the lock.</li>
+</ul>
+<p>The built-in locks come back to where they started. A tie-in starts where the stitching starts, and a
+tie-off ends where the stitching ended, which is where the thread is trimmed.</p>
+<h2 id="shapes"><a class="header" href="#shapes">Shapes</a></h2>
+<p>The ids are Ink/Stitch’s, and a file that names a bowtie gets one. The shapes behind them are
+StitchCraft’s own designs (deviation <code>DEV-LCK-001</code>). One table in
+<code>crates/stitchcraft-engine/src/locks/shapes.rs</code> defines them. The lists of locks that each size parameter
+applies to come from that table.</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Lock</th><th>Kind</th><th>Size</th><th>What the needle sews</th></tr>
+</thead>
+<tbody>
+<tr><td><code>half_stitch</code> (default)</td><td>steps</td><td>the first stitch</td><td>forth and back over half the first (or last) stitch, twice: steps half as long as that stitch, from 0.2 mm to 1 mm</td></tr>
+<tr><td><code>back_forth</code></td><td>steps</td><td><code>lock_*_scale_mm</code></td><td>forth and back over one step, twice: the half stitch’s rhythm, at a size the user sets</td></tr>
+<tr><td><code>custom</code></td><td>steps</td><td><code>lock_*_scale_mm</code></td><td>the element’s own steps (<a href="#custom-locks">custom locks</a>)</td></tr>
+<tr><td><code>arrow</code></td><td>drawn</td><td><code>lock_*_scale_percent</code></td><td>a shaft along the stitching to the tip of an arrowhead 1.4 mm ahead, round the head and back down the shaft</td></tr>
+<tr><td><code>bowtie</code></td><td>drawn</td><td><code>lock_*_scale_percent</code></td><td>two triangles tip to tip across the stitching, 1.2 mm long, their long stitches crossing in the middle</td></tr>
+<tr><td><code>cross</code></td><td>drawn</td><td><code>lock_*_scale_percent</code></td><td>an X 0.8 mm across, 0.3 to 1.1 mm ahead</td></tr>
+<tr><td><code>star</code></td><td>drawn</td><td><code>lock_*_scale_percent</code></td><td>a five-pointed star 1.2 mm across, one of its points at the anchor</td></tr>
+<tr><td><code>simple</code></td><td>drawn</td><td><code>lock_*_scale_percent</code></td><td>a diamond of four 0.58 mm stitches round the stitching</td></tr>
+<tr><td><code>triangle</code></td><td>drawn</td><td><code>lock_*_scale_percent</code></td><td>a triangle opening ahead, its tip at the anchor, 1.2 mm long</td></tr>
+<tr><td><code>zigzag</code></td><td>drawn</td><td><code>lock_*_scale_percent</code></td><td>zigzag across the stitching for 1.2 mm, then straight back along it</td></tr>
+</tbody>
+</table>
+</div>
+<p>A settings window shows <code>lock_*_scale_mm</code> only for the locks made of steps it sizes (<code>back_forth</code>,
+<code>custom</code>) and <code>lock_*_scale_percent</code> only for the drawn ones and <code>custom</code>, as Ink/Stitch’s does. The half
+stitch is sized from the stitch it lies on and takes its size from neither parameter.</p>
+<p>The drawn shapes follow the same rules. Each one secures the thread in the same way and hides under the
+stitching it secures:</p>
+<ul>
+<li>a loop from the anchor round and back to it</li>
+<li>at most 1.4 mm along the stitching and 0.6 mm across it at 100 %, mostly ahead of the anchor</li>
+<li>stitches 0.46 mm to 1.4 mm long at 100 %, well clear of the 0.2 mm a lock stitch needs and long enough to
+grip</li>
+</ul>
+<h2 id="steps"><a class="header" href="#steps">Steps</a></h2>
+<p>Steps are distances along the stitching, in sewing order, positive into it. A tie-in’s needle positions are
+the anchor less the steps still to come, and its last step ends at the anchor. A tie-off’s positions are
+the anchor plus the steps sewn so far. Take steps of <code>2 -1</code> in sizes of 0.5 mm. A tie-in starts 0.5 mm
+behind the start of the stitching, goes 1 mm forth and goes 0.5 mm back onto it. A tie-off goes 1 mm back
+over the last stitches and 0.5 mm forth again. Steps that add up to 0, as the built-in locks’ steps do,
+start a tie-in and end a tie-off at the anchor.</p>
+<h2 id="custom-locks"><a class="header" href="#custom-locks">Custom locks</a></h2>
+<p><code>lock_custom_start</code> and <code>lock_custom_end</code> hold numbers separated by spaces, or an SVG path that draws the
+lock. The numbers are steps, in sizes of <code>lock_*_scale_mm</code>. The kind of text sets how a file sews, and
+StitchCraft reads it as Ink/Stitch does (<code>REQ-LCK-004</code>). A text made only of digits, spaces, dots, commas
+and minus signs is numbers, and a newline may end it. Any other text is a path. The steps are the pieces
+between spaces that read as numbers, and <code>1,5</code> is not one of them.</p>
+<p>StitchCraft reports what it cannot sew (<code>SC-W0503</code>), where Ink/Stitch passes over it in silence:</p>
+<ul>
+<li>A piece that is not a number, or a step longer than 10 m (the data model’s reach), is left out.</li>
+<li>With no step left, as in an empty text, the half stitch is sewn instead.</li>
+<li>A lock drawn as an SVG path is not sewn yet, and the half stitch is sewn instead. The engine never reads
+SVG, and the SVG adapter will hand it the path (roadmap M8).</li>
+</ul>
+<p>A step of 0 moves nowhere and would sew in place. It is not a step.</p>
+<h2 id="the-shortest-lock-stitch"><a class="header" href="#the-shortest-lock-stitch">The shortest lock stitch</a></h2>
+<p>A lock stitch is at least 0.2 mm long (<code>LOCK_MIN_STITCH</code>), and the plan checker holds lock stitches to
+that length (<code>REQ-PLAN-002</code>). The needle never goes back into the hole it just left. Joins count: a
+tie-in’s last stitch into the anchor and a tie-off’s first stitch out of it.</p>
+<ul>
+<li>A step shorter than 0.2 mm is lengthened to it, keeping its direction.</li>
+<li>A drawn lock whose shortest stitch would be shorter is enlarged as a whole until that stitch is 0.2 mm
+long, keeping its shape.</li>
+<li>A lock of steps that a sharp turn would fold onto itself is sewn straight (<a href="#placement-1">placement</a>).</li>
+</ul>
+<p><code>SC-W0502</code> reports each of these, with the size. The half stitch never needs them.</p>
+<h2 id="compared-with-inkstitch"><a class="header" href="#compared-with-inkstitch">Compared with Ink/Stitch</a></h2>
+<p>Read at <code>d59c9ab</code> (<a href="#adr-0012-read-inkstitchs-source-never-copy-it">ADR-0012</a>). The ids, how a custom lock’s text is read,
+and which size parameter applies to which lock are the same. The shapes differ (<code>DEV-LCK-001</code>):</p>
+<ul>
+<li>Ink/Stitch’s half stitch goes towards the first needle point at least 0.5 mm away, in a straight line to
+it, out and back by halves of that distance capped at 1.5 mm. StitchCraft’s goes forth and back over
+half the first stitch, which then covers it.</li>
+<li>Ink/Stitch’s back-and-forth lock goes two steps out and two back. StitchCraft’s goes forth and back over
+one step, twice, like its half stitch.</li>
+<li>The drawn shapes are StitchCraft’s own designs.</li>
+<li>Ink/Stitch draws custom SVG paths. StitchCraft sews the half stitch with <code>SC-W0503</code> until M8.</li>
+</ul>
+<p>Both follow the stitching with custom steps. They differ in 2 places (<code>DEV-LCK-002</code>):</p>
+<ul>
+<li>Ink/Stitch puts the needle points past the end of stitching shorter than the lock on its last needle
+point. StitchCraft goes straight on from the last stitch, and no two needle points coincide.</li>
+<li>Ink/Stitch follows a turn however sharp. StitchCraft sews straight a lock that a turn would fold onto
+itself.</li>
+</ul>
+<h2 id="properties"><a class="header" href="#properties">Properties</a></h2>
+<p>The conformance suite checks, through the engine’s public API (<code>crates/stitchcraft-engine/tests/locks.rs</code>):</p>
+<ol>
+<li><strong>Each id</strong> sews a lock that joins the stitching where it starts or ends (<code>REQ-LCK-002</code>).</li>
+<li><strong>The shortest lock stitch</strong> is 0.2 mm, joins included, for any group, lock and size. The same input
+sews the same lock (<code>REQ-LCK-002</code>, property test).</li>
+<li><strong>Sizes:</strong> the drawn locks scale with <code>lock_*_scale_percent</code> alone, and the locks made of steps with
+<code>lock_*_scale_mm</code> alone. The half stitch scales with neither (<code>REQ-LCK-002</code>).</li>
+<li><strong>Custom steps</strong> sew as Ink/Stitch reads them, round the stitching’s corners (<code>REQ-LCK-004</code>).</li>
+</ol>
+<p>Plan assembly (M3.8) checks where locks go (<code>ties</code>, <code>REQ-LCK-001</code>). Machine checkpoint MC-2 checks with test
+sheet TS-04 whether the default locks hold when the tail is pulled (<code>REQ-LCK-003</code>).</p>
+<div style="break-before: page; page-break-before: always;"></div>
 <h1 id="machine-formats"><a class="header" href="#machine-formats">Machine formats</a></h1>
 <!-- implements: crates/stitchcraft-formats/src/**, apps/stitchcraft-cli/src/commands/convert.rs, apps/stitchcraft-cli/src/commands/inspect.rs -->
 <p><code>stitchcraft-formats</code> encodes a <code>StitchPlan</code> into machine files and decodes machine files into plans.
@@ -2920,11 +3081,18 @@ that points nowhere) become warnings in the result.</p>
 <tr><th>Reader</th><th>Reads</th><th>What it has to infer</th></tr>
 </thead>
 <tbody>
-<tr><td>PES / PEC</td><td>the PEC block of any PES version (<code>#PES0001</code> … <code>#PES0060</code>), and bare <code>#PEC0001</code> files; the block must start with <code>LA:</code></td><td>A colour change to the same palette entry is a <strong>stop</strong> — the way PEC writes stops. Two blocks whose threads map to the same Brother colour read back as one block with a stop: PES v1 cannot tell them apart.</td></tr>
+<tr><td>PES / PEC</td><td>the PEC block of any PES version (<code>#PES0001</code> … <code>#PES0060</code>), and bare <code>#PEC0001</code> files; the block must start with <code>LA:</code></td><td>A colour change to the same palette entry is a <strong>stop</strong>, as PEC writes stops. Blocks whose threads map to one Brother colour read back as one block with a stop, because PES v1 cannot tell them apart. Whether the stitch data starts with the <strong>origin field</strong> (below).</td></tr>
 <tr><td>DST</td><td>the header’s label and every record</td><td>Three or more jumps in a row are a <strong>trim</strong> before them where something was sewn since the thread was last cut or changed, as DST machines read them (<code>REQ-FMT-008</code>); a trim’s own spelling at the start of the run — up to 8 jumps of at most 1 mm that end where they started — moves the frame nowhere and is not kept as jumps. Colours: none — each block gets a placeholder thread, and a stop reads as a colour change.</td></tr>
 </tbody>
 </table>
 </div>
+<p><strong>The PEC origin field</strong> (<code>REQ-FMT-009</code>). Brother’s software, pystitch and StitchCraft write 4 bytes
+before the first record, shaped like a long jump on both axes. They hold the offset from the corner of
+the box that the header’s width and height give to the start of the design. pyembroidery 1.4.32 to
+1.5.1 leave the field out, and their first record is often a long jump that looks the same. The reader
+takes the 4 bytes as the field only if the design read after them fits that box, and otherwise reads them
+as the first record, with a warning that Brother machines expect the field. Files from pyembroidery
+1.5.1 itself test both cases (<code>conformance/oracle/write_pes.py</code>).</p>
 <p>Every reader survives every truncation and single-byte change of the golden files (a deterministic test
 that runs on every PR), and an hour of coverage-guided fuzzing every night (<code>REQ-FMT-006</code>;
 <a href="#fuzzing">fuzzing</a>).</p>
@@ -3973,11 +4141,11 @@ stitches once its stitch type or feature lands (see <em>Phase</em> and the param
 <tr><td><code>ties</code></td><td>dropdown</td><td>—</td><td>0</td><td>all</td><td>P1 (M3)</td><td><a href="#ties">registered</a></td></tr>
 <tr><td><code>force_lock_stitches</code></td><td>boolean</td><td>—</td><td>false</td><td>all</td><td>P1 (M3)</td><td><a href="#force_lock_stitches">registered</a></td></tr>
 <tr><td><code>lock_start</code></td><td>combo</td><td>—</td><td>half_stitch</td><td>all</td><td>P1 (M3)</td><td><a href="#lock_start">deviates</a></td></tr>
-<tr><td><code>lock_custom_start</code></td><td>string</td><td>—</td><td>—</td><td><code>custom</code></td><td>P1 (M3)</td><td><a href="#lock_custom_start">registered</a></td></tr>
+<tr><td><code>lock_custom_start</code></td><td>string</td><td>—</td><td>—</td><td><code>custom</code></td><td>P1 (M3)</td><td><a href="#lock_custom_start">deviates</a></td></tr>
 <tr><td><code>lock_start_scale_mm</code></td><td>float</td><td>mm</td><td>0.7</td><td><code>back_forth</code>, <code>custom</code></td><td>P1 (M3)</td><td><a href="#lock_start_scale_mm">registered</a></td></tr>
 <tr><td><code>lock_start_scale_percent</code></td><td>float</td><td>%</td><td>100</td><td><code>arrow</code>, <code>bowtie</code>, <code>cross</code>, <code>star</code>, <code>simple</code>, <code>triangle</code>, <code>zigzag</code>, <code>custom</code></td><td>P1 (M3)</td><td><a href="#lock_start_scale_percent">registered</a></td></tr>
 <tr><td><code>lock_end</code></td><td>combo</td><td>—</td><td>half_stitch</td><td>all</td><td>P1 (M3)</td><td><a href="#lock_end">deviates</a></td></tr>
-<tr><td><code>lock_custom_end</code></td><td>string</td><td>—</td><td>—</td><td><code>custom</code></td><td>P1 (M3)</td><td><a href="#lock_custom_end">registered</a></td></tr>
+<tr><td><code>lock_custom_end</code></td><td>string</td><td>—</td><td>—</td><td><code>custom</code></td><td>P1 (M3)</td><td><a href="#lock_custom_end">deviates</a></td></tr>
 <tr><td><code>lock_end_scale_mm</code></td><td>float</td><td>mm</td><td>0.7</td><td><code>back_forth</code>, <code>custom</code></td><td>P1 (M3)</td><td><a href="#lock_end_scale_mm">registered</a></td></tr>
 <tr><td><code>lock_end_scale_percent</code></td><td>float</td><td>%</td><td>100</td><td><code>arrow</code>, <code>bowtie</code>, <code>cross</code>, <code>star</code>, <code>simple</code>, <code>triangle</code>, <code>zigzag</code>, <code>custom</code></td><td>P1 (M3)</td><td><a href="#lock_end_scale_percent">registered</a></td></tr>
 <tr><td><code>trim_after</code></td><td>boolean</td><td>—</td><td>false</td><td>all</td><td>P1 (M3)</td><td><a href="#trim_after">registered</a></td></tr>
@@ -4767,11 +4935,11 @@ of code) · 🧵 machine checkpoint · 👤 owner action</p>
 <tr><td>M3.4 ✅</td><td>Running stitch: corners, even spacing, patterns, tolerance; stitch lengths measured straight</td><td><code>REQ-RUN-001..003</code></td></tr>
 <tr><td>M3.5 ✅</td><td>Repeats, bean stitch, random length</td><td><code>REQ-RUN-004</code>, <code>REQ-RUN-005</code>, <code>REQ-RUN-007</code></td></tr>
 <tr><td>M3.6 ✅</td><td>Manual stitch</td><td><code>REQ-RUN-006</code>, <code>REQ-RUN-008</code></td></tr>
-<tr><td>M3.7</td><td>Lock stitches: types, scale, placement</td><td><code>REQ-LCK-001..003</code></td></tr>
-<tr><td>M3.8</td><td>Plan assembly: order, collapse, travel, tie-off/jump/trim/tie-in, stops, colour changes, commands</td><td><code>REQ-ASM-001..005</code></td></tr>
+<tr><td>M3.7 ✅</td><td>Lock stitches: every shape, its size and its place at either end of the stitching</td><td><code>REQ-LCK-002</code>, <code>REQ-LCK-004</code></td></tr>
+<tr><td>M3.8</td><td>Plan assembly: order, collapse, travel, tie-off/jump/trim/tie-in (where <code>ties</code> says), stops, colour changes, commands</td><td><code>REQ-ASM-001..005</code>, <code>REQ-LCK-001</code></td></tr>
 <tr><td>M3.9</td><td>Finalize: split, merge, hoop, colour limits; <code>stitch plan in.svg -o out.pes --preview out.png --report out.json</code></td><td>end-to-end cases</td></tr>
 <tr><td>M3.10</td><td><code>stitch bug-report</code> bundle</td><td>a bundle reproduces its plan byte for byte</td></tr>
-<tr><td>MC-2 🧵</td><td><strong>TS-03</strong> (running/bean lengths), <strong>TS-04</strong> (lock holding test), <strong>TS-02</strong> again with element-driven trims</td><td>report filed; min-stitch and lock defaults confirmed</td></tr>
+<tr><td>MC-2 🧵</td><td><strong>TS-03</strong> (running/bean lengths), <strong>TS-04</strong> (lock holding test), <strong>TS-02</strong> again with element-driven trims</td><td>report filed; min-stitch and lock defaults confirmed (<code>REQ-LCK-003</code>)</td></tr>
 </tbody>
 </table>
 </div>
@@ -4836,10 +5004,18 @@ of code) · 🧵 machine checkpoint · 👤 owner action</p>
 fill with generated tiles; circular fill. One step per type with its requirements, then <strong>MC-6 🧵</strong>
 (TS-11 sampler of the new types).</p>
 <h2 id="m8--inkstitch-interoperability"><a class="header" href="#m8--inkstitch-interoperability">M8 — Ink/Stitch interoperability</a></h2>
-<p>SVG adapter v2: every <code>inkstitch:*</code> attribute in the <a href="#inkstitch-compatibility-contract">compatibility contract</a>,
-the command symbols not read yet (since M3 the adapter applies trim, stop and the ignore commands, and
-never stitches commands, connectors or helper paths: <code>REQ-SVG-003</code>), clones (<code>&lt;use&gt;</code>); <code>stitch import-inkstitch file.svg -o file.vectorcraft</code>;
-L3 differential conformance against a pinned Ink/Stitch with the deviations ledger. Ink/Stitch’s font
+<p>SVG adapter v2:</p>
+<ul>
+<li>every <code>inkstitch:*</code> attribute in the <a href="#inkstitch-compatibility-contract">compatibility contract</a></li>
+<li>the command symbols not read yet. Since M3 the adapter applies trim, stop and the ignore commands, and
+it never stitches commands, connectors or helper paths (<code>REQ-SVG-003</code>).</li>
+<li>clones (<code>&lt;use&gt;</code>)</li>
+<li>custom locks drawn as SVG paths, which the adapter reads for the engine. Until then they sew the half
+stitch, with <code>SC-W0503</code>.</li>
+<li><code>stitch import-inkstitch file.svg -o file.vectorcraft</code></li>
+<li>L3 differential conformance against a pinned Ink/Stitch with the deviations ledger</li>
+</ul>
+<p>Ink/Stitch’s font
 library is part of that corpus: hundreds of real Ink/Stitch files, mostly satin, downloaded at a pinned
 commit by <code>cargo xtask corpus</code> and never committed, using only fonts whose licence allows it (OFL, CC0,
 CC-BY, CC-BY-SA; 132 of the 142 fonts on 2026-10-08).</p>
@@ -4916,7 +5092,7 @@ cases, or bugs. Every profile change links its report.</li>
 <tr><td><strong>TS-01</strong> Orientation &amp; scale</td><td>An asymmetric “F”, a 100 mm cross with 10 mm ticks, 10 mm squares in the corners (120 × 120 mm)</td><td>F not mirrored or rotated; 100 mm line = 100.0 ± 0.5 mm in X and Y; squares square</td><td>MC-1</td></tr>
 <tr><td><strong>TS-02</strong> Commands</td><td>Three colour blocks; a stop; rows of two dashes separated by jumps of 2, 5, 15, 40 mm; trims encoded as trim-flagged jumps on the left half (red) and as plain jumps only on the right (blue) (140 × 70 mm)</td><td>The machine stops for colours and the stop; which jumps were trimmed on each half; any loose loops</td><td>MC-1, MC-2</td></tr>
 <tr><td><strong>TS-03</strong> Running stitch</td><td>Lines at 1.5, 2.0, 2.5, 3.0, 4.0 mm stitch length; bean 1×, 2×; curves at three tolerances</td><td>Even stitches; curves smooth; bean lines solid</td><td>MC-2</td></tr>
-<tr><td><strong>TS-04</strong> Lock stitches</td><td>Short lines ending in each lock type at 0.5, 0.7, 1.0 mm, trimmed after</td><td>Pull each tail gently: holds or unravels? Lock visible from the front?</td><td>MC-2</td></tr>
+<tr><td><strong>TS-04</strong> Lock stitches</td><td>Short lines with every lock shape at both ends, trimmed after: the half stitch on first stitches of 1.5, 2.5 and 4 mm, back-and-forth at 0.5, 0.7 and 1.0 mm, drawn shapes at 70, 100 and 150 %</td><td>Pull each tail gently: does the lock stay, or does the thread pull out? Is the lock visible from the front?</td><td>MC-2</td></tr>
 <tr><td><strong>TS-05</strong> Satin width ladder</td><td>Columns 1–10 mm wide at three spacings (0.3, 0.4, 0.5 mm)</td><td>Coverage, fabric showing between stitches, edges straight, long stitches loose</td><td>MC-3</td></tr>
 <tr><td><strong>TS-06</strong> Satin underlays</td><td>The same 6 mm column with no underlay, centre walk, contour, zigzag, contour+zigzag</td><td>Edge sharpness, loft, puckering</td><td>MC-3</td></tr>
 <tr><td><strong>TS-07</strong> Registration</td><td>A 60 mm tatami circle with a running-stitch outline; at three pull-compensation values</td><td>Gap or overlap between fill and outline at 12 points around the circle</td><td>MC-4</td></tr>
@@ -5140,7 +5316,9 @@ mind.</li>
 their authors wrote them.</li>
 </ul>
 <p>Lines that a branch does not touch are not checked. Older pages follow the rules when they are
-rewritten.</p>
+rewritten. Pages generated from the registries are not checked either: their tables, labels and
+deviation notes have a format of their own. Their prose is the registries’ help text, which follows these
+rules all the same.</p>
 <h2 id="rules"><a class="header" href="#rules">Rules</a></h2>
 <ul>
 <li><strong>State the fact first.</strong> Start with what the software does: “The reader leaves connectors out.” Put

@@ -35,10 +35,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-85dedfbb.js";
+            window.path_to_searchindex_js = "../searchindex-7a0951d5.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-eddbe1a2.js"></script>
+        <script src="../toc-9f562a62.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -317,8 +317,9 @@ change starts a new run.</p>
 <p>Palettes are static tables (the Brother PEC palette first) of <code>PaletteEntry { index, name, color, matchable }</code>. Nearest-colour matching uses CIEDE2000 in CIELAB (D65), through <code>stitchcraft_core::math</code>
 so it is deterministic, with ties going to the lower index; it is tested against the 34 reference pairs
 of Sharma, Wu &amp; Dalal (2005). Entries that are not threads — Brother’s applique steps 62–64 — are never
-matched. Tables carry their source in the module docs and a row in <code>NOTICE</code> (the PEC palette as published
-in MIT-licensed pyembroidery). Thread catalogues (brand and number) arrive with M11.</p>
+matched. Each table names its source in its module docs and in a row of <code>NOTICE</code>. The PEC palette is the one
+MIT-licensed pyembroidery publishes, with the names of entries 62 and 63 from its fork pystitch. Thread
+catalogues (brand and number) arrive with M11.</p>
 <h2 id="machine-profiles"><a class="header" href="#machine-profiles">Machine profiles</a></h2>
 <pre><code class="language-rust ignore">pub struct MachineProfile {
     pub id: &amp;'static str,            // "brother-200x200"

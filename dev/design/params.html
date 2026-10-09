@@ -35,10 +35,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-85dedfbb.js";
+            window.path_to_searchindex_js = "../searchindex-7a0951d5.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-eddbe1a2.js"></script>
+        <script src="../toc-9f562a62.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -216,15 +216,17 @@ embroiderer. The real declaration of the settings every stitch type shares, in
         /// The shape of a custom start lock: …
         lock_custom_start: Text = "", label "Custom start lock", when lock_start == "custom";
 
-        /// The size of start-lock shapes that are measured in millimetres.
-        lock_start_scale_mm: Length = "0.7", label "Start lock size", range (0.1, 10.0);
+        /// How long each step of a start lock made of steps (back and forth, or custom) is.
+        lock_start_scale_mm: Length = "0.7", label "Start lock size", range (0.1, 10.0),
+            when lock_start in SIZED_IN_MM;
         …
     }
 }</code></pre>
 <p>Each parameter is <code>key: Kind = "default", label "Label"</code>, followed by what its kind needs and what is
 not the usual: <code>range (min, max)</code> for numbers and lists, <code>options [...]</code> or <code>choices CONST</code> for choices,
-<code>applies</code> when it covers fewer stitch types than its struct, <code>when other == "value"</code> when a user interface
-shows it only then, <code>origin</code> (default <code>Origin::InkStitch</code>) and <code>stability</code> (default <code>Stability::Stable</code>).
+<code>applies</code> when it covers fewer stitch types than its struct, <code>when other == "value"</code> (or
+<code>when other in VALUES</code>, a list of them) when a user interface shows it only then, <code>origin</code> (default
+<code>Origin::InkStitch</code>) and <code>stability</code> (default <code>Stability::Stable</code>).
 A combination a kind does not take does not compile. Defaults are written as a design stores them, so
 they are checked by the same code as a design’s values. The grammar is in the <code>macros</code> module’s
 documentation.</p>
@@ -248,7 +250,7 @@ generator’s parameters is one line there). <code>stitchcraft-params</code> kno
     pub default: &amp;'static str,      // as a design stores it; "" for an empty optional value
     pub group: &amp;'static str,        // UI and docs section
     pub applies_to: &amp;'static [StitchType],
-    pub visible_when: Option&lt;Condition&gt;,   // e.g. lock_custom_start only when lock_start == custom
+    pub visible_when: Option&lt;Condition&gt;,   // another key and the values it shows this for: lock_custom_start only for lock_start custom
     pub stability: Stability,       // Stable | Experimental | Deprecated { use_instead }
     pub origin: Origin,             // InkStitch | InkStitchDeviates { deviation } | StitchCraft
 }</code></pre>

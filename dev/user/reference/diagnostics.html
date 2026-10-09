@@ -35,10 +35,10 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-85dedfbb.js";
+            window.path_to_searchindex_js = "../../searchindex-7a0951d5.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../../toc-eddbe1a2.js"></script>
+        <script src="../../toc-9f562a62.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -199,6 +199,8 @@
 <tr><td><a href="#sc-w0401"><code>SC-W0401</code></a></td><td>Warning</td><td>Path too small for the shortest stitch; skipped</td></tr>
 <tr><td><a href="#sc-w0402"><code>SC-W0402</code></a></td><td>Warning</td><td>Stitch length below twice the shortest stitch; raised</td></tr>
 <tr><td><a href="#sc-w0403"><code>SC-W0403</code></a></td><td>Warning</td><td>Hand-placed stitch shorter than the shortest stitch; point left out</td></tr>
+<tr><td><a href="#sc-w0502"><code>SC-W0502</code></a></td><td>Warning</td><td>Lock stitch shorter than 0.2 mm; lengthened</td></tr>
+<tr><td><a href="#sc-w0503"><code>SC-W0503</code></a></td><td>Warning</td><td>Custom lock cannot be sewn as written</td></tr>
 <tr><td><a href="#sc-e0601"><code>SC-E0601</code></a></td><td>Error</td><td>Too many colour changes for the file format</td></tr>
 <tr><td><a href="#sc-e0602"><code>SC-E0602</code></a></td><td>Error</td><td>Design too large for the file format</td></tr>
 <tr><td><a href="#sc-e0603"><code>SC-E0603</code></a></td><td>Error</td><td>Machine file could not be read</td></tr>
@@ -282,6 +284,26 @@ needle point that made each one too short was left out, so the stitch before it 
 next point. A part’s last point is always kept; the one before it goes instead.</p>
 <p>The message gives how many and the shortest of them. Move the nodes apart, or delete the extra
 ones.</p>
+<h2 id="sc-w0502"><a class="header" href="#sc-w0502">SC-W0502</a></h2>
+<p><strong>Warning</strong> — Lock stitch shorter than 0.2 mm; lengthened</p>
+<p>A lock stitch would have been shorter than 0.2 mm, the shortest stitch a lock may have. The needle
+would go back into the hole it just left, which can cut the thread and does not lock it. Each such
+step of a lock made of steps (back and forth, or a custom lock written as numbers) was lengthened
+to 0.2 mm, and a drawn lock was enlarged until its shortest stitch is 0.2 mm long. A lock of steps
+follows the stitching. Where a sharp turn would fold it onto itself, it was sewn straight along the
+first (or last) stitch.</p>
+<p>The message says which lock, and by how much. Set a larger lock size (<code>lock_start_scale_mm</code>,
+<code>lock_end_scale_mm</code>) or scale (<code>lock_start_scale_percent</code>, <code>lock_end_scale_percent</code>), or write
+longer custom steps.</p>
+<h2 id="sc-w0503"><a class="header" href="#sc-w0503">SC-W0503</a></h2>
+<p><strong>Warning</strong> — Custom lock cannot be sewn as written</p>
+<p>The lock is set to custom, but its shape cannot be sewn as written. A custom lock is numbers
+separated by spaces, the steps the needle takes along the stitching in sizes of
+<code>lock_*_scale_mm</code>, or an SVG path that draws it. StitchCraft sews the numbers. It does not sew a
+drawn custom lock yet, and sews the half stitch in its place. Parts that are not numbers, and steps
+longer than 10 m, are left out. If no step is left, the half stitch is sewn instead.</p>
+<p>The message says what was wrong. Write the lock as numbers, such as <code>1 -1 1 -1</code>, or choose
+another lock shape.</p>
 <h2 id="sc-e0601"><a class="header" href="#sc-e0601">SC-E0601</a></h2>
 <p><strong>Error</strong> — Too many colour changes for the file format</p>
 <p>The file format can record only a limited number of colour changes and stops (PES: 255). This

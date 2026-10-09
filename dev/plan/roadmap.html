@@ -35,10 +35,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-85dedfbb.js";
+            window.path_to_searchindex_js = "../searchindex-7a0951d5.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-eddbe1a2.js"></script>
+        <script src="../toc-9f562a62.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -263,11 +263,11 @@ of code) · 🧵 machine checkpoint · 👤 owner action</p>
 <tr><td>M3.4 ✅</td><td>Running stitch: corners, even spacing, patterns, tolerance; stitch lengths measured straight</td><td><code>REQ-RUN-001..003</code></td></tr>
 <tr><td>M3.5 ✅</td><td>Repeats, bean stitch, random length</td><td><code>REQ-RUN-004</code>, <code>REQ-RUN-005</code>, <code>REQ-RUN-007</code></td></tr>
 <tr><td>M3.6 ✅</td><td>Manual stitch</td><td><code>REQ-RUN-006</code>, <code>REQ-RUN-008</code></td></tr>
-<tr><td>M3.7</td><td>Lock stitches: types, scale, placement</td><td><code>REQ-LCK-001..003</code></td></tr>
-<tr><td>M3.8</td><td>Plan assembly: order, collapse, travel, tie-off/jump/trim/tie-in, stops, colour changes, commands</td><td><code>REQ-ASM-001..005</code></td></tr>
+<tr><td>M3.7 ✅</td><td>Lock stitches: every shape, its size and its place at either end of the stitching</td><td><code>REQ-LCK-002</code>, <code>REQ-LCK-004</code></td></tr>
+<tr><td>M3.8</td><td>Plan assembly: order, collapse, travel, tie-off/jump/trim/tie-in (where <code>ties</code> says), stops, colour changes, commands</td><td><code>REQ-ASM-001..005</code>, <code>REQ-LCK-001</code></td></tr>
 <tr><td>M3.9</td><td>Finalize: split, merge, hoop, colour limits; <code>stitch plan in.svg -o out.pes --preview out.png --report out.json</code></td><td>end-to-end cases</td></tr>
 <tr><td>M3.10</td><td><code>stitch bug-report</code> bundle</td><td>a bundle reproduces its plan byte for byte</td></tr>
-<tr><td>MC-2 🧵</td><td><strong>TS-03</strong> (running/bean lengths), <strong>TS-04</strong> (lock holding test), <strong>TS-02</strong> again with element-driven trims</td><td>report filed; min-stitch and lock defaults confirmed</td></tr>
+<tr><td>MC-2 🧵</td><td><strong>TS-03</strong> (running/bean lengths), <strong>TS-04</strong> (lock holding test), <strong>TS-02</strong> again with element-driven trims</td><td>report filed; min-stitch and lock defaults confirmed (<code>REQ-LCK-003</code>)</td></tr>
 </tbody>
 </table>
 </div>
@@ -332,10 +332,18 @@ of code) · 🧵 machine checkpoint · 👤 owner action</p>
 fill with generated tiles; circular fill. One step per type with its requirements, then <strong>MC-6 🧵</strong>
 (TS-11 sampler of the new types).</p>
 <h2 id="m8--inkstitch-interoperability"><a class="header" href="#m8--inkstitch-interoperability">M8 — Ink/Stitch interoperability</a></h2>
-<p>SVG adapter v2: every <code>inkstitch:*</code> attribute in the <a href="../design/inkstitch-compat-contract.html">compatibility contract</a>,
-the command symbols not read yet (since M3 the adapter applies trim, stop and the ignore commands, and
-never stitches commands, connectors or helper paths: <code>REQ-SVG-003</code>), clones (<code>&lt;use&gt;</code>); <code>stitch import-inkstitch file.svg -o file.vectorcraft</code>;
-L3 differential conformance against a pinned Ink/Stitch with the deviations ledger. Ink/Stitch’s font
+<p>SVG adapter v2:</p>
+<ul>
+<li>every <code>inkstitch:*</code> attribute in the <a href="../design/inkstitch-compat-contract.html">compatibility contract</a></li>
+<li>the command symbols not read yet. Since M3 the adapter applies trim, stop and the ignore commands, and
+it never stitches commands, connectors or helper paths (<code>REQ-SVG-003</code>).</li>
+<li>clones (<code>&lt;use&gt;</code>)</li>
+<li>custom locks drawn as SVG paths, which the adapter reads for the engine. Until then they sew the half
+stitch, with <code>SC-W0503</code>.</li>
+<li><code>stitch import-inkstitch file.svg -o file.vectorcraft</code></li>
+<li>L3 differential conformance against a pinned Ink/Stitch with the deviations ledger</li>
+</ul>
+<p>Ink/Stitch’s font
 library is part of that corpus: hundreds of real Ink/Stitch files, mostly satin, downloaded at a pinned
 commit by <code>cargo xtask corpus</code> and never committed, using only fonts whose licence allows it (OFL, CC0,
 CC-BY, CC-BY-SA; 132 of the 142 fonts on 2026-10-08).</p>

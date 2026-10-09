@@ -35,7 +35,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-70193300.js";
+            window.path_to_searchindex_js = "../searchindex-e51bd65c.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-631d94b1.js"></script>
@@ -245,6 +245,16 @@ golden = ["golden/testsheets/TS-10B.pes"]        # byte for byte; the format com
 </code></pre>
 <p>The plan invariants run on the sheet’s plan before anything else. The golden files are the very bytes
 sewn at the machine checkpoint, so a change to how a sheet sews cannot slip through unnoticed.</p>
+<p>The <code>oracle</code> kind reads machine files with an independent reader — a pinned pyembroidery, through
+<code>conformance/oracle/decode.py</code> — and with StitchCraft’s, and requires the machine to do the same thing
+either way (<code>REQ-FMT-005</code>):</p>
+<pre><code class="language-toml">id = "pyembroidery-oracle"
+requirements = ["REQ-FMT-005"]
+kind = "oracle"
+files = ["golden/formats/every-command.pes", "golden/testsheets/TS-01.dst"]   # …
+</code></pre>
+<p>It needs Python with pyembroidery (<code>STITCHCRAFT_PYTHON</code>, see <code>conformance/oracle/requirements.txt</code>):
+without it the case is skipped locally (⏭ in the report) and fails in CI, like every optional tool.</p>
 <p>From M3, <code>design</code> cases take an SVG or JSON design and parameters, and check generator properties:</p>
 <pre><code class="language-toml">id = "fill-tatami-gap-preserved"
 requirements = ["REQ-FILL-TAT-006", "REQ-FILL-TAT-007"]

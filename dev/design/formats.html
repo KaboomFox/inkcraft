@@ -35,7 +35,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-70193300.js";
+            window.path_to_searchindex_js = "../searchindex-e51bd65c.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-631d94b1.js"></script>
@@ -306,6 +306,13 @@ that points nowhere) become warnings in the result.</p>
 </div>
 <p>Every reader survives every truncation and single-byte change of the golden files (a deterministic test
 that runs on every PR); coverage-guided fuzzing runs nightly from M2.5 (<code>REQ-FMT-006</code>).</p>
+<p><strong>Round trips.</strong> A file cannot say everything a plan says (a trim is a flag in PEC and three jumps in DST;
+long moves become several records), so a plan read back is not the same plan — it makes the machine do
+the same thing. <code>stitchcraft-testkit::equivalence</code> defines that: where the needle goes down, where the
+thread is cut, where the machine pauses. Every writer/reader pair keeps it on 256 random plans per PR (fixed
+seed) and 10,000 more each night (fresh seed). Fresh seeds paid off before this was even merged: they found a DST
+design whose split jump pieces cancelled exactly and read back as a trim, which is why trim runs must be
+made of jumps of at most 1 mm.</p>
 <h2 id="later-formats"><a class="header" href="#later-formats">Later formats</a></h2>
 <div class="table-wrapper">
 <table>
@@ -331,7 +338,7 @@ that runs on every PR); coverage-guided fuzzing runs nightly from M2.5 (<code>RE
 </thead>
 <tbody>
 <tr><td><code>REQ-FMT-001</code></td><td>Golden bytes: canonical plans encode to committed files byte for byte</td></tr>
-<tr><td><code>REQ-FMT-002</code></td><td>Round trip: <code>decode(encode(plan)) == quantize(plan)</code> for every writer/reader pair, on random plans</td></tr>
+<tr><td><code>REQ-FMT-002</code></td><td>Round trip: <code>decode(encode(plan))</code> makes the machine do what the plan does — needle-downs, cuts and pauses at the same 0.1 mm positions — for every writer/reader pair, on random plans</td></tr>
 <tr><td><code>REQ-FMT-003</code></td><td>Every command kind survives every writer/reader pair (and is sewn in TS-02)</td></tr>
 <tr><td><code>REQ-FMT-004</code></td><td>Empty and zero-stitch files read cleanly; empty plans are never written</td></tr>
 <tr><td><code>REQ-FMT-005</code></td><td>Independent oracle: pyembroidery reads our files to the same stitches (CI job with a pinned version)</td></tr>
@@ -340,8 +347,12 @@ that runs on every PR); coverage-guided fuzzing runs nightly from M2.5 (<code>RE
 </tbody>
 </table>
 </div>
-<p>The pyembroidery oracle runs in a separate CI job with a pinned version and only compares decoded
-stitch lists; no pyembroidery code is vendored.</p>
+<p>The pyembroidery oracle is a conformance case (<code>conformance/cases/formats/pyembroidery-oracle.toml</code>): a
+pinned pyembroidery, installed by hash in CI, reads every golden machine file through
+<code>conformance/oracle/decode.py</code>, and its reading must make the machine do what our reader’s does. Only its
+output is compared; no pyembroidery code is vendored. pyembroidery places a PES design’s top-left corner at
+its origin where StitchCraft keeps the machine origin, so both readings are compared from their first
+needle-down.</p>
 
                     </main>
 

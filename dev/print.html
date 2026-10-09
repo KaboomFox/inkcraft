@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-70193300.js";
+            window.path_to_searchindex_js = "searchindex-e51bd65c.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-631d94b1.js"></script>
@@ -2282,6 +2282,13 @@ that points nowhere) become warnings in the result.</p>
 </div>
 <p>Every reader survives every truncation and single-byte change of the golden files (a deterministic test
 that runs on every PR); coverage-guided fuzzing runs nightly from M2.5 (<code>REQ-FMT-006</code>).</p>
+<p><strong>Round trips.</strong> A file cannot say everything a plan says (a trim is a flag in PEC and three jumps in DST;
+long moves become several records), so a plan read back is not the same plan — it makes the machine do
+the same thing. <code>stitchcraft-testkit::equivalence</code> defines that: where the needle goes down, where the
+thread is cut, where the machine pauses. Every writer/reader pair keeps it on 256 random plans per PR (fixed
+seed) and 10,000 more each night (fresh seed). Fresh seeds paid off before this was even merged: they found a DST
+design whose split jump pieces cancelled exactly and read back as a trim, which is why trim runs must be
+made of jumps of at most 1 mm.</p>
 <h2 id="later-formats"><a class="header" href="#later-formats">Later formats</a></h2>
 <div class="table-wrapper">
 <table>
@@ -2307,7 +2314,7 @@ that runs on every PR); coverage-guided fuzzing runs nightly from M2.5 (<code>RE
 </thead>
 <tbody>
 <tr><td><code>REQ-FMT-001</code></td><td>Golden bytes: canonical plans encode to committed files byte for byte</td></tr>
-<tr><td><code>REQ-FMT-002</code></td><td>Round trip: <code>decode(encode(plan)) == quantize(plan)</code> for every writer/reader pair, on random plans</td></tr>
+<tr><td><code>REQ-FMT-002</code></td><td>Round trip: <code>decode(encode(plan))</code> makes the machine do what the plan does — needle-downs, cuts and pauses at the same 0.1 mm positions — for every writer/reader pair, on random plans</td></tr>
 <tr><td><code>REQ-FMT-003</code></td><td>Every command kind survives every writer/reader pair (and is sewn in TS-02)</td></tr>
 <tr><td><code>REQ-FMT-004</code></td><td>Empty and zero-stitch files read cleanly; empty plans are never written</td></tr>
 <tr><td><code>REQ-FMT-005</code></td><td>Independent oracle: pyembroidery reads our files to the same stitches (CI job with a pinned version)</td></tr>
@@ -2316,8 +2323,12 @@ that runs on every PR); coverage-guided fuzzing runs nightly from M2.5 (<code>RE
 </tbody>
 </table>
 </div>
-<p>The pyembroidery oracle runs in a separate CI job with a pinned version and only compares decoded
-stitch lists; no pyembroidery code is vendored.</p>
+<p>The pyembroidery oracle is a conformance case (<code>conformance/cases/formats/pyembroidery-oracle.toml</code>): a
+pinned pyembroidery, installed by hash in CI, reads every golden machine file through
+<code>conformance/oracle/decode.py</code>, and its reading must make the machine do what our reader’s does. Only its
+output is compared; no pyembroidery code is vendored. pyembroidery places a PES design’s top-left corner at
+its origin where StitchCraft keeps the machine origin, so both readings are compared from their first
+needle-down.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="vectorcraft-integration"><a class="header" href="#vectorcraft-integration">VectorCraft integration</a></h1>
 <p>How StitchCraft lives inside <a href="https://github.com/storytold/vectorcraft">VectorCraft</a>: what VectorCraft
@@ -2765,6 +2776,16 @@ golden = ["golden/testsheets/TS-10B.pes"]        # byte for byte; the format com
 </code></pre>
 <p>The plan invariants run on the sheet’s plan before anything else. The golden files are the very bytes
 sewn at the machine checkpoint, so a change to how a sheet sews cannot slip through unnoticed.</p>
+<p>The <code>oracle</code> kind reads machine files with an independent reader — a pinned pyembroidery, through
+<code>conformance/oracle/decode.py</code> — and with StitchCraft’s, and requires the machine to do the same thing
+either way (<code>REQ-FMT-005</code>):</p>
+<pre><code class="language-toml">id = "pyembroidery-oracle"
+requirements = ["REQ-FMT-005"]
+kind = "oracle"
+files = ["golden/formats/every-command.pes", "golden/testsheets/TS-01.dst"]   # …
+</code></pre>
+<p>It needs Python with pyembroidery (<code>STITCHCRAFT_PYTHON</code>, see <code>conformance/oracle/requirements.txt</code>):
+without it the case is skipped locally (⏭ in the report) and fails in CI, like every optional tool.</p>
 <p>From M3, <code>design</code> cases take an SVG or JSON design and parameters, and check generator properties:</p>
 <pre><code class="language-toml">id = "fill-tatami-gap-preserved"
 requirements = ["REQ-FILL-TAT-006", "REQ-FILL-TAT-007"]
@@ -4127,8 +4148,8 @@ of code) · 🧵 machine checkpoint · 👤 owner action</p>
 <tbody>
 <tr><td>M2.1 ✅</td><td>PES/PEC reader (bounded, typed errors); <code>stitch inspect file</code> (counts, bounds, colours, stitch lengths, profile check)</td><td>empty files <code>REQ-FMT-004</code>; every truncation and byte flip handled</td></tr>
 <tr><td>M2.2 ✅</td><td>DST reader (trims inferred from cancelling jump runs)</td><td>same</td></tr>
-<tr><td>M2.3</td><td>Command round trip for every writer/reader pair</td><td><code>REQ-FMT-003</code> active</td></tr>
-<tr><td>M2.4</td><td>pyembroidery oracle job (pinned)</td><td><code>REQ-FMT-005</code> active</td></tr>
+<tr><td>M2.3 ✅</td><td>Command round trip for every writer/reader pair; machine-equivalence oracle; fresh-seed nightly</td><td><code>REQ-FMT-002</code>, <code>REQ-FMT-003</code> active</td></tr>
+<tr><td>M2.4 ✅</td><td>pyembroidery oracle (pinned by hash) as a conformance case in the gates job</td><td><code>REQ-FMT-005</code> active</td></tr>
 <tr><td>M2.5</td><td><code>cargo-fuzz</code> targets for both readers; nightly job with persisted corpus</td><td><code>REQ-FMT-006</code>; 1 h fuzzing clean</td></tr>
 <tr><td>M2.6</td><td><code>stitchcraft-render</code>: realistic and simple styles from the quantized plan</td><td><code>REQ-RND-001</code>; golden PNG files</td></tr>
 <tr><td>M2.7</td><td><code>stitch preview</code>, <code>stitch convert</code>; the <code>stitch</code> shot generator behind <code>cargo xtask shots</code>; the <code>docs-refresh.yml</code> label workflow</td><td>first generated docs images, byte-compared on every PR</td></tr>

@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-046d5ac5.js";
+            window.path_to_searchindex_js = "searchindex-712d0b9e.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-06242336.js"></script>
+        <script src="toc-e486a7f9.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -1356,7 +1356,7 @@ L0  stitchcraft-core ◀── stitchcraft-params
 
 apps:  stitchcraft-cli (bin `stitch`)   stitchcraft-vc-plugin (wasm32 cdylib)
 test:  stitchcraft-testkit (dev-dependency only)
-tools: xtask
+tools: stitchcraft-xtask (`xtask/`, run as `cargo xtask`)
 </code></pre>
 <div class="table-wrapper">
 <table>
@@ -1375,7 +1375,7 @@ tools: xtask
 <tr><td><code>stitchcraft-testkit</code></td><td>test</td><td>fixtures, <code>proptest</code> strategies (from the registry), invariant assertions</td><td>be a normal dependency</td></tr>
 <tr><td><code>stitchcraft-cli</code></td><td>app</td><td>the <code>stitch</code> command; all filesystem access</td><td>contain engine logic</td></tr>
 <tr><td><code>stitchcraft-vc-plugin</code></td><td>app</td><td>VectorCraft ABI v1 shim + plug-in manifests</td><td>contain engine logic; <code>unsafe</code> outside <code>abi.rs</code></td></tr>
-<tr><td><code>xtask</code></td><td>tools</td><td>gates (<code>ci</code>, <code>layers</code>, <code>docs</code>, <code>cleanroom</code>, …), generators, compatibility runs</td><td>ship to users</td></tr>
+<tr><td><code>stitchcraft-xtask</code></td><td>tools</td><td>gates (<code>ci</code>, <code>layers</code>, <code>docs</code>, <code>cleanroom</code>, …), generators, compatibility runs; works from its own folder, on StitchCraft’s packages only (<a href="#adr-0011-stitchcraft-can-move-into-vectorcrafts-repository">ADR-0011</a>)</td><td>ship to users</td></tr>
 </tbody>
 </table>
 </div>
@@ -3091,6 +3091,19 @@ green PR.</li>
 <li>The workflow uses the default <code>GITHUB_TOKEN</code> with <code>contents: write</code>, <code>pull-requests: write</code>,
 <code>issues: write</code> only on the scheduled job.</li>
 </ul>
+<h2 id="moving-into-vectorcraft"><a class="header" href="#moving-into-vectorcraft">Moving into VectorCraft</a></h2>
+<p>StitchCraft must stay movable into VectorCraft’s own repository (<a href="#adr-0011-stitchcraft-can-move-into-vectorcrafts-repository">ADR-0011</a>).
+The <code>move</code> job rehearses it against the latest stable release and <code>main</code> (pull requests that touch
+manifests or tooling: the pinned stable release):</p>
+<ol>
+<li>Check out VectorCraft and put this repository into it as the folder <code>stitchcraft/</code>.</li>
+<li><strong>Nested:</strong> <code>cargo xtask compat join --nested ..</code>, then build a throwaway VectorCraft crate that depends
+on <code>stitchcraft-engine</code> by path.</li>
+<li><strong>Joined:</strong> <code>cargo xtask compat join ..</code>, then run <code>cargo xtask ci</code> from the folder: StitchCraft’s
+gates, inside VectorCraft’s workspace, with its lockfile and lints.</li>
+</ol>
+<p>A failure means a change here, or one in VectorCraft, has made the move harder; the scheduled run reports
+it in the same <code>upstream-canary</code> issue as the contract tests.</p>
 <h2 id="the-supported-versions-table"><a class="header" href="#the-supported-versions-table">The supported-versions table</a></h2>
 <p>Generated, never hand-edited:</p>
 <div class="table-wrapper">
@@ -3380,6 +3393,7 @@ so the rules hold without anyone having to remember them. Most are adopted from 
 <tr><td><strong>Layering</strong></td><td>Crates depend only on lower layers (<a href="#architecture">architecture</a>); dependencies like <code>clap</code> or <code>tiny-skia</code> only where allowed</td><td><code>xtask/src/layers.rs</code> (append-only table)</td><td><code>cargo xtask layers</code> · CI</td></tr>
 <tr><td><strong>Module size</strong></td><td>Rust files warn above 800 lines, fail above 1,500 (generated files exempt)</td><td><code>xtask/src/filesize.rs</code></td><td><code>cargo xtask filesize</code> · CI</td></tr>
 <tr><td>WebAssembly</td><td>L0–L3 crates and the plug-in build for <code>wasm32-unknown-unknown</code></td><td><code>xtask/src/wasm.rs</code></td><td><code>cargo xtask wasm</code> · CI</td></tr>
+<tr><td><strong>Movable into VectorCraft</strong></td><td>Every package is <code>stitchcraft-*</code>; crates inherit only workspace keys VectorCraft defines; tooling works from its own folder on StitchCraft’s packages (<a href="#adr-0011-stitchcraft-can-move-into-vectorcrafts-repository">ADR-0011</a>)</td><td><code>xtask/src/layers.rs</code>, <code>xtask/src/util.rs</code>, <code>xtask/src/join.rs</code></td><td><code>move</code> job in <code>compat.yml</code> · daily and on PRs touching manifests or tooling</td></tr>
 <tr><td><strong>Clean room</strong></td><td>No GPL/AGPL licence text or Ink/Stitch source paths anywhere in the repository, documents included</td><td><code>xtask/src/cleanroom.rs</code></td><td><code>cargo xtask cleanroom</code> · CI</td></tr>
 <tr><td>Docs</td><td>Generated pages fresh, links and anchors valid, mentioned <code>cargo xtask</code> commands exist, ids exist</td><td><code>xtask/src/docs.rs</code></td><td><code>cargo xtask docs --check</code> · CI</td></tr>
 <tr><td>Docs images</td><td>Every image declared in <code>docs/shots.toml</code>, with alt text, and regenerating to the committed file</td><td><code>xtask/src/shots.rs</code></td><td><code>cargo xtask shots --check</code> · CI</td></tr>
@@ -3821,6 +3835,7 @@ supersedes the old one.</p>
 <tr><td><a href="#adr-0008-conformance-first-development">0008</a></td><td>Conformance-first development</td><td>Accepted</td></tr>
 <tr><td><a href="#adr-0009-adopt-vectorcrafts-conventions-improve-the-ones-that-drift">0009</a></td><td>Adopt VectorCraft’s conventions; improve the ones that drift</td><td>Accepted</td></tr>
 <tr><td><a href="#adr-0010-coded-diagnostics-with-explanation-pages">0010</a></td><td>Coded diagnostics with explanation pages</td><td>Accepted</td></tr>
+<tr><td><a href="#adr-0011-stitchcraft-can-move-into-vectorcrafts-repository">0011</a></td><td>StitchCraft can move into VectorCraft’s repository</td><td>Accepted</td></tr>
 </tbody>
 </table>
 </div>
@@ -4112,6 +4127,88 @@ Details: <a href="#diagnostics">diagnostics</a>.</p>
 <li>Issue reports can cite a code; search engines find the explanation page.</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div>
+<h1 id="adr-0011-stitchcraft-can-move-into-vectorcrafts-repository"><a class="header" href="#adr-0011-stitchcraft-can-move-into-vectorcrafts-repository">ADR-0011: StitchCraft can move into VectorCraft’s repository</a></h1>
+<p><strong>Status:</strong> Accepted · 2026-10-08</p>
+<h2 id="context-10"><a class="header" href="#context-10">Context</a></h2>
+<p>If VectorCraft’s maintainers want machine embroidery in VectorCraft itself, they should be able to take
+this repository into theirs without a rewrite. Much already lines up: the same licence
+(MIT OR Apache-2.0), edition (2024), minimum Rust version (1.95), formatting and lint style
+(<a href="#adr-0009-adopt-vectorcrafts-conventions-improve-the-ones-that-drift">ADR-0009</a>).</p>
+<p>We tried it on 2026-10-08 with VectorCraft <code>main</code> at <code>a469568c</code>: a copy of this repository as the folder
+<code>stitchcraft/</code>, and a VectorCraft crate depending on <code>stitchcraft-engine</code> by path. It failed in three
+ways:</p>
+<ol>
+<li>Cargo gave our crates VectorCraft’s workspace settings, because the path dependency sits inside
+VectorCraft’s workspace directory. Our crates inherited <code>publish</code>, which VectorCraft’s workspace does
+not define, so Cargo refused to load them. Once VectorCraft’s manifest excluded the folder
+(<code>exclude = ["stitchcraft"]</code>), the path dependency resolved against our own workspace and built.</li>
+<li>Both repositories call their tooling package <code>xtask</code>, so the two cannot share one workspace.</li>
+<li>Our tooling ran <code>cargo … --workspace</code> and read every package in <code>cargo metadata</code>. Inside a shared
+workspace it would build, lint and test VectorCraft’s crates too, and the layering check would call
+them unknown.</li>
+</ol>
+<h2 id="decision-9"><a class="header" href="#decision-9">Decision</a></h2>
+<p>The repository stays movable <strong>as one folder</strong>, in either of two ways. Both are one command, and CI
+rehearses both against VectorCraft’s latest release and <code>main</code>.</p>
+<p><strong>Nested.</strong> Copy the folder in, with history if wanted
+(<code>git subtree add --prefix=stitchcraft https://github.com/KaboomFox/stitchcraft main</code>), then run
+<code>cargo xtask compat join --nested ..</code> from it. That adds the folder to VectorCraft’s <code>exclude</code> list.
+StitchCraft keeps its own workspace, lockfile, toolchain pin and gates (<code>cargo xtask ci</code> inside the
+folder), and VectorCraft’s crates may depend on StitchCraft’s by path.</p>
+<p><strong>Joined.</strong> After the copy, run <code>cargo xtask compat join ..</code> instead (or after a nested join). It edits
+VectorCraft’s root <code>Cargo.toml</code> in place, keeping its comments and layout:</p>
+<ul>
+<li>our crates, apps and tooling become members;</li>
+<li>our <code>[workspace.dependencies]</code> are merged into VectorCraft’s: VectorCraft’s own entry is reused where
+it satisfies ours, and any features we need are added;</li>
+<li>our root <code>Cargo.toml</code> and <code>Cargo.lock</code> are removed, leaving one workspace and one lockfile.</li>
+</ul>
+<p>It refuses, writing nothing, when the two cannot merge: a dependency in an incompatible version, a
+setting our crates inherit that VectorCraft does not define, or a name clash. It prints the rows
+VectorCraft’s layering table needs. The tooling keeps working from the folder: <code>cargo xtask ci</code> there
+builds, lints and tests StitchCraft’s packages, with VectorCraft’s lockfile and lints.</p>
+<p>These rules keep it that way:</p>
+<ul>
+<li><strong>Every package is named <code>stitchcraft-*</code></strong>, the tooling included (<code>stitchcraft-xtask</code>, still run as
+<code>cargo xtask</code>). The layering table holds only prefixed names, and an unlisted package fails
+<code>cargo xtask layers</code>.</li>
+<li><strong>Crate manifests inherit only what VectorCraft’s workspace defines</strong>: <code>version</code>, <code>edition</code>, <code>license</code>,
+<code>rust-version</code>, <code>repository</code>, and lints. Each crate sets <code>publish = false</code> itself.</li>
+<li><strong>Tooling is relative to its own folder.</strong> Files are found from the folder that holds <code>xtask/</code>, never
+from the Git root or the current directory. Cargo commands name StitchCraft’s packages instead of
+<code>--workspace</code> (<code>util::packages</code>). Inside a larger workspace, <code>cargo-deny</code> is skipped, because it judges
+a whole workspace and VectorCraft’s answers to VectorCraft’s policy.</li>
+<li><strong>Configuration that should follow the code lives in the folder.</strong> Clippy and rustfmt read the
+configuration file nearest each crate, so our determinism rules (<code>clippy.toml</code>) keep applying to our
+crates, and VectorCraft’s to theirs.</li>
+<li><strong>Generated files never depend on where the folder is</strong>: no absolute paths, no repository-relative
+paths outside it. <code>cargo xtask docs --check</code> and <code>shots --check</code> run in the rehearsal.</li>
+</ul>
+<h2 id="what-stays-with-vectorcrafts-maintainers"><a class="header" href="#what-stays-with-vectorcrafts-maintainers">What stays with VectorCraft’s maintainers</a></h2>
+<ul>
+<li><strong>Workflows.</strong> GitHub reads them only at the repository root. Ours call <code>cargo xtask …</code>, so moving
+them is a matter of <code>working-directory: stitchcraft</code>.</li>
+<li><strong>Their own checks.</strong> In the joined form, their layering table needs rows for our crates (printed by
+<code>compat join</code>), and their repository-wide checks will see our files.</li>
+<li><strong>The plug-in shim.</strong> <code>apps/stitchcraft-vc-plugin</code> talks to VectorCraft through ABI v1. Inside
+VectorCraft, the engine can be called directly instead; that is their integration choice.</li>
+</ul>
+<h2 id="consequences-10"><a class="header" href="#consequences-10">Consequences</a></h2>
+<ul>
+<li>Taking StitchCraft into VectorCraft is a folder copy plus one command, and the <code>move</code> job in
+<code>compat.yml</code> proves it daily, so a change that would break it fails here first.</li>
+<li>Small constraints for us: no <code>publish.workspace</code>, no <code>--workspace</code> in tooling, and a prefixed name
+for every package.</li>
+</ul>
+<h2 id="alternatives-considered-5"><a class="header" href="#alternatives-considered-5">Alternatives considered</a></h2>
+<ul>
+<li><strong>Publish the crates to crates.io and let VectorCraft depend on them.</strong> Possible later. It doesn’t
+bring the docs, tests and gates along, and it isn’t what “moving into their codebase” means.</li>
+<li><strong>Relative <code>path</code> dependencies instead of workspace dependencies.</strong> That would make crates movable
+without merging tables, but it departs from VectorCraft’s convention and repeats every version in
+every crate. <code>compat join</code> merges the tables instead.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div>
 <h1 id="roadmap-small-steps-to-the-final-project"><a class="header" href="#roadmap-small-steps-to-the-final-project">Roadmap: small steps to the final project</a></h1>
 <p>Each <strong>step</strong> is one pull request: small, reviewable, with its tests, conformance cases and docs. Each
 <strong>milestone</strong> ends with green gates and, where it produces something sewable, a <strong>machine checkpoint</strong>
@@ -4137,6 +4234,7 @@ of code) · 🧵 machine checkpoint · 👤 owner action</p>
 <tr><td>M0.6 🧪</td><td>VectorCraft “hello” plug-in: identity live effect built in CI for <code>wasm32-unknown-unknown</code>; Level A contract test against the pinned stable <code>vectorcraft-plugins</code> (v0.6.0, now v0.7.0), <code>release</code> and <code>main</code>; measure fuel per output byte</td><td>Contract test green in <code>compat.yml</code> (done: green on every track, 2026-10-08); budget numbers recorded in the integration doc (open)</td></tr>
 <tr><td>M0.7 🧪</td><td>Geometry spike (<a href="#adr-0005-geometry-stack">ADR-0005</a> criteria)</td><td>ADR-0005 accepted or revised</td></tr>
 <tr><td>M0.8 🧪</td><td>Headless VectorCraft window in CI (Xvfb + Mesa) taking <code>ui.screenshot</code> twice with identical pixels</td><td>Decision recorded in the docs pipeline page</td></tr>
+<tr><td>M0.9 ✅</td><td>Movable into VectorCraft (<a href="#adr-0011-stitchcraft-can-move-into-vectorcrafts-repository">ADR-0011</a>): packages prefixed, manifests inheriting only what VectorCraft defines, tooling scoped to its folder and packages, <code>cargo xtask compat join [--nested]</code>, and a daily <code>move</code> job</td><td><code>move</code> green against VectorCraft’s latest release and <code>main</code></td></tr>
 <tr><td>M0.10 ✅</td><td>Clean room, tightened: no document describes Ink/Stitch’s code; Ink/Stitch is named only for file compatibility and in the independence notices; <code>cargo xtask cleanroom</code> scans documents too</td><td><code>cleanroom</code> green over the whole repository</td></tr>
 </tbody>
 </table>

@@ -35,10 +35,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-046d5ac5.js";
+            window.path_to_searchindex_js = "../searchindex-712d0b9e.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-06242336.js"></script>
+        <script src="../toc-e486a7f9.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -200,6 +200,7 @@ so the rules hold without anyone having to remember them. Most are adopted from 
 <tr><td><strong>Layering</strong></td><td>Crates depend only on lower layers (<a href="architecture.html">architecture</a>); dependencies like <code>clap</code> or <code>tiny-skia</code> only where allowed</td><td><code>xtask/src/layers.rs</code> (append-only table)</td><td><code>cargo xtask layers</code> · CI</td></tr>
 <tr><td><strong>Module size</strong></td><td>Rust files warn above 800 lines, fail above 1,500 (generated files exempt)</td><td><code>xtask/src/filesize.rs</code></td><td><code>cargo xtask filesize</code> · CI</td></tr>
 <tr><td>WebAssembly</td><td>L0–L3 crates and the plug-in build for <code>wasm32-unknown-unknown</code></td><td><code>xtask/src/wasm.rs</code></td><td><code>cargo xtask wasm</code> · CI</td></tr>
+<tr><td><strong>Movable into VectorCraft</strong></td><td>Every package is <code>stitchcraft-*</code>; crates inherit only workspace keys VectorCraft defines; tooling works from its own folder on StitchCraft’s packages (<a href="adr/0011-movable-into-vectorcraft.html">ADR-0011</a>)</td><td><code>xtask/src/layers.rs</code>, <code>xtask/src/util.rs</code>, <code>xtask/src/join.rs</code></td><td><code>move</code> job in <code>compat.yml</code> · daily and on PRs touching manifests or tooling</td></tr>
 <tr><td><strong>Clean room</strong></td><td>No GPL/AGPL licence text or Ink/Stitch source paths anywhere in the repository, documents included</td><td><code>xtask/src/cleanroom.rs</code></td><td><code>cargo xtask cleanroom</code> · CI</td></tr>
 <tr><td>Docs</td><td>Generated pages fresh, links and anchors valid, mentioned <code>cargo xtask</code> commands exist, ids exist</td><td><code>xtask/src/docs.rs</code></td><td><code>cargo xtask docs --check</code> · CI</td></tr>
 <tr><td>Docs images</td><td>Every image declared in <code>docs/shots.toml</code>, with alt text, and regenerating to the committed file</td><td><code>xtask/src/shots.rs</code></td><td><code>cargo xtask shots --check</code> · CI</td></tr>

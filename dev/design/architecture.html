@@ -35,10 +35,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-046d5ac5.js";
+            window.path_to_searchindex_js = "../searchindex-712d0b9e.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-06242336.js"></script>
+        <script src="../toc-e486a7f9.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -209,7 +209,7 @@ L0  stitchcraft-core ◀── stitchcraft-params
 
 apps:  stitchcraft-cli (bin `stitch`)   stitchcraft-vc-plugin (wasm32 cdylib)
 test:  stitchcraft-testkit (dev-dependency only)
-tools: xtask
+tools: stitchcraft-xtask (`xtask/`, run as `cargo xtask`)
 </code></pre>
 <div class="table-wrapper">
 <table>
@@ -228,7 +228,7 @@ tools: xtask
 <tr><td><code>stitchcraft-testkit</code></td><td>test</td><td>fixtures, <code>proptest</code> strategies (from the registry), invariant assertions</td><td>be a normal dependency</td></tr>
 <tr><td><code>stitchcraft-cli</code></td><td>app</td><td>the <code>stitch</code> command; all filesystem access</td><td>contain engine logic</td></tr>
 <tr><td><code>stitchcraft-vc-plugin</code></td><td>app</td><td>VectorCraft ABI v1 shim + plug-in manifests</td><td>contain engine logic; <code>unsafe</code> outside <code>abi.rs</code></td></tr>
-<tr><td><code>xtask</code></td><td>tools</td><td>gates (<code>ci</code>, <code>layers</code>, <code>docs</code>, <code>cleanroom</code>, …), generators, compatibility runs</td><td>ship to users</td></tr>
+<tr><td><code>stitchcraft-xtask</code></td><td>tools</td><td>gates (<code>ci</code>, <code>layers</code>, <code>docs</code>, <code>cleanroom</code>, …), generators, compatibility runs; works from its own folder, on StitchCraft’s packages only (<a href="adr/0011-movable-into-vectorcraft.html">ADR-0011</a>)</td><td>ship to users</td></tr>
 </tbody>
 </table>
 </div>

@@ -35,10 +35,10 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-e51bd65c.js";
+            window.path_to_searchindex_js = "../../searchindex-046d5ac5.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../../toc-631d94b1.js"></script>
+        <script src="../../toc-06242336.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -184,8 +184,8 @@
 <p><strong>Status:</strong> Accepted · 2026-10-08</p>
 <h2 id="context"><a class="header" href="#context">Context</a></h2>
 <p>Parameters appear in at least seven places: generators, validation, VectorCraft manifests, the CLI,
-SVG attributes, documentation and property tests. Ink/Stitch declares them in code and documents them
-again by hand; six code parameters have no docs entry (<a href="../inkstitch-analysis.html#f6--parameters-described-twice-by-hand">F6</a>).</p>
+SVG attributes, documentation and property tests. When each place restates them by hand they drift
+apart: a parameter is added in code and never documented, or its documented default goes stale.</p>
 <h2 id="decision"><a class="header" href="#decision">Decision</a></h2>
 <p>Declare each parameter once, next to its generator, with a <code>params!</code> macro (doc comment = help text).
 Generate typed structs, validation, manifests, CLI help, SVG mapping, docs pages, JSON Schema and

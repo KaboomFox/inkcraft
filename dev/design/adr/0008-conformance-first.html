@@ -35,10 +35,10 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-e51bd65c.js";
+            window.path_to_searchindex_js = "../../searchindex-046d5ac5.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../../toc-631d94b1.js"></script>
+        <script src="../../toc-06242336.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -183,8 +183,9 @@
                         <h1 id="adr-0008-conformance-first-development"><a class="header" href="#adr-0008-conformance-first-development">ADR-0008: Conformance-first development</a></h1>
 <p><strong>Status:</strong> Accepted · 2026-10-08</p>
 <h2 id="context"><a class="header" href="#context">Context</a></h2>
-<p>The main complaint about Ink/Stitch’s quality is testing: 52 test functions for 45k lines; issue #245
-“automated testing” open since 2018; 62 error-related commits since 2024, none of which touched the tests.</p>
+<p>When behaviour is specified only by its implementation, nobody can say what “correct” means: a fix for
+one input silently breaks another, and a regression looks like any other change. Stitch generators are
+especially prone to this, because their output is thousands of coordinates no reviewer reads.</p>
 <h2 id="decision"><a class="header" href="#decision">Decision</a></h2>
 <p>Behaviour is specified as numbered requirements (<code>conformance/requirements.toml</code>) and proven by data-
 driven cases (<code>conformance/cases/</code>) across five levels (invariants, formats, generator properties,

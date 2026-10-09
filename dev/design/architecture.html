@@ -35,10 +35,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-e51bd65c.js";
+            window.path_to_searchindex_js = "../searchindex-046d5ac5.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-631d94b1.js"></script>
+        <script src="../toc-06242336.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -218,7 +218,7 @@ tools: xtask
 </thead>
 <tbody>
 <tr><td><code>stitchcraft-core</code></td><td>L0</td><td><code>Mm</code>, <code>Point</code>, <code>Vec2</code>, tolerances, deterministic math (<code>libm</code> wrappers), <code>SplitMix64</code> RNG, <code>Budget</code>, <code>Diagnostic</code>/<code>Code</code>/<code>Severity</code></td><td>depend on any workspace crate</td></tr>
-<tr><td><code>stitchcraft-params</code></td><td>L0</td><td><code>ParamSpec</code> registry, <code>ParamSet</code>, value parsing/validation, JSON-schema and docs model</td><td>know any stitch algorithm</td></tr>
+<tr><td><code>stitchcraft-params</code></td><td>L0</td><td><code>params!</code>, <code>ParamSpec</code>, <code>ParamSet</code>, value parsing and validation, the registry audit (the list of declarations is <code>stitchcraft_engine::registry</code>)</td><td>know any stitch algorithm</td></tr>
 <tr><td><code>stitchcraft-plan</code></td><td>L1</td><td><code>Stitch</code>, <code>StitchKind</code>, <code>ColorBlock</code>, <code>StitchPlan</code>, <code>Thread</code>, palettes, <code>MachineProfile</code>, plan invariants</td><td>generate stitches; read/write files</td></tr>
 <tr><td><code>stitchcraft-engine</code></td><td>L2</td><td><code>Design</code>/<code>Element</code>/<code>Shape</code>, normalization, generators, plan assembly</td><td>depend on formats, render or any adapter</td></tr>
 <tr><td><code>stitchcraft-formats</code></td><td>L2</td><td>readers/writers (PES/PEC, DST, …), quantization, format limits</td><td>depend on engine (it encodes <em>plans</em>)</td></tr>
@@ -325,7 +325,7 @@ absolute: in wasm a panic aborts the module and VectorCraft reports the plug-in 
 </thead>
 <tbody>
 <tr><td>A new stitch type</td><td><code>crates/stitchcraft-engine/src/generators/&lt;name&gt;/</code></td><td>registry params, diagnostics, conformance cases, docs page — see the <a href="../contributing/playbook-new-stitch-type.html">playbook</a></td></tr>
-<tr><td>A parameter</td><td>the generator’s <code>params!</code> block</td><td>nothing else by hand: docs, schemas and CLI regenerate</td></tr>
+<tr><td>A parameter</td><td>the generator’s <code>params!</code> block</td><td>nothing else by hand: docs and schemas regenerate; a new <code>…Params</code> declaration also gets a line in <code>stitchcraft_engine::registry::PARAMETERS</code> — see the <a href="../contributing/playbook-new-param.html">playbook</a></td></tr>
 <tr><td>A machine format</td><td><code>crates/stitchcraft-formats/src/&lt;format&gt;/</code></td><td><a href="../contributing/playbook-new-format.html">format playbook</a></td></tr>
 <tr><td>A machine profile</td><td><code>crates/stitchcraft-plan/src/profiles/</code> (data)</td><td>machine-testing record</td></tr>
 <tr><td>A diagnostic</td><td>the diagnostics registry in <code>stitchcraft-core</code></td><td>explanation text + a case that triggers it</td></tr>

@@ -35,10 +35,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-e51bd65c.js";
+            window.path_to_searchindex_js = "../searchindex-046d5ac5.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-631d94b1.js"></script>
+        <script src="../toc-06242336.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -181,9 +181,8 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="conformance-testing"><a class="header" href="#conformance-testing">Conformance testing</a></h1>
-<p>Ink/Stitch shows what happens when behaviour is specified only by its implementation: fixes for one
-input break another, and nobody can say what “correct” means (<a href="inkstitch-analysis.html#f1--tests-cover-almost-nothing-of-the-stitch-engine">finding F1</a>).
-StitchCraft specifies behaviour as <strong>requirements</strong>, proves each with <strong>cases</strong>, and reports the result
+<p>When behaviour is specified only by its implementation, fixes for one input break another and nobody
+can say what “correct” means. StitchCraft specifies behaviour as <strong>requirements</strong>, proves each with <strong>cases</strong>, and reports the result
 as a <strong>matrix</strong> on every pull request. Code is written to make cases pass, not the other way round
 (<a href="adr/0008-conformance-first.html">ADR-0008</a>).</p>
 <h2 id="vocabulary"><a class="header" href="#vocabulary">Vocabulary</a></h2>
@@ -209,7 +208,7 @@ id = "REQ-FILL-TAT-006"
 area = "fill/tatami"
 level = "L2"
 statement = "Pull compensation preserves the number of holes and connected components of the region."
-rationale = "Ink/Stitch #3395: compensation by buffering closed deliberate gaps."
+rationale = "Compensating by growing the whole shape closes gaps the designer left on purpose."
 milestone = "M5"
 status = "planned"        # planned | active | retired
 </code></pre>
@@ -285,8 +284,24 @@ suite produces, whatever the case is about. A case never needs to ask for them.<
 <h3 id="l1--formats-every-pr-fuzzing-nightly"><a class="header" href="#l1--formats-every-pr-fuzzing-nightly">L1 — Formats (every PR; fuzzing nightly)</a></h3>
 <p>Golden bytes for canonical plans; round trips on random plans (<code>proptest</code>); every command per format;
 empty and degenerate files; the <strong>pyembroidery oracle</strong> job (pinned version, in its own CI job) decodes
-our files and must agree on every stitch; <code>cargo-fuzz</code> targets per reader run nightly with a persisted
-corpus (<a href="formats.html#conformance">formats</a>).</p>
+our files and must agree on every stitch; <code>cargo-fuzz</code> targets run nightly with a persisted corpus
+(<a href="formats.html#conformance">formats</a>).</p>
+<h4 id="fuzzing"><a class="header" href="#fuzzing">Fuzzing</a></h4>
+<p><code>fuzz/</code> holds one target per reader (<code>read_pes</code>, <code>read_dst</code>) and one for a file’s whole journey
+(<code>read_write_preview</code>: read, write in every format, read the PES file back, preview). Each target is
+one line; its body is in <code>stitchcraft-testkit::fuzz</code>, so every pull request runs the bodies on the golden
+files, every shortening of them and random bytes, on stable Rust and all three operating systems. The
+properties (<code>REQ-FMT-006</code>): no panic; at most 2,000,000 entries and no position beyond ±10 m from any
+reader; a plan read from anything is written in every format, and its PES file reads back to a plan the
+machine sews the same way; a preview never panics.</p>
+<p>Every night <code>nightly.yml</code> fuzzes each target for 20 minutes with libFuzzer (<code>-timeout=10</code>,
+<code>-rss_limit_mb=2048</code>). The corpus starts from the golden machine files and is kept, minimised, in the
+Actions cache, so each night continues where the last stopped. A crash fails the job and keeps the input
+as an artifact. To work on one locally:</p>
+<pre><code class="language-sh">cargo +nightly fuzz run read_pes                        # until stopped; corpus in fuzz/corpus/read_pes
+cargo +nightly fuzz run read_pes fuzz/artifacts/read_pes/crash-…   # reproduce a crash
+</code></pre>
+<p>A crash becomes a regression test next to the code it found a bug in, before the fix.</p>
 <h3 id="l2--generator-properties-every-pr"><a class="header" href="#l2--generator-properties-every-pr">L2 — Generator properties (every PR)</a></h3>
 <p>Property tests per generator (<a href="algorithms/README.html">algorithms</a>), run over:</p>
 <ul>
@@ -318,8 +333,8 @@ CC0), in a container, producing stitch files. We compare <strong>metrics, not st
 (±10 %), bounds (±0.5 mm), colour sequence (exact), trims and jumps (±1), coverage IoU (≥ 0.9). Running
 Ink/Stitch as an oracle uses it, it does not copy it; implementers see metric reports, not Ink/Stitch
 code. Differences we intend are recorded in the <strong>deviations ledger</strong> (<code>conformance/deviations.toml</code>),
-each with a reason and a link to the requirement that motivates it (for example row-end compensation,
-L4 of the issues review). Starts in M8.</p>
+each with a reason and a link to the requirement that motivates it (for example <code>DEV-LCK-001</code>: the
+lock shapes are StitchCraft’s own). Starts in M8.</p>
 <h3 id="l4--physical-milestone-gates"><a class="header" href="#l4--physical-milestone-gates">L4 — Physical (milestone gates)</a></h3>
 <p>Machine checkpoints sew generated test sheets on the target machine and record the results through the
 <strong>Sew-out report</strong> issue form (<a href="../plan/machine-testing.html">machine testing</a>). A checkpoint result is
@@ -332,7 +347,9 @@ with such a record.</p>
 away; in GitHub Actions it is appended to the job summary, so every pull request shows it;</li>
 <li><code>report.json</code> — machine-readable results, for the docs (requirement pages will show their status);</li>
 <li><code>hashes.json</code> — one SHA-256 per output, for the <a href="determinism.html#cross-platform-check">cross-platform determinism</a> job;</li>
-<li>from M2.6, <code>diffs/</code> — for failing golden cases, before/after stitch renders and a side-by-side PNG.</li>
+<li><code>diffs/</code> — for a machine-file golden that differs, previews (simple style) of the golden file and of
+the new output, so a reviewer sees what sews differently; CI keeps them as a workflow artifact when a
+run fails.</li>
 </ul>
 <p>It fails when a case fails or an active requirement has no passing case. <code>--filter &lt;text&gt;</code> runs only the
 cases whose id, test name or requirements contain the text (and skips the “every active requirement”
@@ -340,7 +357,8 @@ rule, since the run is partial). <code>cargo xtask ci</code> runs the whole suit
 <p><code>cargo xtask conformance --bless &lt;case&gt;</code> rewrites a data case’s golden files. CI refuses a pull request
 that changes files under <code>conformance/golden/</code> unless it carries the <code>golden-change</code> label and a line in
 <code>CHANGELOG.md</code>. For the canonical-plan goldens of the format tests, bless with
-<code>STITCHCRAFT_BLESS=1 cargo test -p stitchcraft-formats --test golden</code>. Later, <code>stitch conformance run</code>
+<code>STITCHCRAFT_BLESS=1 cargo test -p stitchcraft-formats --test golden</code>; for the preview goldens
+(<code>REQ-RND-002</code>), with <code>STITCHCRAFT_BLESS=1 cargo test -p stitchcraft-render --test preview</code>. Later, <code>stitch conformance run</code>
 will let users validate a machine profile with the same cases.</p>
 <h2 id="gates"><a class="header" href="#gates">Gates</a></h2>
 <div class="table-wrapper">
@@ -349,8 +367,9 @@ will let users validate a machine profile with the same cases.</p>
 <tr><th>When</th><th>What must pass</th></tr>
 </thead>
 <tbody>
-<tr><td>Every PR</td><td>L0, L1 (no fuzzing), L2 with fixed seeds, <code>--check</code> rules, cross-platform hashes</td></tr>
-<tr><td>Nightly</td><td>L1 fuzzing, L2 fresh seeds, L3 differential, mutation testing on changed crates</td></tr>
+<tr><td>Every PR</td><td>L0, L1 (no fuzzing), L2 with fixed seeds, <code>--check</code> rules, cross-platform hashes, coverage floors</td></tr>
+<tr><td>Nightly</td><td>L1 fuzzing, L2 fresh seeds, L3 differential</td></tr>
+<tr><td>Weekly</td><td>Mutation testing of every shipped crate, against the recorded counts</td></tr>
 <tr><td>Milestone close</td><td>All requirements of the milestone <code>active</code> and green; its machine checkpoint signed off</td></tr>
 <tr><td>Release</td><td>Everything above, plus the compatibility gate green on VectorCraft <code>stable</code></td></tr>
 </tbody>
@@ -360,7 +379,13 @@ will let users validate a machine profile with the same cases.</p>
 <p>Conformance cases describe behaviour users see. Unit tests (in modules), snapshot tests (<code>insta</code>, for
 intermediate structures such as cell decompositions) and CLI examples in the docs (<code>trycmd</code>) still cover
 internals and documentation; mutation testing (<code>cargo-mutants</code>) and a coverage ratchet (<code>cargo-llvm-cov</code>)
-measure how well all of them together bite.</p>
+measure how well all of them together bite (<a href="guardrails.html">guardrails</a>).</p>
+<p>Both are ratchets. <code>conformance/coverage.toml</code> holds a line-coverage floor per crate, which a pull
+request may not fall below and <code>cargo xtask coverage --record</code> only raises. <code>conformance/mutation.toml</code>
+holds, per crate, how many mutants no test notices: the weekly run fails when a crate has more, and
+<code>cargo xtask mutants --record</code> only lowers the counts. The weekly job summary lists every missed mutant,
+which is the to-do list for better tests. Each mutant is judged by its own crate’s tests
+(<code>.cargo/mutants.toml</code>), so each crate answers for its own code.</p>
 
                     </main>
 

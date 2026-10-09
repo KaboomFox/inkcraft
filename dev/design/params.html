@@ -35,10 +35,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-e51bd65c.js";
+            window.path_to_searchindex_js = "../searchindex-046d5ac5.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-631d94b1.js"></script>
+        <script src="../toc-06242336.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -191,77 +191,104 @@ params! { … }  ─────────┼──▶ VectorCraft plug-in man
                         ├──▶ reference docs pages + JSON Schema (generated, checked in CI)
                         └──▶ proptest strategies for conformance and fuzzing
 </code></pre>
-<p>This is the answer to Ink/Stitch’s drift between code labels and a hand-maintained docs dataset
-(<a href="inkstitch-analysis.html#f6--parameters-described-twice-by-hand">finding F6</a>).</p>
+<p>Nothing about a parameter is written twice, so its label, help, range and default cannot drift apart
+between the code, the docs and the user interfaces.</p>
 <h2 id="declaring-parameters"><a class="header" href="#declaring-parameters">Declaring parameters</a></h2>
 <p>Parameters are declared with a <code>macro_rules!</code> macro (no proc-macro crate, so contributors read plain
-Rust and builds stay fast). Doc comments become the help text.</p>
+Rust and builds stay fast). The field name is the key; the doc comment is the help text, written for an
+embroiderer. The real declaration of the settings every stitch type shares, in
+<code>crates/stitchcraft-engine/src/common.rs</code>, starts like this:</p>
 <pre><code class="language-rust ignore">params! {
-    /// Tatami fill.
-    pub struct TatamiParams for StitchType::Tatami {
-        group "Fill";
+    /// Settings every stitch type shares: lock stitches where the element's stitching starts and
+    /// ends, a trim or a stop after it, and the shortest stitch and jump.
+    pub struct CommonParams for StitchType::ALL;
 
-        /// Distance between rows of stitches. Smaller is denser.
-        row_spacing: Length = mm(0.25), range mm(0.1)..=mm(10.0), key "row_spacing_mm";
+    "Lock stitches" {
+        /// Where the element gets lock stitches: …
+        ties: Choice = "0", label "Lock stitches",
+            options ["0" =&gt; "At the start and the end", "1" =&gt; "At the start", "2" =&gt; "At the end", "3" =&gt; "None"];
 
-        /// Angle of the rows, counter-clockwise from horizontal.
-        angle: Angle = deg(0.0), key "angle";
+        /// The shape of the lock stitches at the start. …
+        lock_start: Choice = "half_stitch", label "Start lock", choices LOCKS,
+            origin Origin::InkStitchDeviates { deviation: "DEV-LCK-001" };
 
-        /// Longest stitch along a row before it is split.
-        max_stitch_length: Length = mm(4.0), range mm(0.5)..=mm(12.0), key "max_stitch_length_mm";
+        /// The shape of a custom start lock: …
+        lock_custom_start: Text = "", label "Custom start lock", when lock_start == "custom";
 
-        /// How many rows before the stitch pattern repeats; hides lines in large fills.
-        staggers: Count = 4, range 1..=20, key "staggers";
-
-        group "Fill underlay";
-
-        /// Sew a sparse layer under the fill to stabilize the fabric.
-        fill_underlay: Toggle = true, key "fill_underlay";
+        /// The size of start-lock shapes that are measured in millimetres.
+        lock_start_scale_mm: Length = "0.7", label "Start lock size", range (0.1, 10.0);
         …
     }
 }</code></pre>
+<p>Each parameter is <code>key: Kind = "default", label "Label"</code>, followed by what its kind needs and what is
+not the usual: <code>range (min, max)</code> for numbers and lists, <code>options [...]</code> or <code>choices CONST</code> for choices,
+<code>applies</code> when it covers fewer stitch types than its struct, <code>when other == "value"</code> when a user interface
+shows it only then, <code>origin</code> (default <code>Origin::InkStitch</code>) and <code>stability</code> (default <code>Stability::Stable</code>).
+A combination a kind does not take does not compile. Defaults are written as a design stores them, so
+they are checked by the same code as a design’s values. The grammar is in the <code>macros</code> module’s
+documentation.</p>
 <p>The macro expands to:</p>
 <ul>
-<li><code>pub struct TatamiParams { pub row_spacing: Mm, pub angle: Deg, … }</code> with a
-<code>TatamiParams::from_set(&amp;ParamSet) -&gt; Result&lt;Self, Vec&lt;Diagnostic&gt;&gt;</code> constructor;</li>
-<li>a <code>static</code> slice of <code>ParamSpec</code> registered in the global registry (an ordered list, no
-life-before-main tricks: the registry is a plain <code>const</code> array assembled in one module, listing each
-generator’s specs — adding a generator is one line there).</li>
+<li>the typed struct, <code>pub struct CommonParams { pub ties: &amp;'static str, pub lock_start_scale_mm: Mm, … }</code>,
+each field’s type given by its kind (<code>kinds</code> module), so a field and its validation cannot disagree;</li>
+<li><code>CommonParams::SPECS</code> (a <code>const</code> slice of <code>ParamSpec</code>) and <code>CommonParams::GROUP</code>;</li>
+<li><code>CommonParams::from_set(&amp;ParamSet) -&gt; Result&lt;Validated&lt;CommonParams&gt;, Vec&lt;Diagnostic&gt;&gt;</code>: every
+parameter read from its text or its default, with the clamping warnings beside the values.</li>
 </ul>
+<p>The registry itself is <code>stitchcraft_engine::registry::PARAMETERS</code>, a plain <code>const</code> list of every
+declaration’s <code>GROUP</code> in the engine, next to the generators (no life-before-main tricks; adding a
+generator’s parameters is one line there). <code>stitchcraft-params</code> knows no stitch algorithm.</p>
 <h2 id="paramspec"><a class="header" href="#paramspec"><code>ParamSpec</code></a></h2>
 <pre><code class="language-rust ignore">pub struct ParamSpec {
     pub key: &amp;'static str,          // registry key == Ink/Stitch attribute name when one exists
     pub label: &amp;'static str,        // short UI label (English source string, translation key)
-    pub help: &amp;'static str,         // from the doc comment; Markdown allowed
-    pub kind: Kind,                 // Length, Angle, Percent, Count, Toggle, Choice, Seed, LengthList, Text
-    pub group: &amp;'static str,        // UI and docs grouping
+    pub help: &amp;'static str,         // the doc comment; `help()` gives the Markdown
+    pub kind: Kind,                 // with its limits: range, options, maximum length
+    pub default: &amp;'static str,      // as a design stores it; "" for an empty optional value
+    pub group: &amp;'static str,        // UI and docs section
     pub applies_to: &amp;'static [StitchType],
     pub visible_when: Option&lt;Condition&gt;,   // e.g. lock_custom_start only when lock_start == custom
-    pub stability: Stability,       // Stable | Experimental | Deprecated { since, use_instead }
-    pub since: &amp;'static str,        // first StitchCraft version that accepted it
-    pub origin: Origin,             // InkStitch (same name and meaning) | InkStitchDeviates | StitchCraft
+    pub stability: Stability,       // Stable | Experimental | Deprecated { use_instead }
+    pub origin: Origin,             // InkStitch | InkStitchDeviates { deviation } | StitchCraft
 }</code></pre>
+<p><code>InkStitchDeviates</code> names its entry in the deviations ledger (<code>conformance/deviations.toml</code>), which says
+what differs and why; the reference pages show that entry, so a deviation is described once. A <code>since</code>
+version and a registry schema version arrive with the first release, together with
+<a href="#versioning-and-migration">migrations</a>.</p>
 <h3 id="kinds-and-validation"><a class="header" href="#kinds-and-validation">Kinds and validation</a></h3>
 <div class="table-wrapper">
 <table>
 <thead>
-<tr><th>Kind</th><th>Storage</th><th>Validation</th><th>Ink/Stitch equivalent</th></tr>
+<tr><th>Kind</th><th>Generators get</th><th>Validation</th><th>Ink/Stitch equivalent</th></tr>
 </thead>
 <tbody>
-<tr><td><code>Length</code></td><td>mm, <code>f64</code></td><td>finite, within <code>range</code>; units accepted on input: mm, in, pt</td><td><code>float</code>, unit <code>mm</code></td></tr>
-<tr><td><code>Angle</code></td><td>degrees</td><td>finite; normalized to (−180, 180]</td><td><code>float</code>, unit <code>deg</code></td></tr>
+<tr><td><code>Length</code></td><td><code>Mm</code></td><td>finite, within <code>range</code>; units accepted on input: mm, in, pt</td><td><code>float</code>, unit <code>mm</code></td></tr>
+<tr><td><code>OptionalLength</code></td><td><code>Option&lt;Mm&gt;</code></td><td>as <code>Length</code>, or empty (the setting then comes from the document or the machine)</td><td><code>float</code>, unit <code>mm</code>, no default</td></tr>
+<tr><td><code>Angle</code></td><td>degrees, <code>f64</code></td><td>finite; normalized to (−180, 180]</td><td><code>float</code>, unit <code>deg</code></td></tr>
 <tr><td><code>Percent</code></td><td><code>f64</code></td><td>finite, within range</td><td><code>float</code>, unit <code>%</code></td></tr>
-<tr><td><code>Count</code></td><td><code>u32</code></td><td>within range</td><td><code>int</code></td></tr>
-<tr><td><code>Toggle</code></td><td><code>bool</code></td><td>—</td><td><code>boolean</code>, <code>toggle</code></td></tr>
-<tr><td><code>Choice</code></td><td>string id</td><td>one of the declared ids; unknown ids are a diagnostic, not a default</td><td><code>combo</code>, <code>dropdown</code></td></tr>
-<tr><td><code>Seed</code></td><td><code>u64</code></td><td>any; empty means “derive from element id”</td><td><code>random_seed</code></td></tr>
-<tr><td><code>LengthList</code></td><td><code>Vec&lt;Mm&gt;</code></td><td>1–16 values, each in range (patterns like <code>"2.5 1.0"</code>, asymmetric per-side values)</td><td><code>string</code>/<code>float</code> lists</td></tr>
-<tr><td><code>Text</code></td><td>string</td><td>≤ 4,096 bytes, kind-specific grammar (e.g. custom lock path)</td><td><code>string</code></td></tr>
+<tr><td><code>Count</code></td><td><code>u32</code></td><td>whole, within range</td><td><code>int</code></td></tr>
+<tr><td><code>Toggle</code></td><td><code>bool</code></td><td><code>true</code>/<code>false</code> (also <code>yes</code>/<code>no</code>, <code>on</code>/<code>off</code>, <code>1</code>/<code>0</code>)</td><td><code>boolean</code>, <code>toggle</code></td></tr>
+<tr><td><code>Choice</code></td><td><code>&amp;'static str</code> (the id)</td><td>one of the declared ids; unknown ids are a diagnostic, not a default</td><td><code>combo</code>, <code>dropdown</code></td></tr>
+<tr><td><code>Seed</code></td><td><code>Option&lt;u64&gt;</code></td><td>any; empty means “derive from the element”; text that is not a number is hashed (FNV-1a)</td><td><code>random_seed</code></td></tr>
+<tr><td><code>LengthList</code></td><td><code>Vec&lt;Mm&gt;</code></td><td>1–16 values, each in range (patterns like <code>"2.5 1.0"</code>, per-side values)</td><td><code>string</code>/<code>float</code> lists</td></tr>
+<tr><td><code>CountList</code></td><td><code>Vec&lt;u32&gt;</code></td><td>1–16 whole numbers, each in range</td><td><code>string</code>/<code>int</code> lists</td></tr>
+<tr><td><code>Text</code></td><td><code>String</code></td><td>≤ 4,096 bytes; kind-specific grammar (e.g. a custom lock path) is checked by its user</td><td><code>string</code></td></tr>
 </tbody>
 </table>
 </div>
-<p>Invalid values never fall back silently to defaults: the element gets <code>SC-E0101</code> (wrong type) or
-<code>SC-W0102</code> (clamped to range) with the key, the value and the accepted range.</p>
+<p>Invalid values never fall back silently to defaults: the element gets <code>SC-E0101</code> (not a value of the
+kind; the element cannot be stitched) or <code>SC-W0102</code> (clamped into range), with the key, the value and what
+is accepted. Keys the registry does not know are kept, so they round-trip, and reported once as
+<code>SC-W0105</code>. Parsing lives in one place (<code>value</code> module), so every host reads text the same way: an SVG
+attribute, a command-line <code>key=value</code>, a VectorCraft effect record.</p>
+<h3 id="completeness-req-prm-001"><a class="header" href="#completeness-req-prm-001">Completeness (REQ-PRM-001)</a></h3>
+<p>A declaration that compiles can still be wrong: an empty range, a default outside it, a repeated option,
+a condition on a parameter that does not exist. <code>stitchcraft_params::audit</code> lists every such problem, and
+the engine’s <code>req_prm_001_every_registered_parameter_is_complete</code> test requires the list to be empty.
+<code>cargo xtask docs --check</code> adds the cross-checks with outside data: a parameter of Ink/Stitch origin must
+be in the <a href="inkstitch-compat-contract.html">compatibility contract</a> with a compatible type and the same
+default; one of StitchCraft’s own must not take an Ink/Stitch key; deviations must name ledger entries;
+the lock and method identifiers must equal Ink/Stitch’s.</p>
 <h2 id="naming-rules"><a class="header" href="#naming-rules">Naming rules</a></h2>
 <ol>
 <li>If Ink/Stitch has the parameter with the same meaning, <strong>use its attribute name verbatim</strong>
@@ -283,8 +310,9 @@ never from changing a default.</li>
 <tr><th>Output</th><th>Generated by</th><th>Checked by</th></tr>
 </thead>
 <tbody>
-<tr><td>Reference pages <code>docs/src/user/reference/params/*.md</code></td><td><code>cargo xtask docs</code></td><td><code>cargo xtask docs --check</code> (CI fails if stale)</td></tr>
-<tr><td><code>docs/src/user/reference/params.schema.json</code></td><td><code>cargo xtask docs</code></td><td>same</td></tr>
+<tr><td>Reference pages: the <a href="../user/reference/params.html">index</a> and <code>docs/src/user/reference/params/*.md</code>, one per declaration</td><td><code>cargo xtask docs</code></td><td><code>cargo xtask docs --check</code> (CI fails if stale; pages no declaration produces are deleted)</td></tr>
+<tr><td><code>docs/src/user/reference/params.schema.json</code>: the parameters as JSON values (numbers, booleans, strings, arrays, <code>null</code> for empty), for editors, presets and JSON hosts</td><td><code>cargo xtask docs</code></td><td>same</td></tr>
+<tr><td>The <em>StitchCraft</em> column of the <a href="inkstitch-compat-contract.html">Ink/Stitch compatibility contract</a></td><td><code>cargo xtask docs</code></td><td>same, plus the cross-checks above</td></tr>
 <tr><td>VectorCraft manifests (embedded in each <code>.wasm</code>)</td><td><code>build.rs</code> of the plug-in crate, from the registry</td><td>plug-in tests validate them against VectorCraft’s manifest rules</td></tr>
 <tr><td>CLI parameter help</td><td>at runtime from the registry</td><td><code>trycmd</code> examples</td></tr>
 <tr><td>SVG attribute read/write</td><td><code>stitchcraft-svg</code> iterates the registry</td><td>round-trip property test <code>REQ-PRM-003</code></td></tr>

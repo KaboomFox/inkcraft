@@ -35,10 +35,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-e51bd65c.js";
+            window.path_to_searchindex_js = "../searchindex-046d5ac5.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-631d94b1.js"></script>
+        <script src="../toc-06242336.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -228,9 +228,8 @@ whose letter disagrees with its severity, or whose explanation is missing. From 
 <li>a test fails when a code has no explanation, no triggering conformance case, or a case triggers a
 code that is not registered.</li>
 </ul>
-<p>That last rule is what keeps error paths alive: Ink/Stitch shipped an error message reading “There
-are d color changes” because the message was never rendered by a test
-(<a href="inkstitch-analysis.html#f4--a-verified-bug-in-an-error-path">finding F4</a>).</p>
+<p>That last rule is what keeps error paths alive: a message that no test ever renders can ship with a
+typo in its formatting and nobody sees it until a user does.</p>
 <h2 id="writing-good-messages"><a class="header" href="#writing-good-messages">Writing good messages</a></h2>
 <ul>
 <li>Say what is wrong <em>and</em> by how much: “Rows are 0.25 mm apart but the region is only 0.18 mm tall.”</li>
@@ -243,7 +242,10 @@ are d color changes” because the message was never rendered by a test
 undo (for example “rotate the design 90°” for <code>SC-W0702</code> when the rotated bounds fit, or “drop the
 dangling rung” for <code>SC-W0203</code>). Applied fixes go through the host’s command system so they are undoable.</p>
 <h2 id="initial-codes"><a class="header" href="#initial-codes">Initial codes</a></h2>
-<p>Codes referenced by the design docs; each is registered in the milestone that implements it.</p>
+<p>Codes referenced by the design docs; each is registered in the milestone that implements it. A
+registered code must keep its row here, with the same severity and a title that starts with the
+registry’s (<code>cargo xtask docs --check</code>), so a code allocated for one thing cannot be registered for
+another.</p>
 <div class="table-wrapper">
 <table>
 <thead>
@@ -251,8 +253,9 @@ dangling rung” for <code>SC-W0203</code>). Applied fixes go through the host�
 </thead>
 <tbody>
 <tr><td><code>SC-E0004</code></td><td>Error</td><td>Budget exhausted (work for one element, or stitches for the design)</td><td>M1</td></tr>
+<tr><td><code>SC-E0005</code></td><td>Error</td><td>Preview too large (over 4,096 pixels on a side at the requested scale)</td><td>M2</td></tr>
 <tr><td><code>SC-E0009</code></td><td>Error</td><td>Internal check failed (a StitchCraft bug; a bug-report bundle is written)</td><td>M1</td></tr>
-<tr><td><code>SC-E0010</code></td><td>Error</td><td>Nothing to stitch (no embroiderable elements)</td><td>M3</td></tr>
+<tr><td><code>SC-E0010</code></td><td>Error</td><td>Nothing to stitch (no embroiderable elements)</td><td>M1</td></tr>
 <tr><td><code>SC-E0101</code></td><td>Error</td><td>Parameter has the wrong type or an unknown choice</td><td>M3</td></tr>
 <tr><td><code>SC-W0102</code></td><td>Warning</td><td>Parameter clamped to its allowed range</td><td>M3</td></tr>
 <tr><td><code>SC-W0105</code></td><td>Warning</td><td>Unknown parameter preserved but ignored</td><td>M3</td></tr>
@@ -270,11 +273,12 @@ dangling rung” for <code>SC-W0203</code>). Applied fixes go through the host�
 <tr><td><code>SC-W0401</code></td><td>Warning</td><td>Path shorter than the minimum stitch length; skipped</td><td>M3</td></tr>
 <tr><td><code>SC-W0402</code></td><td>Warning</td><td>Stitch length below the profile minimum; raised to the minimum</td><td>M3</td></tr>
 <tr><td><code>SC-W0501</code></td><td>Warning</td><td>Travel could not stay inside the region; used tie-off, trim and tie-in</td><td>M5</td></tr>
-<tr><td><code>SC-E0601</code></td><td>Error</td><td>Too many colour changes for the format</td><td>M1</td></tr>
+<tr><td><code>SC-E0601</code></td><td>Error</td><td>Too many colour changes for the file format</td><td>M1</td></tr>
 <tr><td><code>SC-E0602</code></td><td>Error</td><td>Design too large for the file format (coordinates or data exceed its fields)</td><td>M1</td></tr>
 <tr><td><code>SC-E0603</code></td><td>Error</td><td>Machine file could not be read (wrong format, truncated, or a record that makes no sense)</td><td>M2</td></tr>
+<tr><td><code>SC-W0604</code></td><td>Warning</td><td>Thread colours unknown (the file stores none, as DST never does; threads are placeholders)</td><td>M2</td></tr>
 <tr><td><code>SC-E0701</code></td><td>Error</td><td>Design does not fit the hoop</td><td>M1</td></tr>
-<tr><td><code>SC-W0702</code></td><td>Warning</td><td>Design is larger than the profile’s comfort zone</td><td>M1</td></tr>
+<tr><td><code>SC-W0702</code></td><td>Warning</td><td>Design is larger than the comfort zone (the profile’s most accurate area)</td><td>M1</td></tr>
 <tr><td><code>SC-E0801</code></td><td>Error</td><td>SVG could not be read (with the parser’s position)</td><td>M3</td></tr>
 <tr><td><code>SC-W0802</code></td><td>Warning</td><td>SVG feature ignored (e.g. raster image, text not converted to paths)</td><td>M3</td></tr>
 <tr><td><code>SC-W0803</code></td><td>Warning</td><td><code>.vectorcraft</code> file from a newer VectorCraft format version; read best-effort</td><td>M6</td></tr>

@@ -35,10 +35,10 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-e51bd65c.js";
+            window.path_to_searchindex_js = "../../searchindex-046d5ac5.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../../toc-631d94b1.js"></script>
+        <script src="../../toc-06242336.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -190,11 +190,16 @@
 </thead>
 <tbody>
 <tr><td><a href="#sc-e0004"><code>SC-E0004</code></a></td><td>Error</td><td>Budget exhausted</td></tr>
+<tr><td><a href="#sc-e0005"><code>SC-E0005</code></a></td><td>Error</td><td>Preview too large</td></tr>
 <tr><td><a href="#sc-e0009"><code>SC-E0009</code></a></td><td>Error</td><td>Internal check failed</td></tr>
 <tr><td><a href="#sc-e0010"><code>SC-E0010</code></a></td><td>Error</td><td>Nothing to stitch</td></tr>
+<tr><td><a href="#sc-e0101"><code>SC-E0101</code></a></td><td>Error</td><td>Parameter has the wrong type or an unknown choice</td></tr>
+<tr><td><a href="#sc-w0102"><code>SC-W0102</code></a></td><td>Warning</td><td>Parameter clamped to its allowed range</td></tr>
+<tr><td><a href="#sc-w0105"><code>SC-W0105</code></a></td><td>Warning</td><td>Unknown parameter preserved but ignored</td></tr>
 <tr><td><a href="#sc-e0601"><code>SC-E0601</code></a></td><td>Error</td><td>Too many colour changes for the file format</td></tr>
 <tr><td><a href="#sc-e0602"><code>SC-E0602</code></a></td><td>Error</td><td>Design too large for the file format</td></tr>
 <tr><td><a href="#sc-e0603"><code>SC-E0603</code></a></td><td>Error</td><td>Machine file could not be read</td></tr>
+<tr><td><a href="#sc-w0604"><code>SC-W0604</code></a></td><td>Warning</td><td>Thread colours unknown</td></tr>
 <tr><td><a href="#sc-e0701"><code>SC-E0701</code></a></td><td>Error</td><td>Design does not fit the hoop</td></tr>
 <tr><td><a href="#sc-w0702"><code>SC-W0702</code></a></td><td>Warning</td><td>Design is larger than the comfort zone</td></tr>
 </tbody>
@@ -207,6 +212,12 @@ design may have, so that no input can make it run for hours or run out of memory
 command line or inside VectorCraft’s live preview.</p>
 <p>The element named in the message was skipped; the rest of the design was planned. Simplify the
 element (fewer nodes, wider spacing, a smaller area) or split it into several elements.</p>
+<h2 id="sc-e0005"><a class="header" href="#sc-e0005">SC-E0005</a></h2>
+<p><strong>Error</strong> — Preview too large</p>
+<p>Preview images have a size limit, so that drawing one never runs out of memory. At the scale
+asked for, this design’s preview would be larger, so no image was written.</p>
+<p>Use a smaller scale: the message says the largest that fits. A design that runs more than 10
+metres from the hoop centre cannot be previewed at any scale.</p>
 <h2 id="sc-e0009"><a class="header" href="#sc-e0009">SC-E0009</a></h2>
 <p><strong>Error</strong> — Internal check failed</p>
 <p>StitchCraft checks every stitch plan against its own rules before writing a machine file. One of
@@ -218,6 +229,26 @@ wrong reaches your machine.</p>
 <p>The design has no stitches: it is empty, or every element was skipped (see the other messages).
 StitchCraft never writes an empty machine file, because some machines refuse or mishandle them.</p>
 <p>Add an element with an embroidery stitch type, or fix the errors reported for the elements.</p>
+<h2 id="sc-e0101"><a class="header" href="#sc-e0101">SC-E0101</a></h2>
+<p><strong>Error</strong> — Parameter has the wrong type or an unknown choice</p>
+<p>A parameter’s value could not be understood: a number where a word was expected, a choice that
+is not one of the parameter’s options, or a list with the wrong number of values. The element was
+not stitched: guessing could sew something you did not ask for.</p>
+<p>The message names the parameter, the value and what the parameter accepts. The parameter
+reference lists every parameter with its accepted values.</p>
+<h2 id="sc-w0102"><a class="header" href="#sc-w0102">SC-W0102</a></h2>
+<p><strong>Warning</strong> — Parameter clamped to its allowed range</p>
+<p>A parameter’s value is outside the range StitchCraft accepts, so the nearest allowed value was
+used, and the element was stitched with it. Values outside the range are impossible (a negative
+length) or beyond what machines sew reliably.</p>
+<p>The message names the parameter, your value and the range. Change the value to remove the
+warning.</p>
+<h2 id="sc-w0105"><a class="header" href="#sc-w0105">SC-W0105</a></h2>
+<p><strong>Warning</strong> — Unknown parameter preserved but ignored</p>
+<p>The design carries a parameter StitchCraft does not know: one from a newer version of StitchCraft
+or Ink/Stitch, or one for a stitch type StitchCraft does not support yet. It was kept, so saving
+the design does not lose it, but it does not change the stitches.</p>
+<p>The Ink/Stitch compatibility page says when each Ink/Stitch parameter is supported.</p>
 <h2 id="sc-e0601"><a class="header" href="#sc-e0601">SC-E0601</a></h2>
 <p><strong>Error</strong> — Too many colour changes for the file format</p>
 <p>The file format can record only a limited number of colour changes and stops (PES: 255). This
@@ -236,6 +267,13 @@ ends early, or a record in it makes no sense. StitchCraft reads every file as if
 damaged or hostile, so a bad file is reported, never half-read in silence.</p>
 <p>The message says where reading stopped. If the machine sews the file, it may be a format variant
 StitchCraft does not know yet: please report it with the file.</p>
+<h2 id="sc-w0604"><a class="header" href="#sc-w0604">SC-W0604</a></h2>
+<p><strong>Warning</strong> — Thread colours unknown</p>
+<p>The file stores no thread colours (DST files never do: they only say where the machine pauses for
+the next thread), so every thread has a placeholder colour — in previews, and in files converted
+from this one, where the machine shows that colour at each thread change.</p>
+<p>The stitches are not affected. Load the threads the design needs, in the order the design’s
+author gives; StitchCraft cannot know them.</p>
 <h2 id="sc-e0701"><a class="header" href="#sc-e0701">SC-E0701</a></h2>
 <p><strong>Error</strong> — Design does not fit the hoop</p>
 <p>The design is wider or taller than the machine’s hoop, so the machine cannot sew it in one
@@ -258,7 +296,7 @@ zone, use a firmer stabilizer, or scale the design down.</p>
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
-                            <a rel="next prefetch" href="../../user/reference/glossary.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../../user/reference/params.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
@@ -272,7 +310,7 @@ zone, use a firmer stabilizer, or scale the design down.</p>
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
-                    <a rel="next prefetch" href="../../user/reference/glossary.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../../user/reference/params.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>

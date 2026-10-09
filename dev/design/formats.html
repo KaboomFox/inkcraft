@@ -35,10 +35,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-e51bd65c.js";
+            window.path_to_searchindex_js = "../searchindex-046d5ac5.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-631d94b1.js"></script>
+        <script src="../toc-06242336.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -233,7 +233,7 @@ stop command: a stop is a colour change to the same thread, which readers recogn
 <p><strong>Trims ride on the next move.</strong> PEC cannot cut in place, so a trim flags the next jump; a sewn move after a
 trim becomes a trim-flagged jump to its target and a zero-length stitch there, so the needle still goes
 down where the plan says. A trim right before the end needs no record.</p>
-<p><strong>Where we differ from pystitch on purpose.</strong> pystitch (Ink/Stitch’s writer) flags <em>every</em> jump after the
+<p><strong>Where we differ from pystitch on purpose.</strong> pystitch flags <em>every</em> jump after the
 first as a trim. StitchCraft flags only the jumps that follow a <code>Trim</code> in the plan and writes the others as
 plain jumps, so the plan decides — and test sheet TS-02 can tell the two encodings apart on a machine.</p>
 <p><strong>Checked against a reference.</strong> For the canonical plans, every PEC header byte — palette indices,
@@ -244,18 +244,17 @@ job from M2.4).</p>
 nearest Brother PEC colour (CIEDE2000). Catalogue numbers from other brands cannot survive PES v1; a
 PES v6 writer (below) can carry a thread list with RGB and codes.</p>
 <h3 id="risks-found-in-the-field-and-how-we-test-them"><a class="header" href="#risks-found-in-the-field-and-how-we-test-them">Risks found in the field, and how we test them</a></h3>
-<p>From the <a href="inkstitch-issues-review.html#l2--machines-disagree-about-files">issues review</a>:</p>
+<p>Embroiderers report these with files from other software:</p>
 <ol>
-<li><strong>Trims ignored</strong> on some Brother machines (Ink/Stitch #689). Test sheet TS-02 sews both encodings:
+<li><strong>Trims ignored</strong> on some Brother machines. Test sheet TS-02 sews both encodings:
 trim-flagged jumps, and a long-jump-only variant for machines that trim on jump length. The profile
 records which one the machine honours.</li>
 <li><strong>Large designs hidden</strong> by an older Brother-family machine for PES v1 files beyond about 130 ×
-180 mm (#1853, root cause never found). The PES v1 section carries a hoop indication, and
-Ink/Stitch’s writer (pystitch) sets it to the 130 × 180 mm class — our unconfirmed hypothesis for
-that report. For our 200 × 200 mm hoop, MC-1 sews TS-10 at <strong>150 mm and 190 mm</strong> widths from a PES v1
+180 mm (root cause unknown). The PES v1 section carries a hoop indication, and pystitch sets it to
+the 130 × 180 mm class — our unconfirmed hypothesis for that report. For our 200 × 200 mm hoop, MC-1 sews TS-10 at <strong>150 mm and 190 mm</strong> widths from a PES v1
 file. If the machine refuses either, M1 adds a PES v6 writer with explicit hoop dimensions and repeats
 the test.</li>
-<li><strong>Colour expectations</strong> (#2668): documented behaviour — what you see on the machine is the PEC
+<li><strong>Colour expectations:</strong> documented behaviour — what you see on the machine is the PEC
 palette colour; the thread chart in the report lists the source colour and the PEC match.</li>
 </ol>
 <h3 id="later-versions"><a class="header" href="#later-versions">Later versions</a></h3>
@@ -305,7 +304,8 @@ that points nowhere) become warnings in the result.</p>
 </table>
 </div>
 <p>Every reader survives every truncation and single-byte change of the golden files (a deterministic test
-that runs on every PR); coverage-guided fuzzing runs nightly from M2.5 (<code>REQ-FMT-006</code>).</p>
+that runs on every PR), and an hour of coverage-guided fuzzing every night (<code>REQ-FMT-006</code>;
+<a href="conformance.html#fuzzing">fuzzing</a>).</p>
 <p><strong>Round trips.</strong> A file cannot say everything a plan says (a trim is a flag in PEC and three jumps in DST;
 long moves become several records), so a plan read back is not the same plan — it makes the machine do
 the same thing. <code>stitchcraft-testkit::equivalence</code> defines that: where the needle goes down, where the
@@ -313,6 +313,11 @@ thread is cut, where the machine pauses. Every writer/reader pair keeps it on 25
 seed) and 10,000 more each night (fresh seed). Fresh seeds paid off before this was even merged: they found a DST
 design whose split jump pieces cancelled exactly and read back as a trim, which is why trim runs must be
 made of jumps of at most 1 mm.</p>
+<p><strong>Converting.</strong> <code>stitch convert</code> is a read followed by a write, so the converted file makes the machine do
+the same thing as the original: the round-trip guarantee above. Records carry over literally (a DST
+file’s 12 mm jump pieces stay separate jumps in a PES file), and what the new format cannot say is
+reported instead of guessed: a PES file made from a DST file names a placeholder black for every thread,
+because DST stores no colours (<code>SC-W0604</code>).</p>
 <h2 id="later-formats"><a class="header" href="#later-formats">Later formats</a></h2>
 <div class="table-wrapper">
 <table>
@@ -321,7 +326,7 @@ made of jumps of at most 1 mm.</p>
 </thead>
 <tbody>
 <tr><td>EXP</td><td>Melco, Bernina</td><td>M11</td><td>2-byte records, <code>0x80</code> escape codes for commands</td></tr>
-<tr><td>JEF</td><td>Janome</td><td>M11</td><td>Janome thread table indices; per-palette mapping (Ink/Stitch #3137)</td></tr>
+<tr><td>JEF</td><td>Janome</td><td>M11</td><td>Janome thread table indices; per-palette mapping</td></tr>
 <tr><td>VP3</td><td>Husqvarna Viking, Pfaff</td><td>M11</td><td>Nested length-prefixed sections; thread descriptions as strings</td></tr>
 <tr><td>XXX</td><td>Singer</td><td>M11</td><td></td></tr>
 <tr><td>U01</td><td>Barudan</td><td>M11</td><td></td></tr>
@@ -362,7 +367,7 @@ needle-down.</p>
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
-                            <a rel="next prefetch" href="../design/vectorcraft-integration.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../design/rendering.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
@@ -376,7 +381,7 @@ needle-down.</p>
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
-                    <a rel="next prefetch" href="../design/vectorcraft-integration.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../design/rendering.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>

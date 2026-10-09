@@ -35,10 +35,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-e51bd65c.js";
+            window.path_to_searchindex_js = "../searchindex-046d5ac5.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-631d94b1.js"></script>
+        <script src="../toc-06242336.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -202,11 +202,10 @@
 <a href="https://github.com/storytold/vectorcraft">VectorCraft</a>, ArtCraft’s open-source, clean-room
 Illustrator written in Rust, so embroidery is designed where the art is drawn.</li>
 </ol>
-<p>It covers the stitch types embroiderers know from <a href="https://inkstitch.org">Ink/Stitch</a> (running,
-bean, satin, tatami fill, contour, meander, ripple, …) and reads Ink/Stitch’s SVG parameters, but it
-is a new implementation with a different quality bar: <strong>it never crashes, it produces the same file
-on every platform, and every behaviour is pinned by a conformance suite and by sew-outs on a real
-machine.</strong></p>
+<p>It covers the common machine-embroidery stitch types (running, bean, satin, tatami fill, contour,
+meander, ripple, …) and reads the embroidery parameters Ink/Stitch stores in SVG files, so designs move
+between the tools. Its quality bar: <strong>it never crashes, it produces the same file on every platform,
+and every behaviour is pinned by a conformance suite and by sew-outs on a real machine.</strong></p>
 <hr>
 <h2 id="1-goals"><a class="header" href="#1-goals">1. Goals</a></h2>
 <div class="table-wrapper">
@@ -215,12 +214,12 @@ machine.</strong></p>
 <tr><th>ID</th><th>Goal</th><th>How we know</th></tr>
 </thead>
 <tbody>
-<tr><td>G1</td><td>Cover Ink/Stitch’s stitch types and parameters, in phases</td><td><a href="inkstitch-compat-contract.html">Compatibility contract</a> coverage column reaches 100 % for phase P1–P3 rows</td></tr>
+<tr><td>G1</td><td>Read and write every parameter in the Ink/Stitch compatibility contract, in phases</td><td><a href="inkstitch-compat-contract.html">Compatibility contract</a> coverage column reaches 100 % for phase P1–P3 rows</td></tr>
 <tr><td>G2</td><td>Never crash on any input</td><td>No-panic lints, fuzzing, bounded work budgets (<a href="guardrails.html">guardrails</a>, <a href="#11-robustness">robustness</a>)</td></tr>
 <tr><td>G3</td><td>Correctness proven, not assumed</td><td>Every requirement has a passing conformance case; machine checkpoints signed off (<a href="conformance.html">conformance</a>, <a href="../plan/machine-testing.html">machine testing</a>)</td></tr>
 <tr><td>G4</td><td>Determinism</td><td>Byte-identical files on Linux, macOS, Windows and wasm32 (<a href="determinism.html">determinism</a>)</td></tr>
 <tr><td>G5</td><td>Host-agnostic engine</td><td>VectorCraft plug-in, CLI and (later) an in-tree VectorCraft crate share one engine (<a href="architecture.html">architecture</a>)</td></tr>
-<tr><td>G6</td><td>Documentation that beats Ink/Stitch’s</td><td>Reference generated from code, images regenerated in CI on every PR (<a href="docs-pipeline.html">docs pipeline</a>)</td></tr>
+<tr><td>G6</td><td>Documentation that cannot drift from the code</td><td>Reference generated from code, images regenerated in CI on every PR (<a href="docs-pipeline.html">docs pipeline</a>)</td></tr>
 <tr><td>G7</td><td>Code we are proud to show</td><td>Enforced layering, small modules, playbooks for contributors (<a href="guardrails.html">guardrails</a>)</td></tr>
 <tr><td>G8</td><td>Survive VectorCraft releases</td><td>Plug-in tested against VectorCraft stable, pre-releases, <code>release</code> and <code>main</code> (<a href="compatibility-gate.html">compatibility gate</a>)</td></tr>
 </tbody>
@@ -228,7 +227,7 @@ machine.</strong></p>
 </div>
 <h3 id="non-goals-for-10"><a class="header" href="#non-goals-for-10">Non-goals for 1.0</a></h3>
 <ul>
-<li>An Inkscape extension (Ink/Stitch already is one).</li>
+<li>An Inkscape extension.</li>
 <li>Lettering with a bundled embroidery-font library (post-1.0; see <a href="../plan/roadmap.html">roadmap</a>).</li>
 <li>Automatic digitizing of photos or bitmaps.</li>
 <li>Sending files to machines over USB/Wi-Fi; the output is a file you copy to the machine.</li>
@@ -257,22 +256,13 @@ built-in profile <code>brother-200x200</code>:</p>
 <p>Profiles are data (see <a href="data-model.html#machine-profiles">data model</a>); adding a machine never touches
 the engine.</p>
 <h2 id="3-background"><a class="header" href="#3-background">3. Background</a></h2>
-<h3 id="31-inkstitch-the-reference-behaviour"><a class="header" href="#31-inkstitch-the-reference-behaviour">3.1 Ink/Stitch, the reference behaviour</a></h3>
-<p>Ink/Stitch is a GPL-3.0 Python extension for Inkscape: ~45,000 lines in <code>lib/</code>, 145 embroidery
-parameter declarations, more than a dozen stitch types, and 51 file readers and 24 writers through
-<code>pystitch</code> (an MIT fork of pyembroidery). It is the best open-source digitizer available and its users are
-passionate. Its weaknesses are the reason this project exists, and they are measured in
-<a href="inkstitch-analysis.html">the Ink/Stitch analysis</a>:</p>
-<ul>
-<li><strong>52 test functions (1,142 lines) for 45,344 lines of library code</strong>; no tests for satin, running
-stitch or any fill algorithm. Since 2024, 62 commits addressed errors, crashes or invalid/empty
-inputs, and none of them touched the tests.</li>
-<li>Library code ends the process (<code>sys.exit</code>) instead of returning errors, and algorithms degrade
-silently (a fill too small for its rows becomes an outline; an impossible travel becomes a straight
-line across the shape) without telling the user.</li>
-<li>Docs are hand-written and partly drift from code (parameters missing, no docs CI, 1,341 hand-made
-images, one unversioned site).</li>
-</ul>
+<h3 id="31-file-compatibility-with-inkstitch"><a class="header" href="#31-file-compatibility-with-inkstitch">3.1 File compatibility with Ink/Stitch</a></h3>
+<p>Ink/Stitch, a GPL-3.0 extension for Inkscape, stores its embroidery settings in SVG files as
+<code>inkstitch:&lt;name&gt;</code> attributes. StitchCraft reads and writes the same attribute names, values and
+defaults, so a design moves between the tools unchanged. Those names, types and defaults are facts
+listed in the <a href="inkstitch-compat-contract.html">compatibility contract</a>; where StitchCraft’s behaviour
+differs on purpose, the deviations ledger (<code>conformance/deviations.toml</code>) says how and why. StitchCraft
+is an independent project and contains no Ink/Stitch code, documentation text or data files (<a href="adr/0001-license-and-clean-room.html">ADR-0001</a>).</p>
 <h3 id="32-vectorcraft-the-host"><a class="header" href="#32-vectorcraft-the-host">3.2 VectorCraft, the host</a></h3>
 <p>VectorCraft (MIT OR Apache-2.0, Rust 2024, ~290,000 lines) is a clean-room Illustrator. What matters
 here (details and file references in <a href="vectorcraft-integration.html">VectorCraft integration</a>):</p>
@@ -526,7 +516,7 @@ milestone signed off.</p>
 <tr><td>R4</td><td>Polygon offset/boolean robustness</td><td>Spike M0.7; input sanitizing; fuzzing; fallback to diagnostics, never panics</td></tr>
 <tr><td>R5</td><td>Clean-room discipline slips</td><td>Process in ADR-0001; <code>cargo xtask cleanroom</code>; review checklist</td></tr>
 <tr><td>R6</td><td>Cross-platform float differences</td><td><code>libm</code>, no FMA-sensitive formulas in quantization, cross-platform hash CI</td></tr>
-<tr><td>R7</td><td>Scope: Ink/Stitch is large</td><td>Phases; compatibility contract tracks coverage; post-1.0 items explicit</td></tr>
+<tr><td>R7</td><td>Scope: the compatibility contract is large</td><td>Phases; compatibility contract tracks coverage; post-1.0 items explicit</td></tr>
 <tr><td>R8</td><td>Brother trim behaviour varies by model</td><td>Profile flag; MC-1 tests both encodings</td></tr>
 <tr><td>R9</td><td>VectorCraft breaking changes</td><td>Compatibility gate on stable, pre-release, <code>release</code> and <code>main</code></td></tr>
 <tr><td>R10</td><td>Headless UI screenshots need a GPU</td><td>Spike M0.8 (Xvfb + Mesa); fallback: CLI-rendered art + semantic panel tests</td></tr>

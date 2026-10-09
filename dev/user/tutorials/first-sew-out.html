@@ -35,10 +35,10 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-e51bd65c.js";
+            window.path_to_searchindex_js = "../../searchindex-046d5ac5.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../../toc-631d94b1.js"></script>
+        <script src="../../toc-06242336.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -209,21 +209,31 @@ after sewing, check:
 file will have. The checksum is how a sew-out report names exactly the bytes that were sewn. Every test
 sheet is in the <a href="../reference/test-sheets.html">test sheets reference</a>; <code>stitch testsheet --list</code> lists
 them too.</p>
-<h2 id="2-load-it-on-the-machine"><a class="header" href="#2-load-it-on-the-machine">2. Load it on the machine</a></h2>
+<h2 id="2-look-at-it-first"><a class="header" href="#2-look-at-it-first">2. Look at it first</a></h2>
+<pre><code class="language-console">$ stitch preview TS-01.pes -o TS-01.png
+TS-01.png · 992 × 992 pixels
+  from      TS-01.pes · PES (#PES0001) · "TS-01"
+  style     realistic, 8 pixels per millimetre
+</code></pre>
+<p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="../../images/generated/testsheet-ts-01.png" alt="TS-01 as it will sew: a cross with ticks, an upright F at the top left and four corner squares, in black thread."><span class="img-wrapper"><img src="../../images/generated/testsheet-ts-01.png" alt="TS-01 as it will sew: a cross with ticks, an upright F at the top left and four corner squares, in black thread."></span></label></p>
+<p>The picture is drawn from the file itself, at the exact positions the machine will use, so this is what
+you should see in the hoop. Add <code>--style simple</code> to see every stitch, needle hole, trim and jump instead:
+the way to check a design before you sew it.</p>
+<h2 id="3-load-it-on-the-machine"><a class="header" href="#3-load-it-on-the-machine">3. Load it on the machine</a></h2>
 <p>Copy <code>TS-01.pes</code> to a USB stick, plug it into the machine and select the design. The machine should show
 it at 120 × 120 mm, with an upright “F” in the top-left quarter. If it does not list the file at all,
 stop here and report that — it is the most important thing this sheet tests.</p>
-<h2 id="3-hoop-and-sew"><a class="header" href="#3-hoop-and-sew">3. Hoop and sew</a></h2>
+<h2 id="4-hoop-and-sew"><a class="header" href="#4-hoop-and-sew">4. Hoop and sew</a></h2>
 <p>Hoop the fabric and stabilizer drum-tight, centre the design, attach the hoop, and sew. The machine sews
 the cross first, then the “F”, then the four corner squares, trimming between parts if it can.</p>
-<h2 id="4-check"><a class="header" href="#4-check">4. Check</a></h2>
+<h2 id="5-check"><a class="header" href="#5-check">5. Check</a></h2>
 <ul>
 <li>The “F” reads normally: not mirrored, not upside down, not turned.</li>
 <li>Each arm of the cross measures 100.0 ± 0.5 mm end to end, horizontally and vertically.</li>
 <li>The corner squares measure 10.0 mm on every side.</li>
 <li>Ticks are 10 mm apart; the long ticks mark the ends and the centre.</li>
 </ul>
-<h2 id="5-tell-us"><a class="header" href="#5-tell-us">5. Tell us</a></h2>
+<h2 id="6-tell-us"><a class="header" href="#6-tell-us">6. Tell us</a></h2>
 <p>File a <strong>Sew-out report</strong> on GitHub with photos of the front and back (a ruler in view), your measurements,
 and anything odd (<a href="../../plan/machine-testing.html">machine testing</a>).</p>
 

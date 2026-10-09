@@ -35,10 +35,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-e51bd65c.js";
+            window.path_to_searchindex_js = "../searchindex-046d5ac5.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-631d94b1.js"></script>
+        <script src="../toc-06242336.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -200,7 +200,7 @@ so the rules hold without anyone having to remember them. Most are adopted from 
 <tr><td><strong>Layering</strong></td><td>Crates depend only on lower layers (<a href="architecture.html">architecture</a>); dependencies like <code>clap</code> or <code>tiny-skia</code> only where allowed</td><td><code>xtask/src/layers.rs</code> (append-only table)</td><td><code>cargo xtask layers</code> · CI</td></tr>
 <tr><td><strong>Module size</strong></td><td>Rust files warn above 800 lines, fail above 1,500 (generated files exempt)</td><td><code>xtask/src/filesize.rs</code></td><td><code>cargo xtask filesize</code> · CI</td></tr>
 <tr><td>WebAssembly</td><td>L0–L3 crates and the plug-in build for <code>wasm32-unknown-unknown</code></td><td><code>xtask/src/wasm.rs</code></td><td><code>cargo xtask wasm</code> · CI</td></tr>
-<tr><td><strong>Clean room</strong></td><td>No GPL/AGPL licence text or Ink/Stitch source paths in code, fixtures or tests</td><td><code>xtask/src/cleanroom.rs</code></td><td><code>cargo xtask cleanroom</code> · CI</td></tr>
+<tr><td><strong>Clean room</strong></td><td>No GPL/AGPL licence text or Ink/Stitch source paths anywhere in the repository, documents included</td><td><code>xtask/src/cleanroom.rs</code></td><td><code>cargo xtask cleanroom</code> · CI</td></tr>
 <tr><td>Docs</td><td>Generated pages fresh, links and anchors valid, mentioned <code>cargo xtask</code> commands exist, ids exist</td><td><code>xtask/src/docs.rs</code></td><td><code>cargo xtask docs --check</code> · CI</td></tr>
 <tr><td>Docs images</td><td>Every image declared in <code>docs/shots.toml</code>, with alt text, and regenerating to the committed file</td><td><code>xtask/src/shots.rs</code></td><td><code>cargo xtask shots --check</code> · CI</td></tr>
 <tr><td>Conformance</td><td>Requirement/case consistency; all cases pass; changed goldens need the <code>golden-change</code> label and a changelog line</td><td><code>xtask/src/conformance/</code>, <code>ci.yml</code>, <code>goldens.yml</code></td><td><code>cargo xtask conformance</code> · CI</td></tr>
@@ -208,14 +208,19 @@ so the rules hold without anyone having to remember them. Most are adopted from 
 <tr><td>Spelling</td><td>Typos in code, docs, commit-facing text</td><td><code>typos.toml</code></td><td>CI</td></tr>
 <tr><td>MSRV</td><td>Builds on the declared <code>rust-version</code></td><td>workspace <code>Cargo.toml</code></td><td>CI</td></tr>
 <tr><td>Cross-platform</td><td>Tests on Linux, macOS, Windows; identical conformance hashes</td><td><code>ci.yml</code></td><td>CI</td></tr>
-<tr><td>Public API review (M2+)</td><td>Changes to library crates’ public API are visible in the PR diff</td><td><code>cargo public-api</code> snapshots</td><td>CI</td></tr>
-<tr><td>Coverage ratchet (M1+)</td><td>Line coverage of engine, formats and plan crates never drops</td><td><code>cargo-llvm-cov</code>, <code>coverage.toml</code></td><td>CI</td></tr>
-<tr><td>Mutation testing (M2+)</td><td>Tests actually detect changed behaviour</td><td><code>cargo-mutants</code></td><td>nightly</td></tr>
+<tr><td>API docs</td><td>Rustdoc builds without warnings: no broken, ambiguous or private intra-doc links</td><td><code>cargo xtask ci</code> (<code>RUSTDOCFLAGS=-D warnings</code>)</td><td><code>cargo xtask ci</code> · CI</td></tr>
+<tr><td><strong>Public API review</strong></td><td>Changes to a library crate’s public API show in the PR diff, as a change to its <code>public-api.txt</code></td><td><code>xtask/src/api.rs</code> (cargo-public-api, pinned)</td><td><code>cargo xtask api --check</code> · CI</td></tr>
+<tr><td><strong>Coverage ratchet</strong></td><td>No crate’s line coverage drops below its floor; floors only go up</td><td><code>conformance/coverage.toml</code>, <code>xtask/src/coverage.rs</code> (cargo-llvm-cov)</td><td><code>cargo xtask coverage</code> · CI job</td></tr>
+<tr><td><strong>Mutation testing</strong></td><td>Tests notice changed behaviour: no crate gets more mutants no test notices than recorded; records only go down</td><td><code>.cargo/mutants.toml</code>, <code>conformance/mutation.toml</code>, <code>xtask/src/mutants.rs</code></td><td><code>mutants.yml</code> · weekly</td></tr>
+<tr><td><strong>Fuzzing</strong></td><td>Readers never panic, respect their caps and terminate; anything read round-trips and previews</td><td><code>fuzz/</code>, <code>stitchcraft-testkit::fuzz</code> (<a href="conformance.html#fuzzing">conformance</a>)</td><td>bodies every PR · an hour nightly</td></tr>
 </tbody>
 </table>
 </div>
 <p><code>cargo xtask ci</code> runs everything that does not need extra tools; tools that are not installed locally
-are reported as skipped, while CI installs them and treats them as required.</p>
+are reported as skipped, while CI installs them and treats them as required. In GitHub Actions every
+problem a check finds is also an annotation, on the right line of the pull request’s diff when it names
+one, and a failed fuzz run puts the end of its output in one: the reason is visible without opening a
+log.</p>
 <h2 id="design-rules-reviewed-partly-linted"><a class="header" href="#design-rules-reviewed-partly-linted">Design rules (reviewed, partly linted)</a></h2>
 <ol>
 <li><strong>Everything user-visible is data first.</strong> A stitch type, parameter, diagnostic, profile or format is

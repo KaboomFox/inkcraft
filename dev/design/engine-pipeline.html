@@ -35,10 +35,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-e51bd65c.js";
+            window.path_to_searchindex_js = "../searchindex-046d5ac5.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-631d94b1.js"></script>
+        <script src="../toc-06242336.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -227,8 +227,8 @@ every element was skipped yields <code>SC-E0010</code>.</li>
 <li><strong>Pure:</strong> output depends only on (normalized shape, typed params, hints, seed, budget).</li>
 <li><strong>Entry and exit hints, not neighbours’ stitches.</strong> The previous element’s <em>geometry</em> suggests where
 this one should start (nearest point to its exit hint); the generator never waits for another
-element’s stitches. This makes generation independent, cacheable and parallel
-(<a href="inkstitch-issues-review.html#l6--large-designs-are-slow">issues review L6</a>), and honours explicit
+element’s stitches. This makes generation independent, cacheable and parallel, so large designs
+stay fast, and honours explicit
 start/end commands (<code>REQ-GEN-001</code>).</li>
 <li><strong>Seeded randomness:</strong> seed = <code>random_seed</code> parameter if set, else a hash of the element id; the PRNG
 is SplitMix64 from <code>stitchcraft-core</code> (<a href="determinism.html">determinism</a>).</li>
@@ -268,8 +268,10 @@ changes is an explicit, separate tool (P3) because it changes what covers what.<
 <li><code>lock_start</code> / <code>lock_end</code> choose a lock shape by id; <code>half_stitch</code> (stitch back and forth along the
 path by a fraction of the first stitch) is the default; other ids map to StitchCraft’s own shape
 definitions with the same intent (<a href="inkstitch-compat-contract.html#method-identifiers">compatibility contract</a>).</li>
-<li>Shapes are defined in a unit frame aligned with the path direction and scaled by
-<code>lock_*_scale_mm</code> (absolute shapes) or <code>lock_*_scale_percent</code> (relative to the first stitch).</li>
+<li>Shapes are defined in a unit frame aligned with the path direction. Shapes made of back-and-forth
+steps are scaled by <code>lock_*_scale_mm</code> (an absolute size), shapes drawn as paths by
+<code>lock_*_scale_percent</code> (relative to their own size); the half stitch is sized from the first stitch.
+A custom lock (<code>lock_custom_start</code>, <code>lock_custom_end</code>) is either kind.</li>
 <li><code>force_lock_stitches</code> adds locks even when the next group is close enough to collapse.</li>
 <li>Lock stitches must be ≥ 0.2 mm long so the needle does not hit the same hole; shorter computed locks
 are scaled up, never dropped silently.</li>

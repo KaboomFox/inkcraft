@@ -35,10 +35,10 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-e51bd65c.js";
+            window.path_to_searchindex_js = "../../searchindex-046d5ac5.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../../toc-631d94b1.js"></script>
+        <script src="../../toc-06242336.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -206,8 +206,8 @@ subpaths, which must not cross each other, are the rails.</li>
 <li>A rung that crosses only one rail is dangling (<code>SC-W0203</code>, ignored); a rung crossing a rail twice is
 ignored with <code>SC-W0207</code>; rails that cross each other are <code>SC-E0204</code>.</li>
 </ol>
-<p>Validation runs before any stitch is computed; the generator never sees an invalid satin
-(<a href="../inkstitch-issues-review.html#l1--edge-case-geometry-and-inputs-raise-exceptions">issues review L1</a>).</p>
+<p>Validation runs before any stitch is computed; the generator never sees an invalid satin, so odd
+geometry is a diagnostic that points at the rung, never a crash.</p>
 <h2 id="orientation"><a class="header" href="#orientation">Orientation</a></h2>
 <ul>
 <li><code>reverse_rails = automatic</code> orients rail B so that <code>|A₀B₀| + |A₁B₁|</code> is smaller than the crossed

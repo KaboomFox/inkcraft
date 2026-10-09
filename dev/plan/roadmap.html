@@ -35,10 +35,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-e51bd65c.js";
+            window.path_to_searchindex_js = "../searchindex-046d5ac5.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-631d94b1.js"></script>
+        <script src="../toc-06242336.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -205,6 +205,7 @@ of code) · 🧵 machine checkpoint · 👤 owner action</p>
 <tr><td>M0.6 🧪</td><td>VectorCraft “hello” plug-in: identity live effect built in CI for <code>wasm32-unknown-unknown</code>; Level A contract test against the pinned stable <code>vectorcraft-plugins</code> (v0.6.0, now v0.7.0), <code>release</code> and <code>main</code>; measure fuel per output byte</td><td>Contract test green in <code>compat.yml</code> (done: green on every track, 2026-10-08); budget numbers recorded in the integration doc (open)</td></tr>
 <tr><td>M0.7 🧪</td><td>Geometry spike (<a href="../design/adr/0005-geometry-stack.html">ADR-0005</a> criteria)</td><td>ADR-0005 accepted or revised</td></tr>
 <tr><td>M0.8 🧪</td><td>Headless VectorCraft window in CI (Xvfb + Mesa) taking <code>ui.screenshot</code> twice with identical pixels</td><td>Decision recorded in the docs pipeline page</td></tr>
+<tr><td>M0.10 ✅</td><td>Clean room, tightened: no document describes Ink/Stitch’s code; Ink/Stitch is named only for file compatibility and in the independence notices; <code>cargo xtask cleanroom</code> scans documents too</td><td><code>cleanroom</code> green over the whole repository</td></tr>
 </tbody>
 </table>
 </div>
@@ -241,10 +242,10 @@ of code) · 🧵 machine checkpoint · 👤 owner action</p>
 <tr><td>M2.2 ✅</td><td>DST reader (trims inferred from cancelling jump runs)</td><td>same</td></tr>
 <tr><td>M2.3 ✅</td><td>Command round trip for every writer/reader pair; machine-equivalence oracle; fresh-seed nightly</td><td><code>REQ-FMT-002</code>, <code>REQ-FMT-003</code> active</td></tr>
 <tr><td>M2.4 ✅</td><td>pyembroidery oracle (pinned by hash) as a conformance case in the gates job</td><td><code>REQ-FMT-005</code> active</td></tr>
-<tr><td>M2.5</td><td><code>cargo-fuzz</code> targets for both readers; nightly job with persisted corpus</td><td><code>REQ-FMT-006</code>; 1 h fuzzing clean</td></tr>
-<tr><td>M2.6</td><td><code>stitchcraft-render</code>: realistic and simple styles from the quantized plan</td><td><code>REQ-RND-001</code>; golden PNG files</td></tr>
-<tr><td>M2.7</td><td><code>stitch preview</code>, <code>stitch convert</code>; the <code>stitch</code> shot generator behind <code>cargo xtask shots</code>; the <code>docs-refresh.yml</code> label workflow</td><td>first generated docs images, byte-compared on every PR</td></tr>
-<tr><td>M2.8</td><td>Coverage ratchet and mutation-testing baseline; public-API snapshots</td><td>thresholds recorded</td></tr>
+<tr><td>M2.5 ✅</td><td><code>cargo-fuzz</code> targets for both readers; nightly job with persisted corpus</td><td><code>REQ-FMT-006</code>; 1 h fuzzing clean</td></tr>
+<tr><td>M2.6 ✅</td><td><code>stitchcraft-render</code>: realistic and simple styles from the quantized plan</td><td><code>REQ-RND-001</code>; golden PNG files</td></tr>
+<tr><td>M2.7 ✅</td><td><code>stitch preview</code>, <code>stitch convert</code>; the <code>stitch</code> shot generator behind <code>cargo xtask shots</code>; the <code>docs-refresh.yml</code> label workflow</td><td>first generated docs images, byte-compared on every PR</td></tr>
+<tr><td>M2.8 ✅</td><td>Coverage ratchet and mutation-testing baseline; public-API snapshots</td><td>thresholds recorded</td></tr>
 </tbody>
 </table>
 </div>
@@ -255,7 +256,7 @@ of code) · 🧵 machine checkpoint · 👤 owner action</p>
 <tr><th>Step</th><th>Deliverable</th><th>Done when</th></tr>
 </thead>
 <tbody>
-<tr><td>M3.1</td><td>Parameter registry (<code>params!</code>, <code>ParamSet</code>, validation, generated reference + JSON Schema)</td><td><code>REQ-PRM-001</code>, <code>REQ-PRM-002</code>; <code>docs --check</code> covers params</td></tr>
+<tr><td>M3.1 ✅</td><td>Parameter registry (<code>params!</code>, <code>ParamSet</code>, validation, generated reference + JSON Schema)</td><td><code>REQ-PRM-001</code>, <code>REQ-PRM-002</code>; <code>docs --check</code> covers params</td></tr>
 <tr><td>M3.2</td><td>Diagnostics registry, <code>stitch explain</code>, generated diagnostics index</td><td>every registered code has a page and a case</td></tr>
 <tr><td>M3.3</td><td><code>Design</code> model; SVG adapter v1: paths, groups, transforms, viewBox units, colours, visibility (no <code>inkstitch:*</code> yet)</td><td><code>REQ-SVG-001</code>, <code>REQ-SVG-002</code> (fuzzed path data)</td></tr>
 <tr><td>M3.4</td><td>Running stitch: corners, even spacing, tolerance</td><td><code>REQ-RUN-001..003</code></td></tr>

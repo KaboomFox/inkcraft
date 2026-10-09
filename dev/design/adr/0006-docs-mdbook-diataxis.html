@@ -35,10 +35,10 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-e51bd65c.js";
+            window.path_to_searchindex_js = "../../searchindex-046d5ac5.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../../toc-631d94b1.js"></script>
+        <script src="../../toc-06242336.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -183,7 +183,8 @@
                         <h1 id="adr-0006-mdbook-diátaxis-generated-reference-ci-regenerated-images"><a class="header" href="#adr-0006-mdbook-diátaxis-generated-reference-ci-regenerated-images">ADR-0006: mdBook, Diátaxis, generated reference, CI-regenerated images</a></h1>
 <p><strong>Status:</strong> Accepted · 2026-10-08</p>
 <h2 id="context"><a class="header" href="#context">Context</a></h2>
-<p>The docs must beat Ink/Stitch’s and stay correct on every PR, including screenshots.</p>
+<p>The docs must stay correct on every PR, including screenshots. Documentation written once by hand
+drifts from the code it describes, and nobody notices until a reader is misled.</p>
 <h2 id="decision"><a class="header" href="#decision">Decision</a></h2>
 <ul>
 <li><strong>mdBook</strong> (Rust-native, fast, search and print built in, no Ruby/Node toolchain).</li>
@@ -201,7 +202,7 @@ VectorCraft UI screenshots, photos — regenerated and compared in CI, refreshed
 </ul>
 <h2 id="alternatives-considered"><a class="header" href="#alternatives-considered">Alternatives considered</a></h2>
 <ul>
-<li><strong>Jekyll on GitHub Pages</strong> (Ink/Stitch’s choice): no checks, Ruby toolchain. Rejected.</li>
+<li><strong>Jekyll on GitHub Pages:</strong> no checks, Ruby toolchain. Rejected.</li>
 <li><strong>Docusaurus / MkDocs:</strong> capable, but bring Node or Python into a Rust-only repository.</li>
 </ul>
 

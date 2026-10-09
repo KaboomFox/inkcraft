@@ -35,10 +35,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-e51bd65c.js";
+            window.path_to_searchindex_js = "../searchindex-046d5ac5.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-631d94b1.js"></script>
+        <script src="../toc-06242336.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -191,7 +191,9 @@ limits (<code>REQ-FMT-*</code> per format).</li>
 <li><strong>Module:</strong> <code>crates/stitchcraft-formats/src/&lt;format&gt;/</code> with <code>write.rs</code>, <code>read.rs</code>, <code>consts.rs</code>,
 <code>tests.rs</code>. Readers: check every length and offset before use, cap counts, return typed errors;
 <code>indexing_slicing</code> is denied here.</li>
-<li><strong>Fuzz target</strong> in <code>fuzz/fuzz_targets/read_&lt;format&gt;.rs</code>; run it for 10 minutes locally.</li>
+<li><strong>Fuzz target:</strong> a body <code>read_&lt;format&gt;</code> in <code>stitchcraft-testkit::fuzz</code> (its tests run it on the
+new golden files), a one-line target in <code>fuzz/fuzz_targets/read_&lt;format&gt;.rs</code>, its name in the
+<code>fuzz</code> matrix of <code>nightly.yml</code>; run it for 10 minutes locally (<code>cargo +nightly fuzz run read_&lt;format&gt;</code>). The format’s golden files join the seed corpus by themselves.</li>
 <li><strong>Oracle:</strong> add the format to the pyembroidery oracle job if pyembroidery supports it.</li>
 <li><strong>Profiles:</strong> if a machine uses it, add or update a profile — and schedule a machine test before
 calling it supported.</li>

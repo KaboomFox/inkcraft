@@ -35,10 +35,10 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-e51bd65c.js";
+            window.path_to_searchindex_js = "../../searchindex-046d5ac5.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../../toc-631d94b1.js"></script>
+        <script src="../../toc-06242336.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -184,8 +184,8 @@
 <p><strong>Status:</strong> Accepted · 2026-10-08</p>
 <h2 id="context"><a class="header" href="#context">Context</a></h2>
 <p>Users need to understand why a design will not sew well, and maintainers need to know which message a
-user saw. Ink/Stitch’s validation messages are helpful but uncoded, and an untested error path shipped a
-broken message (<a href="../inkstitch-analysis.html#f4--a-verified-bug-in-an-error-path">F4</a>).</p>
+user saw. A message without a code cannot be looked up, searched for in bug reports or tested on its
+own, and an error path that no test ever renders can ship a broken message.</p>
 <h2 id="decision"><a class="header" href="#decision">Decision</a></h2>
 <p>Every user-facing problem is a <code>Diagnostic</code> with a stable code (<code>SC-E0201</code>), severity, element, location,
 message and optional fix. A single registry holds codes and long explanations; docs pages and

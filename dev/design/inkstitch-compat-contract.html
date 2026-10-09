@@ -35,10 +35,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-e51bd65c.js";
+            window.path_to_searchindex_js = "../searchindex-046d5ac5.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-631d94b1.js"></script>
+        <script src="../toc-06242336.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -186,13 +186,18 @@
 supports each one. This is the interoperability contract: StitchCraft’s registry uses these names as
 its keys so files move between the tools unchanged (<a href="adr/0001-license-and-clean-room.html">ADR-0001</a>).</p>
 <ul>
-<li><strong>Source:</strong> Ink/Stitch <code>main</code> at <code>d59c9ab</code> (2026-09-17), 145 <code>@param</code> declarations.</li>
+<li><strong>Checked against:</strong> Ink/Stitch <code>main</code> at <code>d59c9ab</code> (2026-09-17), 145 parameters.</li>
 <li><strong>Facts only:</strong> names, types, units, defaults and applicability. Ink/Stitch’s descriptions are GPL text
 and are not copied; StitchCraft’s own help text lives in the <a href="params.html">parameter registry</a>.</li>
-<li><strong>Machine-readable source:</strong> <code>conformance/inkstitch-params.toml</code>; this page is generated from it by
-<code>cargo xtask docs</code>, and <code>cargo xtask docs --check</code> fails if the two disagree. From M3 the page gains a
-<em>Status</em> column (planned / supported / deviates) from the registry, and a milestone cannot close with
-its rows still planned.</li>
+<li><strong>Machine-readable source:</strong> <code>conformance/inkstitch-params.toml</code>; this page is generated from it and
+from the parameter registry by <code>cargo xtask docs</code>, and <code>cargo xtask docs --check</code> fails if they disagree:
+a parameter declared with an Ink/Stitch origin must be listed here with a compatible type and the same
+default.</li>
+<li><strong>StitchCraft</strong> says whether the <a href="../user/reference/params.html">parameter registry</a> declares the
+parameter. <em>planned</em>: not yet; a design that sets it keeps it unchanged and gets <code>SC-W0105</code>.
+<em>registered</em>: StitchCraft reads and checks it under the same key, meaning and default; it changes the
+stitches once its stitch type or feature lands (see <em>Phase</em> and the parameter’s reference entry).
+<em>deviates</em>: registered, with a meaning that differs as its reference entry describes.</li>
 <li><strong>Phase</strong> is when the parameter’s stitch type lands (<a href="../plan/roadmap.html">roadmap</a>). <code>—</code> means no default
 (the value is derived from another parameter or the shape); <code>computed</code> means the default is an expression.</li>
 </ul>
@@ -200,23 +205,23 @@ its rows still planned.</li>
 <div class="table-wrapper">
 <table>
 <thead>
-<tr><th>Attribute</th><th>Type</th><th>Unit</th><th>Default</th><th>Applies to</th><th>Phase</th></tr>
+<tr><th>Attribute</th><th>Type</th><th>Unit</th><th>Default</th><th>Applies to</th><th>Phase</th><th>StitchCraft</th></tr>
 </thead>
 <tbody>
-<tr><td><code>min_stitch_length_mm</code></td><td>float</td><td>mm</td><td>—</td><td>all</td><td>P1 (M3)</td></tr>
-<tr><td><code>min_jump_stitch_length_mm</code></td><td>float</td><td>mm</td><td>—</td><td>all</td><td>P1 (M3)</td></tr>
-<tr><td><code>ties</code></td><td>dropdown</td><td>—</td><td>0</td><td>all</td><td>P1 (M3)</td></tr>
-<tr><td><code>force_lock_stitches</code></td><td>boolean</td><td>—</td><td>false</td><td>all</td><td>P1 (M3)</td></tr>
-<tr><td><code>lock_start</code></td><td>combo</td><td>—</td><td>half_stitch</td><td>all</td><td>P1 (M3)</td></tr>
-<tr><td><code>lock_custom_start</code></td><td>string</td><td>—</td><td>—</td><td><code>custom</code></td><td>P1 (M3)</td></tr>
-<tr><td><code>lock_start_scale_mm</code></td><td>float</td><td>mm</td><td>0.7</td><td>all</td><td>P1 (M3)</td></tr>
-<tr><td><code>lock_start_scale_percent</code></td><td>float</td><td>%</td><td>100</td><td>all</td><td>P1 (M3)</td></tr>
-<tr><td><code>lock_end</code></td><td>combo</td><td>—</td><td>half_stitch</td><td>all</td><td>P1 (M3)</td></tr>
-<tr><td><code>lock_custom_end</code></td><td>string</td><td>—</td><td>—</td><td><code>custom</code></td><td>P1 (M3)</td></tr>
-<tr><td><code>lock_end_scale_mm</code></td><td>float</td><td>mm</td><td>0.7</td><td>all</td><td>P1 (M3)</td></tr>
-<tr><td><code>lock_end_scale_percent</code></td><td>float</td><td>%</td><td>100</td><td>all</td><td>P1 (M3)</td></tr>
-<tr><td><code>trim_after</code></td><td>boolean</td><td>—</td><td>false</td><td>all</td><td>P1 (M3)</td></tr>
-<tr><td><code>stop_after</code></td><td>boolean</td><td>—</td><td>false</td><td>all</td><td>P1 (M3)</td></tr>
+<tr><td><code>min_stitch_length_mm</code></td><td>float</td><td>mm</td><td>—</td><td>all</td><td>P1 (M3)</td><td><a href="../user/reference/params/common.html#min_stitch_length_mm">registered</a></td></tr>
+<tr><td><code>min_jump_stitch_length_mm</code></td><td>float</td><td>mm</td><td>—</td><td>all</td><td>P1 (M3)</td><td><a href="../user/reference/params/common.html#min_jump_stitch_length_mm">registered</a></td></tr>
+<tr><td><code>ties</code></td><td>dropdown</td><td>—</td><td>0</td><td>all</td><td>P1 (M3)</td><td><a href="../user/reference/params/common.html#ties">registered</a></td></tr>
+<tr><td><code>force_lock_stitches</code></td><td>boolean</td><td>—</td><td>false</td><td>all</td><td>P1 (M3)</td><td><a href="../user/reference/params/common.html#force_lock_stitches">registered</a></td></tr>
+<tr><td><code>lock_start</code></td><td>combo</td><td>—</td><td>half_stitch</td><td>all</td><td>P1 (M3)</td><td><a href="../user/reference/params/common.html#lock_start">deviates</a></td></tr>
+<tr><td><code>lock_custom_start</code></td><td>string</td><td>—</td><td>—</td><td><code>custom</code></td><td>P1 (M3)</td><td><a href="../user/reference/params/common.html#lock_custom_start">registered</a></td></tr>
+<tr><td><code>lock_start_scale_mm</code></td><td>float</td><td>mm</td><td>0.7</td><td>all</td><td>P1 (M3)</td><td><a href="../user/reference/params/common.html#lock_start_scale_mm">registered</a></td></tr>
+<tr><td><code>lock_start_scale_percent</code></td><td>float</td><td>%</td><td>100</td><td>all</td><td>P1 (M3)</td><td><a href="../user/reference/params/common.html#lock_start_scale_percent">registered</a></td></tr>
+<tr><td><code>lock_end</code></td><td>combo</td><td>—</td><td>half_stitch</td><td>all</td><td>P1 (M3)</td><td><a href="../user/reference/params/common.html#lock_end">deviates</a></td></tr>
+<tr><td><code>lock_custom_end</code></td><td>string</td><td>—</td><td>—</td><td><code>custom</code></td><td>P1 (M3)</td><td><a href="../user/reference/params/common.html#lock_custom_end">registered</a></td></tr>
+<tr><td><code>lock_end_scale_mm</code></td><td>float</td><td>mm</td><td>0.7</td><td>all</td><td>P1 (M3)</td><td><a href="../user/reference/params/common.html#lock_end_scale_mm">registered</a></td></tr>
+<tr><td><code>lock_end_scale_percent</code></td><td>float</td><td>%</td><td>100</td><td>all</td><td>P1 (M3)</td><td><a href="../user/reference/params/common.html#lock_end_scale_percent">registered</a></td></tr>
+<tr><td><code>trim_after</code></td><td>boolean</td><td>—</td><td>false</td><td>all</td><td>P1 (M3)</td><td><a href="../user/reference/params/common.html#trim_after">registered</a></td></tr>
+<tr><td><code>stop_after</code></td><td>boolean</td><td>—</td><td>false</td><td>all</td><td>P1 (M3)</td><td><a href="../user/reference/params/common.html#stop_after">registered</a></td></tr>
 </tbody>
 </table>
 </div>
@@ -224,42 +229,42 @@ its rows still planned.</li>
 <div class="table-wrapper">
 <table>
 <thead>
-<tr><th>Attribute</th><th>Type</th><th>Unit</th><th>Default</th><th>Applies to</th><th>Phase</th></tr>
+<tr><th>Attribute</th><th>Type</th><th>Unit</th><th>Default</th><th>Applies to</th><th>Phase</th><th>StitchCraft</th></tr>
 </thead>
 <tbody>
-<tr><td><code>satin_column</code></td><td>toggle</td><td>—</td><td>—</td><td>all</td><td>P1 (M3)</td></tr>
-<tr><td><code>stroke_method</code></td><td>combo</td><td>—</td><td>0</td><td>all</td><td>P1 (M3)</td></tr>
-<tr><td><code>repeats</code></td><td>int</td><td>—</td><td>1</td><td><code>running_stitch</code>, <code>ripple_stitch</code>, <code>zigzag_stitch</code></td><td>P1 (M3)</td></tr>
-<tr><td><code>bean_stitch_repeats</code></td><td>str</td><td>—</td><td>0</td><td><code>running_stitch</code>, <code>ripple_stitch</code>, <code>manual_stitch</code>, <code>zigzag_stitch</code></td><td>P1 (M3)</td></tr>
-<tr><td><code>manual_pattern_placement</code></td><td>boolean</td><td>—</td><td>false</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td></tr>
-<tr><td><code>running_stitch_length_mm</code></td><td>string</td><td>mm</td><td>2.5</td><td><code>running_stitch</code>, <code>ripple_stitch</code></td><td>P1 (M3)</td></tr>
-<tr><td><code>running_stitch_tolerance_mm</code></td><td>float</td><td>mm</td><td>0.2</td><td><code>running_stitch</code>, <code>ripple_stitch</code></td><td>P1 (M3)</td></tr>
-<tr><td><code>enable_random_stitch_length</code></td><td>boolean</td><td>—</td><td>false</td><td><code>running_stitch</code>, <code>ripple_stitch</code></td><td>P1 (M3)</td></tr>
-<tr><td><code>random_stitch_length_jitter_percent</code></td><td>float</td><td>± %</td><td>10</td><td><code>running_stitch</code>, <code>ripple_stitch</code></td><td>P1 (M3)</td></tr>
-<tr><td><code>max_stitch_length_mm</code></td><td>float</td><td>mm</td><td>—</td><td><code>manual_stitch</code></td><td>P1 (M3)</td></tr>
-<tr><td><code>zigzag_spacing_mm</code></td><td>string</td><td>mm</td><td>0.4</td><td><code>zigzag_stitch</code></td><td>P2 (M7)</td></tr>
-<tr><td><code>stroke_pull_compensation_mm</code></td><td>float</td><td>mm (each side)</td><td>0</td><td><code>zigzag_stitch</code></td><td>P2 (M7)</td></tr>
-<tr><td><code>zigzag_angle</code></td><td>float</td><td>°</td><td>0</td><td><code>zigzag_stitch</code></td><td>P2 (M7)</td></tr>
-<tr><td><code>line_count</code></td><td>int</td><td>—</td><td>10</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td></tr>
-<tr><td><code>min_line_dist_mm</code></td><td>float</td><td>mm</td><td>—</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td></tr>
-<tr><td><code>satin_guide_pattern_position</code></td><td>combo</td><td>—</td><td>default</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td></tr>
-<tr><td><code>staggers</code></td><td>int</td><td>—</td><td>0</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td></tr>
-<tr><td><code>skip_start</code></td><td>int</td><td>—</td><td>0</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td></tr>
-<tr><td><code>skip_end</code></td><td>int</td><td>—</td><td>0</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td></tr>
-<tr><td><code>flip_copies</code></td><td>boolean</td><td>—</td><td>true</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td></tr>
-<tr><td><code>exponent</code></td><td>float</td><td>—</td><td>1</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td></tr>
-<tr><td><code>flip_exponent</code></td><td>boolean</td><td>—</td><td>false</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td></tr>
-<tr><td><code>reverse</code></td><td>boolean</td><td>—</td><td>false</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td></tr>
-<tr><td><code>reverse_rails</code></td><td>combo</td><td>—</td><td>automatic</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td></tr>
-<tr><td><code>swap_satin_rails</code></td><td>boolean</td><td>—</td><td>false</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td></tr>
-<tr><td><code>grid_size_mm</code></td><td>float</td><td>mm</td><td>0</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td></tr>
-<tr><td><code>grid_first</code></td><td>boolean</td><td>—</td><td>false</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td></tr>
-<tr><td><code>scale_axis</code></td><td>dropdown</td><td>—</td><td>0</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td></tr>
-<tr><td><code>scale_start</code></td><td>float</td><td>%</td><td>100</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td></tr>
-<tr><td><code>scale_end</code></td><td>float</td><td>%</td><td>0.0</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td></tr>
-<tr><td><code>rotate_ripples</code></td><td>boolean</td><td>—</td><td>true</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td></tr>
-<tr><td><code>join_style</code></td><td>dropdown</td><td>—</td><td>0</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td></tr>
-<tr><td><code>random_seed</code></td><td>random_seed</td><td>—</td><td>—</td><td><code>running_stitch</code>, <code>ripple_stitch</code></td><td>P1 (M3)</td></tr>
+<tr><td><code>satin_column</code></td><td>toggle</td><td>—</td><td>—</td><td>all</td><td>P1 (M3)</td><td>planned</td></tr>
+<tr><td><code>stroke_method</code></td><td>combo</td><td>—</td><td>0</td><td>all</td><td>P1 (M3)</td><td>planned</td></tr>
+<tr><td><code>repeats</code></td><td>int</td><td>—</td><td>1</td><td><code>running_stitch</code>, <code>ripple_stitch</code>, <code>zigzag_stitch</code></td><td>P1 (M3)</td><td>planned</td></tr>
+<tr><td><code>bean_stitch_repeats</code></td><td>str</td><td>—</td><td>0</td><td><code>running_stitch</code>, <code>ripple_stitch</code>, <code>manual_stitch</code>, <code>zigzag_stitch</code></td><td>P1 (M3)</td><td>planned</td></tr>
+<tr><td><code>manual_pattern_placement</code></td><td>boolean</td><td>—</td><td>false</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td><td>planned</td></tr>
+<tr><td><code>running_stitch_length_mm</code></td><td>string</td><td>mm</td><td>2.5</td><td><code>running_stitch</code>, <code>ripple_stitch</code></td><td>P1 (M3)</td><td>planned</td></tr>
+<tr><td><code>running_stitch_tolerance_mm</code></td><td>float</td><td>mm</td><td>0.2</td><td><code>running_stitch</code>, <code>ripple_stitch</code></td><td>P1 (M3)</td><td>planned</td></tr>
+<tr><td><code>enable_random_stitch_length</code></td><td>boolean</td><td>—</td><td>false</td><td><code>running_stitch</code>, <code>ripple_stitch</code></td><td>P1 (M3)</td><td>planned</td></tr>
+<tr><td><code>random_stitch_length_jitter_percent</code></td><td>float</td><td>± %</td><td>10</td><td><code>running_stitch</code>, <code>ripple_stitch</code></td><td>P1 (M3)</td><td>planned</td></tr>
+<tr><td><code>max_stitch_length_mm</code></td><td>float</td><td>mm</td><td>—</td><td><code>manual_stitch</code></td><td>P1 (M3)</td><td>planned</td></tr>
+<tr><td><code>zigzag_spacing_mm</code></td><td>string</td><td>mm</td><td>0.4</td><td><code>zigzag_stitch</code></td><td>P2 (M7)</td><td>planned</td></tr>
+<tr><td><code>stroke_pull_compensation_mm</code></td><td>float</td><td>mm (each side)</td><td>0</td><td><code>zigzag_stitch</code></td><td>P2 (M7)</td><td>planned</td></tr>
+<tr><td><code>zigzag_angle</code></td><td>float</td><td>°</td><td>0</td><td><code>zigzag_stitch</code></td><td>P2 (M7)</td><td>planned</td></tr>
+<tr><td><code>line_count</code></td><td>int</td><td>—</td><td>10</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td><td>planned</td></tr>
+<tr><td><code>min_line_dist_mm</code></td><td>float</td><td>mm</td><td>—</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td><td>planned</td></tr>
+<tr><td><code>satin_guide_pattern_position</code></td><td>combo</td><td>—</td><td>default</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td><td>planned</td></tr>
+<tr><td><code>staggers</code></td><td>int</td><td>—</td><td>0</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td><td>planned</td></tr>
+<tr><td><code>skip_start</code></td><td>int</td><td>—</td><td>0</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td><td>planned</td></tr>
+<tr><td><code>skip_end</code></td><td>int</td><td>—</td><td>0</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td><td>planned</td></tr>
+<tr><td><code>flip_copies</code></td><td>boolean</td><td>—</td><td>true</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td><td>planned</td></tr>
+<tr><td><code>exponent</code></td><td>float</td><td>—</td><td>1</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td><td>planned</td></tr>
+<tr><td><code>flip_exponent</code></td><td>boolean</td><td>—</td><td>false</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td><td>planned</td></tr>
+<tr><td><code>reverse</code></td><td>boolean</td><td>—</td><td>false</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td><td>planned</td></tr>
+<tr><td><code>reverse_rails</code></td><td>combo</td><td>—</td><td>automatic</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td><td>planned</td></tr>
+<tr><td><code>swap_satin_rails</code></td><td>boolean</td><td>—</td><td>false</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td><td>planned</td></tr>
+<tr><td><code>grid_size_mm</code></td><td>float</td><td>mm</td><td>0</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td><td>planned</td></tr>
+<tr><td><code>grid_first</code></td><td>boolean</td><td>—</td><td>false</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td><td>planned</td></tr>
+<tr><td><code>scale_axis</code></td><td>dropdown</td><td>—</td><td>0</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td><td>planned</td></tr>
+<tr><td><code>scale_start</code></td><td>float</td><td>%</td><td>100</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td><td>planned</td></tr>
+<tr><td><code>scale_end</code></td><td>float</td><td>%</td><td>0.0</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td><td>planned</td></tr>
+<tr><td><code>rotate_ripples</code></td><td>boolean</td><td>—</td><td>true</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td><td>planned</td></tr>
+<tr><td><code>join_style</code></td><td>dropdown</td><td>—</td><td>0</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td><td>planned</td></tr>
+<tr><td><code>random_seed</code></td><td>random_seed</td><td>—</td><td>—</td><td><code>running_stitch</code>, <code>ripple_stitch</code></td><td>P1 (M3)</td><td>planned</td></tr>
 </tbody>
 </table>
 </div>
@@ -267,49 +272,49 @@ its rows still planned.</li>
 <div class="table-wrapper">
 <table>
 <thead>
-<tr><th>Attribute</th><th>Type</th><th>Unit</th><th>Default</th><th>Applies to</th><th>Phase</th></tr>
+<tr><th>Attribute</th><th>Type</th><th>Unit</th><th>Default</th><th>Applies to</th><th>Phase</th><th>StitchCraft</th></tr>
 </thead>
 <tbody>
-<tr><td><code>satin_column</code></td><td>toggle</td><td>—</td><td>—</td><td>all</td><td>P1 (M4)</td></tr>
-<tr><td><code>satin_method</code></td><td>combo</td><td>—</td><td>0</td><td>all</td><td>P1 (M4)</td></tr>
-<tr><td><code>random_width_decrease_percent</code></td><td>float</td><td>% (each side)</td><td>0</td><td>all</td><td>P1 (M4)</td></tr>
-<tr><td><code>random_width_increase_percent</code></td><td>float</td><td>% (each side)</td><td>0</td><td>all</td><td>P1 (M4)</td></tr>
-<tr><td><code>random_zigzag_spacing_percent</code></td><td>float</td><td>± %</td><td>0</td><td>all</td><td>P1 (M4)</td></tr>
-<tr><td><code>split_method</code></td><td>combo</td><td>—</td><td>0</td><td>all</td><td>P1 (M4)</td></tr>
-<tr><td><code>max_stitch_length_mm</code></td><td>float</td><td>mm</td><td>—</td><td>all</td><td>P1 (M4)</td></tr>
-<tr><td><code>random_split_jitter_percent</code></td><td>float</td><td>± %</td><td>0</td><td><code>default</code></td><td>P1 (M4)</td></tr>
-<tr><td><code>random_split_phase</code></td><td>boolean</td><td>—</td><td>false</td><td><code>default</code></td><td>P1 (M4)</td></tr>
-<tr><td><code>min_random_split_length_mm</code></td><td>float</td><td>mm</td><td>—</td><td><code>default</code></td><td>P1 (M4)</td></tr>
-<tr><td><code>split_staggers</code></td><td>float</td><td>—</td><td>4</td><td><code>staggered</code></td><td>P1 (M4)</td></tr>
-<tr><td><code>short_stitch_inset</code></td><td>float</td><td>%</td><td>15</td><td>all</td><td>P1 (M4)</td></tr>
-<tr><td><code>short_stitch_distance_mm</code></td><td>float</td><td>mm</td><td>0.25</td><td>all</td><td>P1 (M4)</td></tr>
-<tr><td><code>zigzag_spacing_mm</code></td><td>float</td><td>mm/cycle</td><td>0.4</td><td>all</td><td>P1 (M4)</td></tr>
-<tr><td><code>pull_compensation_percent</code></td><td>float</td><td>% (each side)</td><td>0</td><td>all</td><td>P1 (M4)</td></tr>
-<tr><td><code>pull_compensation_mm</code></td><td>float</td><td>mm (each side)</td><td>0</td><td>all</td><td>P1 (M4)</td></tr>
-<tr><td><code>push_compensation_mm</code></td><td>float</td><td>mm (each side)</td><td>0</td><td>all</td><td>P1 (M4)</td></tr>
-<tr><td><code>reverse_rails</code></td><td>combo</td><td>—</td><td>automatic</td><td>all</td><td>P1 (M4)</td></tr>
-<tr><td><code>swap_satin_rails</code></td><td>boolean</td><td>—</td><td>false</td><td>all</td><td>P1 (M4)</td></tr>
-<tr><td><code>running_stitch_length_mm</code></td><td>float</td><td>mm</td><td>2.5</td><td>all</td><td>P1 (M4)</td></tr>
-<tr><td><code>running_stitch_tolerance_mm</code></td><td>float</td><td>mm</td><td>0.1</td><td>all</td><td>P1 (M4)</td></tr>
-<tr><td><code>running_stitch_position</code></td><td>float</td><td>%</td><td>50</td><td>all</td><td>P1 (M4)</td></tr>
-<tr><td><code>start_at_nearest_point</code></td><td>boolean</td><td>—</td><td>true</td><td>all</td><td>P1 (M4)</td></tr>
-<tr><td><code>end_at_nearest_point</code></td><td>boolean</td><td>—</td><td>true</td><td>all</td><td>P1 (M4)</td></tr>
-<tr><td><code>contour_underlay</code></td><td>toggle</td><td>—</td><td>—</td><td>all</td><td>P1 (M4)</td></tr>
-<tr><td><code>contour_underlay_stitch_length_mm</code></td><td>float</td><td>mm</td><td>3</td><td>all</td><td>P1 (M4)</td></tr>
-<tr><td><code>contour_underlay_stitch_tolerance_mm</code></td><td>float</td><td>mm</td><td>0.2</td><td>all</td><td>P1 (M4)</td></tr>
-<tr><td><code>contour_underlay_inset_mm</code></td><td>float</td><td>mm (each side)</td><td>0.4</td><td>all</td><td>P1 (M4)</td></tr>
-<tr><td><code>contour_underlay_inset_percent</code></td><td>float</td><td>% (each side)</td><td>0</td><td>all</td><td>P1 (M4)</td></tr>
-<tr><td><code>center_walk_underlay</code></td><td>toggle</td><td>—</td><td>—</td><td>all</td><td>P1 (M4)</td></tr>
-<tr><td><code>center_walk_underlay_stitch_length_mm</code></td><td>float</td><td>mm</td><td>3</td><td>all</td><td>P1 (M4)</td></tr>
-<tr><td><code>center_walk_underlay_stitch_tolerance_mm</code></td><td>float</td><td>mm</td><td>0.2</td><td>all</td><td>P1 (M4)</td></tr>
-<tr><td><code>center_walk_underlay_repeats</code></td><td>int</td><td>—</td><td>2</td><td>all</td><td>P1 (M4)</td></tr>
-<tr><td><code>center_walk_underlay_position</code></td><td>float</td><td>%</td><td>50</td><td>all</td><td>P1 (M4)</td></tr>
-<tr><td><code>zigzag_underlay</code></td><td>toggle</td><td>—</td><td>—</td><td>all</td><td>P1 (M4)</td></tr>
-<tr><td><code>zigzag_underlay_spacing_mm</code></td><td>float</td><td>mm</td><td>3</td><td>all</td><td>P1 (M4)</td></tr>
-<tr><td><code>zigzag_underlay_inset_mm</code></td><td>float</td><td>mm (each side)</td><td>—</td><td>all</td><td>P1 (M4)</td></tr>
-<tr><td><code>zigzag_underlay_inset_percent</code></td><td>float</td><td>% (each side)</td><td>—</td><td>all</td><td>P1 (M4)</td></tr>
-<tr><td><code>zigzag_underlay_max_stitch_length_mm</code></td><td>float</td><td>mm</td><td>—</td><td>all</td><td>P1 (M4)</td></tr>
-<tr><td><code>random_seed</code></td><td>random_seed</td><td>—</td><td>—</td><td>all</td><td>P1 (M4)</td></tr>
+<tr><td><code>satin_column</code></td><td>toggle</td><td>—</td><td>—</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>satin_method</code></td><td>combo</td><td>—</td><td>0</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>random_width_decrease_percent</code></td><td>float</td><td>% (each side)</td><td>0</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>random_width_increase_percent</code></td><td>float</td><td>% (each side)</td><td>0</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>random_zigzag_spacing_percent</code></td><td>float</td><td>± %</td><td>0</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>split_method</code></td><td>combo</td><td>—</td><td>0</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>max_stitch_length_mm</code></td><td>float</td><td>mm</td><td>—</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>random_split_jitter_percent</code></td><td>float</td><td>± %</td><td>0</td><td><code>default</code></td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>random_split_phase</code></td><td>boolean</td><td>—</td><td>false</td><td><code>default</code></td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>min_random_split_length_mm</code></td><td>float</td><td>mm</td><td>—</td><td><code>default</code></td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>split_staggers</code></td><td>float</td><td>—</td><td>4</td><td><code>staggered</code></td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>short_stitch_inset</code></td><td>float</td><td>%</td><td>15</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>short_stitch_distance_mm</code></td><td>float</td><td>mm</td><td>0.25</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>zigzag_spacing_mm</code></td><td>float</td><td>mm/cycle</td><td>0.4</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>pull_compensation_percent</code></td><td>float</td><td>% (each side)</td><td>0</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>pull_compensation_mm</code></td><td>float</td><td>mm (each side)</td><td>0</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>push_compensation_mm</code></td><td>float</td><td>mm (each side)</td><td>0</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>reverse_rails</code></td><td>combo</td><td>—</td><td>automatic</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>swap_satin_rails</code></td><td>boolean</td><td>—</td><td>false</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>running_stitch_length_mm</code></td><td>float</td><td>mm</td><td>2.5</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>running_stitch_tolerance_mm</code></td><td>float</td><td>mm</td><td>0.1</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>running_stitch_position</code></td><td>float</td><td>%</td><td>50</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>start_at_nearest_point</code></td><td>boolean</td><td>—</td><td>true</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>end_at_nearest_point</code></td><td>boolean</td><td>—</td><td>true</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>contour_underlay</code></td><td>toggle</td><td>—</td><td>—</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>contour_underlay_stitch_length_mm</code></td><td>float</td><td>mm</td><td>3</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>contour_underlay_stitch_tolerance_mm</code></td><td>float</td><td>mm</td><td>0.2</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>contour_underlay_inset_mm</code></td><td>float</td><td>mm (each side)</td><td>0.4</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>contour_underlay_inset_percent</code></td><td>float</td><td>% (each side)</td><td>0</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>center_walk_underlay</code></td><td>toggle</td><td>—</td><td>—</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>center_walk_underlay_stitch_length_mm</code></td><td>float</td><td>mm</td><td>3</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>center_walk_underlay_stitch_tolerance_mm</code></td><td>float</td><td>mm</td><td>0.2</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>center_walk_underlay_repeats</code></td><td>int</td><td>—</td><td>2</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>center_walk_underlay_position</code></td><td>float</td><td>%</td><td>50</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>zigzag_underlay</code></td><td>toggle</td><td>—</td><td>—</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>zigzag_underlay_spacing_mm</code></td><td>float</td><td>mm</td><td>3</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>zigzag_underlay_inset_mm</code></td><td>float</td><td>mm (each side)</td><td>—</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>zigzag_underlay_inset_percent</code></td><td>float</td><td>% (each side)</td><td>—</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>zigzag_underlay_max_stitch_length_mm</code></td><td>float</td><td>mm</td><td>—</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>random_seed</code></td><td>random_seed</td><td>—</td><td>—</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
 </tbody>
 </table>
 </div>
@@ -317,64 +322,64 @@ its rows still planned.</li>
 <div class="table-wrapper">
 <table>
 <thead>
-<tr><th>Attribute</th><th>Type</th><th>Unit</th><th>Default</th><th>Applies to</th><th>Phase</th></tr>
+<tr><th>Attribute</th><th>Type</th><th>Unit</th><th>Default</th><th>Applies to</th><th>Phase</th><th>StitchCraft</th></tr>
 </thead>
 <tbody>
-<tr><td><code>fill</code></td><td>toggle</td><td>—</td><td>true</td><td>all</td><td>P1 (M5)</td></tr>
-<tr><td><code>fill_method</code></td><td>combo</td><td>—</td><td>0</td><td>all</td><td>P1 (M5)</td></tr>
-<tr><td><code>guided_fill_strategy</code></td><td>dropdown</td><td>—</td><td>0</td><td><code>guided_fill</code></td><td>P3 (M10)</td></tr>
-<tr><td><code>contour_strategy</code></td><td>dropdown</td><td>—</td><td>0</td><td><code>contour_fill</code></td><td>P2 (M7)</td></tr>
-<tr><td><code>join_style</code></td><td>dropdown</td><td>—</td><td>0</td><td><code>contour_fill</code></td><td>P2 (M7)</td></tr>
-<tr><td><code>avoid_self_crossing</code></td><td>boolean</td><td>—</td><td>false</td><td><code>contour_fill</code></td><td>P2 (M7)</td></tr>
-<tr><td><code>clockwise</code></td><td>boolean</td><td>—</td><td>true</td><td><code>contour_fill</code></td><td>P2 (M7)</td></tr>
-<tr><td><code>meander_pattern</code></td><td>combo</td><td>—</td><td>0</td><td><code>meander_fill</code></td><td>P2 (M7)</td></tr>
-<tr><td><code>meander_angle</code></td><td>float</td><td>degrees</td><td>0</td><td><code>meander_fill</code></td><td>P2 (M7)</td></tr>
-<tr><td><code>meander_scale_percent</code></td><td>float</td><td>%</td><td>100</td><td><code>meander_fill</code></td><td>P2 (M7)</td></tr>
-<tr><td><code>clip</code></td><td>boolean</td><td>—</td><td>false</td><td><code>meander_fill</code></td><td>P2 (M7)</td></tr>
-<tr><td><code>smoothness_mm</code></td><td>float</td><td>mm</td><td>0</td><td><code>contour_fill</code>, <code>guided_fill</code>, <code>meander_fill</code></td><td>P2 (M7)</td></tr>
-<tr><td><code>expand_mm</code></td><td>float</td><td>mm</td><td>0</td><td>all</td><td>P1 (M5)</td></tr>
-<tr><td><code>gap_fill_rows</code></td><td>int</td><td>rows</td><td>0</td><td><code>tatami_fill</code></td><td>P1 (M5)</td></tr>
-<tr><td><code>angle</code></td><td>float</td><td>deg</td><td>0</td><td><code>tatami_fill</code>, <code>legacy_fill</code></td><td>P1 (M5)</td></tr>
-<tr><td><code>guided_fill_angle</code></td><td>float</td><td>deg</td><td>—</td><td><code>guided_fill</code></td><td>P3 (M10)</td></tr>
-<tr><td><code>tartan_angle</code></td><td>float</td><td>deg</td><td>-45</td><td><code>tartan_fill</code></td><td>P3 (M10)</td></tr>
-<tr><td><code>max_stitch_length_mm</code></td><td>float</td><td>mm</td><td>4.0</td><td><code>tatami_fill</code>, <code>contour_fill</code>, <code>guided_fill</code>, <code>linear_gradient_fill</code>, <code>tartan_fill</code>, <code>legacy_fill</code></td><td>P1 (M5)</td></tr>
-<tr><td><code>row_spacing_mm</code></td><td>float</td><td>mm</td><td>0.25</td><td><code>tatami_fill</code>, <code>contour_fill</code>, <code>guided_fill</code>, <code>circular_fill</code>, <code>linear_gradient_fill</code>, <code>tartan_fill</code>, <code>legacy_fill</code></td><td>P1 (M5)</td></tr>
-<tr><td><code>end_row_spacing_mm</code></td><td>float</td><td>mm</td><td>—</td><td><code>tatami_fill</code>, <code>circular_fill</code>, <code>legacy_fill</code></td><td>P1 (M5)</td></tr>
-<tr><td><code>stitch_position_method</code></td><td>combo</td><td>—</td><td>0</td><td><code>guided_fill</code></td><td>P3 (M10)</td></tr>
-<tr><td><code>staggers</code></td><td>int</td><td>—</td><td>4</td><td><code>tatami_fill</code>, <code>guided_fill</code>, <code>linear_gradient_fill</code>, <code>tartan_fill</code>, <code>legacy_fill</code></td><td>P1 (M5)</td></tr>
-<tr><td><code>skip_last</code></td><td>boolean</td><td>—</td><td>false</td><td><code>tatami_fill</code>, <code>guided_fill</code>, <code>linear_gradient_fill</code>, <code>legacy_fill</code></td><td>P1 (M5)</td></tr>
-<tr><td><code>flip</code></td><td>boolean</td><td>—</td><td>false</td><td><code>legacy_fill</code></td><td>P3 (M10)</td></tr>
-<tr><td><code>reverse</code></td><td>boolean</td><td>—</td><td>false</td><td><code>legacy_fill</code></td><td>P3 (M10)</td></tr>
-<tr><td><code>stop_at_ending_point</code></td><td>boolean</td><td>—</td><td>false</td><td><code>linear_gradient_fill</code>, <code>tartan_fill</code></td><td>P3 (M10)</td></tr>
-<tr><td><code>underpath</code></td><td>boolean</td><td>—</td><td>true</td><td><code>tatami_fill</code>, <code>guided_fill</code>, <code>circular_fill</code></td><td>P1 (M5)</td></tr>
-<tr><td><code>running_stitch_length_mm</code></td><td>float</td><td>mm</td><td>2.5</td><td><code>tatami_fill</code>, <code>guided_fill</code>, <code>meander_fill</code>, <code>circular_fill</code>, <code>linear_gradient_fill</code>, <code>tartan_fill</code></td><td>P1 (M5)</td></tr>
-<tr><td><code>running_stitch_tolerance_mm</code></td><td>float</td><td>mm</td><td>0.1</td><td><code>tatami_fill</code>, <code>contour_fill</code>, <code>guided_fill</code>, <code>meander_fill</code>, <code>circular_fill</code>, <code>linear_gradient_fill</code>, <code>tartan_fill</code></td><td>P1 (M5)</td></tr>
-<tr><td><code>enable_random_stitch_length</code></td><td>boolean</td><td>—</td><td>false</td><td><code>tatami_fill</code>, <code>contour_fill</code>, <code>guided_fill</code>, <code>circular_fill</code>, <code>linear_gradient_fill</code></td><td>P1 (M5)</td></tr>
-<tr><td><code>random_stitch_length_jitter_percent</code></td><td>float</td><td>± %</td><td>10</td><td><code>tatami_fill</code>, <code>contour_fill</code>, <code>guided_fill</code>, <code>circular_fill</code>, <code>linear_gradient_fill</code></td><td>P1 (M5)</td></tr>
-<tr><td><code>repeats</code></td><td>int</td><td>—</td><td>1</td><td><code>meander_fill</code>, <code>contour_fill</code>, <code>circular_fill</code></td><td>P2 (M7)</td></tr>
-<tr><td><code>bean_stitch_repeats</code></td><td>str</td><td>—</td><td>0</td><td><code>meander_fill</code>, <code>circular_fill</code>, <code>contour_fill</code>, <code>guided_fill</code>, <code>tartan_fill</code></td><td>P2 (M7)</td></tr>
-<tr><td><code>zigzag_spacing_mm</code></td><td>float</td><td>mm</td><td>0</td><td><code>meander_fill</code></td><td>P2 (M7)</td></tr>
-<tr><td><code>zigzag_width_mm</code></td><td>float</td><td>mm</td><td>3</td><td><code>meander_fill</code></td><td>P2 (M7)</td></tr>
-<tr><td><code>rows_per_thread</code></td><td>int</td><td>—</td><td>2</td><td><code>tartan_fill</code></td><td>P3 (M10)</td></tr>
-<tr><td><code>herringbone_width_mm</code></td><td>int</td><td>mm</td><td>0</td><td><code>tartan_fill</code></td><td>P3 (M10)</td></tr>
-<tr><td><code>pull_compensation_mm</code></td><td>float</td><td>mm (each side)</td><td>0</td><td><code>tatami_fill</code></td><td>P1 (M5)</td></tr>
-<tr><td><code>pull_compensation_percent</code></td><td>float</td><td>% (each side)</td><td>0</td><td><code>tatami_fill</code></td><td>P1 (M5)</td></tr>
-<tr><td><code>fill_underlay</code></td><td>toggle</td><td>—</td><td>true</td><td>all</td><td>P1 (M5)</td></tr>
-<tr><td><code>fill_underlay_angle</code></td><td>float</td><td>deg</td><td>—</td><td>all</td><td>P1 (M5)</td></tr>
-<tr><td><code>fill_underlay_row_spacing_mm</code></td><td>float</td><td>mm</td><td>—</td><td>all</td><td>P1 (M5)</td></tr>
-<tr><td><code>fill_underlay_max_stitch_length_mm</code></td><td>float</td><td>mm</td><td>—</td><td>all</td><td>P1 (M5)</td></tr>
-<tr><td><code>fill_underlay_inset_mm</code></td><td>float</td><td>mm</td><td>0</td><td>all</td><td>P1 (M5)</td></tr>
-<tr><td><code>fill_underlay_skip_last</code></td><td>boolean</td><td>—</td><td>false</td><td>all</td><td>P1 (M5)</td></tr>
-<tr><td><code>underlay_underpath</code></td><td>boolean</td><td>—</td><td>true</td><td>all</td><td>P1 (M5)</td></tr>
-<tr><td><code>random_seed</code></td><td>random_seed</td><td>—</td><td>—</td><td><code>tatami_fill</code>, <code>contour_fill</code>, <code>guided_fill</code>, <code>circular_fill</code>, <code>meander_fill</code>, <code>linear_gradient_fill</code></td><td>P1 (M5)</td></tr>
-<tr><td><code>cross_stitch_method</code></td><td>combo</td><td>—</td><td>0</td><td><code>cross_stitch</code></td><td>P3 (M10)</td></tr>
-<tr><td><code>cross_thread_count</code></td><td>int</td><td>—</td><td>4</td><td><code>cross_stitch</code></td><td>P3 (M10)</td></tr>
-<tr><td><code>pattern_size_mm</code></td><td>float</td><td>mm (x y)</td><td>3</td><td><code>cross_stitch</code></td><td>P3 (M10)</td></tr>
-<tr><td><code>canvas_grid_origin</code></td><td>boolean</td><td>—</td><td>true</td><td><code>cross_stitch</code></td><td>P3 (M10)</td></tr>
-<tr><td><code>cross_offset_mm</code></td><td>float</td><td>mm (x y)</td><td>0</td><td><code>cross_stitch</code></td><td>P3 (M10)</td></tr>
-<tr><td><code>cross_rotation</code></td><td>float</td><td>deg</td><td>0</td><td><code>cross_stitch</code></td><td>P3 (M10)</td></tr>
-<tr><td><code>fill_coverage</code></td><td>int</td><td>%</td><td>50</td><td><code>cross_stitch</code></td><td>P3 (M10)</td></tr>
-<tr><td><code>max_cross_stitch_length_mm</code></td><td>float</td><td>mm</td><td>11.0</td><td><code>cross_stitch</code></td><td>P3 (M10)</td></tr>
+<tr><td><code>fill</code></td><td>toggle</td><td>—</td><td>true</td><td>all</td><td>P1 (M5)</td><td>planned</td></tr>
+<tr><td><code>fill_method</code></td><td>combo</td><td>—</td><td>0</td><td>all</td><td>P1 (M5)</td><td>planned</td></tr>
+<tr><td><code>guided_fill_strategy</code></td><td>dropdown</td><td>—</td><td>0</td><td><code>guided_fill</code></td><td>P3 (M10)</td><td>planned</td></tr>
+<tr><td><code>contour_strategy</code></td><td>dropdown</td><td>—</td><td>0</td><td><code>contour_fill</code></td><td>P2 (M7)</td><td>planned</td></tr>
+<tr><td><code>join_style</code></td><td>dropdown</td><td>—</td><td>0</td><td><code>contour_fill</code></td><td>P2 (M7)</td><td>planned</td></tr>
+<tr><td><code>avoid_self_crossing</code></td><td>boolean</td><td>—</td><td>false</td><td><code>contour_fill</code></td><td>P2 (M7)</td><td>planned</td></tr>
+<tr><td><code>clockwise</code></td><td>boolean</td><td>—</td><td>true</td><td><code>contour_fill</code></td><td>P2 (M7)</td><td>planned</td></tr>
+<tr><td><code>meander_pattern</code></td><td>combo</td><td>—</td><td>0</td><td><code>meander_fill</code></td><td>P2 (M7)</td><td>planned</td></tr>
+<tr><td><code>meander_angle</code></td><td>float</td><td>degrees</td><td>0</td><td><code>meander_fill</code></td><td>P2 (M7)</td><td>planned</td></tr>
+<tr><td><code>meander_scale_percent</code></td><td>float</td><td>%</td><td>100</td><td><code>meander_fill</code></td><td>P2 (M7)</td><td>planned</td></tr>
+<tr><td><code>clip</code></td><td>boolean</td><td>—</td><td>false</td><td><code>meander_fill</code></td><td>P2 (M7)</td><td>planned</td></tr>
+<tr><td><code>smoothness_mm</code></td><td>float</td><td>mm</td><td>0</td><td><code>contour_fill</code>, <code>guided_fill</code>, <code>meander_fill</code></td><td>P2 (M7)</td><td>planned</td></tr>
+<tr><td><code>expand_mm</code></td><td>float</td><td>mm</td><td>0</td><td>all</td><td>P1 (M5)</td><td>planned</td></tr>
+<tr><td><code>gap_fill_rows</code></td><td>int</td><td>rows</td><td>0</td><td><code>tatami_fill</code></td><td>P1 (M5)</td><td>planned</td></tr>
+<tr><td><code>angle</code></td><td>float</td><td>deg</td><td>0</td><td><code>tatami_fill</code>, <code>legacy_fill</code></td><td>P1 (M5)</td><td>planned</td></tr>
+<tr><td><code>guided_fill_angle</code></td><td>float</td><td>deg</td><td>—</td><td><code>guided_fill</code></td><td>P3 (M10)</td><td>planned</td></tr>
+<tr><td><code>tartan_angle</code></td><td>float</td><td>deg</td><td>-45</td><td><code>tartan_fill</code></td><td>P3 (M10)</td><td>planned</td></tr>
+<tr><td><code>max_stitch_length_mm</code></td><td>float</td><td>mm</td><td>4.0</td><td><code>tatami_fill</code>, <code>contour_fill</code>, <code>guided_fill</code>, <code>linear_gradient_fill</code>, <code>tartan_fill</code>, <code>legacy_fill</code></td><td>P1 (M5)</td><td>planned</td></tr>
+<tr><td><code>row_spacing_mm</code></td><td>float</td><td>mm</td><td>0.25</td><td><code>tatami_fill</code>, <code>contour_fill</code>, <code>guided_fill</code>, <code>circular_fill</code>, <code>linear_gradient_fill</code>, <code>tartan_fill</code>, <code>legacy_fill</code></td><td>P1 (M5)</td><td>planned</td></tr>
+<tr><td><code>end_row_spacing_mm</code></td><td>float</td><td>mm</td><td>—</td><td><code>tatami_fill</code>, <code>circular_fill</code>, <code>legacy_fill</code></td><td>P1 (M5)</td><td>planned</td></tr>
+<tr><td><code>stitch_position_method</code></td><td>combo</td><td>—</td><td>0</td><td><code>guided_fill</code></td><td>P3 (M10)</td><td>planned</td></tr>
+<tr><td><code>staggers</code></td><td>int</td><td>—</td><td>4</td><td><code>tatami_fill</code>, <code>guided_fill</code>, <code>linear_gradient_fill</code>, <code>tartan_fill</code>, <code>legacy_fill</code></td><td>P1 (M5)</td><td>planned</td></tr>
+<tr><td><code>skip_last</code></td><td>boolean</td><td>—</td><td>false</td><td><code>tatami_fill</code>, <code>guided_fill</code>, <code>linear_gradient_fill</code>, <code>legacy_fill</code></td><td>P1 (M5)</td><td>planned</td></tr>
+<tr><td><code>flip</code></td><td>boolean</td><td>—</td><td>false</td><td><code>legacy_fill</code></td><td>P3 (M10)</td><td>planned</td></tr>
+<tr><td><code>reverse</code></td><td>boolean</td><td>—</td><td>false</td><td><code>legacy_fill</code></td><td>P3 (M10)</td><td>planned</td></tr>
+<tr><td><code>stop_at_ending_point</code></td><td>boolean</td><td>—</td><td>false</td><td><code>linear_gradient_fill</code>, <code>tartan_fill</code></td><td>P3 (M10)</td><td>planned</td></tr>
+<tr><td><code>underpath</code></td><td>boolean</td><td>—</td><td>true</td><td><code>tatami_fill</code>, <code>guided_fill</code>, <code>circular_fill</code></td><td>P1 (M5)</td><td>planned</td></tr>
+<tr><td><code>running_stitch_length_mm</code></td><td>float</td><td>mm</td><td>2.5</td><td><code>tatami_fill</code>, <code>guided_fill</code>, <code>meander_fill</code>, <code>circular_fill</code>, <code>linear_gradient_fill</code>, <code>tartan_fill</code></td><td>P1 (M5)</td><td>planned</td></tr>
+<tr><td><code>running_stitch_tolerance_mm</code></td><td>float</td><td>mm</td><td>0.1</td><td><code>tatami_fill</code>, <code>contour_fill</code>, <code>guided_fill</code>, <code>meander_fill</code>, <code>circular_fill</code>, <code>linear_gradient_fill</code>, <code>tartan_fill</code></td><td>P1 (M5)</td><td>planned</td></tr>
+<tr><td><code>enable_random_stitch_length</code></td><td>boolean</td><td>—</td><td>false</td><td><code>tatami_fill</code>, <code>contour_fill</code>, <code>guided_fill</code>, <code>circular_fill</code>, <code>linear_gradient_fill</code></td><td>P1 (M5)</td><td>planned</td></tr>
+<tr><td><code>random_stitch_length_jitter_percent</code></td><td>float</td><td>± %</td><td>10</td><td><code>tatami_fill</code>, <code>contour_fill</code>, <code>guided_fill</code>, <code>circular_fill</code>, <code>linear_gradient_fill</code></td><td>P1 (M5)</td><td>planned</td></tr>
+<tr><td><code>repeats</code></td><td>int</td><td>—</td><td>1</td><td><code>meander_fill</code>, <code>contour_fill</code>, <code>circular_fill</code></td><td>P2 (M7)</td><td>planned</td></tr>
+<tr><td><code>bean_stitch_repeats</code></td><td>str</td><td>—</td><td>0</td><td><code>meander_fill</code>, <code>circular_fill</code>, <code>contour_fill</code>, <code>guided_fill</code>, <code>tartan_fill</code></td><td>P2 (M7)</td><td>planned</td></tr>
+<tr><td><code>zigzag_spacing_mm</code></td><td>float</td><td>mm</td><td>0</td><td><code>meander_fill</code></td><td>P2 (M7)</td><td>planned</td></tr>
+<tr><td><code>zigzag_width_mm</code></td><td>float</td><td>mm</td><td>3</td><td><code>meander_fill</code></td><td>P2 (M7)</td><td>planned</td></tr>
+<tr><td><code>rows_per_thread</code></td><td>int</td><td>—</td><td>2</td><td><code>tartan_fill</code></td><td>P3 (M10)</td><td>planned</td></tr>
+<tr><td><code>herringbone_width_mm</code></td><td>int</td><td>mm</td><td>0</td><td><code>tartan_fill</code></td><td>P3 (M10)</td><td>planned</td></tr>
+<tr><td><code>pull_compensation_mm</code></td><td>float</td><td>mm (each side)</td><td>0</td><td><code>tatami_fill</code></td><td>P1 (M5)</td><td>planned</td></tr>
+<tr><td><code>pull_compensation_percent</code></td><td>float</td><td>% (each side)</td><td>0</td><td><code>tatami_fill</code></td><td>P1 (M5)</td><td>planned</td></tr>
+<tr><td><code>fill_underlay</code></td><td>toggle</td><td>—</td><td>true</td><td>all</td><td>P1 (M5)</td><td>planned</td></tr>
+<tr><td><code>fill_underlay_angle</code></td><td>float</td><td>deg</td><td>—</td><td>all</td><td>P1 (M5)</td><td>planned</td></tr>
+<tr><td><code>fill_underlay_row_spacing_mm</code></td><td>float</td><td>mm</td><td>—</td><td>all</td><td>P1 (M5)</td><td>planned</td></tr>
+<tr><td><code>fill_underlay_max_stitch_length_mm</code></td><td>float</td><td>mm</td><td>—</td><td>all</td><td>P1 (M5)</td><td>planned</td></tr>
+<tr><td><code>fill_underlay_inset_mm</code></td><td>float</td><td>mm</td><td>0</td><td>all</td><td>P1 (M5)</td><td>planned</td></tr>
+<tr><td><code>fill_underlay_skip_last</code></td><td>boolean</td><td>—</td><td>false</td><td>all</td><td>P1 (M5)</td><td>planned</td></tr>
+<tr><td><code>underlay_underpath</code></td><td>boolean</td><td>—</td><td>true</td><td>all</td><td>P1 (M5)</td><td>planned</td></tr>
+<tr><td><code>random_seed</code></td><td>random_seed</td><td>—</td><td>—</td><td><code>tatami_fill</code>, <code>contour_fill</code>, <code>guided_fill</code>, <code>circular_fill</code>, <code>meander_fill</code>, <code>linear_gradient_fill</code></td><td>P1 (M5)</td><td>planned</td></tr>
+<tr><td><code>cross_stitch_method</code></td><td>combo</td><td>—</td><td>0</td><td><code>cross_stitch</code></td><td>P3 (M10)</td><td>planned</td></tr>
+<tr><td><code>cross_thread_count</code></td><td>int</td><td>—</td><td>4</td><td><code>cross_stitch</code></td><td>P3 (M10)</td><td>planned</td></tr>
+<tr><td><code>pattern_size_mm</code></td><td>float</td><td>mm (x y)</td><td>3</td><td><code>cross_stitch</code></td><td>P3 (M10)</td><td>planned</td></tr>
+<tr><td><code>canvas_grid_origin</code></td><td>boolean</td><td>—</td><td>true</td><td><code>cross_stitch</code></td><td>P3 (M10)</td><td>planned</td></tr>
+<tr><td><code>cross_offset_mm</code></td><td>float</td><td>mm (x y)</td><td>0</td><td><code>cross_stitch</code></td><td>P3 (M10)</td><td>planned</td></tr>
+<tr><td><code>cross_rotation</code></td><td>float</td><td>deg</td><td>0</td><td><code>cross_stitch</code></td><td>P3 (M10)</td><td>planned</td></tr>
+<tr><td><code>fill_coverage</code></td><td>int</td><td>%</td><td>50</td><td><code>cross_stitch</code></td><td>P3 (M10)</td><td>planned</td></tr>
+<tr><td><code>max_cross_stitch_length_mm</code></td><td>float</td><td>mm</td><td>11.0</td><td><code>cross_stitch</code></td><td>P3 (M10)</td><td>planned</td></tr>
 </tbody>
 </table>
 </div>
@@ -382,12 +387,12 @@ its rows still planned.</li>
 <div class="table-wrapper">
 <table>
 <thead>
-<tr><th>Attribute</th><th>Type</th><th>Unit</th><th>Default</th><th>Applies to</th><th>Phase</th></tr>
+<tr><th>Attribute</th><th>Type</th><th>Unit</th><th>Default</th><th>Applies to</th><th>Phase</th><th>StitchCraft</th></tr>
 </thead>
 <tbody>
-<tr><td><code>clone</code></td><td>toggle</td><td>—</td><td>true</td><td>all</td><td>P2 (M8)</td></tr>
-<tr><td><code>angle</code></td><td>float</td><td>deg</td><td>—</td><td>all</td><td>P2 (M8)</td></tr>
-<tr><td><code>flip_angle</code></td><td>boolean</td><td>—</td><td>false</td><td>all</td><td>P2 (M8)</td></tr>
+<tr><td><code>clone</code></td><td>toggle</td><td>—</td><td>true</td><td>all</td><td>P2 (M8)</td><td>planned</td></tr>
+<tr><td><code>angle</code></td><td>float</td><td>deg</td><td>—</td><td>all</td><td>P2 (M8)</td><td>planned</td></tr>
+<tr><td><code>flip_angle</code></td><td>boolean</td><td>—</td><td>false</td><td>all</td><td>P2 (M8)</td><td>planned</td></tr>
 </tbody>
 </table>
 </div>
@@ -420,14 +425,14 @@ its rows still planned.</li>
 </table>
 </div>
 <p>Lock stitch identifiers (<code>lock_start</code>, <code>lock_end</code>): <code>half_stitch</code>, <code>arrow</code>, <code>back_forth</code>, <code>bowtie</code>, <code>cross</code>, <code>star</code>, <code>simple</code>, <code>triangle</code>, <code>zigzag</code>, <code>custom</code>. StitchCraft accepts every identifier; the shapes are its own
-designs with the same intent, recorded as a deviation in the <a href="conformance.html">conformance</a> deviations ledger.</p>
-<p><em>145 parameter declarations.</em></p>
+designs with the same intent, a deviation recorded in the deviations ledger (<code>conformance/deviations.toml</code>).</p>
+<p><em>145 parameter declarations, 14 registered in StitchCraft.</em></p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../design/inkstitch-issues-review.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../design/docs-pipeline.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
@@ -441,7 +446,7 @@ designs with the same intent, recorded as a deviation in the <a href="conformanc
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../design/inkstitch-issues-review.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../design/docs-pipeline.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 

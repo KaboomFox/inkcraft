@@ -35,10 +35,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-e51bd65c.js";
+            window.path_to_searchindex_js = "../searchindex-046d5ac5.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-631d94b1.js"></script>
+        <script src="../toc-06242336.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -194,7 +194,7 @@ pub struct Point { pub x: f64, pub y: f64 }</code></pre>
 <li><strong>Internal unit: millimetres.</strong> Embroidery parameters are specified in mm and machine files use
 0.1 mm, so mm keeps the numbers people read and the numbers we compute the same.</li>
 <li><strong>Host units are converted at the adapter:</strong> VectorCraft points ×25.4/72; SVG user units through
-the root <code>viewBox</code>/<code>width</code>/<code>height</code> (Ink/Stitch documents assume 96 px per inch, <code>PIXELS_PER_MM = 96 / 25.4</code>).</li>
+the root <code>viewBox</code>/<code>width</code>/<code>height</code>, with CSS pixels at 96 per inch.</li>
 <li><strong>Quantization happens once, in the encoder</strong>, on absolute positions: <code>round_half_even(x * 10)</code>.
 Deltas are differences of quantized absolutes, so rounding never accumulates.</li>
 <li><strong>Axis conventions per format</strong> are the encoder’s job (DST is y-up). Test sheet TS-01 (an

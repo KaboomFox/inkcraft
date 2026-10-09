@@ -35,10 +35,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-e51bd65c.js";
+            window.path_to_searchindex_js = "../searchindex-046d5ac5.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-631d94b1.js"></script>
+        <script src="../toc-06242336.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -197,7 +197,8 @@ safe, and means the docs images regenerated in CI match the ones on a contributo
 <tr><td>Floating-point contraction (FMA)</td><td>Rust does not contract <code>a * b + c</code> implicitly; we never call <code>mul_add</code> in quantization or comparisons</td><td><code>clippy::disallowed_methods</code> on <code>f64::mul_add</code> in formats</td></tr>
 <tr><td>Parallelism</td><td>Results joined in document order; no reductions whose order depends on scheduling</td><td>engine design; CI compares sequential vs parallel output</td></tr>
 <tr><td>Sorting ties</td><td>Every sort uses a total order with an explicit tie-breaker (<code>f64::total_cmp</code>, then index)</td><td>review checklist; property tests shuffle inputs</td></tr>
-<tr><td>Quantization drift</td><td>Quantize absolute positions once, at encode time, with round-half-even; deltas are differences of quantized values</td><td>format conformance (<code>REQ-FMT-002</code>)</td></tr>
+<tr><td>Quantization drift</td><td>Quantize absolute positions once, at encode time, with round-half-even (<code>Point::to_tenths</code>, shared by the writers and the previews); deltas are differences of quantized values</td><td>format conformance (<code>REQ-FMT-002</code>, <code>REQ-RND-001</code>)</td></tr>
+<tr><td>Rasterization (SIMD code paths, platform trigonometry in curve flattening)</td><td>tiny-skia without its <code>simd</code> feature; previews draw only lines and circles; grid positions convert to <code>f32</code> exactly; pure-Rust PNG encoding without timestamps (<a href="rendering.html">rendering</a>)</td><td>golden PNG files compared on all three operating systems (<code>REQ-RND-002</code>); <code>f32</code> transcendental methods are disallowed like the <code>f64</code> ones</td></tr>
 <tr><td>Dependency upgrades</td><td><code>Cargo.lock</code> committed; golden files re-blessed only in a PR that explains why</td><td>CI + review</td></tr>
 </tbody>
 </table>

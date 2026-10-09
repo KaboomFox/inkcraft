@@ -35,10 +35,10 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-e51bd65c.js";
+            window.path_to_searchindex_js = "../../searchindex-046d5ac5.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../../toc-631d94b1.js"></script>
+        <script src="../../toc-06242336.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -205,8 +205,8 @@ so a vertex exactly on a scan line is counted once. Sort the crossings; consecut
 row <em>segments</em> inside the region.</li>
 <li><strong>Pull compensation extends each segment at both ends</strong> by <code>pull_compensation_mm + pull_compensation_percent × segment length</code> (one value or two values for start/end side), clipped so
 it never reaches into a neighbouring segment of the same row. Holes, gaps and separate components
-keep their topology — the shape is never buffered as a whole
-(<a href="../inkstitch-issues-review.html#l4--algorithms-that-break-the-shape">issues review L4</a>, <code>REQ-FILL-TAT-006</code>).</li>
+keep their topology — the shape is never buffered as a whole, which would close gaps the designer
+left on purpose (<code>REQ-FILL-TAT-006</code>).</li>
 </ol>
 <h3 id="2-needle-points-along-a-row"><a class="header" href="#2-needle-points-along-a-row">2. Needle points along a row</a></h3>
 <p>Needle points fall on a global grid along the row direction: positions where
@@ -231,8 +231,7 @@ region’s vertices (A* with Euclidean heuristic). With <code>underpath</code> t
 stitch with <code>running_stitch_length_mm</code>.</li>
 <li><strong>Disconnected parts.</strong> If no inside path exists (the region has separate components), the parts are
 planned as separate sub-groups joined by tie-off → jump/trim → tie-in, with <code>SC-W0307</code> — never a
-straight stitch across empty fabric (<code>SC-W0501</code>,
-<a href="../inkstitch-analysis.html#f5--silent-degradation">finding F5</a>).</li>
+straight stitch across empty fabric (<code>SC-W0501</code>), and never a silent change to what is sewn.</li>
 <li><strong>Exit.</strong> The last cell is chosen, when possible, to end near the exit hint.</li>
 </ol>
 <h3 id="4-gap-fill-rows"><a class="header" href="#4-gap-fill-rows">4. Gap-fill rows</a></h3>
@@ -278,7 +277,7 @@ nearest points.</li>
 outside to centre; double: in and back out), following the Connected Fermat Spirals construction (Zhao
 et al., SIGGRAPH 2016). Before spiralling, <strong>necks</strong> (where the inset ring tree branches) split the region
 into parts that each spiral cleanly; a part that still cannot be connected falls back to inner-to-outer
-with <code>SC-W0311</code> (<a href="../inkstitch-issues-review.html#l4--algorithms-that-break-the-shape">issues review L4</a>).</li>
+with <code>SC-W0311</code>.</li>
 <li><code>clockwise</code> and <code>avoid_self_crossing</code> control direction and how ring connections are placed;
 <code>smoothness_mm</code> simplifies rings before stitching.</li>
 </ul>

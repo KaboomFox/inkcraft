@@ -35,7 +35,7 @@
             const path_to_root = "../../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../../searchindex-3f058530.js";
+            window.path_to_searchindex_js = "../../../searchindex-25cf0b85.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../../toc-c8bf69c1.js"></script>
@@ -188,10 +188,12 @@
 <h3 id="running_stitch_length_mm"><a class="header" href="#running_stitch_length_mm"><code>running_stitch_length_mm</code></a></h3>
 <p><strong>Stitch length.</strong> How long each stitch is. Between corners the stitches are spread evenly, so each one is at most
 this long. Several lengths separated by spaces sew as a repeating pattern: “2.5 1” sews long,
-short, long, short.</p>
+short, long, short. The stitches that join a satin column’s underlays are no longer than the
+first length.</p>
 <ul>
 <li><strong>Accepts:</strong> 1 to 16 lengths from 0.1 to 25 mm, separated by spaces</li>
 <li><strong>Default:</strong> <code>2.5</code></li>
+<li><strong>Applies to:</strong> Running stitch, Ripple stitch, Satin column, E-stitch, S-stitch, Zigzag satin</li>
 <li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
 </ul>
 <h3 id="running_stitch_tolerance_mm"><a class="header" href="#running_stitch_tolerance_mm"><code>running_stitch_tolerance_mm</code></a></h3>

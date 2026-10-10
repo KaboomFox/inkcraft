@@ -35,7 +35,7 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-3f058530.js";
+            window.path_to_searchindex_js = "../../searchindex-25cf0b85.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-c8bf69c1.js"></script>
@@ -202,6 +202,7 @@
 <tr><td><a href="#sc-w0202"><code>SC-W0202</code></a></td><td>Warning</td><td>Satin rails taken as the two longest subpaths</td></tr>
 <tr><td><a href="#sc-w0203"><code>SC-W0203</code></a></td><td>Warning</td><td>Satin rung does not cross both rails</td></tr>
 <tr><td><a href="#sc-w0205"><code>SC-W0205</code></a></td><td>Warning</td><td>Satin subpath is one point; left out</td></tr>
+<tr><td><a href="#sc-w0206"><code>SC-W0206</code></a></td><td>Warning</td><td>Satin contour underlay too short for its insets; it keeps its length</td></tr>
 <tr><td><a href="#sc-w0207"><code>SC-W0207</code></a></td><td>Warning</td><td>Satin rung crosses a rail more than once; left out</td></tr>
 <tr><td><a href="#sc-w0210"><code>SC-W0210</code></a></td><td>Warning</td><td>Satin rails without rungs have different numbers of nodes</td></tr>
 <tr><td><a href="#sc-w0211"><code>SC-W0211</code></a></td><td>Warning</td><td>Satin push compensation too long for a rail; that rail keeps its length</td></tr>
@@ -316,6 +317,13 @@ rails, so that where it joins them is what you drew.</p>
 left out.</p>
 <p>The message names the subpath, numbered from 1 in the order the path draws it. Delete the node, or
 if it was meant as a rung, draw the rung across both rails.</p>
+<h2 id="sc-w0206"><a class="header" href="#sc-w0206">SC-W0206</a></h2>
+<p><strong>Warning</strong> — Satin contour underlay too short for its insets; it keeps its length</p>
+<p>A satin column’s contour underlay stops short of the column’s start and end by its inset, but a side
+of it is so short that this would leave less than half a CSS pixel (0.13 mm), so that side runs to
+the column’s ends, as in Ink/Stitch.</p>
+<p>The message gives the insets at each end. Lower <code>contour_underlay_inset_mm</code>, or turn the contour
+underlay off for so short a column.</p>
 <h2 id="sc-w0207"><a class="header" href="#sc-w0207">SC-W0207</a></h2>
 <p><strong>Warning</strong> — Satin rung crosses a rail more than once; left out</p>
 <p>A rung of a satin column crosses a rail more than once, so it does not say which point of one rail
@@ -347,12 +355,12 @@ all of it lies within the shortest stitch of its ends: a tiny closed loop, say.<
 neighbour, or delete it if it is a stray.</p>
 <h2 id="sc-w0402"><a class="header" href="#sc-w0402">SC-W0402</a></h2>
 <p><strong>Warning</strong> — Stitch length below twice the shortest stitch; raised</p>
-<p>The running stitch length is shorter than twice the shortest stitch, so it was lengthened to
-twice the shortest stitch. Stitches are spread evenly between corners; at half the length or
-more, every stitch then stays at or above the shortest stitch, whatever the distance between
-corners.</p>
-<p>The message gives both lengths. Use a longer stitch length, or a shorter minimum if your machine
-sews shorter stitches well.</p>
+<p>A running stitch’s length, a stroke’s or that of one of a satin column’s underlays, is shorter than
+twice the shortest stitch, so it was lengthened to twice the shortest stitch. Stitches are spread
+evenly between corners; at half the length or more, every stitch then stays at or above the
+shortest stitch, whatever the distance between corners.</p>
+<p>The message names the parameter and gives both lengths. Use a longer stitch length, or a shorter
+minimum if your machine sews shorter stitches well.</p>
 <h2 id="sc-w0403"><a class="header" href="#sc-w0403">SC-W0403</a></h2>
 <p><strong>Warning</strong> — Hand-placed stitch shorter than the shortest stitch; point left out</p>
 <p>Hand-placed stitches (manual stitch) shorter than the shortest stitch the machine sews well: the

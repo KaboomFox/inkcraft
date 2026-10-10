@@ -35,7 +35,7 @@
             const path_to_root = "../../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../../searchindex-3f058530.js";
+            window.path_to_searchindex_js = "../../../searchindex-25cf0b85.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../../toc-c8bf69c1.js"></script>
@@ -351,6 +351,129 @@ diagonals that show less than whole numbers do.</p>
 <li><strong>Accepts:</strong> a number from 0.01 to 100</li>
 <li><strong>Default:</strong> <code>4</code></li>
 <li><strong>Shown when</strong> <a href="#split_method"><code>split_method</code></a> is <code>staggered</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h2 id="centre-walk-underlay"><a class="header" href="#centre-walk-underlay">Centre walk underlay</a></h2>
+<h3 id="center_walk_underlay"><a class="header" href="#center_walk_underlay"><code>center_walk_underlay</code></a></h3>
+<p><strong>Centre walk underlay.</strong> Sew a running stitch along the middle of the column first, there and back. It holds the fabric
+still along the column, and suits narrow columns. The other underlays and the top stitches
+follow it.</p>
+<ul>
+<li><strong>Accepts:</strong> true or false</li>
+<li><strong>Default:</strong> <code>false</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="center_walk_underlay_stitch_length_mm"><a class="header" href="#center_walk_underlay_stitch_length_mm"><code>center_walk_underlay_stitch_length_mm</code></a></h3>
+<p><strong>Centre walk stitch length.</strong> How long each stitch of the centre walk is. Between corners its stitches are spread evenly, so
+each one is at most this long.</p>
+<ul>
+<li><strong>Accepts:</strong> a length from 0.1 to 25 mm</li>
+<li><strong>Default:</strong> <code>3</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="center_walk_underlay_stitch_tolerance_mm"><a class="header" href="#center_walk_underlay_stitch_tolerance_mm"><code>center_walk_underlay_stitch_tolerance_mm</code></a></h3>
+<p><strong>Centre walk tolerance.</strong> How far a centre walk stitch may stray from the middle of the column on a curve. A smaller
+tolerance follows curves more closely, with more and shorter stitches.</p>
+<ul>
+<li><strong>Accepts:</strong> a length from 0.01 to 5 mm</li>
+<li><strong>Default:</strong> <code>0.2</code></li>
+<li><strong>Ink/Stitch:</strong> same key; StitchCraft differs (DEV-SAT-004): The centre walk underlay keeps within center_walk_underlay_stitch_tolerance_mm of its line, and follows points that far apart. Ink/Stitch declares that parameter but uses running_stitch_tolerance_mm in its place, the tolerance of the satin’s travel to its start and end. Both are 0.2 mm unless a file sets them.</li>
+</ul>
+<h3 id="center_walk_underlay_repeats"><a class="header" href="#center_walk_underlay_repeats"><code>center_walk_underlay_repeats</code></a></h3>
+<p><strong>Centre walk repeats.</strong> How many times the centre walk is sewn: 2 goes there and back, 3 there, back and there again.
+An odd number ends at the column’s end, and the rest of the column is then sewn from its end.</p>
+<ul>
+<li><strong>Accepts:</strong> a whole number from 1 to 100</li>
+<li><strong>Default:</strong> <code>2</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="center_walk_underlay_position"><a class="header" href="#center_walk_underlay_position"><code>center_walk_underlay_position</code></a></h3>
+<p><strong>Centre walk position.</strong> Where the centre walk runs, in percent of the way from the first rail to the second: 50 is the
+middle.</p>
+<ul>
+<li><strong>Accepts:</strong> a percentage from 0 to 100</li>
+<li><strong>Default:</strong> <code>50</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h2 id="contour-underlay"><a class="header" href="#contour-underlay">Contour underlay</a></h2>
+<h3 id="contour_underlay"><a class="header" href="#contour_underlay"><code>contour_underlay</code></a></h3>
+<p><strong>Contour underlay.</strong> Sew a running stitch along each edge of the column, a little inside it, after any centre walk.
+It holds the edges still and keeps them crisp.</p>
+<ul>
+<li><strong>Accepts:</strong> true or false</li>
+<li><strong>Default:</strong> <code>false</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="contour_underlay_stitch_length_mm"><a class="header" href="#contour_underlay_stitch_length_mm"><code>contour_underlay_stitch_length_mm</code></a></h3>
+<p><strong>Contour stitch length.</strong> How long each stitch of the contour is. Between corners its stitches are spread evenly, so each
+one is at most this long.</p>
+<ul>
+<li><strong>Accepts:</strong> a length from 0.1 to 25 mm</li>
+<li><strong>Default:</strong> <code>3</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="contour_underlay_stitch_tolerance_mm"><a class="header" href="#contour_underlay_stitch_tolerance_mm"><code>contour_underlay_stitch_tolerance_mm</code></a></h3>
+<p><strong>Contour tolerance.</strong> How far a contour stitch may stray from its line on a curve. A smaller tolerance follows curves
+more closely, with more and shorter stitches.</p>
+<ul>
+<li><strong>Accepts:</strong> a length from 0.01 to 5 mm</li>
+<li><strong>Default:</strong> <code>0.2</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="contour_underlay_inset_mm"><a class="header" href="#contour_underlay_inset_mm"><code>contour_underlay_inset_mm</code></a></h3>
+<p><strong>Contour inset.</strong> How far inside each rail the contour runs, so that it does not show past the top stitches. It
+also stops short of the column’s start by the first rail’s value and of its end by the
+second’s. 2 values set the first rail’s side, then the second’s.</p>
+<ul>
+<li><strong>Accepts:</strong> a length from -10 to 10 mm, or 2 separated by a space</li>
+<li><strong>Default:</strong> <code>0.4</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="contour_underlay_inset_percent"><a class="header" href="#contour_underlay_inset_percent"><code>contour_underlay_inset_percent</code></a></h3>
+<p><strong>Contour inset (% of width).</strong> More inset, in percent of the column’s width at each point, added to the length above. 2 values
+set the first rail’s side, then the second’s.</p>
+<ul>
+<li><strong>Accepts:</strong> a percentage from -100 to 100, or 2 separated by a space</li>
+<li><strong>Default:</strong> <code>0</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h2 id="zigzag-underlay"><a class="header" href="#zigzag-underlay">Zigzag underlay</a></h2>
+<h3 id="zigzag_underlay"><a class="header" href="#zigzag_underlay"><code>zigzag_underlay</code></a></h3>
+<p><strong>Zigzag underlay.</strong> Sew a sparse zigzag across the column, to its end and back, before the top stitches. It lifts
+them off the fabric and makes a wide column look fuller.</p>
+<ul>
+<li><strong>Accepts:</strong> true or false</li>
+<li><strong>Default:</strong> <code>false</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="zigzag_underlay_spacing_mm"><a class="header" href="#zigzag_underlay_spacing_mm"><code>zigzag_underlay_spacing_mm</code></a></h3>
+<p><strong>Zigzag underlay spacing.</strong> How far apart the zigzag’s points on each rail are, each way.</p>
+<ul>
+<li><strong>Accepts:</strong> a length from 0.01 to 10 mm</li>
+<li><strong>Default:</strong> <code>3</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="zigzag_underlay_inset_mm"><a class="header" href="#zigzag_underlay_inset_mm"><code>zigzag_underlay_inset_mm</code></a></h3>
+<p><strong>Zigzag underlay inset.</strong> How far inside each rail the zigzag’s points are. Empty: half the contour’s inset, which puts
+them between the contour and the edge. 2 values set the first rail’s side, then the second’s.</p>
+<ul>
+<li><strong>Accepts:</strong> a length from -10 to 10 mm, or 2 separated by a space, or empty</li>
+<li><strong>Default:</strong> empty</li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="zigzag_underlay_inset_percent"><a class="header" href="#zigzag_underlay_inset_percent"><code>zigzag_underlay_inset_percent</code></a></h3>
+<p><strong>Zigzag underlay inset (% of width).</strong> More inset, in percent of the column’s width at each point, added to the length above. Empty:
+half the contour’s. 2 values set the first rail’s side, then the second’s.</p>
+<ul>
+<li><strong>Accepts:</strong> a percentage from -100 to 100, or 2 separated by a space, or empty</li>
+<li><strong>Default:</strong> empty</li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="zigzag_underlay_max_stitch_length_mm"><a class="header" href="#zigzag_underlay_max_stitch_length_mm"><code>zigzag_underlay_max_stitch_length_mm</code></a></h3>
+<p><strong>Zigzag underlay longest stitch.</strong> Split zigzag stitches longer than this into equal parts. Empty: none is split.</p>
+<ul>
+<li><strong>Accepts:</strong> a length from 0.1 to 25 mm, or empty (0 or less counts as empty)</li>
+<li><strong>Default:</strong> empty</li>
 <li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
 </ul>
 

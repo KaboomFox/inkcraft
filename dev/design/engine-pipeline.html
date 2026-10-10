@@ -35,7 +35,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-3f058530.js";
+            window.path_to_searchindex_js = "../searchindex-25cf0b85.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-c8bf69c1.js"></script>
@@ -225,7 +225,9 @@ assembly reads them there: its thread, locks, trim and stop.</p>
 <p>The stitch type picks the generator. A stroke whose <code>satin_column</code> setting is on is a satin column,
 whatever its <code>stroke_method</code> says, as in Ink/Stitch. Its rails and rungs are recognized, what
 recognition finds is reported, and its <code>satin_method</code> picks the generator: the satin stitch, sewn from
-M4.2. For any other stroke the generator is its <code>stroke_method</code>. <code>running_stitch</code> (the default) and
+M4.2. A satin column also reads the running stitch’s length (<code>running_stitch_length_mm</code>): the stitches
+that join its underlays are no longer than the first value. For any other stroke the generator is its
+<code>stroke_method</code>. <code>running_stitch</code> (the default) and
 <code>manual_stitch</code> are sewn from M3. The other stroke and satin methods, satin columns drawn as their centre
 line, and fills are skipped with <code>SC-W0011</code> until their milestones. An element whose parameters are
 wrong (<code>SC-E0101</code>) is skipped too, and the rest of the design still plans.</p>

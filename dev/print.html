@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-3f058530.js";
+            window.path_to_searchindex_js = "searchindex-25cf0b85.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-c8bf69c1.js"></script>
@@ -202,7 +202,7 @@ every pull request.</li>
 <blockquote>
 <p><strong>Status:</strong> StitchCraft sews the strokes of an SVG design and writes PES and DST files. A stroke is
 sewn in running stitch or manual stitch, with bean stitch where it is set. Milestone M4 is under way:
-the engine places and compensates a satin column’s top stitches, and <code>stitch plan</code> sews the satins of
+the engine sews a satin column’s underlays and top stitches, and <code>stitch plan</code> sews the satins of
 an SVG from M8, when it reads Ink/Stitch’s settings. Fills come in M5. The
 <a href="#roadmap-small-steps-to-the-final-project">roadmap</a> has every step.</p>
 </blockquote>
@@ -1288,6 +1288,7 @@ Arguments:
 <tr><td><a href="#sc-w0202"><code>SC-W0202</code></a></td><td>Warning</td><td>Satin rails taken as the two longest subpaths</td></tr>
 <tr><td><a href="#sc-w0203"><code>SC-W0203</code></a></td><td>Warning</td><td>Satin rung does not cross both rails</td></tr>
 <tr><td><a href="#sc-w0205"><code>SC-W0205</code></a></td><td>Warning</td><td>Satin subpath is one point; left out</td></tr>
+<tr><td><a href="#sc-w0206"><code>SC-W0206</code></a></td><td>Warning</td><td>Satin contour underlay too short for its insets; it keeps its length</td></tr>
 <tr><td><a href="#sc-w0207"><code>SC-W0207</code></a></td><td>Warning</td><td>Satin rung crosses a rail more than once; left out</td></tr>
 <tr><td><a href="#sc-w0210"><code>SC-W0210</code></a></td><td>Warning</td><td>Satin rails without rungs have different numbers of nodes</td></tr>
 <tr><td><a href="#sc-w0211"><code>SC-W0211</code></a></td><td>Warning</td><td>Satin push compensation too long for a rail; that rail keeps its length</td></tr>
@@ -1402,6 +1403,13 @@ rails, so that where it joins them is what you drew.</p>
 left out.</p>
 <p>The message names the subpath, numbered from 1 in the order the path draws it. Delete the node, or
 if it was meant as a rung, draw the rung across both rails.</p>
+<h2 id="sc-w0206"><a class="header" href="#sc-w0206">SC-W0206</a></h2>
+<p><strong>Warning</strong> — Satin contour underlay too short for its insets; it keeps its length</p>
+<p>A satin column’s contour underlay stops short of the column’s start and end by its inset, but a side
+of it is so short that this would leave less than half a CSS pixel (0.13 mm), so that side runs to
+the column’s ends, as in Ink/Stitch.</p>
+<p>The message gives the insets at each end. Lower <code>contour_underlay_inset_mm</code>, or turn the contour
+underlay off for so short a column.</p>
 <h2 id="sc-w0207"><a class="header" href="#sc-w0207">SC-W0207</a></h2>
 <p><strong>Warning</strong> — Satin rung crosses a rail more than once; left out</p>
 <p>A rung of a satin column crosses a rail more than once, so it does not say which point of one rail
@@ -1433,12 +1441,12 @@ all of it lies within the shortest stitch of its ends: a tiny closed loop, say.<
 neighbour, or delete it if it is a stray.</p>
 <h2 id="sc-w0402"><a class="header" href="#sc-w0402">SC-W0402</a></h2>
 <p><strong>Warning</strong> — Stitch length below twice the shortest stitch; raised</p>
-<p>The running stitch length is shorter than twice the shortest stitch, so it was lengthened to
-twice the shortest stitch. Stitches are spread evenly between corners; at half the length or
-more, every stitch then stays at or above the shortest stitch, whatever the distance between
-corners.</p>
-<p>The message gives both lengths. Use a longer stitch length, or a shorter minimum if your machine
-sews shorter stitches well.</p>
+<p>A running stitch’s length, a stroke’s or that of one of a satin column’s underlays, is shorter than
+twice the shortest stitch, so it was lengthened to twice the shortest stitch. Stitches are spread
+evenly between corners; at half the length or more, every stitch then stays at or above the
+shortest stitch, whatever the distance between corners.</p>
+<p>The message names the parameter and gives both lengths. Use a longer stitch length, or a shorter
+minimum if your machine sews shorter stitches well.</p>
 <h2 id="sc-w0403"><a class="header" href="#sc-w0403">SC-W0403</a></h2>
 <p><strong>Warning</strong> — Hand-placed stitch shorter than the shortest stitch; point left out</p>
 <p>Hand-placed stitches (manual stitch) shorter than the shortest stitch the machine sews well: the
@@ -1595,7 +1603,7 @@ numbers, <code>true</code>/<code>false</code>, strings and arrays instead, and <
 <tr><td><a href="#stroke-parameters">Stroke parameters</a></td><td>1</td><td>Running stitch, Ripple stitch, Zigzag stitch, Manual stitch</td></tr>
 <tr><td><a href="#running-parameters">Running parameters</a></td><td>4</td><td>Running stitch, Ripple stitch</td></tr>
 <tr><td><a href="#repeat-parameters">Repeat parameters</a></td><td>2</td><td>Running stitch, Ripple stitch, Zigzag stitch, Manual stitch</td></tr>
-<tr><td><a href="#satin-parameters">Satin parameters</a></td><td>18</td><td>Satin column, E-stitch, S-stitch, Zigzag satin</td></tr>
+<tr><td><a href="#satin-parameters">Satin parameters</a></td><td>33</td><td>Satin column, E-stitch, S-stitch, Zigzag satin</td></tr>
 </tbody>
 </table>
 </div>
@@ -1607,6 +1615,16 @@ numbers, <code>true</code>/<code>false</code>, strings and arrays instead, and <
 </thead>
 <tbody>
 <tr><td><a href="#bean_stitch_repeats"><code>bean_stitch_repeats</code></a></td><td>Bean stitch</td><td>Repeat parameters</td></tr>
+<tr><td><a href="#center_walk_underlay"><code>center_walk_underlay</code></a></td><td>Centre walk underlay</td><td>Satin parameters</td></tr>
+<tr><td><a href="#center_walk_underlay_position"><code>center_walk_underlay_position</code></a></td><td>Centre walk position</td><td>Satin parameters</td></tr>
+<tr><td><a href="#center_walk_underlay_repeats"><code>center_walk_underlay_repeats</code></a></td><td>Centre walk repeats</td><td>Satin parameters</td></tr>
+<tr><td><a href="#center_walk_underlay_stitch_length_mm"><code>center_walk_underlay_stitch_length_mm</code></a></td><td>Centre walk stitch length</td><td>Satin parameters</td></tr>
+<tr><td><a href="#center_walk_underlay_stitch_tolerance_mm"><code>center_walk_underlay_stitch_tolerance_mm</code></a></td><td>Centre walk tolerance</td><td>Satin parameters</td></tr>
+<tr><td><a href="#contour_underlay"><code>contour_underlay</code></a></td><td>Contour underlay</td><td>Satin parameters</td></tr>
+<tr><td><a href="#contour_underlay_inset_mm"><code>contour_underlay_inset_mm</code></a></td><td>Contour inset</td><td>Satin parameters</td></tr>
+<tr><td><a href="#contour_underlay_inset_percent"><code>contour_underlay_inset_percent</code></a></td><td>Contour inset (% of width)</td><td>Satin parameters</td></tr>
+<tr><td><a href="#contour_underlay_stitch_length_mm"><code>contour_underlay_stitch_length_mm</code></a></td><td>Contour stitch length</td><td>Satin parameters</td></tr>
+<tr><td><a href="#contour_underlay_stitch_tolerance_mm"><code>contour_underlay_stitch_tolerance_mm</code></a></td><td>Contour tolerance</td><td>Satin parameters</td></tr>
 <tr><td><a href="#enable_random_stitch_length"><code>enable_random_stitch_length</code></a></td><td>Random stitch length</td><td>Running parameters</td></tr>
 <tr><td><a href="#force_lock_stitches"><code>force_lock_stitches</code></a></td><td>Always lock</td><td>Common parameters</td></tr>
 <tr><td><a href="#lock_custom_end"><code>lock_custom_end</code></a></td><td>Custom end lock</td><td>Common parameters</td></tr>
@@ -1647,6 +1665,11 @@ numbers, <code>true</code>/<code>false</code>, strings and arrays instead, and <
 <tr><td><a href="#ties"><code>ties</code></a></td><td>Lock stitches</td><td>Common parameters</td></tr>
 <tr><td><a href="#trim_after"><code>trim_after</code></a></td><td>Trim after</td><td>Common parameters</td></tr>
 <tr><td><a href="#zigzag_spacing_mm"><code>zigzag_spacing_mm</code></a></td><td>Zigzag spacing</td><td>Satin parameters</td></tr>
+<tr><td><a href="#zigzag_underlay"><code>zigzag_underlay</code></a></td><td>Zigzag underlay</td><td>Satin parameters</td></tr>
+<tr><td><a href="#zigzag_underlay_inset_mm"><code>zigzag_underlay_inset_mm</code></a></td><td>Zigzag underlay inset</td><td>Satin parameters</td></tr>
+<tr><td><a href="#zigzag_underlay_inset_percent"><code>zigzag_underlay_inset_percent</code></a></td><td>Zigzag underlay inset (% of width)</td><td>Satin parameters</td></tr>
+<tr><td><a href="#zigzag_underlay_max_stitch_length_mm"><code>zigzag_underlay_max_stitch_length_mm</code></a></td><td>Zigzag underlay longest stitch</td><td>Satin parameters</td></tr>
+<tr><td><a href="#zigzag_underlay_spacing_mm"><code>zigzag_underlay_spacing_mm</code></a></td><td>Zigzag underlay spacing</td><td>Satin parameters</td></tr>
 </tbody>
 </table>
 </div>
@@ -1824,10 +1847,12 @@ element set to one is skipped (<code>SC-W0011</code>).</p>
 <h3 id="running_stitch_length_mm"><a class="header" href="#running_stitch_length_mm"><code>running_stitch_length_mm</code></a></h3>
 <p><strong>Stitch length.</strong> How long each stitch is. Between corners the stitches are spread evenly, so each one is at most
 this long. Several lengths separated by spaces sew as a repeating pattern: “2.5 1” sews long,
-short, long, short.</p>
+short, long, short. The stitches that join a satin column’s underlays are no longer than the
+first length.</p>
 <ul>
 <li><strong>Accepts:</strong> 1 to 16 lengths from 0.1 to 25 mm, separated by spaces</li>
 <li><strong>Default:</strong> <code>2.5</code></li>
+<li><strong>Applies to:</strong> Running stitch, Ripple stitch, Satin column, E-stitch, S-stitch, Zigzag satin</li>
 <li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
 </ul>
 <h3 id="running_stitch_tolerance_mm"><a class="header" href="#running_stitch_tolerance_mm"><code>running_stitch_tolerance_mm</code></a></h3>
@@ -2049,6 +2074,129 @@ diagonals that show less than whole numbers do.</p>
 <li><strong>Accepts:</strong> a number from 0.01 to 100</li>
 <li><strong>Default:</strong> <code>4</code></li>
 <li><strong>Shown when</strong> <a href="#split_method"><code>split_method</code></a> is <code>staggered</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h2 id="centre-walk-underlay"><a class="header" href="#centre-walk-underlay">Centre walk underlay</a></h2>
+<h3 id="center_walk_underlay"><a class="header" href="#center_walk_underlay"><code>center_walk_underlay</code></a></h3>
+<p><strong>Centre walk underlay.</strong> Sew a running stitch along the middle of the column first, there and back. It holds the fabric
+still along the column, and suits narrow columns. The other underlays and the top stitches
+follow it.</p>
+<ul>
+<li><strong>Accepts:</strong> true or false</li>
+<li><strong>Default:</strong> <code>false</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="center_walk_underlay_stitch_length_mm"><a class="header" href="#center_walk_underlay_stitch_length_mm"><code>center_walk_underlay_stitch_length_mm</code></a></h3>
+<p><strong>Centre walk stitch length.</strong> How long each stitch of the centre walk is. Between corners its stitches are spread evenly, so
+each one is at most this long.</p>
+<ul>
+<li><strong>Accepts:</strong> a length from 0.1 to 25 mm</li>
+<li><strong>Default:</strong> <code>3</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="center_walk_underlay_stitch_tolerance_mm"><a class="header" href="#center_walk_underlay_stitch_tolerance_mm"><code>center_walk_underlay_stitch_tolerance_mm</code></a></h3>
+<p><strong>Centre walk tolerance.</strong> How far a centre walk stitch may stray from the middle of the column on a curve. A smaller
+tolerance follows curves more closely, with more and shorter stitches.</p>
+<ul>
+<li><strong>Accepts:</strong> a length from 0.01 to 5 mm</li>
+<li><strong>Default:</strong> <code>0.2</code></li>
+<li><strong>Ink/Stitch:</strong> same key; StitchCraft differs (DEV-SAT-004): The centre walk underlay keeps within center_walk_underlay_stitch_tolerance_mm of its line, and follows points that far apart. Ink/Stitch declares that parameter but uses running_stitch_tolerance_mm in its place, the tolerance of the satin’s travel to its start and end. Both are 0.2 mm unless a file sets them.</li>
+</ul>
+<h3 id="center_walk_underlay_repeats"><a class="header" href="#center_walk_underlay_repeats"><code>center_walk_underlay_repeats</code></a></h3>
+<p><strong>Centre walk repeats.</strong> How many times the centre walk is sewn: 2 goes there and back, 3 there, back and there again.
+An odd number ends at the column’s end, and the rest of the column is then sewn from its end.</p>
+<ul>
+<li><strong>Accepts:</strong> a whole number from 1 to 100</li>
+<li><strong>Default:</strong> <code>2</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="center_walk_underlay_position"><a class="header" href="#center_walk_underlay_position"><code>center_walk_underlay_position</code></a></h3>
+<p><strong>Centre walk position.</strong> Where the centre walk runs, in percent of the way from the first rail to the second: 50 is the
+middle.</p>
+<ul>
+<li><strong>Accepts:</strong> a percentage from 0 to 100</li>
+<li><strong>Default:</strong> <code>50</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h2 id="contour-underlay"><a class="header" href="#contour-underlay">Contour underlay</a></h2>
+<h3 id="contour_underlay"><a class="header" href="#contour_underlay"><code>contour_underlay</code></a></h3>
+<p><strong>Contour underlay.</strong> Sew a running stitch along each edge of the column, a little inside it, after any centre walk.
+It holds the edges still and keeps them crisp.</p>
+<ul>
+<li><strong>Accepts:</strong> true or false</li>
+<li><strong>Default:</strong> <code>false</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="contour_underlay_stitch_length_mm"><a class="header" href="#contour_underlay_stitch_length_mm"><code>contour_underlay_stitch_length_mm</code></a></h3>
+<p><strong>Contour stitch length.</strong> How long each stitch of the contour is. Between corners its stitches are spread evenly, so each
+one is at most this long.</p>
+<ul>
+<li><strong>Accepts:</strong> a length from 0.1 to 25 mm</li>
+<li><strong>Default:</strong> <code>3</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="contour_underlay_stitch_tolerance_mm"><a class="header" href="#contour_underlay_stitch_tolerance_mm"><code>contour_underlay_stitch_tolerance_mm</code></a></h3>
+<p><strong>Contour tolerance.</strong> How far a contour stitch may stray from its line on a curve. A smaller tolerance follows curves
+more closely, with more and shorter stitches.</p>
+<ul>
+<li><strong>Accepts:</strong> a length from 0.01 to 5 mm</li>
+<li><strong>Default:</strong> <code>0.2</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="contour_underlay_inset_mm"><a class="header" href="#contour_underlay_inset_mm"><code>contour_underlay_inset_mm</code></a></h3>
+<p><strong>Contour inset.</strong> How far inside each rail the contour runs, so that it does not show past the top stitches. It
+also stops short of the column’s start by the first rail’s value and of its end by the
+second’s. 2 values set the first rail’s side, then the second’s.</p>
+<ul>
+<li><strong>Accepts:</strong> a length from -10 to 10 mm, or 2 separated by a space</li>
+<li><strong>Default:</strong> <code>0.4</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="contour_underlay_inset_percent"><a class="header" href="#contour_underlay_inset_percent"><code>contour_underlay_inset_percent</code></a></h3>
+<p><strong>Contour inset (% of width).</strong> More inset, in percent of the column’s width at each point, added to the length above. 2 values
+set the first rail’s side, then the second’s.</p>
+<ul>
+<li><strong>Accepts:</strong> a percentage from -100 to 100, or 2 separated by a space</li>
+<li><strong>Default:</strong> <code>0</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h2 id="zigzag-underlay"><a class="header" href="#zigzag-underlay">Zigzag underlay</a></h2>
+<h3 id="zigzag_underlay"><a class="header" href="#zigzag_underlay"><code>zigzag_underlay</code></a></h3>
+<p><strong>Zigzag underlay.</strong> Sew a sparse zigzag across the column, to its end and back, before the top stitches. It lifts
+them off the fabric and makes a wide column look fuller.</p>
+<ul>
+<li><strong>Accepts:</strong> true or false</li>
+<li><strong>Default:</strong> <code>false</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="zigzag_underlay_spacing_mm"><a class="header" href="#zigzag_underlay_spacing_mm"><code>zigzag_underlay_spacing_mm</code></a></h3>
+<p><strong>Zigzag underlay spacing.</strong> How far apart the zigzag’s points on each rail are, each way.</p>
+<ul>
+<li><strong>Accepts:</strong> a length from 0.01 to 10 mm</li>
+<li><strong>Default:</strong> <code>3</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="zigzag_underlay_inset_mm"><a class="header" href="#zigzag_underlay_inset_mm"><code>zigzag_underlay_inset_mm</code></a></h3>
+<p><strong>Zigzag underlay inset.</strong> How far inside each rail the zigzag’s points are. Empty: half the contour’s inset, which puts
+them between the contour and the edge. 2 values set the first rail’s side, then the second’s.</p>
+<ul>
+<li><strong>Accepts:</strong> a length from -10 to 10 mm, or 2 separated by a space, or empty</li>
+<li><strong>Default:</strong> empty</li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="zigzag_underlay_inset_percent"><a class="header" href="#zigzag_underlay_inset_percent"><code>zigzag_underlay_inset_percent</code></a></h3>
+<p><strong>Zigzag underlay inset (% of width).</strong> More inset, in percent of the column’s width at each point, added to the length above. Empty:
+half the contour’s. 2 values set the first rail’s side, then the second’s.</p>
+<ul>
+<li><strong>Accepts:</strong> a percentage from -100 to 100, or 2 separated by a space, or empty</li>
+<li><strong>Default:</strong> empty</li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="zigzag_underlay_max_stitch_length_mm"><a class="header" href="#zigzag_underlay_max_stitch_length_mm"><code>zigzag_underlay_max_stitch_length_mm</code></a></h3>
+<p><strong>Zigzag underlay longest stitch.</strong> Split zigzag stitches longer than this into equal parts. Empty: none is split.</p>
+<ul>
+<li><strong>Accepts:</strong> a length from 0.1 to 25 mm, or empty (0 or less counts as empty)</li>
+<li><strong>Default:</strong> empty</li>
 <li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div>
@@ -2932,6 +3080,7 @@ version and a registry schema version arrive with the first release, together wi
 <tr><td><code>LengthList</code></td><td><code>Vec&lt;Mm&gt;</code></td><td>1 to 16 values, each in range (patterns like <code>"2.5 1.0"</code>)</td><td><code>string</code>/<code>float</code> lists</td></tr>
 <tr><td><code>LengthPair</code></td><td><code>[Mm; 2]</code></td><td>1 value for both sides, or 2 for the first side and the second (a satin’s rails, or its start and end). Each is in range, with units as for <code>Length</code></td><td><code>float</code>, unit <code>mm (each side)</code></td></tr>
 <tr><td><code>PercentPair</code></td><td><code>[f64; 2]</code></td><td>as <code>LengthPair</code>, in percent</td><td><code>float</code>, unit <code>% (each side)</code></td></tr>
+<tr><td><code>OptionalLengthPair</code>, <code>OptionalPercentPair</code></td><td><code>Option&lt;[Mm; 2]&gt;</code>, <code>Option&lt;[f64; 2]&gt;</code></td><td>as <code>LengthPair</code> and <code>PercentPair</code>, or empty: the setting then comes from another one, as a zigzag underlay’s inset comes from the contour’s. 0 is a value, as Ink/Stitch reads it</td><td><code>float</code>, unit <code>mm (each side)</code> or <code>% (each side)</code>, no default</td></tr>
 <tr><td><code>PercentList</code></td><td><code>Vec&lt;f64&gt;</code></td><td>1 to 16 percentages, each in range (levels like <code>"15 30"</code>)</td><td><code>float</code>, unit <code>%</code>, read as a list</td></tr>
 <tr><td><code>CountList</code></td><td><code>Vec&lt;u32&gt;</code></td><td>1–16 whole numbers, each in range</td><td><code>string</code>/<code>int</code> lists</td></tr>
 <tr><td><code>Text</code></td><td><code>String</code></td><td>≤ 4,096 bytes; kind-specific grammar (e.g. a custom lock path) is checked by its user</td><td><code>string</code></td></tr>
@@ -3092,7 +3241,7 @@ another.</p>
 <tr><td><code>SC-W0202</code></td><td>Warning</td><td>Satin rails taken as the two longest subpaths (where the subpaths meet does not say)</td><td>M4</td></tr>
 <tr><td><code>SC-W0203</code></td><td>Warning</td><td>Satin rung does not cross both rails (dangling rung); the rail’s nearest point is used</td><td>M4</td></tr>
 <tr><td><code>SC-W0205</code></td><td>Warning</td><td>Satin subpath is one point; left out</td><td>M4</td></tr>
-<tr><td><code>SC-W0206</code></td><td>Warning</td><td>Satin narrower than the minimum width; underlay skipped</td><td>M4</td></tr>
+<tr><td><code>SC-W0206</code></td><td>Warning</td><td>Satin contour underlay too short for its insets; it keeps its length</td><td>M4</td></tr>
 <tr><td><code>SC-W0207</code></td><td>Warning</td><td>Satin rung crosses a rail more than once; left out</td><td>M4</td></tr>
 <tr><td><code>SC-W0208</code></td><td>Warning</td><td>Satin stitches skew more than 45° from the column; add a rung here</td><td>M4</td></tr>
 <tr><td><code>SC-W0209</code></td><td>Warning</td><td>Satin wider than 12 mm; long stitches may snag</td><td>M4</td></tr>
@@ -3258,7 +3407,9 @@ assembly reads them there: its thread, locks, trim and stop.</p>
 <p>The stitch type picks the generator. A stroke whose <code>satin_column</code> setting is on is a satin column,
 whatever its <code>stroke_method</code> says, as in Ink/Stitch. Its rails and rungs are recognized, what
 recognition finds is reported, and its <code>satin_method</code> picks the generator: the satin stitch, sewn from
-M4.2. For any other stroke the generator is its <code>stroke_method</code>. <code>running_stitch</code> (the default) and
+M4.2. A satin column also reads the running stitch’s length (<code>running_stitch_length_mm</code>): the stitches
+that join its underlays are no longer than the first value. For any other stroke the generator is its
+<code>stroke_method</code>. <code>running_stitch</code> (the default) and
 <code>manual_stitch</code> are sewn from M3. The other stroke and satin methods, satin columns drawn as their centre
 line, and fills are skipped with <code>SC-W0011</code> until their milestones. An element whose parameters are
 wrong (<code>SC-E0101</code>) is skipped too, and the rest of the design still plans.</p>
@@ -3542,6 +3693,11 @@ shortest stitch, or lying all within it of its ends, is not stitched (<code>SC-W
 every platform places the same stitches.</p>
 <p><strong>Compared with Ink/Stitch:</strong> the same parameters, meanings and defaults; the placement differs in four
 documented ways, <code>DEV-RUN-001</code> to <code>DEV-RUN-004</code> in the deviations ledger (<code>conformance/deviations.toml</code>).</p>
+<p><strong>Satin underlays</strong> walk lines made point by point by the satin generator
+(<a href="#underlays">satin</a>), and steps 2 to 5 place their stitches, with each walk’s own length and
+tolerance. Such a line is a polyline already, and each join that turns by more than 30° is a corner. A
+line too small for a stitch of the shortest length is sewn as its 2 ends, as Ink/Stitch sews it, and
+finalizing merges what is too short.</p>
 <h3 id="repeats-and-bean-stitch"><a class="header" href="#repeats-and-bean-stitch">Repeats and bean stitch</a></h3>
 <ul>
 <li><code>repeats = k</code> sews the path k times, alternating direction; odd k ends at the far end, even k returns
@@ -3579,7 +3735,7 @@ vary (<code>REQ-RUN-007</code>).</li>
 </ul>
 <h3 id="diagnostics-1"><a class="header" href="#diagnostics-1">Diagnostics</a></h3>
 <p><code>SC-W0401</code> part of the path too small for the shortest stitch (skipped); <code>SC-W0402</code> stitch length below
-twice the shortest stitch (raised).</p>
+twice the shortest stitch (raised), a stroke’s or a satin underlay’s, which the message names.</p>
 <h2 id="manual-stitch-1"><a class="header" href="#manual-stitch-1">Manual stitch</a></h2>
 <p>Every node of the path is a needle penetration, in order — for hand-placed stitches and imported stitch
 files. A curve gives only its end node: its control points are not stitched and it is not flattened. A
@@ -3765,27 +3921,42 @@ The stitch from A to B goes straight across, and the one from B to the next A sl
 Random splits are drawn after the pairs are placed, in the order the stitches are sewn.</li>
 </ol>
 <h2 id="underlays"><a class="header" href="#underlays">Underlays</a></h2>
-<p>Sewn before the top stitches, in this order, each optional:</p>
+<p>Underlays are sewn before the top stitches, as Ink/Stitch sews them. The centre walk comes first, then the
+contour and the zigzag, each one the element turns on, and all of them go into one run with the top
+stitches.</p>
+<p>Each underlay places pairs of points across the column as the top stitches are placed (step 1 of <em>Top
+stitches</em>), along the same sections, after any swap, reversal and push compensation. A pair moves in by
+its underlay’s insets as negative pull compensation moves it, and nothing varies at random, so turning an
+underlay on leaves the top stitches as they were.</p>
 <div class="table-wrapper">
 <table>
 <thead>
 <tr><th>Underlay</th><th>Parameters</th><th>What it does</th></tr>
 </thead>
 <tbody>
-<tr><td>Centre walk</td><td><code>center_walk_underlay</code>, <code>_stitch_length_mm</code>, <code>_stitch_tolerance_mm</code>, <code>_repeats</code>, <code>_position</code></td><td>Running stitch along the line at <code>position</code> percent between the rails (50 = centre). Repeats alternate direction; an even count ends where it started</td></tr>
-<tr><td>Contour</td><td><code>contour_underlay</code>, <code>_stitch_length_mm</code>, <code>_stitch_tolerance_mm</code>, <code>_inset_mm</code>, <code>_inset_percent</code></td><td>Running stitch along each rail, inset toward the centre; stabilizes the edges</td></tr>
-<tr><td>Zigzag</td><td><code>zigzag_underlay</code>, <code>_spacing_mm</code>, <code>_inset_mm</code>, <code>_inset_percent</code>, <code>_max_stitch_length_mm</code></td><td>A sparse zigzag inside the inset band; lifts the top stitches</td></tr>
+<tr><td>Centre walk</td><td><code>center_walk_underlay</code>, <code>_stitch_length_mm</code>, <code>_stitch_tolerance_mm</code>, <code>_repeats</code>, <code>_position</code></td><td>Pairs every <code>_stitch_tolerance_mm</code>, each moved in until its ends meet <code>_position</code> percent of the way from the first rail to the second (50 is the middle). A running stitch of <code>_stitch_length_mm</code> follows the line through them within the tolerance, there and back <code>_repeats</code> times</td></tr>
+<tr><td>Contour</td><td><code>contour_underlay</code>, <code>_stitch_length_mm</code>, <code>_stitch_tolerance_mm</code>, <code>_inset_mm</code>, <code>_inset_percent</code></td><td>Pairs every <code>_stitch_tolerance_mm</code>, inset by <code>_inset_mm</code> plus <code>_inset_percent</code> of the width on each side, and a running stitch along each side. Each side then stops short of the column’s start by the first rail’s inset in millimetres and of its end by the second’s, as push compensation shortens a rail. A side too short for that keeps its length (<code>SC-W0206</code>). The first rail’s side goes towards the column’s end, and the second’s back</td></tr>
+<tr><td>Zigzag</td><td><code>zigzag_underlay</code>, <code>_spacing_mm</code>, <code>_inset_mm</code>, <code>_inset_percent</code>, <code>_max_stitch_length_mm</code></td><td>Pairs every half <code>_spacing_mm</code>, inset by its own insets, which are half the contour’s when left empty. It zigzags to the column’s end through one end of each pair, the rails taking turns. It comes back through the other ends. Each way, a rail’s points lie the spacing apart. A stitch longer than <code>_max_stitch_length_mm</code> is split into equal parts</td></tr>
 </tbody>
 </table>
 </div>
-<p>The underlays are routed so the column ends where the top stitching should start; if the inset band
-collapses (the column is too narrow) the underlay is skipped with <code>SC-W0206</code>.</p>
+<p>A centre walk with an odd number of repeats ends at the column’s end. The contour’s first side then goes
+back and its second side on, the zigzag starts from the end, and the top stitches run from the end to the
+start. Straight stitches join each part to the next, all of one length and no longer than the first of
+the running stitch’s lengths (<code>running_stitch_length_mm</code>).</p>
+<p>The walks are running stitches, placed as a stroke’s are (<a href="#running-stitch-2">strokes</a>), and they
+differ from Ink/Stitch’s in the same ways (<code>DEV-RUN-001</code> to <code>DEV-RUN-003</code>). Where the insets cross in a
+narrow column, a pair’s ends meet as pull compensation’s do, and the contour’s sides then run along one
+line. StitchCraft differs from Ink/Stitch in 2 more places. The centre walk keeps to its own tolerance,
+where Ink/Stitch uses the satin’s running stitch tolerance (<code>DEV-SAT-004</code>). A running stitch length of
+several values gives the travel its first, where Ink/Stitch falls back to 2.5 mm (<code>DEV-SAT-005</code>).</p>
 <h2 id="start-and-end"><a class="header" href="#start-and-end">Start and end</a></h2>
 <p>With <code>start_at_nearest_point</code>, the column begins at whichever end is nearest the previous element’s
 exit; with <code>end_at_nearest_point</code>, the top stitching finishes at the end nearest the next element’s
 entry, which may mean the underlay runs one way and the top the other. Explicit start/end commands
-override both (<code>REQ-GEN-001</code>). Travel between underlay passes uses <code>running_stitch_length_mm</code>,
-<code>running_stitch_tolerance_mm</code> and <code>running_stitch_position</code>.</p>
+override both (<code>REQ-GEN-001</code>). The stitches that join the underlays are no longer than
+<code>running_stitch_length_mm</code> (see <em>Underlays</em>). The way to the start and from the end follows the line at
+<code>running_stitch_position</code> between the rails, within <code>running_stitch_tolerance_mm</code>.</p>
 <h2 id="variants-p2-m7"><a class="header" href="#variants-p2-m7">Variants (P2, M7)</a></h2>
 <div class="table-wrapper">
 <table>
@@ -3809,20 +3980,24 @@ override both (<code>REQ-GEN-001</code>). Travel between underlay passes uses <c
 <tr><td><code>REQ-SAT-001</code></td><td>Pull compensation moves both ends of every top stitch outward along it, by <code>pull_compensation_mm</code> plus <code>pull_compensation_percent</code> of its width (± 0.01 mm). Ends moved past each other meet</td></tr>
 <tr><td><code>REQ-SAT-002</code></td><td>Consecutive pairs are the zigzag spacing apart, measured across the previous pair at its farther end, exactly so between straight parallel rails and within 5 % on curves. The last pair is at most a spacing on</td></tr>
 <tr><td><code>REQ-SAT-003</code></td><td>With a longest stitch, a longer top stitch is split as <code>split_method</code> says. By default it splits into the fewest equal parts, and the stitch back into as many as the stitch across before. Simple and staggered splits fall at whole multiples of the longest stitch, from a start that <code>staggered</code> moves along</td></tr>
-<tr><td><code>REQ-SAT-004</code></td><td>Underlays lie inside the inset band and precede the top stitches</td></tr>
+<tr><td><code>REQ-SAT-004</code></td><td>Underlays come before the top stitches and leave them as they were: the centre walk, then the contour and the zigzag. Straight stitches of one length join them, no longer than the running stitch’s length. After an odd centre walk the rest runs from the column’s end</td></tr>
 <tr><td><code>REQ-SAT-005</code></td><td>Rails and rungs are told apart as Ink/Stitch tells them, in any drawing order. A path with no subpath longer than a point produces <code>SC-E0201</code> and no stitches, and a rung that misses a rail joins the rail’s nearest point (<code>SC-W0203</code>)</td></tr>
 <tr><td><code>REQ-SAT-006</code></td><td>A parameter with a value for each side changes only its own side: a rail’s stitch ends, or the column’s start or end</td></tr>
 <tr><td><code>REQ-SAT-007</code></td><td>Random widths and spacing are reproducible from the element and its seed, and stay within their ranges</td></tr>
 <tr><td><code>REQ-SAT-008</code></td><td>Push compensation shortens the rails at the column’s start and end before they are cut, or lengthens them where negative. A rail it would leave shorter than half a CSS pixel keeps its length (<code>SC-W0211</code>)</td></tr>
 <tr><td><code>REQ-SAT-009</code></td><td>On each rail, a top stitch end closer than <code>short_stitch_distance_mm</code> to the last end left in place moves in along its stitch by the next <code>short_stitch_inset</code> percentage. Ends far enough from it stay</td></tr>
+<tr><td><code>REQ-SAT-010</code></td><td>The centre walk follows the line at its position between the rails within its tolerance, in stitches no longer than its length, there and back its repeats</td></tr>
+<tr><td><code>REQ-SAT-011</code></td><td>The contour runs along each rail at its insets, towards the end on the first rail’s side and back on the second’s. It stops short of the column’s start and end by the rails’ insets in millimetres</td></tr>
+<tr><td><code>REQ-SAT-012</code></td><td>The zigzag goes through one end of each pair, the rails taking turns, and back through the others. Its insets are half the contour’s when left empty, and its long stitches split into equal parts</td></tr>
 </tbody>
 </table>
 </div>
 <p>Machine checkpoint MC-3 sews a width ladder (1–10 mm) and an underlay comparison to tune defaults
 (<a href="#machine-testing-protocol">machine testing</a>).</p>
 <h2 id="diagnostics-2"><a class="header" href="#diagnostics-2">Diagnostics</a></h2>
-<p><code>SC-E0201</code>, <code>SC-W0202</code>, <code>SC-W0203</code>, <code>SC-W0205</code>, <code>SC-W0206</code>, <code>SC-W0207</code>, <code>SC-W0208</code>, <code>SC-W0209</code> (a satin
-wider than 12 mm risks snagging: consider split stitches or a fill), <code>SC-W0210</code> and <code>SC-W0211</code>.</p>
+<p><code>SC-E0201</code>, <code>SC-W0202</code>, <code>SC-W0203</code>, <code>SC-W0205</code>, <code>SC-W0206</code> (a contour underlay too short for its insets
+keeps its length), <code>SC-W0207</code>, <code>SC-W0208</code>, <code>SC-W0209</code> (a satin wider than 12 mm risks snagging: consider
+split stitches or a fill), <code>SC-W0210</code> and <code>SC-W0211</code>.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="fill-generators"><a class="header" href="#fill-generators">Fill generators</a></h1>
 <p>Fills cover a <code>Region</code> (valid polygons with holes, from the normalizer). Tatami is P1 (M5); contour,
@@ -4896,8 +5071,8 @@ SHA-256, downloaded by <code>cargo xtask corpus</code> — the same policy Vecto
 <p>The engine’s cases build their small designs with <code>stitchcraft_testkit::designs</code>. It also reads a plan’s
 shape at a glance: <code>J L4 S5 L4</code> is a jump, 4 lock stitches, 5 needle points of stitching and 4 more lock
 stitches. The satin cases sew their columns with <code>stitchcraft_testkit::satins</code>, as an element is sewn on
-the reference machine, with stitches no shorter than the machine’s shortest and no longer than the
-element’s longest, and read the needle points back in pairs across the column.</p>
+the reference machine, with the stitch lengths the engine gives it there (<code>satin_lengths</code>), and read the
+needle points back in pairs across the column.</p>
 <h2 id="levels"><a class="header" href="#levels">Levels</a></h2>
 <h3 id="l0--plan-invariants-every-pr"><a class="header" href="#l0--plan-invariants-every-pr">L0 — Plan invariants (every PR)</a></h3>
 <p>The <a href="#plan-invariants">plan invariants</a> run on <em>every</em> plan the
@@ -5414,26 +5589,26 @@ stitches once its stitch type or feature lands (see <em>Phase</em> and the param
 <tr><td><code>push_compensation_mm</code></td><td>float</td><td>mm (each side)</td><td>0</td><td>all</td><td>P1 (M4)</td><td><a href="#push_compensation_mm">registered</a></td></tr>
 <tr><td><code>reverse_rails</code></td><td>combo</td><td>—</td><td>automatic</td><td>all</td><td>P1 (M4)</td><td><a href="#reverse_rails">registered</a></td></tr>
 <tr><td><code>swap_satin_rails</code></td><td>boolean</td><td>—</td><td>false</td><td>all</td><td>P1 (M4)</td><td><a href="#swap_satin_rails">registered</a></td></tr>
-<tr><td><code>running_stitch_length_mm</code></td><td>float</td><td>mm</td><td>2.5</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>running_stitch_length_mm</code></td><td>float</td><td>mm</td><td>2.5</td><td>all</td><td>P1 (M4)</td><td><a href="#running_stitch_length_mm">registered</a></td></tr>
 <tr><td><code>running_stitch_tolerance_mm</code></td><td>float</td><td>mm</td><td>0.1</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
 <tr><td><code>running_stitch_position</code></td><td>float</td><td>%</td><td>50</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
 <tr><td><code>start_at_nearest_point</code></td><td>boolean</td><td>—</td><td>true</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
 <tr><td><code>end_at_nearest_point</code></td><td>boolean</td><td>—</td><td>true</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
-<tr><td><code>contour_underlay</code></td><td>toggle</td><td>—</td><td>—</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
-<tr><td><code>contour_underlay_stitch_length_mm</code></td><td>float</td><td>mm</td><td>3</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
-<tr><td><code>contour_underlay_stitch_tolerance_mm</code></td><td>float</td><td>mm</td><td>0.2</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
-<tr><td><code>contour_underlay_inset_mm</code></td><td>float</td><td>mm (each side)</td><td>0.4</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
-<tr><td><code>contour_underlay_inset_percent</code></td><td>float</td><td>% (each side)</td><td>0</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
-<tr><td><code>center_walk_underlay</code></td><td>toggle</td><td>—</td><td>—</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
-<tr><td><code>center_walk_underlay_stitch_length_mm</code></td><td>float</td><td>mm</td><td>3</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
-<tr><td><code>center_walk_underlay_stitch_tolerance_mm</code></td><td>float</td><td>mm</td><td>0.2</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
-<tr><td><code>center_walk_underlay_repeats</code></td><td>int</td><td>—</td><td>2</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
-<tr><td><code>center_walk_underlay_position</code></td><td>float</td><td>%</td><td>50</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
-<tr><td><code>zigzag_underlay</code></td><td>toggle</td><td>—</td><td>—</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
-<tr><td><code>zigzag_underlay_spacing_mm</code></td><td>float</td><td>mm</td><td>3</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
-<tr><td><code>zigzag_underlay_inset_mm</code></td><td>float</td><td>mm (each side)</td><td>—</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
-<tr><td><code>zigzag_underlay_inset_percent</code></td><td>float</td><td>% (each side)</td><td>—</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
-<tr><td><code>zigzag_underlay_max_stitch_length_mm</code></td><td>float</td><td>mm</td><td>—</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>contour_underlay</code></td><td>toggle</td><td>—</td><td>—</td><td>all</td><td>P1 (M4)</td><td><a href="#contour_underlay">registered</a></td></tr>
+<tr><td><code>contour_underlay_stitch_length_mm</code></td><td>float</td><td>mm</td><td>3</td><td>all</td><td>P1 (M4)</td><td><a href="#contour_underlay_stitch_length_mm">registered</a></td></tr>
+<tr><td><code>contour_underlay_stitch_tolerance_mm</code></td><td>float</td><td>mm</td><td>0.2</td><td>all</td><td>P1 (M4)</td><td><a href="#contour_underlay_stitch_tolerance_mm">registered</a></td></tr>
+<tr><td><code>contour_underlay_inset_mm</code></td><td>float</td><td>mm (each side)</td><td>0.4</td><td>all</td><td>P1 (M4)</td><td><a href="#contour_underlay_inset_mm">registered</a></td></tr>
+<tr><td><code>contour_underlay_inset_percent</code></td><td>float</td><td>% (each side)</td><td>0</td><td>all</td><td>P1 (M4)</td><td><a href="#contour_underlay_inset_percent">registered</a></td></tr>
+<tr><td><code>center_walk_underlay</code></td><td>toggle</td><td>—</td><td>—</td><td>all</td><td>P1 (M4)</td><td><a href="#center_walk_underlay">registered</a></td></tr>
+<tr><td><code>center_walk_underlay_stitch_length_mm</code></td><td>float</td><td>mm</td><td>3</td><td>all</td><td>P1 (M4)</td><td><a href="#center_walk_underlay_stitch_length_mm">registered</a></td></tr>
+<tr><td><code>center_walk_underlay_stitch_tolerance_mm</code></td><td>float</td><td>mm</td><td>0.2</td><td>all</td><td>P1 (M4)</td><td><a href="#center_walk_underlay_stitch_tolerance_mm">deviates</a></td></tr>
+<tr><td><code>center_walk_underlay_repeats</code></td><td>int</td><td>—</td><td>2</td><td>all</td><td>P1 (M4)</td><td><a href="#center_walk_underlay_repeats">registered</a></td></tr>
+<tr><td><code>center_walk_underlay_position</code></td><td>float</td><td>%</td><td>50</td><td>all</td><td>P1 (M4)</td><td><a href="#center_walk_underlay_position">registered</a></td></tr>
+<tr><td><code>zigzag_underlay</code></td><td>toggle</td><td>—</td><td>—</td><td>all</td><td>P1 (M4)</td><td><a href="#zigzag_underlay">registered</a></td></tr>
+<tr><td><code>zigzag_underlay_spacing_mm</code></td><td>float</td><td>mm</td><td>3</td><td>all</td><td>P1 (M4)</td><td><a href="#zigzag_underlay_spacing_mm">registered</a></td></tr>
+<tr><td><code>zigzag_underlay_inset_mm</code></td><td>float</td><td>mm (each side)</td><td>—</td><td>all</td><td>P1 (M4)</td><td><a href="#zigzag_underlay_inset_mm">registered</a></td></tr>
+<tr><td><code>zigzag_underlay_inset_percent</code></td><td>float</td><td>% (each side)</td><td>—</td><td>all</td><td>P1 (M4)</td><td><a href="#zigzag_underlay_inset_percent">registered</a></td></tr>
+<tr><td><code>zigzag_underlay_max_stitch_length_mm</code></td><td>float</td><td>mm</td><td>—</td><td>all</td><td>P1 (M4)</td><td><a href="#zigzag_underlay_max_stitch_length_mm">registered</a></td></tr>
 <tr><td><code>random_seed</code></td><td>random_seed</td><td>—</td><td>—</td><td>all</td><td>P1 (M4)</td><td><a href="#random_seed">registered</a></td></tr>
 </tbody>
 </table>
@@ -5596,7 +5771,7 @@ patterns, stitch plan or sew stack, and legacy names Ink/Stitch’s updater rewr
 </tbody>
 </table>
 </div>
-<p><em>145 parameter declarations, 44 registered in StitchCraft.</em></p>
+<p><em>145 parameter declarations, 60 registered in StitchCraft.</em></p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="architecture-decision-records"><a class="header" href="#architecture-decision-records">Architecture decision records</a></h1>
 <p>Short records of decisions that shape the code, with their context and the alternatives we rejected.
@@ -6212,7 +6387,7 @@ of code) · 🧵 machine checkpoint · 👤 owner action</p>
 <tr><td>M4.3 ✅</td><td>Pull and push compensation (symmetric/asymmetric), random width and spacing, <code>SC-W0211</code></td><td><code>REQ-SAT-001</code>, <code>REQ-SAT-006</code> to <code>REQ-SAT-008</code></td></tr>
 <tr><td>M4.4 ✅</td><td>Short stitches on curves</td><td><code>REQ-SAT-009</code>, a case set on tight curves</td></tr>
 <tr><td>M4.5 ✅</td><td>Split stitches (simple, staggered, random)</td><td><code>REQ-SAT-003</code></td></tr>
-<tr><td>M4.6</td><td>Underlays: centre walk, contour, zigzag</td><td><code>REQ-SAT-004</code></td></tr>
+<tr><td>M4.6 ✅</td><td>Underlays: centre walk, contour, zigzag</td><td><code>REQ-SAT-004</code>, <code>REQ-SAT-010</code> to <code>REQ-SAT-012</code></td></tr>
 <tr><td>M4.7</td><td>Start/end nearest point; hints</td><td><code>REQ-GEN-001</code> for satin</td></tr>
 <tr><td>M4.8</td><td>Single-path satin (centre line + width)</td><td>cases</td></tr>
 <tr><td>MC-3 🧵</td><td><strong>TS-05</strong> (width ladder 1–10 mm × three densities), <strong>TS-06</strong> (underlay comparison)</td><td>report filed; satin defaults tuned</td></tr>

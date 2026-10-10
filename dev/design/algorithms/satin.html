@@ -35,7 +35,7 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-3f058530.js";
+            window.path_to_searchindex_js = "../../searchindex-25cf0b85.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-c8bf69c1.js"></script>
@@ -336,27 +336,42 @@ The stitch from A to B goes straight across, and the one from B to the next A sl
 Random splits are drawn after the pairs are placed, in the order the stitches are sewn.</li>
 </ol>
 <h2 id="underlays"><a class="header" href="#underlays">Underlays</a></h2>
-<p>Sewn before the top stitches, in this order, each optional:</p>
+<p>Underlays are sewn before the top stitches, as Ink/Stitch sews them. The centre walk comes first, then the
+contour and the zigzag, each one the element turns on, and all of them go into one run with the top
+stitches.</p>
+<p>Each underlay places pairs of points across the column as the top stitches are placed (step 1 of <em>Top
+stitches</em>), along the same sections, after any swap, reversal and push compensation. A pair moves in by
+its underlay’s insets as negative pull compensation moves it, and nothing varies at random, so turning an
+underlay on leaves the top stitches as they were.</p>
 <div class="table-wrapper">
 <table>
 <thead>
 <tr><th>Underlay</th><th>Parameters</th><th>What it does</th></tr>
 </thead>
 <tbody>
-<tr><td>Centre walk</td><td><code>center_walk_underlay</code>, <code>_stitch_length_mm</code>, <code>_stitch_tolerance_mm</code>, <code>_repeats</code>, <code>_position</code></td><td>Running stitch along the line at <code>position</code> percent between the rails (50 = centre). Repeats alternate direction; an even count ends where it started</td></tr>
-<tr><td>Contour</td><td><code>contour_underlay</code>, <code>_stitch_length_mm</code>, <code>_stitch_tolerance_mm</code>, <code>_inset_mm</code>, <code>_inset_percent</code></td><td>Running stitch along each rail, inset toward the centre; stabilizes the edges</td></tr>
-<tr><td>Zigzag</td><td><code>zigzag_underlay</code>, <code>_spacing_mm</code>, <code>_inset_mm</code>, <code>_inset_percent</code>, <code>_max_stitch_length_mm</code></td><td>A sparse zigzag inside the inset band; lifts the top stitches</td></tr>
+<tr><td>Centre walk</td><td><code>center_walk_underlay</code>, <code>_stitch_length_mm</code>, <code>_stitch_tolerance_mm</code>, <code>_repeats</code>, <code>_position</code></td><td>Pairs every <code>_stitch_tolerance_mm</code>, each moved in until its ends meet <code>_position</code> percent of the way from the first rail to the second (50 is the middle). A running stitch of <code>_stitch_length_mm</code> follows the line through them within the tolerance, there and back <code>_repeats</code> times</td></tr>
+<tr><td>Contour</td><td><code>contour_underlay</code>, <code>_stitch_length_mm</code>, <code>_stitch_tolerance_mm</code>, <code>_inset_mm</code>, <code>_inset_percent</code></td><td>Pairs every <code>_stitch_tolerance_mm</code>, inset by <code>_inset_mm</code> plus <code>_inset_percent</code> of the width on each side, and a running stitch along each side. Each side then stops short of the column’s start by the first rail’s inset in millimetres and of its end by the second’s, as push compensation shortens a rail. A side too short for that keeps its length (<code>SC-W0206</code>). The first rail’s side goes towards the column’s end, and the second’s back</td></tr>
+<tr><td>Zigzag</td><td><code>zigzag_underlay</code>, <code>_spacing_mm</code>, <code>_inset_mm</code>, <code>_inset_percent</code>, <code>_max_stitch_length_mm</code></td><td>Pairs every half <code>_spacing_mm</code>, inset by its own insets, which are half the contour’s when left empty. It zigzags to the column’s end through one end of each pair, the rails taking turns. It comes back through the other ends. Each way, a rail’s points lie the spacing apart. A stitch longer than <code>_max_stitch_length_mm</code> is split into equal parts</td></tr>
 </tbody>
 </table>
 </div>
-<p>The underlays are routed so the column ends where the top stitching should start; if the inset band
-collapses (the column is too narrow) the underlay is skipped with <code>SC-W0206</code>.</p>
+<p>A centre walk with an odd number of repeats ends at the column’s end. The contour’s first side then goes
+back and its second side on, the zigzag starts from the end, and the top stitches run from the end to the
+start. Straight stitches join each part to the next, all of one length and no longer than the first of
+the running stitch’s lengths (<code>running_stitch_length_mm</code>).</p>
+<p>The walks are running stitches, placed as a stroke’s are (<a href="strokes.html#running-stitch">strokes</a>), and they
+differ from Ink/Stitch’s in the same ways (<code>DEV-RUN-001</code> to <code>DEV-RUN-003</code>). Where the insets cross in a
+narrow column, a pair’s ends meet as pull compensation’s do, and the contour’s sides then run along one
+line. StitchCraft differs from Ink/Stitch in 2 more places. The centre walk keeps to its own tolerance,
+where Ink/Stitch uses the satin’s running stitch tolerance (<code>DEV-SAT-004</code>). A running stitch length of
+several values gives the travel its first, where Ink/Stitch falls back to 2.5 mm (<code>DEV-SAT-005</code>).</p>
 <h2 id="start-and-end"><a class="header" href="#start-and-end">Start and end</a></h2>
 <p>With <code>start_at_nearest_point</code>, the column begins at whichever end is nearest the previous element’s
 exit; with <code>end_at_nearest_point</code>, the top stitching finishes at the end nearest the next element’s
 entry, which may mean the underlay runs one way and the top the other. Explicit start/end commands
-override both (<code>REQ-GEN-001</code>). Travel between underlay passes uses <code>running_stitch_length_mm</code>,
-<code>running_stitch_tolerance_mm</code> and <code>running_stitch_position</code>.</p>
+override both (<code>REQ-GEN-001</code>). The stitches that join the underlays are no longer than
+<code>running_stitch_length_mm</code> (see <em>Underlays</em>). The way to the start and from the end follows the line at
+<code>running_stitch_position</code> between the rails, within <code>running_stitch_tolerance_mm</code>.</p>
 <h2 id="variants-p2-m7"><a class="header" href="#variants-p2-m7">Variants (P2, M7)</a></h2>
 <div class="table-wrapper">
 <table>
@@ -380,20 +395,24 @@ override both (<code>REQ-GEN-001</code>). Travel between underlay passes uses <c
 <tr><td><code>REQ-SAT-001</code></td><td>Pull compensation moves both ends of every top stitch outward along it, by <code>pull_compensation_mm</code> plus <code>pull_compensation_percent</code> of its width (± 0.01 mm). Ends moved past each other meet</td></tr>
 <tr><td><code>REQ-SAT-002</code></td><td>Consecutive pairs are the zigzag spacing apart, measured across the previous pair at its farther end, exactly so between straight parallel rails and within 5 % on curves. The last pair is at most a spacing on</td></tr>
 <tr><td><code>REQ-SAT-003</code></td><td>With a longest stitch, a longer top stitch is split as <code>split_method</code> says. By default it splits into the fewest equal parts, and the stitch back into as many as the stitch across before. Simple and staggered splits fall at whole multiples of the longest stitch, from a start that <code>staggered</code> moves along</td></tr>
-<tr><td><code>REQ-SAT-004</code></td><td>Underlays lie inside the inset band and precede the top stitches</td></tr>
+<tr><td><code>REQ-SAT-004</code></td><td>Underlays come before the top stitches and leave them as they were: the centre walk, then the contour and the zigzag. Straight stitches of one length join them, no longer than the running stitch’s length. After an odd centre walk the rest runs from the column’s end</td></tr>
 <tr><td><code>REQ-SAT-005</code></td><td>Rails and rungs are told apart as Ink/Stitch tells them, in any drawing order. A path with no subpath longer than a point produces <code>SC-E0201</code> and no stitches, and a rung that misses a rail joins the rail’s nearest point (<code>SC-W0203</code>)</td></tr>
 <tr><td><code>REQ-SAT-006</code></td><td>A parameter with a value for each side changes only its own side: a rail’s stitch ends, or the column’s start or end</td></tr>
 <tr><td><code>REQ-SAT-007</code></td><td>Random widths and spacing are reproducible from the element and its seed, and stay within their ranges</td></tr>
 <tr><td><code>REQ-SAT-008</code></td><td>Push compensation shortens the rails at the column’s start and end before they are cut, or lengthens them where negative. A rail it would leave shorter than half a CSS pixel keeps its length (<code>SC-W0211</code>)</td></tr>
 <tr><td><code>REQ-SAT-009</code></td><td>On each rail, a top stitch end closer than <code>short_stitch_distance_mm</code> to the last end left in place moves in along its stitch by the next <code>short_stitch_inset</code> percentage. Ends far enough from it stay</td></tr>
+<tr><td><code>REQ-SAT-010</code></td><td>The centre walk follows the line at its position between the rails within its tolerance, in stitches no longer than its length, there and back its repeats</td></tr>
+<tr><td><code>REQ-SAT-011</code></td><td>The contour runs along each rail at its insets, towards the end on the first rail’s side and back on the second’s. It stops short of the column’s start and end by the rails’ insets in millimetres</td></tr>
+<tr><td><code>REQ-SAT-012</code></td><td>The zigzag goes through one end of each pair, the rails taking turns, and back through the others. Its insets are half the contour’s when left empty, and its long stitches split into equal parts</td></tr>
 </tbody>
 </table>
 </div>
 <p>Machine checkpoint MC-3 sews a width ladder (1–10 mm) and an underlay comparison to tune defaults
 (<a href="../../plan/machine-testing.html">machine testing</a>).</p>
 <h2 id="diagnostics"><a class="header" href="#diagnostics">Diagnostics</a></h2>
-<p><code>SC-E0201</code>, <code>SC-W0202</code>, <code>SC-W0203</code>, <code>SC-W0205</code>, <code>SC-W0206</code>, <code>SC-W0207</code>, <code>SC-W0208</code>, <code>SC-W0209</code> (a satin
-wider than 12 mm risks snagging: consider split stitches or a fill), <code>SC-W0210</code> and <code>SC-W0211</code>.</p>
+<p><code>SC-E0201</code>, <code>SC-W0202</code>, <code>SC-W0203</code>, <code>SC-W0205</code>, <code>SC-W0206</code> (a contour underlay too short for its insets
+keeps its length), <code>SC-W0207</code>, <code>SC-W0208</code>, <code>SC-W0209</code> (a satin wider than 12 mm risks snagging: consider
+split stitches or a fill), <code>SC-W0210</code> and <code>SC-W0211</code>.</p>
 
                     </main>
 

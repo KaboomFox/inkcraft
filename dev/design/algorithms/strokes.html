@@ -35,10 +35,10 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-44df09e1.js";
+            window.path_to_searchindex_js = "../../searchindex-3f058530.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../../toc-68c7fe35.js"></script>
+        <script src="../../toc-c8bf69c1.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -276,8 +276,8 @@ twice the shortest stitch (raised).</p>
 <p>Every node of the path is a needle penetration, in order — for hand-placed stitches and imported stitch
 files. A curve gives only its end node: its control points are not stitched and it is not flattened. A
 node where the needle already is counts once, and a closed path comes back to its start. Segments longer
-than <code>max_stitch_length_mm</code> (if set) are split into the fewest equal parts no longer than it, but never
-into parts shorter than the shortest stitch. A value of 0 or less means “not set”, as in Ink/Stitch, so
+than <code>max_stitch_length_mm</code> (if set, a setting manual stitch shares with satin columns) are split into the
+fewest equal parts no longer than it, but never into parts shorter than the shortest stitch. A value of 0 or less means “not set”, as in Ink/Stitch, so
 every stitch is then sewn as drawn. Bean stitch applies; repeats do not. Lock stitches are added
 only when <code>force_lock_stitches</code> is set, as in Ink/Stitch (read at <code>d59c9ab</code>).</p>
 <p>The shortest stitch holds here too: a node closer than it to the needle point before it is left out, so

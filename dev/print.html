@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-44df09e1.js";
+            window.path_to_searchindex_js = "searchindex-3f058530.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-68c7fe35.js"></script>
+        <script src="toc-c8bf69c1.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -726,8 +726,9 @@ says so.</p>
 <ul>
 <li><a href="#running-parameters">running stitch</a></li>
 <li><a href="#repeat-parameters">repeats and bean stitch</a></li>
-<li><a href="#manual-parameters">manual stitch</a></li>
 <li><a href="#stroke-parameters">the stroke method</a></li>
+<li><a href="#common-parameters">the settings every stitch type shares</a>, with manual stitch’s longest
+stitch</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="lock-stitches-trims-and-stops"><a class="header" href="#lock-stitches-trims-and-stops">Lock stitches, trims and stops</a></h1>
@@ -1590,12 +1591,11 @@ numbers, <code>true</code>/<code>false</code>, strings and arrays instead, and <
 <tr><th>Group</th><th>Parameters</th><th>Applies to</th></tr>
 </thead>
 <tbody>
-<tr><td><a href="#common-parameters">Common parameters</a></td><td>15</td><td>every stitch type</td></tr>
+<tr><td><a href="#common-parameters">Common parameters</a></td><td>16</td><td>every stitch type</td></tr>
 <tr><td><a href="#stroke-parameters">Stroke parameters</a></td><td>1</td><td>Running stitch, Ripple stitch, Zigzag stitch, Manual stitch</td></tr>
 <tr><td><a href="#running-parameters">Running parameters</a></td><td>4</td><td>Running stitch, Ripple stitch</td></tr>
 <tr><td><a href="#repeat-parameters">Repeat parameters</a></td><td>2</td><td>Running stitch, Ripple stitch, Zigzag stitch, Manual stitch</td></tr>
-<tr><td><a href="#manual-parameters">Manual parameters</a></td><td>1</td><td>Manual stitch</td></tr>
-<tr><td><a href="#satin-parameters">Satin parameters</a></td><td>13</td><td>Satin column, E-stitch, S-stitch, Zigzag satin</td></tr>
+<tr><td><a href="#satin-parameters">Satin parameters</a></td><td>18</td><td>Satin column, E-stitch, S-stitch, Zigzag satin</td></tr>
 </tbody>
 </table>
 </div>
@@ -1617,13 +1617,16 @@ numbers, <code>true</code>/<code>false</code>, strings and arrays instead, and <
 <tr><td><a href="#lock_start"><code>lock_start</code></a></td><td>Start lock</td><td>Common parameters</td></tr>
 <tr><td><a href="#lock_start_scale_mm"><code>lock_start_scale_mm</code></a></td><td>Start lock size</td><td>Common parameters</td></tr>
 <tr><td><a href="#lock_start_scale_percent"><code>lock_start_scale_percent</code></a></td><td>Start lock scale</td><td>Common parameters</td></tr>
-<tr><td><a href="#max_stitch_length_mm"><code>max_stitch_length_mm</code></a></td><td>Longest stitch</td><td>Manual parameters</td></tr>
+<tr><td><a href="#max_stitch_length_mm"><code>max_stitch_length_mm</code></a></td><td>Longest stitch</td><td>Common parameters</td></tr>
 <tr><td><a href="#min_jump_stitch_length_mm"><code>min_jump_stitch_length_mm</code></a></td><td>Shortest jump</td><td>Common parameters</td></tr>
+<tr><td><a href="#min_random_split_length_mm"><code>min_random_split_length_mm</code></a></td><td>Shortest split stitch</td><td>Satin parameters</td></tr>
 <tr><td><a href="#min_stitch_length_mm"><code>min_stitch_length_mm</code></a></td><td>Shortest stitch</td><td>Common parameters</td></tr>
 <tr><td><a href="#pull_compensation_mm"><code>pull_compensation_mm</code></a></td><td>Pull compensation</td><td>Satin parameters</td></tr>
 <tr><td><a href="#pull_compensation_percent"><code>pull_compensation_percent</code></a></td><td>Pull compensation (% of width)</td><td>Satin parameters</td></tr>
 <tr><td><a href="#push_compensation_mm"><code>push_compensation_mm</code></a></td><td>Push compensation</td><td>Satin parameters</td></tr>
 <tr><td><a href="#random_seed"><code>random_seed</code></a></td><td>Random seed</td><td>Common parameters</td></tr>
+<tr><td><a href="#random_split_jitter_percent"><code>random_split_jitter_percent</code></a></td><td>Split jitter</td><td>Satin parameters</td></tr>
+<tr><td><a href="#random_split_phase"><code>random_split_phase</code></a></td><td>Random split phase</td><td>Satin parameters</td></tr>
 <tr><td><a href="#random_stitch_length_jitter_percent"><code>random_stitch_length_jitter_percent</code></a></td><td>Length variation</td><td>Running parameters</td></tr>
 <tr><td><a href="#random_width_decrease_percent"><code>random_width_decrease_percent</code></a></td><td>Random width decrease</td><td>Satin parameters</td></tr>
 <tr><td><a href="#random_width_increase_percent"><code>random_width_increase_percent</code></a></td><td>Random width increase</td><td>Satin parameters</td></tr>
@@ -1636,6 +1639,8 @@ numbers, <code>true</code>/<code>false</code>, strings and arrays instead, and <
 <tr><td><a href="#satin_method"><code>satin_method</code></a></td><td>Method</td><td>Satin parameters</td></tr>
 <tr><td><a href="#short_stitch_distance_mm"><code>short_stitch_distance_mm</code></a></td><td>Short stitch distance</td><td>Satin parameters</td></tr>
 <tr><td><a href="#short_stitch_inset"><code>short_stitch_inset</code></a></td><td>Short stitch inset</td><td>Satin parameters</td></tr>
+<tr><td><a href="#split_method"><code>split_method</code></a></td><td>Split method</td><td>Satin parameters</td></tr>
+<tr><td><a href="#split_staggers"><code>split_staggers</code></a></td><td>Staggers</td><td>Satin parameters</td></tr>
 <tr><td><a href="#stop_after"><code>stop_after</code></a></td><td>Stop after</td><td>Common parameters</td></tr>
 <tr><td><a href="#stroke_method"><code>stroke_method</code></a></td><td>Method</td><td>Stroke parameters</td></tr>
 <tr><td><a href="#swap_satin_rails"><code>swap_satin_rails</code></a></td><td>Swap rails</td><td>Satin parameters</td></tr>
@@ -1648,7 +1653,8 @@ numbers, <code>true</code>/<code>false</code>, strings and arrays instead, and <
 <div style="break-before: page; page-break-before: always;"></div><!-- Generated by `cargo xtask docs` from `CommonParams` in the parameter registry. Edit the declaration, not this page. -->
 <h1 id="common-parameters"><a class="header" href="#common-parameters">Common parameters</a></h1>
 <p>Settings every stitch type shares: lock stitches where the element’s stitching starts and
-ends, a trim or a stop after it, the shortest stitch and jump, and where random variation starts.</p>
+ends, a trim or a stop after it, the shortest stitch and jump, the longest stitch, and where random
+variation starts.</p>
 <p>StitchCraft reads and checks them today; they change the stitches as plan assembly arrives
 (roadmap steps M3.7 to M3.9).</p>
 <p>Applies to every stitch type.</p>
@@ -1775,6 +1781,16 @@ jump. Empty: the document’s setting.</p>
 <li><strong>Default:</strong> empty</li>
 <li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
 </ul>
+<h2 id="longest-stitch"><a class="header" href="#longest-stitch">Longest stitch</a></h2>
+<h3 id="max_stitch_length_mm"><a class="header" href="#max_stitch_length_mm"><code>max_stitch_length_mm</code></a></h3>
+<p><strong>Longest stitch.</strong> Split stitches longer than this. Manual stitch splits them into equal parts, and a satin column
+as its split method says. Empty, every stitch is sewn whole.</p>
+<ul>
+<li><strong>Accepts:</strong> a length from 0.1 to 25 mm, or empty (0 or less counts as empty)</li>
+<li><strong>Default:</strong> empty</li>
+<li><strong>Applies to:</strong> Manual stitch, Satin column, E-stitch, S-stitch, Zigzag satin</li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
 <h2 id="random-variation"><a class="header" href="#random-variation">Random variation</a></h2>
 <h3 id="random_seed"><a class="header" href="#random_seed"><code>random_seed</code></a></h3>
 <p><strong>Random seed.</strong> Where random variation starts: a running stitch’s random lengths, and a satin column’s random
@@ -1860,18 +1876,6 @@ the stitches: “1 0” makes every other stitch bold.</p>
 <ul>
 <li><strong>Accepts:</strong> 1 to 16 whole numbers from 0 to 10, separated by spaces</li>
 <li><strong>Default:</strong> <code>0</code></li>
-<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
-</ul>
-<div style="break-before: page; page-break-before: always;"></div><!-- Generated by `cargo xtask docs` from `ManualParams` in the parameter registry. Edit the declaration, not this page. -->
-<h1 id="manual-parameters"><a class="header" href="#manual-parameters">Manual parameters</a></h1>
-<p>Manual stitch: a needle point on every node of the path, for stitches placed by hand.</p>
-<p>Applies to Manual stitch.</p>
-<h2 id="manual-stitch-1"><a class="header" href="#manual-stitch-1">Manual stitch</a></h2>
-<h3 id="max_stitch_length_mm"><a class="header" href="#max_stitch_length_mm"><code>max_stitch_length_mm</code></a></h3>
-<p><strong>Longest stitch.</strong> Split stitches longer than this into equal parts. Empty, every stitch is sewn as drawn.</p>
-<ul>
-<li><strong>Accepts:</strong> a length from 0.1 to 25 mm, or empty (0 or less counts as empty)</li>
-<li><strong>Default:</strong> empty</li>
 <li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><!-- Generated by `cargo xtask docs` from `SatinParams` in the parameter registry. Edit the declaration, not this page. -->
@@ -1997,6 +2001,54 @@ in. 0 moves none.</p>
 <ul>
 <li><strong>Accepts:</strong> a length from 0 to 5 mm</li>
 <li><strong>Default:</strong> <code>0.25</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h2 id="split-stitches"><a class="header" href="#split-stitches">Split stitches</a></h2>
+<h3 id="split_method"><a class="header" href="#split_method"><code>split_method</code></a></h3>
+<p><strong>Split method.</strong> How stitches longer than the longest stitch (<code>max_stitch_length_mm</code>) are split. Default splits
+each into the fewest equal parts no longer than it. Simple splits at whole multiples of it from
+the stitch’s start. Staggered moves those splits along from one stitch to the next, so the needle
+holes of neighbouring stitches do not line up in a row.</p>
+<ul>
+<li><strong>Accepts:</strong> one of <code>default</code> (Default), <code>simple</code> (Simple), <code>staggered</code> (Staggered)</li>
+<li><strong>Default:</strong> <code>default</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="random_split_jitter_percent"><a class="header" href="#random_split_jitter_percent"><code>random_split_jitter_percent</code></a></h3>
+<p><strong>Split jitter.</strong> How far each split may move at random, in percent of a part, either way. With a random split
+phase, how much each part’s length may vary instead.</p>
+<ul>
+<li><strong>Accepts:</strong> a percentage from 0 to 100</li>
+<li><strong>Default:</strong> <code>0</code></li>
+<li><strong>Shown when</strong> <a href="#split_method"><code>split_method</code></a> is <code>default</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="random_split_phase"><a class="header" href="#random_split_phase"><code>random_split_phase</code></a></h3>
+<p><strong>Random split phase.</strong> Start each stitch’s splits at a random distance from its start, and space them by the longest
+stitch, instead of dividing the stitch evenly. The needle holes of neighbouring stitches then
+fall apart, at the cost of a few more stitches.</p>
+<ul>
+<li><strong>Accepts:</strong> true or false</li>
+<li><strong>Default:</strong> <code>false</code></li>
+<li><strong>Shown when</strong> <a href="#split_method"><code>split_method</code></a> is <code>default</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="min_random_split_length_mm"><a class="header" href="#min_random_split_length_mm"><code>min_random_split_length_mm</code></a></h3>
+<p><strong>Shortest split stitch.</strong> With a random split phase, also split stitches longer than this but no longer than the longest
+stitch. Empty: the longest stitch.</p>
+<ul>
+<li><strong>Accepts:</strong> a length from 0.1 to 25 mm, or empty (0 or less counts as empty)</li>
+<li><strong>Default:</strong> empty</li>
+<li><strong>Shown when</strong> <a href="#split_method"><code>split_method</code></a> is <code>default</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="split_staggers"><a class="header" href="#split_staggers"><code>split_staggers</code></a></h3>
+<p><strong>Staggers.</strong> How many stitches the staggered splits take to come back to where they started. A fraction draws
+diagonals that show less than whole numbers do.</p>
+<ul>
+<li><strong>Accepts:</strong> a number from 0.01 to 100</li>
+<li><strong>Default:</strong> <code>4</code></li>
+<li><strong>Shown when</strong> <a href="#split_method"><code>split_method</code></a> is <code>staggered</code></li>
 <li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div>
@@ -2872,6 +2924,7 @@ version and a registry schema version arrive with the first release, together wi
 <tr><td><code>OptionalLength</code></td><td><code>Option&lt;Mm&gt;</code></td><td>as <code>Length</code>, or empty: the setting then comes from the document or the machine, or there is none. 0 or less counts as empty, as Ink/Stitch reads it</td><td><code>float</code>, unit <code>mm</code>, no default</td></tr>
 <tr><td><code>Angle</code></td><td>degrees, <code>f64</code></td><td>finite; normalized to (−180, 180]</td><td><code>float</code>, unit <code>deg</code></td></tr>
 <tr><td><code>Percent</code></td><td><code>f64</code></td><td>finite, within range</td><td><code>float</code>, unit <code>%</code></td></tr>
+<tr><td><code>Number</code></td><td><code>f64</code></td><td>finite, within range, without a unit</td><td><code>float</code>, no unit</td></tr>
 <tr><td><code>Count</code></td><td><code>u32</code></td><td>whole, within range</td><td><code>int</code></td></tr>
 <tr><td><code>Toggle</code></td><td><code>bool</code></td><td><code>true</code>/<code>false</code> (also <code>yes</code>/<code>no</code>, <code>on</code>/<code>off</code>, <code>1</code>/<code>0</code>)</td><td><code>boolean</code>, <code>toggle</code></td></tr>
 <tr><td><code>Choice</code></td><td><code>&amp;'static str</code> (the id)</td><td>one of the declared ids; unknown ids are a diagnostic, not a default</td><td><code>combo</code>, <code>dropdown</code></td></tr>
@@ -3211,7 +3264,8 @@ line, and fills are skipped with <code>SC-W0011</code> until their milestones. A
 wrong (<code>SC-E0101</code>) is skipped too, and the rest of the design still plans.</p>
 <p>Each element is generated with the shortest stitch for it: the larger of the machine’s (the profile’s
 <code>min_stitch</code>) and the element’s <code>min_stitch_length_mm</code>, or the design’s shortest stitch when the element
-sets none.</p>
+sets none. A satin column is given its longest stitch as well, the element’s <code>max_stitch_length_mm</code>,
+which its split stitches keep to.</p>
 <p>Rules every generator follows:</p>
 <ul>
 <li><strong>Pure:</strong> output depends only on (normalized shape, typed params, hints, seed, budget).</li>
@@ -3526,12 +3580,12 @@ vary (<code>REQ-RUN-007</code>).</li>
 <h3 id="diagnostics-1"><a class="header" href="#diagnostics-1">Diagnostics</a></h3>
 <p><code>SC-W0401</code> part of the path too small for the shortest stitch (skipped); <code>SC-W0402</code> stitch length below
 twice the shortest stitch (raised).</p>
-<h2 id="manual-stitch-2"><a class="header" href="#manual-stitch-2">Manual stitch</a></h2>
+<h2 id="manual-stitch-1"><a class="header" href="#manual-stitch-1">Manual stitch</a></h2>
 <p>Every node of the path is a needle penetration, in order — for hand-placed stitches and imported stitch
 files. A curve gives only its end node: its control points are not stitched and it is not flattened. A
 node where the needle already is counts once, and a closed path comes back to its start. Segments longer
-than <code>max_stitch_length_mm</code> (if set) are split into the fewest equal parts no longer than it, but never
-into parts shorter than the shortest stitch. A value of 0 or less means “not set”, as in Ink/Stitch, so
+than <code>max_stitch_length_mm</code> (if set, a setting manual stitch shares with satin columns) are split into the
+fewest equal parts no longer than it, but never into parts shorter than the shortest stitch. A value of 0 or less means “not set”, as in Ink/Stitch, so
 every stitch is then sewn as drawn. Bean stitch applies; repeats do not. Lock stitches are added
 only when <code>force_lock_stitches</code> is set, as in Ink/Stitch (read at <code>d59c9ab</code>).</p>
 <p>The shortest stitch holds here too: a node closer than it to the needle point before it is left out, so
@@ -3683,18 +3737,32 @@ stitch, by a <code>short_stitch_inset</code> percentage of the stitch’s width.
 another take turns with the percentages and start over at the first, so <code>15 30</code> insets them by 15 %,
 30 %, 15 % and on. A point at least that far from the last one left in place stays, and the next
 points are measured from it. A distance of 0 insets none. The points are the compensated ones, and an
-inset moves its point toward the other end of the stitch as negative pull compensation does. Where
-split stitches (step 4) are on, as Ink/Stitch’s default split method places them, an inset is at most
-a third of the longest stitch (M4.5).</li>
-<li><strong>Split long stitches.</strong> A stitch longer than <code>max_stitch_length_mm</code> (if set) is split into equal
-pieces. <code>split_method</code> decides where the split points fall from one stitch to the next:
-<code>simple</code> (same fractions every time), <code>staggered</code> (offsets cycle every <code>split_staggers</code> stitches, like
-tatami rows) or <code>default</code> (random phase with <code>random_split_jitter_percent</code>, <code>random_split_phase</code>,
-and pieces no shorter than <code>min_random_split_length_mm</code>). Split points never line up into a visible
-seam on more than <code>split_staggers</code> consecutive stitches.</li>
+inset moves its point toward the other end of the stitch as negative pull compensation does. Even
+splits (step 4) hold an inset to a third of the longest stitch.</li>
+<li><strong>Split long stitches,</strong> as Ink/Stitch splits them, where the element sets a longest stitch
+(<code>max_stitch_length_mm</code>, one of the settings every stitch type shares). A stitch’s ends are its pair’s
+compensated points, and it is sewn between their insets. <code>split_method</code> says where the splits go.
+<ul>
+<li><code>default</code> splits a stitch into the fewest equal parts no longer than the longest stitch, and the
+stitch back after it into as many parts as the stitch across before. <code>random_split_jitter_percent</code>
+moves each split by up to that share of a part, either way, at random.</li>
+<li>With <code>random_split_phase</code>, the default method starts the splits a random share of the longest
+stitch from the stitch’s inset start instead, and follows at the longest stitch, longer or shorter
+by up to the jitter. Stitches no longer than <code>min_random_split_length_mm</code> (by default the longest
+stitch) are not split. Of 2 or more splits, one within the element’s shortest stitch of an end is
+left out.</li>
+<li><code>simple</code> splits at whole multiples of the longest stitch from a stitch’s start, and from a stitch
+back’s end, where they lie between its insets. The splits line up in rows.</li>
+<li><code>staggered</code> does the same from a start that moves along by a <code>split_staggers</code>-th of the longest
+stitch from one stitch to the next, and comes back after that many stitches. Fractions are allowed.</li>
+<li>With even splits (the default method without random phase), a short stitch’s inset (step 3) is at
+most a third of the longest stitch.</li>
+</ul>
+</li>
 <li><strong>Alternate.</strong> Each pair is sewn rail A first, then rail B, and the needle goes A, B, A, B and on.
 The stitch from A to B goes straight across, and the one from B to the next A slants. One zigzag cycle
-(A → B → A) spans <code>zigzag_spacing_mm</code>. The exit end is chosen by assembly (see <em>Start and end</em>).</li>
+(A → B → A) spans <code>zigzag_spacing_mm</code>. The exit end is chosen by assembly (see <em>Start and end</em>).
+Random splits are drawn after the pairs are placed, in the order the stitches are sewn.</li>
 </ol>
 <h2 id="underlays"><a class="header" href="#underlays">Underlays</a></h2>
 <p>Sewn before the top stitches, in this order, each optional:</p>
@@ -3740,7 +3808,7 @@ override both (<code>REQ-GEN-001</code>). Travel between underlay passes uses <c
 <tbody>
 <tr><td><code>REQ-SAT-001</code></td><td>Pull compensation moves both ends of every top stitch outward along it, by <code>pull_compensation_mm</code> plus <code>pull_compensation_percent</code> of its width (± 0.01 mm). Ends moved past each other meet</td></tr>
 <tr><td><code>REQ-SAT-002</code></td><td>Consecutive pairs are the zigzag spacing apart, measured across the previous pair at its farther end, exactly so between straight parallel rails and within 5 % on curves. The last pair is at most a spacing on</td></tr>
-<tr><td><code>REQ-SAT-003</code></td><td>No top stitch exceeds <code>max_stitch_length_mm</code> after splitting; split seams follow the chosen method</td></tr>
+<tr><td><code>REQ-SAT-003</code></td><td>With a longest stitch, a longer top stitch is split as <code>split_method</code> says. By default it splits into the fewest equal parts, and the stitch back into as many as the stitch across before. Simple and staggered splits fall at whole multiples of the longest stitch, from a start that <code>staggered</code> moves along</td></tr>
 <tr><td><code>REQ-SAT-004</code></td><td>Underlays lie inside the inset band and precede the top stitches</td></tr>
 <tr><td><code>REQ-SAT-005</code></td><td>Rails and rungs are told apart as Ink/Stitch tells them, in any drawing order. A path with no subpath longer than a point produces <code>SC-E0201</code> and no stitches, and a rung that misses a rail joins the rail’s nearest point (<code>SC-W0203</code>)</td></tr>
 <tr><td><code>REQ-SAT-006</code></td><td>A parameter with a value for each side changes only its own side: a rail’s stitch ends, or the column’s start or end</td></tr>
@@ -4827,8 +4895,9 @@ origin and licence). Large real-world corpora live in a separate repository pinn
 SHA-256, downloaded by <code>cargo xtask corpus</code> — the same policy VectorCraft follows for its corpora.</p>
 <p>The engine’s cases build their small designs with <code>stitchcraft_testkit::designs</code>. It also reads a plan’s
 shape at a glance: <code>J L4 S5 L4</code> is a jump, 4 lock stitches, 5 needle points of stitching and 4 more lock
-stitches. The satin cases sew their columns with <code>stitchcraft_testkit::satins</code>, as an element is sewn, and
-read the needle points back in pairs across the column.</p>
+stitches. The satin cases sew their columns with <code>stitchcraft_testkit::satins</code>, as an element is sewn on
+the reference machine, with stitches no shorter than the machine’s shortest and no longer than the
+element’s longest, and read the needle points back in pairs across the column.</p>
 <h2 id="levels"><a class="header" href="#levels">Levels</a></h2>
 <h3 id="l0--plan-invariants-every-pr"><a class="header" href="#l0--plan-invariants-every-pr">L0 — Plan invariants (every PR)</a></h3>
 <p>The <a href="#plan-invariants">plan invariants</a> run on <em>every</em> plan the
@@ -5331,12 +5400,12 @@ stitches once its stitch type or feature lands (see <em>Phase</em> and the param
 <tr><td><code>random_width_decrease_percent</code></td><td>float</td><td>% (each side)</td><td>0</td><td>all</td><td>P1 (M4)</td><td><a href="#random_width_decrease_percent">registered</a></td></tr>
 <tr><td><code>random_width_increase_percent</code></td><td>float</td><td>% (each side)</td><td>0</td><td>all</td><td>P1 (M4)</td><td><a href="#random_width_increase_percent">registered</a></td></tr>
 <tr><td><code>random_zigzag_spacing_percent</code></td><td>float</td><td>± %</td><td>0</td><td>all</td><td>P1 (M4)</td><td><a href="#random_zigzag_spacing_percent">registered</a></td></tr>
-<tr><td><code>split_method</code></td><td>combo</td><td>—</td><td>0</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
-<tr><td><code>max_stitch_length_mm</code></td><td>float</td><td>mm</td><td>—</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
-<tr><td><code>random_split_jitter_percent</code></td><td>float</td><td>± %</td><td>0</td><td><code>default</code></td><td>P1 (M4)</td><td>planned</td></tr>
-<tr><td><code>random_split_phase</code></td><td>boolean</td><td>—</td><td>false</td><td><code>default</code></td><td>P1 (M4)</td><td>planned</td></tr>
-<tr><td><code>min_random_split_length_mm</code></td><td>float</td><td>mm</td><td>—</td><td><code>default</code></td><td>P1 (M4)</td><td>planned</td></tr>
-<tr><td><code>split_staggers</code></td><td>float</td><td>—</td><td>4</td><td><code>staggered</code></td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>split_method</code></td><td>combo</td><td>—</td><td>0</td><td>all</td><td>P1 (M4)</td><td><a href="#split_method">registered</a></td></tr>
+<tr><td><code>max_stitch_length_mm</code></td><td>float</td><td>mm</td><td>—</td><td>all</td><td>P1 (M4)</td><td><a href="#max_stitch_length_mm">registered</a></td></tr>
+<tr><td><code>random_split_jitter_percent</code></td><td>float</td><td>± %</td><td>0</td><td><code>default</code></td><td>P1 (M4)</td><td><a href="#random_split_jitter_percent">registered</a></td></tr>
+<tr><td><code>random_split_phase</code></td><td>boolean</td><td>—</td><td>false</td><td><code>default</code></td><td>P1 (M4)</td><td><a href="#random_split_phase">registered</a></td></tr>
+<tr><td><code>min_random_split_length_mm</code></td><td>float</td><td>mm</td><td>—</td><td><code>default</code></td><td>P1 (M4)</td><td><a href="#min_random_split_length_mm">registered</a></td></tr>
+<tr><td><code>split_staggers</code></td><td>float</td><td>—</td><td>4</td><td><code>staggered</code></td><td>P1 (M4)</td><td><a href="#split_staggers">registered</a></td></tr>
 <tr><td><code>short_stitch_inset</code></td><td>float</td><td>%</td><td>15</td><td>all</td><td>P1 (M4)</td><td><a href="#short_stitch_inset">registered</a></td></tr>
 <tr><td><code>short_stitch_distance_mm</code></td><td>float</td><td>mm</td><td>0.25</td><td>all</td><td>P1 (M4)</td><td><a href="#short_stitch_distance_mm">registered</a></td></tr>
 <tr><td><code>zigzag_spacing_mm</code></td><td>float</td><td>mm/cycle</td><td>0.4</td><td>all</td><td>P1 (M4)</td><td><a href="#zigzag_spacing_mm">registered</a></td></tr>
@@ -5527,7 +5596,7 @@ patterns, stitch plan or sew stack, and legacy names Ink/Stitch’s updater rewr
 </tbody>
 </table>
 </div>
-<p><em>145 parameter declarations, 38 registered in StitchCraft.</em></p>
+<p><em>145 parameter declarations, 44 registered in StitchCraft.</em></p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="architecture-decision-records"><a class="header" href="#architecture-decision-records">Architecture decision records</a></h1>
 <p>Short records of decisions that shape the code, with their context and the alternatives we rejected.
@@ -6142,7 +6211,7 @@ of code) · 🧵 machine checkpoint · 👤 owner action</p>
 <tr><td>M4.2 ✅</td><td>Correspondence and stitch placement as in Ink/Stitch (rails turned, sections at the rungs or the nodes), <code>SC-W0210</code>. Satin columns are sewn</td><td><code>REQ-SAT-002</code></td></tr>
 <tr><td>M4.3 ✅</td><td>Pull and push compensation (symmetric/asymmetric), random width and spacing, <code>SC-W0211</code></td><td><code>REQ-SAT-001</code>, <code>REQ-SAT-006</code> to <code>REQ-SAT-008</code></td></tr>
 <tr><td>M4.4 ✅</td><td>Short stitches on curves</td><td><code>REQ-SAT-009</code>, a case set on tight curves</td></tr>
-<tr><td>M4.5</td><td>Split stitches (simple, staggered, random)</td><td><code>REQ-SAT-003</code></td></tr>
+<tr><td>M4.5 ✅</td><td>Split stitches (simple, staggered, random)</td><td><code>REQ-SAT-003</code></td></tr>
 <tr><td>M4.6</td><td>Underlays: centre walk, contour, zigzag</td><td><code>REQ-SAT-004</code></td></tr>
 <tr><td>M4.7</td><td>Start/end nearest point; hints</td><td><code>REQ-GEN-001</code> for satin</td></tr>
 <tr><td>M4.8</td><td>Single-path satin (centre line + width)</td><td>cases</td></tr>

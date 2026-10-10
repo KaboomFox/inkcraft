@@ -35,10 +35,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-44df09e1.js";
+            window.path_to_searchindex_js = "../searchindex-3f058530.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-68c7fe35.js"></script>
+        <script src="../toc-c8bf69c1.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -231,7 +231,8 @@ line, and fills are skipped with <code>SC-W0011</code> until their milestones. A
 wrong (<code>SC-E0101</code>) is skipped too, and the rest of the design still plans.</p>
 <p>Each element is generated with the shortest stitch for it: the larger of the machine’s (the profile’s
 <code>min_stitch</code>) and the element’s <code>min_stitch_length_mm</code>, or the design’s shortest stitch when the element
-sets none.</p>
+sets none. A satin column is given its longest stitch as well, the element’s <code>max_stitch_length_mm</code>,
+which its split stitches keep to.</p>
 <p>Rules every generator follows:</p>
 <ul>
 <li><strong>Pure:</strong> output depends only on (normalized shape, typed params, hints, seed, budget).</li>

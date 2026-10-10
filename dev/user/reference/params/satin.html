@@ -35,10 +35,10 @@
             const path_to_root = "../../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../../searchindex-44df09e1.js";
+            window.path_to_searchindex_js = "../../../searchindex-3f058530.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../../../toc-68c7fe35.js"></script>
+        <script src="../../../toc-c8bf69c1.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -305,12 +305,60 @@ in. 0 moves none.</p>
 <li><strong>Default:</strong> <code>0.25</code></li>
 <li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
 </ul>
+<h2 id="split-stitches"><a class="header" href="#split-stitches">Split stitches</a></h2>
+<h3 id="split_method"><a class="header" href="#split_method"><code>split_method</code></a></h3>
+<p><strong>Split method.</strong> How stitches longer than the longest stitch (<code>max_stitch_length_mm</code>) are split. Default splits
+each into the fewest equal parts no longer than it. Simple splits at whole multiples of it from
+the stitch’s start. Staggered moves those splits along from one stitch to the next, so the needle
+holes of neighbouring stitches do not line up in a row.</p>
+<ul>
+<li><strong>Accepts:</strong> one of <code>default</code> (Default), <code>simple</code> (Simple), <code>staggered</code> (Staggered)</li>
+<li><strong>Default:</strong> <code>default</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="random_split_jitter_percent"><a class="header" href="#random_split_jitter_percent"><code>random_split_jitter_percent</code></a></h3>
+<p><strong>Split jitter.</strong> How far each split may move at random, in percent of a part, either way. With a random split
+phase, how much each part’s length may vary instead.</p>
+<ul>
+<li><strong>Accepts:</strong> a percentage from 0 to 100</li>
+<li><strong>Default:</strong> <code>0</code></li>
+<li><strong>Shown when</strong> <a href="#split_method"><code>split_method</code></a> is <code>default</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="random_split_phase"><a class="header" href="#random_split_phase"><code>random_split_phase</code></a></h3>
+<p><strong>Random split phase.</strong> Start each stitch’s splits at a random distance from its start, and space them by the longest
+stitch, instead of dividing the stitch evenly. The needle holes of neighbouring stitches then
+fall apart, at the cost of a few more stitches.</p>
+<ul>
+<li><strong>Accepts:</strong> true or false</li>
+<li><strong>Default:</strong> <code>false</code></li>
+<li><strong>Shown when</strong> <a href="#split_method"><code>split_method</code></a> is <code>default</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="min_random_split_length_mm"><a class="header" href="#min_random_split_length_mm"><code>min_random_split_length_mm</code></a></h3>
+<p><strong>Shortest split stitch.</strong> With a random split phase, also split stitches longer than this but no longer than the longest
+stitch. Empty: the longest stitch.</p>
+<ul>
+<li><strong>Accepts:</strong> a length from 0.1 to 25 mm, or empty (0 or less counts as empty)</li>
+<li><strong>Default:</strong> empty</li>
+<li><strong>Shown when</strong> <a href="#split_method"><code>split_method</code></a> is <code>default</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="split_staggers"><a class="header" href="#split_staggers"><code>split_staggers</code></a></h3>
+<p><strong>Staggers.</strong> How many stitches the staggered splits take to come back to where they started. A fraction draws
+diagonals that show less than whole numbers do.</p>
+<ul>
+<li><strong>Accepts:</strong> a number from 0.01 to 100</li>
+<li><strong>Default:</strong> <code>4</code></li>
+<li><strong>Shown when</strong> <a href="#split_method"><code>split_method</code></a> is <code>staggered</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../../../user/reference/params/manual.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../../../user/reference/params/repeat.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
@@ -324,7 +372,7 @@ in. 0 moves none.</p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../../../user/reference/params/manual.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../../../user/reference/params/repeat.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 

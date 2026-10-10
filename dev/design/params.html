@@ -35,10 +35,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-44df09e1.js";
+            window.path_to_searchindex_js = "../searchindex-3f058530.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-68c7fe35.js"></script>
+        <script src="../toc-c8bf69c1.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -269,6 +269,7 @@ version and a registry schema version arrive with the first release, together wi
 <tr><td><code>OptionalLength</code></td><td><code>Option&lt;Mm&gt;</code></td><td>as <code>Length</code>, or empty: the setting then comes from the document or the machine, or there is none. 0 or less counts as empty, as Ink/Stitch reads it</td><td><code>float</code>, unit <code>mm</code>, no default</td></tr>
 <tr><td><code>Angle</code></td><td>degrees, <code>f64</code></td><td>finite; normalized to (−180, 180]</td><td><code>float</code>, unit <code>deg</code></td></tr>
 <tr><td><code>Percent</code></td><td><code>f64</code></td><td>finite, within range</td><td><code>float</code>, unit <code>%</code></td></tr>
+<tr><td><code>Number</code></td><td><code>f64</code></td><td>finite, within range, without a unit</td><td><code>float</code>, no unit</td></tr>
 <tr><td><code>Count</code></td><td><code>u32</code></td><td>whole, within range</td><td><code>int</code></td></tr>
 <tr><td><code>Toggle</code></td><td><code>bool</code></td><td><code>true</code>/<code>false</code> (also <code>yes</code>/<code>no</code>, <code>on</code>/<code>off</code>, <code>1</code>/<code>0</code>)</td><td><code>boolean</code>, <code>toggle</code></td></tr>
 <tr><td><code>Choice</code></td><td><code>&amp;'static str</code> (the id)</td><td>one of the declared ids; unknown ids are a diagnostic, not a default</td><td><code>combo</code>, <code>dropdown</code></td></tr>

@@ -35,7 +35,7 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-b55d5a7c.js";
+            window.path_to_searchindex_js = "../../searchindex-44df09e1.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-68c7fe35.js"></script>
@@ -301,9 +301,16 @@ a pair moves to lie that spacing from the one before.</li>
 </li>
 <li><strong>Compensate width.</strong> Each pair is widened by pull compensation as it is placed, with its random
 share (<em>Compensation</em>).</li>
-<li><strong>Short stitches on curves.</strong> Where consecutive points on the inner rail are closer than
-<code>short_stitch_distance_mm</code>, every other stitch ends <code>short_stitch_inset</code> percent of the width short of
-that rail, so the inner edge does not pile up.</li>
+<li><strong>Short stitches on curves,</strong> as in Ink/Stitch, where they are on by default. On the inside of a
+tight curve, a rail’s needle points crowd together and the thread piles up. On each rail, a point
+closer than <code>short_stitch_distance_mm</code> to the last point left in place there moves in along its
+stitch, by a <code>short_stitch_inset</code> percentage of the stitch’s width. Points that crowd one after
+another take turns with the percentages and start over at the first, so <code>15 30</code> insets them by 15 %,
+30 %, 15 % and on. A point at least that far from the last one left in place stays, and the next
+points are measured from it. A distance of 0 insets none. The points are the compensated ones, and an
+inset moves its point toward the other end of the stitch as negative pull compensation does. Where
+split stitches (step 4) are on, as Ink/Stitch’s default split method places them, an inset is at most
+a third of the longest stitch (M4.5).</li>
 <li><strong>Split long stitches.</strong> A stitch longer than <code>max_stitch_length_mm</code> (if set) is split into equal
 pieces. <code>split_method</code> decides where the split points fall from one stitch to the next:
 <code>simple</code> (same fractions every time), <code>staggered</code> (offsets cycle every <code>split_staggers</code> stitches, like
@@ -364,6 +371,7 @@ override both (<code>REQ-GEN-001</code>). Travel between underlay passes uses <c
 <tr><td><code>REQ-SAT-006</code></td><td>A parameter with a value for each side changes only its own side: a rail’s stitch ends, or the column’s start or end</td></tr>
 <tr><td><code>REQ-SAT-007</code></td><td>Random widths and spacing are reproducible from the element and its seed, and stay within their ranges</td></tr>
 <tr><td><code>REQ-SAT-008</code></td><td>Push compensation shortens the rails at the column’s start and end before they are cut, or lengthens them where negative. A rail it would leave shorter than half a CSS pixel keeps its length (<code>SC-W0211</code>)</td></tr>
+<tr><td><code>REQ-SAT-009</code></td><td>On each rail, a top stitch end closer than <code>short_stitch_distance_mm</code> to the last end left in place moves in along its stitch by the next <code>short_stitch_inset</code> percentage. Ends far enough from it stay</td></tr>
 </tbody>
 </table>
 </div>

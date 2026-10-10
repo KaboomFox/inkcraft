@@ -35,7 +35,7 @@
             const path_to_root = "../../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../../searchindex-b55d5a7c.js";
+            window.path_to_searchindex_js = "../../../searchindex-44df09e1.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../../toc-68c7fe35.js"></script>
@@ -284,6 +284,25 @@ percent of the spacing, longer or shorter.</p>
 <ul>
 <li><strong>Accepts:</strong> a percentage from 0 to 100</li>
 <li><strong>Default:</strong> <code>0</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h2 id="short-stitches"><a class="header" href="#short-stitches">Short stitches</a></h2>
+<h3 id="short_stitch_inset"><a class="header" href="#short_stitch_inset"><code>short_stitch_inset</code></a></h3>
+<p><strong>Short stitch inset.</strong> How far a crowded needle point is moved in along its stitch, in percent of the stitch’s width.
+On the inside of a tight curve the needle points of a rail crowd together, and the thread piles
+up there. Moving some of them in spreads them out. Points that crowd one after another take
+turns with several values separated by spaces.</p>
+<ul>
+<li><strong>Accepts:</strong> 1 to 16 percentages from 0 to 50, separated by spaces</li>
+<li><strong>Default:</strong> <code>15</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="short_stitch_distance_mm"><a class="header" href="#short_stitch_distance_mm"><code>short_stitch_distance_mm</code></a></h3>
+<p><strong>Short stitch distance.</strong> How close a needle point may come to the last one left in place on its rail before it is moved
+in. 0 moves none.</p>
+<ul>
+<li><strong>Accepts:</strong> a length from 0 to 5 mm</li>
+<li><strong>Default:</strong> <code>0.25</code></li>
 <li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
 </ul>
 

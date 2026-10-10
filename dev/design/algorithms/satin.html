@@ -35,7 +35,7 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-30ea70a6.js";
+            window.path_to_searchindex_js = "../../searchindex-4623099b.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-65a8af2a.js"></script>
@@ -231,27 +231,47 @@ Ink/Stitch also counts a line of zero length among the subpaths in step 3, where
 out as a point.</p>
 <h2 id="orientation"><a class="header" href="#orientation">Orientation</a></h2>
 <ul>
-<li><code>reverse_rails = automatic</code> reverses rail B when that brings the rails’ points closer together, as in
-Ink/Stitch. Points at every tenth of each rail’s length, from its start to 90 %, are paired twice, with
-rail B forwards and with it backwards. The pairing whose distances add up to less wins. <code>none</code>,
-<code>first</code>, <code>second</code> and <code>both</code> force it.</li>
-<li><code>swap_satin_rails</code> swaps which rail is “first”, which matters for asymmetric values (one value per
-side) and for which side the E-stitch spine runs on.</li>
+<li><code>swap_satin_rails</code> makes the second rail the first, before any reversal. The first rail sews first in
+each pair, and the column starts on it. Asymmetric values (one value per side) name it first, and the
+E-stitch spine runs on it.</li>
+<li><code>reverse_rails = automatic</code> reverses rail B, the second, when that brings the rails’ points closer
+together, as in Ink/Stitch. Points at every tenth of each rail’s length, from its start to 90 %, are
+paired twice, with rail B forwards and with it backwards. The pairing whose distances add up to less
+wins. <code>none</code>, <code>first</code>, <code>second</code> and <code>both</code> force it.</li>
 </ul>
 <h2 id="correspondence"><a class="header" href="#correspondence">Correspondence</a></h2>
-<p>Rails are cut at rung crossings into paired sections. Within a section, the point at normalized arc
-length <code>t</code> on rail A corresponds to <code>t</code> on rail B. A column of 2 subpaths has no rungs, and its rails’
-nodes are paired instead, as in Ink/Stitch. The 2nd node of one rail goes with the 2nd node of the other,
-and on in order, after any reversal, with each rail’s 2 ends left out. Rails with different numbers of
-nodes pair as many nodes as the shorter list has, with a warning. Rails of 2 nodes each are one
-section. When the resulting stitch directions deviate from the local column normal by more than 45°
-somewhere, the element gets <code>SC-W0208</code> (“add a rung here”) with the location.</p>
+<p>Every rung cuts each rail at the distance along it of the rung’s point on it, after any reversal. Each
+rail is cut at its own distances, in order, and the n-th part of one rail goes with the n-th part of the
+other: a section. A part of no length leaves its section out, as where two rungs meet a rail at one
+point or one meets it at an end. Within a section, the point at a fraction of rail A’s part goes with the
+point at the same fraction of rail B’s.</p>
+<p>A column of 2 subpaths has no rungs, and its rails’ nodes cut the rails instead, as in Ink/Stitch. The
+2nd node of one rail goes with the 2nd node of the other, and on in order, after any reversal, without
+each rail’s 2 ends. Rails with different numbers of nodes pair as many as the one with fewer has
+(<code>SC-W0210</code>). Ink/Stitch’s own warning for this counts the rails’ points after flattening, not their
+nodes, and can warn where the nodes pair as drawn. Rails of 2 nodes each are cut once near their
+starts, and sew as one section. The cut on each rail is where the point 0.2 CSS pixels along the straight
+line from its first node to its last lies along it, as Ink/Stitch places the rung it adds there.</p>
+<p>When the resulting stitch directions deviate from the local column normal by more than 45° somewhere,
+the element gets <code>SC-W0208</code> (“add a rung here”) with the location.</p>
 <h2 id="top-stitches-method-satin_column"><a class="header" href="#top-stitches-method-satin_column">Top stitches (method <code>satin_column</code>)</a></h2>
 <ol>
-<li><strong>Sample along the centre.</strong> Walk the section so that consecutive stitch pairs are
-<code>zigzag_spacing_mm / 2</code> apart measured on the centre line (midpoints of corresponding points): one
-zigzag cycle (A → B → A) spans <code>zigzag_spacing_mm</code>. <code>random_zigzag_spacing_percent</code> jitters each
-step (seeded).</li>
+<li><strong>Place pairs along the sections,</strong> as Ink/Stitch places them. A pair of needle points goes across
+the column, one on each rail at the same fraction of its section. Each pair is meant to lie
+<code>zigzag_spacing_mm</code> from the one before, measured across the column. The measure is taken at a right
+angle to the previous pair, at whichever of its ends is farther (the outside of a curve). Where the
+previous pair has no length, it is the distance from that pair’s point.
+<ul>
+<li>Within a section, a pair is placed the spacing’s share of the section’s longer part past the one
+before. A pair that lands more than 5 % off the spacing moves by its step scaled by how far off it
+is. It moves at most twice, and the first move stops at the section’s end.</li>
+<li>The first pair of a section after the first goes as far past the section’s start as the previous
+pair is short of the spacing.</li>
+<li>The column starts with a pair at its start and ends with one at its end, unless the last pair is
+within 0.1 mm of it.</li>
+<li><code>random_zigzag_spacing_percent</code> jitters each step (seeded, M4.3).</li>
+</ul>
+</li>
 <li><strong>Compensate width.</strong> For each pair, move both ends outward along the A–B line by
 <code>pull_compensation_mm + pull_compensation_percent × width</code> per side; one value applies to both sides,
 two values (<code>"0.2 0.4"</code>) apply per rail. <code>random_width_increase_percent</code> and
@@ -267,7 +287,9 @@ pieces. <code>split_method</code> decides where the split points fall from one s
 tatami rows) or <code>default</code> (random phase with <code>random_split_jitter_percent</code>, <code>random_split_phase</code>,
 and pieces no shorter than <code>min_random_split_length_mm</code>). Split points never line up into a visible
 seam on more than <code>split_staggers</code> consecutive stitches.</li>
-<li><strong>Alternate.</strong> Emit A, B, A, B… The exit end is chosen by assembly (see <em>Start and end</em>).</li>
+<li><strong>Alternate.</strong> Each pair is sewn rail A first, then rail B, and the needle goes A, B, A, B and on.
+The stitch from A to B goes straight across, and the one from B to the next A slants. One zigzag cycle
+(A → B → A) spans <code>zigzag_spacing_mm</code>. The exit end is chosen by assembly (see <em>Start and end</em>).</li>
 </ol>
 <h2 id="underlays"><a class="header" href="#underlays">Underlays</a></h2>
 <p>Sewn before the top stitches, in this order, each optional:</p>
@@ -312,7 +334,7 @@ override both (<code>REQ-GEN-001</code>). Travel between underlay passes uses <c
 </thead>
 <tbody>
 <tr><td><code>REQ-SAT-001</code></td><td>Every top stitch end lies on its rail, offset outward by exactly the compensation (± 0.01 mm)</td></tr>
-<tr><td><code>REQ-SAT-002</code></td><td>Measured zigzag spacing on the centre line equals the parameter (± 5 %) away from short-stitch zones</td></tr>
+<tr><td><code>REQ-SAT-002</code></td><td>Consecutive pairs are the zigzag spacing apart, measured across the previous pair at its farther end, exactly so between straight parallel rails and within 5 % on curves. The last pair is at most a spacing on</td></tr>
 <tr><td><code>REQ-SAT-003</code></td><td>No top stitch exceeds <code>max_stitch_length_mm</code> after splitting; split seams follow the chosen method</td></tr>
 <tr><td><code>REQ-SAT-004</code></td><td>Underlays lie inside the inset band and precede the top stitches</td></tr>
 <tr><td><code>REQ-SAT-005</code></td><td>Rails and rungs are told apart as Ink/Stitch tells them, in any drawing order. A path with no subpath longer than a point produces <code>SC-E0201</code> and no stitches, and a rung that misses a rail joins the rail’s nearest point (<code>SC-W0203</code>)</td></tr>

@@ -35,7 +35,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-30ea70a6.js";
+            window.path_to_searchindex_js = "../searchindex-4623099b.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-65a8af2a.js"></script>
@@ -223,12 +223,12 @@ that a jump may separate from the next, in sewing order. A stroke gives one grou
 too small for a stitch gives none (<code>SC-W0401</code>). The element’s own settings stay with the element, and
 assembly reads them there: its thread, locks, trim and stop.</p>
 <p>The stitch type picks the generator. A stroke whose <code>satin_column</code> setting is on is a satin column,
-whatever its <code>stroke_method</code> says, as in Ink/Stitch. Its rails and rungs are recognized and what
-recognition finds is reported, and then it is skipped with <code>SC-W0011</code> until M4.2 sews satins. For any
-other stroke the generator is its <code>stroke_method</code>. <code>running_stitch</code> (the default) and <code>manual_stitch</code>
-are sewn from M3. The other stroke methods and fills are skipped with <code>SC-W0011</code> until their
-milestones. An element whose parameters are wrong (<code>SC-E0101</code>) is skipped too, and the rest of the
-design still plans.</p>
+whatever its <code>stroke_method</code> says, as in Ink/Stitch. Its rails and rungs are recognized, what
+recognition finds is reported, and its <code>satin_method</code> picks the generator: the satin stitch, sewn from
+M4.2. For any other stroke the generator is its <code>stroke_method</code>. <code>running_stitch</code> (the default) and
+<code>manual_stitch</code> are sewn from M3. The other stroke and satin methods, satin columns drawn as their centre
+line, and fills are skipped with <code>SC-W0011</code> until their milestones. An element whose parameters are
+wrong (<code>SC-E0101</code>) is skipped too, and the rest of the design still plans.</p>
 <p>Each element is generated with the shortest stitch for it: the larger of the machine’s (the profile’s
 <code>min_stitch</code>) and the element’s <code>min_stitch_length_mm</code>, or the design’s shortest stitch when the element
 sets none.</p>

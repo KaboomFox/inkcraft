@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-30ea70a6.js";
+            window.path_to_searchindex_js = "searchindex-4623099b.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-65a8af2a.js"></script>
@@ -201,8 +201,9 @@ every pull request.</li>
 </ul>
 <blockquote>
 <p><strong>Status:</strong> StitchCraft sews the strokes of an SVG design and writes PES and DST files. A stroke is
-sewn in running stitch or manual stitch, with bean stitch where it is set. Satin columns come in
-milestone M4 and fills in M5. The <a href="#roadmap-small-steps-to-the-final-project">roadmap</a> has every step.</p>
+sewn in running stitch or manual stitch, with bean stitch where it is set. Milestone M4 is under way:
+the engine places a satin column’s top stitches, and <code>stitch plan</code> sews the satins of an SVG from M8,
+when it reads Ink/Stitch’s settings. Fills come in M5. The <a href="#roadmap-small-steps-to-the-final-project">roadmap</a> has every step.</p>
 </blockquote>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="user-guide"><a class="header" href="#user-guide">User guide</a></h1>
@@ -1244,6 +1245,7 @@ Arguments:
 <tr><td><a href="#sc-w0203"><code>SC-W0203</code></a></td><td>Warning</td><td>Satin rung does not cross both rails</td></tr>
 <tr><td><a href="#sc-w0205"><code>SC-W0205</code></a></td><td>Warning</td><td>Satin subpath is one point; left out</td></tr>
 <tr><td><a href="#sc-w0207"><code>SC-W0207</code></a></td><td>Warning</td><td>Satin rung crosses a rail more than once; left out</td></tr>
+<tr><td><a href="#sc-w0210"><code>SC-W0210</code></a></td><td>Warning</td><td>Satin rails without rungs have different numbers of nodes</td></tr>
 <tr><td><a href="#sc-w0401"><code>SC-W0401</code></a></td><td>Warning</td><td>Path too small for the shortest stitch; skipped</td></tr>
 <tr><td><a href="#sc-w0402"><code>SC-W0402</code></a></td><td>Warning</td><td>Stitch length below twice the shortest stitch; raised</td></tr>
 <tr><td><a href="#sc-w0403"><code>SC-W0403</code></a></td><td>Warning</td><td>Hand-placed stitch shorter than the shortest stitch; point left out</td></tr>
@@ -1361,6 +1363,14 @@ if it was meant as a rung, draw the rung across both rails.</p>
 goes with which point of the other, and it was left out. The column is sewn without it.</p>
 <p>The message names the subpath, numbered from 1 in the order the path draws it. Redraw the rung as a
 straight line across both rails.</p>
+<h2 id="sc-w0210"><a class="header" href="#sc-w0210">SC-W0210</a></h2>
+<p><strong>Warning</strong> — Satin rails without rungs have different numbers of nodes</p>
+<p>A satin column’s path draws no rungs, so its rails’ nodes pair up instead, as in Ink/Stitch: the
+2nd node of one rail with the 2nd of the other, and on in order. Its rails have different numbers
+of nodes, so the rail with more has nodes that pair with none, and between them the stitches
+follow the rails’ lengths alone.</p>
+<p>The message gives both counts. Add rungs across the column, or give both rails the same number of
+nodes.</p>
 <h2 id="sc-w0401"><a class="header" href="#sc-w0401">SC-W0401</a></h2>
 <p><strong>Warning</strong> — Path too small for the shortest stitch; skipped</p>
 <p>A part of a stroke is too small for the shortest stitch the machine sews well, so it was left out:
@@ -1534,7 +1544,7 @@ numbers, <code>true</code>/<code>false</code>, strings and arrays instead, and <
 <tr><td><a href="#running-parameters">Running parameters</a></td><td>5</td><td>Running stitch, Ripple stitch</td></tr>
 <tr><td><a href="#repeat-parameters">Repeat parameters</a></td><td>2</td><td>Running stitch, Ripple stitch, Zigzag stitch, Manual stitch</td></tr>
 <tr><td><a href="#manual-parameters">Manual parameters</a></td><td>1</td><td>Manual stitch</td></tr>
-<tr><td><a href="#satin-parameters">Satin parameters</a></td><td>1</td><td>Satin column</td></tr>
+<tr><td><a href="#satin-parameters">Satin parameters</a></td><td>5</td><td>Satin column, E-stitch, S-stitch, Zigzag satin</td></tr>
 </tbody>
 </table>
 </div>
@@ -1562,13 +1572,17 @@ numbers, <code>true</code>/<code>false</code>, strings and arrays instead, and <
 <tr><td><a href="#random_seed"><code>random_seed</code></a></td><td>Random seed</td><td>Running parameters</td></tr>
 <tr><td><a href="#random_stitch_length_jitter_percent"><code>random_stitch_length_jitter_percent</code></a></td><td>Length variation</td><td>Running parameters</td></tr>
 <tr><td><a href="#repeats"><code>repeats</code></a></td><td>Repeats</td><td>Repeat parameters</td></tr>
+<tr><td><a href="#reverse_rails"><code>reverse_rails</code></a></td><td>Reverse rails</td><td>Satin parameters</td></tr>
 <tr><td><a href="#running_stitch_length_mm"><code>running_stitch_length_mm</code></a></td><td>Stitch length</td><td>Running parameters</td></tr>
 <tr><td><a href="#running_stitch_tolerance_mm"><code>running_stitch_tolerance_mm</code></a></td><td>Curve tolerance</td><td>Running parameters</td></tr>
 <tr><td><a href="#satin_column"><code>satin_column</code></a></td><td>Satin column</td><td>Satin parameters</td></tr>
+<tr><td><a href="#satin_method"><code>satin_method</code></a></td><td>Method</td><td>Satin parameters</td></tr>
 <tr><td><a href="#stop_after"><code>stop_after</code></a></td><td>Stop after</td><td>Common parameters</td></tr>
 <tr><td><a href="#stroke_method"><code>stroke_method</code></a></td><td>Method</td><td>Stroke parameters</td></tr>
+<tr><td><a href="#swap_satin_rails"><code>swap_satin_rails</code></a></td><td>Swap rails</td><td>Satin parameters</td></tr>
 <tr><td><a href="#ties"><code>ties</code></a></td><td>Lock stitches</td><td>Common parameters</td></tr>
 <tr><td><a href="#trim_after"><code>trim_after</code></a></td><td>Trim after</td><td>Common parameters</td></tr>
+<tr><td><a href="#zigzag_spacing_mm"><code>zigzag_spacing_mm</code></a></td><td>Zigzag spacing</td><td>Satin parameters</td></tr>
 </tbody>
 </table>
 </div>
@@ -1800,18 +1814,52 @@ the stitches: “1 0” makes every other stitch bold.</p>
 <div style="break-before: page; page-break-before: always;"></div><!-- Generated by `cargo xtask docs` from `SatinParams` in the parameter registry. Edit the declaration, not this page. -->
 <h1 id="satin-parameters"><a class="header" href="#satin-parameters">Satin parameters</a></h1>
 <p>Satin column: a band of stitches between two rails.</p>
-<p>Applies to Satin column.</p>
+<p>Applies to Satin column, E-stitch, S-stitch, Zigzag satin.</p>
 <h2 id="satin-column"><a class="header" href="#satin-column">Satin column</a></h2>
 <h3 id="satin_column"><a class="header" href="#satin_column"><code>satin_column</code></a></h3>
 <p><strong>Satin column.</strong> Sew the path as a satin column. Two of its subpaths are the rails, the column’s edges, and the
-others are rungs across both, which say which point of one rail goes with which of the other. A
-path of 1 subpath is the column’s centre line. Off, the path is sewn as a stroke, by its
-<code>stroke_method</code>. This version reads a satin column’s rails and rungs and reports what it finds,
-then skips the element (<code>SC-W0011</code>). Satin stitches arrive in a later version.</p>
+others are rungs across both, which say which point of one rail goes with which of the other.
+Without rungs, the rails’ nodes pair up instead. A path of 1 subpath is the column’s centre
+line, which a later version sews. Off, the path is sewn as a stroke, by its <code>stroke_method</code>.</p>
 <ul>
 <li><strong>Accepts:</strong> true or false</li>
 <li><strong>Default:</strong> <code>false</code></li>
 <li><strong>Applies to:</strong> Running stitch, Manual stitch, Zigzag stitch, Ripple stitch, Satin column, E-stitch, S-stitch, Zigzag satin</li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="satin_method"><a class="header" href="#satin_method"><code>satin_method</code></a></h3>
+<p><strong>Method.</strong> How the column is sewn. A satin column sews stitches straight across it, from one rail to the
+other and back. E, S and zigzag stitches arrive in later versions, and until then an element
+set to one is skipped (<code>SC-W0011</code>).</p>
+<ul>
+<li><strong>Accepts:</strong> one of <code>satin_column</code> (Satin column), <code>e_stitch</code> (E-stitch), <code>s_stitch</code> (S-stitch), <code>zigzag</code> (Zigzag satin)</li>
+<li><strong>Default:</strong> <code>satin_column</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="zigzag_spacing_mm"><a class="header" href="#zigzag_spacing_mm"><code>zigzag_spacing_mm</code></a></h3>
+<p><strong>Zigzag spacing.</strong> The distance from one stitch across the column to the next that goes the same way: from one
+rail to the other and back again is one spacing. It is measured across the column at its
+outside edge, and on a curve the stitches fan out from the inside edge.</p>
+<ul>
+<li><strong>Accepts:</strong> a length from 0.01 to 10 mm</li>
+<li><strong>Default:</strong> <code>0.4</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h2 id="rails"><a class="header" href="#rails">Rails</a></h2>
+<h3 id="reverse_rails"><a class="header" href="#reverse_rails"><code>reverse_rails</code></a></h3>
+<p><strong>Reverse rails.</strong> Which rails are sewn against the way they are drawn, so that both run the same way. Automatic
+reverses the second rail when it runs against the first.</p>
+<ul>
+<li><strong>Accepts:</strong> one of <code>automatic</code> (Automatic), <code>none</code> (Neither), <code>first</code> (The first), <code>second</code> (The second), <code>both</code> (Both)</li>
+<li><strong>Default:</strong> <code>automatic</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="swap_satin_rails"><a class="header" href="#swap_satin_rails"><code>swap_satin_rails</code></a></h3>
+<p><strong>Swap rails.</strong> Make the second rail the first. The column starts on its first rail, and each stitch across it
+goes from the first rail to the second.</p>
+<ul>
+<li><strong>Accepts:</strong> true or false</li>
+<li><strong>Default:</strong> <code>false</code></li>
 <li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div>
@@ -2848,6 +2896,7 @@ another.</p>
 <tr><td><code>SC-W0207</code></td><td>Warning</td><td>Satin rung crosses a rail more than once; left out</td><td>M4</td></tr>
 <tr><td><code>SC-W0208</code></td><td>Warning</td><td>Satin stitches skew more than 45° from the column; add a rung here</td><td>M4</td></tr>
 <tr><td><code>SC-W0209</code></td><td>Warning</td><td>Satin wider than 12 mm; long stitches may snag</td><td>M4</td></tr>
+<tr><td><code>SC-W0210</code></td><td>Warning</td><td>Satin rails without rungs have different numbers of nodes (some pair with none)</td><td>M4</td></tr>
 <tr><td><code>SC-W0303</code></td><td>Warning</td><td>Tiny ring dropped from fill region</td><td>M5</td></tr>
 <tr><td><code>SC-W0305</code></td><td>Warning</td><td>Region too small for fill rows; outlined with running stitch instead</td><td>M5</td></tr>
 <tr><td><code>SC-W0307</code></td><td>Warning</td><td>Region split into parts that are not connected; parts joined with trims</td><td>M5</td></tr>
@@ -3006,12 +3055,12 @@ that a jump may separate from the next, in sewing order. A stroke gives one grou
 too small for a stitch gives none (<code>SC-W0401</code>). The element’s own settings stay with the element, and
 assembly reads them there: its thread, locks, trim and stop.</p>
 <p>The stitch type picks the generator. A stroke whose <code>satin_column</code> setting is on is a satin column,
-whatever its <code>stroke_method</code> says, as in Ink/Stitch. Its rails and rungs are recognized and what
-recognition finds is reported, and then it is skipped with <code>SC-W0011</code> until M4.2 sews satins. For any
-other stroke the generator is its <code>stroke_method</code>. <code>running_stitch</code> (the default) and <code>manual_stitch</code>
-are sewn from M3. The other stroke methods and fills are skipped with <code>SC-W0011</code> until their
-milestones. An element whose parameters are wrong (<code>SC-E0101</code>) is skipped too, and the rest of the
-design still plans.</p>
+whatever its <code>stroke_method</code> says, as in Ink/Stitch. Its rails and rungs are recognized, what
+recognition finds is reported, and its <code>satin_method</code> picks the generator: the satin stitch, sewn from
+M4.2. For any other stroke the generator is its <code>stroke_method</code>. <code>running_stitch</code> (the default) and
+<code>manual_stitch</code> are sewn from M3. The other stroke and satin methods, satin columns drawn as their centre
+line, and fills are skipped with <code>SC-W0011</code> until their milestones. An element whose parameters are
+wrong (<code>SC-E0101</code>) is skipped too, and the rest of the design still plans.</p>
 <p>Each element is generated with the shortest stitch for it: the larger of the machine’s (the profile’s
 <code>min_stitch</code>) and the element’s <code>min_stitch_length_mm</code>, or the design’s shortest stitch when the element
 sets none.</p>
@@ -3237,7 +3286,7 @@ rests on is welcome when it helps the next reader check it again
 (<a href="#adr-0012-read-inkstitchs-source-never-copy-it">ADR-0012</a>).</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="stroke-generators"><a class="header" href="#stroke-generators">Stroke generators</a></h1>
-<!-- implements: crates/stitchcraft-engine/src/generators/mod.rs, crates/stitchcraft-engine/src/generators/running/**, crates/stitchcraft-engine/src/generators/manual.rs, crates/stitchcraft-engine/src/generators/passes.rs, crates/stitchcraft-engine/src/normalize/stroke.rs -->
+<!-- implements: crates/stitchcraft-engine/src/generators/mod.rs, crates/stitchcraft-engine/src/generators/running/**, crates/stitchcraft-engine/src/generators/manual.rs, crates/stitchcraft-engine/src/generators/passes.rs, crates/stitchcraft-engine/src/normalize/stroke.rs, crates/stitchcraft-engine/src/normalize/along.rs -->
 <p>Strokes follow a path. Shape: <code>StrokePath</code> (an ordered list of polylines, corners marked, from the
 normalizer). Phase P1 (M3) unless noted.</p>
 <h2 id="running-stitch-2"><a class="header" href="#running-stitch-2">Running stitch</a></h2>
@@ -3407,27 +3456,47 @@ Ink/Stitch also counts a line of zero length among the subpaths in step 3, where
 out as a point.</p>
 <h2 id="orientation"><a class="header" href="#orientation">Orientation</a></h2>
 <ul>
-<li><code>reverse_rails = automatic</code> reverses rail B when that brings the rails’ points closer together, as in
-Ink/Stitch. Points at every tenth of each rail’s length, from its start to 90 %, are paired twice, with
-rail B forwards and with it backwards. The pairing whose distances add up to less wins. <code>none</code>,
-<code>first</code>, <code>second</code> and <code>both</code> force it.</li>
-<li><code>swap_satin_rails</code> swaps which rail is “first”, which matters for asymmetric values (one value per
-side) and for which side the E-stitch spine runs on.</li>
+<li><code>swap_satin_rails</code> makes the second rail the first, before any reversal. The first rail sews first in
+each pair, and the column starts on it. Asymmetric values (one value per side) name it first, and the
+E-stitch spine runs on it.</li>
+<li><code>reverse_rails = automatic</code> reverses rail B, the second, when that brings the rails’ points closer
+together, as in Ink/Stitch. Points at every tenth of each rail’s length, from its start to 90 %, are
+paired twice, with rail B forwards and with it backwards. The pairing whose distances add up to less
+wins. <code>none</code>, <code>first</code>, <code>second</code> and <code>both</code> force it.</li>
 </ul>
 <h2 id="correspondence"><a class="header" href="#correspondence">Correspondence</a></h2>
-<p>Rails are cut at rung crossings into paired sections. Within a section, the point at normalized arc
-length <code>t</code> on rail A corresponds to <code>t</code> on rail B. A column of 2 subpaths has no rungs, and its rails’
-nodes are paired instead, as in Ink/Stitch. The 2nd node of one rail goes with the 2nd node of the other,
-and on in order, after any reversal, with each rail’s 2 ends left out. Rails with different numbers of
-nodes pair as many nodes as the shorter list has, with a warning. Rails of 2 nodes each are one
-section. When the resulting stitch directions deviate from the local column normal by more than 45°
-somewhere, the element gets <code>SC-W0208</code> (“add a rung here”) with the location.</p>
+<p>Every rung cuts each rail at the distance along it of the rung’s point on it, after any reversal. Each
+rail is cut at its own distances, in order, and the n-th part of one rail goes with the n-th part of the
+other: a section. A part of no length leaves its section out, as where two rungs meet a rail at one
+point or one meets it at an end. Within a section, the point at a fraction of rail A’s part goes with the
+point at the same fraction of rail B’s.</p>
+<p>A column of 2 subpaths has no rungs, and its rails’ nodes cut the rails instead, as in Ink/Stitch. The
+2nd node of one rail goes with the 2nd node of the other, and on in order, after any reversal, without
+each rail’s 2 ends. Rails with different numbers of nodes pair as many as the one with fewer has
+(<code>SC-W0210</code>). Ink/Stitch’s own warning for this counts the rails’ points after flattening, not their
+nodes, and can warn where the nodes pair as drawn. Rails of 2 nodes each are cut once near their
+starts, and sew as one section. The cut on each rail is where the point 0.2 CSS pixels along the straight
+line from its first node to its last lies along it, as Ink/Stitch places the rung it adds there.</p>
+<p>When the resulting stitch directions deviate from the local column normal by more than 45° somewhere,
+the element gets <code>SC-W0208</code> (“add a rung here”) with the location.</p>
 <h2 id="top-stitches-method-satin_column"><a class="header" href="#top-stitches-method-satin_column">Top stitches (method <code>satin_column</code>)</a></h2>
 <ol>
-<li><strong>Sample along the centre.</strong> Walk the section so that consecutive stitch pairs are
-<code>zigzag_spacing_mm / 2</code> apart measured on the centre line (midpoints of corresponding points): one
-zigzag cycle (A → B → A) spans <code>zigzag_spacing_mm</code>. <code>random_zigzag_spacing_percent</code> jitters each
-step (seeded).</li>
+<li><strong>Place pairs along the sections,</strong> as Ink/Stitch places them. A pair of needle points goes across
+the column, one on each rail at the same fraction of its section. Each pair is meant to lie
+<code>zigzag_spacing_mm</code> from the one before, measured across the column. The measure is taken at a right
+angle to the previous pair, at whichever of its ends is farther (the outside of a curve). Where the
+previous pair has no length, it is the distance from that pair’s point.
+<ul>
+<li>Within a section, a pair is placed the spacing’s share of the section’s longer part past the one
+before. A pair that lands more than 5 % off the spacing moves by its step scaled by how far off it
+is. It moves at most twice, and the first move stops at the section’s end.</li>
+<li>The first pair of a section after the first goes as far past the section’s start as the previous
+pair is short of the spacing.</li>
+<li>The column starts with a pair at its start and ends with one at its end, unless the last pair is
+within 0.1 mm of it.</li>
+<li><code>random_zigzag_spacing_percent</code> jitters each step (seeded, M4.3).</li>
+</ul>
+</li>
 <li><strong>Compensate width.</strong> For each pair, move both ends outward along the A–B line by
 <code>pull_compensation_mm + pull_compensation_percent × width</code> per side; one value applies to both sides,
 two values (<code>"0.2 0.4"</code>) apply per rail. <code>random_width_increase_percent</code> and
@@ -3443,7 +3512,9 @@ pieces. <code>split_method</code> decides where the split points fall from one s
 tatami rows) or <code>default</code> (random phase with <code>random_split_jitter_percent</code>, <code>random_split_phase</code>,
 and pieces no shorter than <code>min_random_split_length_mm</code>). Split points never line up into a visible
 seam on more than <code>split_staggers</code> consecutive stitches.</li>
-<li><strong>Alternate.</strong> Emit A, B, A, B… The exit end is chosen by assembly (see <em>Start and end</em>).</li>
+<li><strong>Alternate.</strong> Each pair is sewn rail A first, then rail B, and the needle goes A, B, A, B and on.
+The stitch from A to B goes straight across, and the one from B to the next A slants. One zigzag cycle
+(A → B → A) spans <code>zigzag_spacing_mm</code>. The exit end is chosen by assembly (see <em>Start and end</em>).</li>
 </ol>
 <h2 id="underlays"><a class="header" href="#underlays">Underlays</a></h2>
 <p>Sewn before the top stitches, in this order, each optional:</p>
@@ -3488,7 +3559,7 @@ override both (<code>REQ-GEN-001</code>). Travel between underlay passes uses <c
 </thead>
 <tbody>
 <tr><td><code>REQ-SAT-001</code></td><td>Every top stitch end lies on its rail, offset outward by exactly the compensation (± 0.01 mm)</td></tr>
-<tr><td><code>REQ-SAT-002</code></td><td>Measured zigzag spacing on the centre line equals the parameter (± 5 %) away from short-stitch zones</td></tr>
+<tr><td><code>REQ-SAT-002</code></td><td>Consecutive pairs are the zigzag spacing apart, measured across the previous pair at its farther end, exactly so between straight parallel rails and within 5 % on curves. The last pair is at most a spacing on</td></tr>
 <tr><td><code>REQ-SAT-003</code></td><td>No top stitch exceeds <code>max_stitch_length_mm</code> after splitting; split seams follow the chosen method</td></tr>
 <tr><td><code>REQ-SAT-004</code></td><td>Underlays lie inside the inset band and precede the top stitches</td></tr>
 <tr><td><code>REQ-SAT-005</code></td><td>Rails and rungs are told apart as Ink/Stitch tells them, in any drawing order. A path with no subpath longer than a point produces <code>SC-E0201</code> and no stitches, and a rung that misses a rail joins the rail’s nearest point (<code>SC-W0203</code>)</td></tr>
@@ -5072,7 +5143,7 @@ stitches once its stitch type or feature lands (see <em>Phase</em> and the param
 </thead>
 <tbody>
 <tr><td><code>satin_column</code></td><td>toggle</td><td>—</td><td>—</td><td>all</td><td>P1 (M4)</td><td><a href="#satin_column">registered</a></td></tr>
-<tr><td><code>satin_method</code></td><td>combo</td><td>—</td><td>0</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>satin_method</code></td><td>combo</td><td>—</td><td>0</td><td>all</td><td>P1 (M4)</td><td><a href="#satin_method">registered</a></td></tr>
 <tr><td><code>random_width_decrease_percent</code></td><td>float</td><td>% (each side)</td><td>0</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
 <tr><td><code>random_width_increase_percent</code></td><td>float</td><td>% (each side)</td><td>0</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
 <tr><td><code>random_zigzag_spacing_percent</code></td><td>float</td><td>± %</td><td>0</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
@@ -5084,12 +5155,12 @@ stitches once its stitch type or feature lands (see <em>Phase</em> and the param
 <tr><td><code>split_staggers</code></td><td>float</td><td>—</td><td>4</td><td><code>staggered</code></td><td>P1 (M4)</td><td>planned</td></tr>
 <tr><td><code>short_stitch_inset</code></td><td>float</td><td>%</td><td>15</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
 <tr><td><code>short_stitch_distance_mm</code></td><td>float</td><td>mm</td><td>0.25</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
-<tr><td><code>zigzag_spacing_mm</code></td><td>float</td><td>mm/cycle</td><td>0.4</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>zigzag_spacing_mm</code></td><td>float</td><td>mm/cycle</td><td>0.4</td><td>all</td><td>P1 (M4)</td><td><a href="#zigzag_spacing_mm">registered</a></td></tr>
 <tr><td><code>pull_compensation_percent</code></td><td>float</td><td>% (each side)</td><td>0</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
 <tr><td><code>pull_compensation_mm</code></td><td>float</td><td>mm (each side)</td><td>0</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
 <tr><td><code>push_compensation_mm</code></td><td>float</td><td>mm (each side)</td><td>0</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
-<tr><td><code>reverse_rails</code></td><td>combo</td><td>—</td><td>automatic</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
-<tr><td><code>swap_satin_rails</code></td><td>boolean</td><td>—</td><td>false</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>reverse_rails</code></td><td>combo</td><td>—</td><td>automatic</td><td>all</td><td>P1 (M4)</td><td><a href="#reverse_rails">registered</a></td></tr>
+<tr><td><code>swap_satin_rails</code></td><td>boolean</td><td>—</td><td>false</td><td>all</td><td>P1 (M4)</td><td><a href="#swap_satin_rails">registered</a></td></tr>
 <tr><td><code>running_stitch_length_mm</code></td><td>float</td><td>mm</td><td>2.5</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
 <tr><td><code>running_stitch_tolerance_mm</code></td><td>float</td><td>mm</td><td>0.1</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
 <tr><td><code>running_stitch_position</code></td><td>float</td><td>%</td><td>50</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
@@ -5272,7 +5343,7 @@ patterns, stitch plan or sew stack, and legacy names Ink/Stitch’s updater rewr
 </tbody>
 </table>
 </div>
-<p><em>145 parameter declarations, 25 registered in StitchCraft.</em></p>
+<p><em>145 parameter declarations, 29 registered in StitchCraft.</em></p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="architecture-decision-records"><a class="header" href="#architecture-decision-records">Architecture decision records</a></h1>
 <p>Short records of decisions that shape the code, with their context and the alternatives we rejected.
@@ -5819,7 +5890,7 @@ of code) · 🧵 machine checkpoint · 👤 owner action</p>
 </thead>
 <tbody>
 <tr><td>M4.1 ✅</td><td>Satin shape: rails and rungs told apart as Ink/Stitch tells them, diagnostics <code>SC-E0201</code>, <code>SC-W0202</code>, <code>SC-W0203</code>, <code>SC-W0205</code>, <code>SC-W0207</code></td><td><code>REQ-SAT-005</code></td></tr>
-<tr><td>M4.2</td><td>Correspondence and centre-line sampling</td><td><code>REQ-SAT-002</code></td></tr>
+<tr><td>M4.2 ✅</td><td>Correspondence and stitch placement as in Ink/Stitch (rails turned, sections at the rungs or the nodes), <code>SC-W0210</code>. Satin columns are sewn</td><td><code>REQ-SAT-002</code></td></tr>
 <tr><td>M4.3</td><td>Pull and push compensation (symmetric/asymmetric), random width</td><td><code>REQ-SAT-001</code>, <code>REQ-SAT-006</code>, <code>REQ-SAT-007</code></td></tr>
 <tr><td>M4.4</td><td>Short stitches on curves</td><td>case set on tight curves</td></tr>
 <tr><td>M4.5</td><td>Split stitches (simple, staggered, random)</td><td><code>REQ-SAT-003</code></td></tr>

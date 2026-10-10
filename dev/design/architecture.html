@@ -35,10 +35,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-e88a471b.js";
+            window.path_to_searchindex_js = "../searchindex-ae51b88f.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-dc5674fc.js"></script>
+        <script src="../toc-89d89d66.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -310,6 +310,9 @@ planning continues where it can.</li>
 exhausted, an I/O failure). Each crate has one <code>thiserror</code> enum; apps turn errors into diagnostics
 or exit codes.</li>
 <li>Nothing below the apps prints, exits or panics.</li>
+<li><strong>A bug in StitchCraft</strong> is neither. It shows as a failed plan check (<code>SC-E0009</code>) or as a panic despite
+the lints. The command line catches it and ends with exit status 4. For <code>stitch plan</code> it also writes a
+bug-report bundle that reproduces the bug (<a href="determinism.html#bug-reports">determinism</a>).</li>
 </ul>
 <h2 id="feature-flags"><a class="header" href="#feature-flags">Feature flags</a></h2>
 <p>Kept minimal: <code>stitchcraft-engine/experimental</code> exposes generators whose status is <code>experimental</code>

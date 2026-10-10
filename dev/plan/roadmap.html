@@ -35,10 +35,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-e88a471b.js";
+            window.path_to_searchindex_js = "../searchindex-ae51b88f.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-dc5674fc.js"></script>
+        <script src="../toc-89d89d66.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -266,7 +266,7 @@ of code) · 🧵 machine checkpoint · 👤 owner action</p>
 <tr><td>M3.7 ✅</td><td>Lock stitches: every shape, its size and its place at either end of the stitching</td><td><code>REQ-LCK-002</code>, <code>REQ-LCK-004</code></td></tr>
 <tr><td>M3.8 ✅</td><td>Plan assembly: order, collapse, tie-off/jump/trim/tie-in (where <code>ties</code> says), stops, colour changes, the origin and stop position; <code>stitchcraft_engine::plan</code> sends each element to its generator</td><td><code>REQ-ASM-001..003</code>, <code>REQ-ASM-005</code>, <code>REQ-LCK-001</code>, <code>REQ-GEN-002</code></td></tr>
 <tr><td>M3.9 ✅</td><td>Finalize: split, merge, hoop, colour limits, the plan check; <code>stitch plan in.svg -o out.pes --preview out.png --report out.json</code></td><td><code>REQ-FIN-001..003</code>; the <code>strokes</code> plan case, SVG to machine file</td></tr>
-<tr><td>M3.10</td><td><code>stitch bug-report</code> bundle</td><td>a bundle reproduces its plan byte for byte</td></tr>
+<tr><td>M3.10 ✅</td><td><code>stitch bug-report</code> bundle; <code>stitch plan</code> writes one for a failed plan check or a panic</td><td>a bundle reproduces its plan byte for byte (<code>REQ-CLI-001</code>, <code>REQ-CLI-002</code>)</td></tr>
 <tr><td>MC-2 🧵</td><td><strong>TS-03</strong> (running/bean lengths), <strong>TS-04</strong> (lock holding test), <strong>TS-02</strong> again with element-driven trims</td><td>report filed; min-stitch and lock defaults confirmed (<code>REQ-LCK-003</code>)</td></tr>
 </tbody>
 </table>

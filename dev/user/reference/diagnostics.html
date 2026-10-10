@@ -35,10 +35,10 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-e88a471b.js";
+            window.path_to_searchindex_js = "../../searchindex-ae51b88f.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../../toc-dc5674fc.js"></script>
+        <script src="../../toc-89d89d66.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -194,6 +194,7 @@
 <tr><td><a href="#sc-e0009"><code>SC-E0009</code></a></td><td>Error</td><td>Internal check failed</td></tr>
 <tr><td><a href="#sc-e0010"><code>SC-E0010</code></a></td><td>Error</td><td>Nothing to stitch</td></tr>
 <tr><td><a href="#sc-w0011"><code>SC-W0011</code></a></td><td>Warning</td><td>Stitch type not sewn yet; element skipped</td></tr>
+<tr><td><a href="#sc-e0012"><code>SC-E0012</code></a></td><td>Error</td><td>Bug-report bundle could not be replayed</td></tr>
 <tr><td><a href="#sc-e0101"><code>SC-E0101</code></a></td><td>Error</td><td>Parameter has the wrong type or an unknown choice</td></tr>
 <tr><td><a href="#sc-w0102"><code>SC-W0102</code></a></td><td>Warning</td><td>Parameter clamped to its allowed range</td></tr>
 <tr><td><a href="#sc-w0105"><code>SC-W0105</code></a></td><td>Warning</td><td>Unknown parameter preserved but ignored</td></tr>
@@ -238,8 +239,10 @@ metres from the hoop centre cannot be previewed at any scale.</p>
 <p><strong>Error</strong> — Internal check failed</p>
 <p>StitchCraft checks every stitch plan against its own rules before writing a machine file. One of
 those checks failed, which means StitchCraft has a bug: the file was not written, so nothing
-wrong reaches your machine.</p>
-<p>Please report it with the design that triggered it; the message names the rule that failed.</p>
+wrong reaches your machine. <code>stitch plan</code> writes a bug-report bundle instead, next to the file it
+was asked for.</p>
+<p>Please attach the bundle to an issue; the message names the rule that failed. The bundle holds
+your design, so that the bug can be reproduced.</p>
 <h2 id="sc-e0010"><a class="header" href="#sc-e0010">SC-E0010</a></h2>
 <p><strong>Error</strong> — Nothing to stitch</p>
 <p>The design has no stitches: it is empty, or every element was skipped (see the other messages).
@@ -253,6 +256,13 @@ satin columns from M4 and tatami fills from M5; the other stitch types follow
 (<code>docs/src/plan/roadmap.md</code>).</p>
 <p>The message names the stitch type. Choose one StitchCraft sews, or sew the element with another
 tool for now.</p>
+<h2 id="sc-e0012"><a class="header" href="#sc-e0012">SC-E0012</a></h2>
+<p><strong>Error</strong> — Bug-report bundle could not be replayed</p>
+<p><code>stitch bug-report --replay</code> was given a file that is not a bug-report bundle it can replay: not
+JSON, not a bundle, a bundle format newer than this StitchCraft, or one that names a profile or a
+format this StitchCraft does not have. Nothing was replayed.</p>
+<p>The message says what is wrong. A bundle written by a newer StitchCraft needs that version or a
+later one; a bundle changed by hand, or by an email program, needs the original file.</p>
 <h2 id="sc-e0101"><a class="header" href="#sc-e0101">SC-E0101</a></h2>
 <p><strong>Error</strong> — Parameter has the wrong type or an unknown choice</p>
 <p>A parameter’s value could not be understood: a number where a word was expected, a choice that

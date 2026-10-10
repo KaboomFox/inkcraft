@@ -35,10 +35,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-e88a471b.js";
+            window.path_to_searchindex_js = "../searchindex-ae51b88f.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-dc5674fc.js"></script>
+        <script src="../toc-89d89d66.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -362,8 +362,8 @@ sew differently in the two tools.</p>
 <h2 id="6-check"><a class="header" href="#6-check">6. Check</a></h2>
 <p>The plan invariant checker (<code>stitchcraft-plan::invariants</code>, the same code conformance level L0 runs)
 validates the result. A violation is a bug in StitchCraft: <code>plan</code> returns no plan and reports
-<code>SC-E0009 internal check failed</code> (<code>REQ-FIN-003</code>). The command line then does not write a machine file,
-and from M3.10 it writes a bug-report bundle. The conformance suite has a case for every invariant.</p>
+<code>SC-E0009 internal check failed</code> (<code>REQ-FIN-003</code>). The command line then does not write a machine file.
+It writes a bug-report bundle that reproduces the failure (<code>REQ-CLI-002</code>). The conformance suite has a case for every invariant.</p>
 <h2 id="7-incremental-and-parallel-planning"><a class="header" href="#7-incremental-and-parallel-planning">7. Incremental and parallel planning</a></h2>
 <ul>
 <li><strong>Cache:</strong> a group is keyed by (element shape hash, params hash, hints, seed, engine version). The

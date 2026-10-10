@@ -35,10 +35,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-c6836515.js";
+            window.path_to_searchindex_js = "../searchindex-b55d5a7c.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-65a8af2a.js"></script>
+        <script src="../toc-68c7fe35.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -234,17 +234,18 @@ and every behaviour is pinned by a conformance suite and by sew-outs on a real m
 <li>A standalone GUI. The GUI is VectorCraft; the CLI renders previews to PNG.</li>
 </ul>
 <h2 id="2-target-machine-and-the-first-user"><a class="header" href="#2-target-machine-and-the-first-user">2. Target machine and the first user</a></h2>
-<p>The first production target is a <strong>Brother home embroidery machine with a 200 × 200 mm (8 × 8 in)
-hoop</strong>, loading <strong>PES</strong> files. Designs are normally kept to <strong>about 150 mm (6 in)</strong>. This becomes the
-built-in profile <code>brother-200x200</code>:</p>
+<p>The first production target is a <strong>Brother PE800</strong>, a home embroidery machine whose largest hoop,
+5 × 7 in, sews at most <strong>130 × 180 mm</strong>, loading <strong>PES</strong> files (<a href="adr/0013-brother-pe800-reference-machine.html">ADR 0013</a>).
+It becomes the built-in profile <code>brother-pe800-5x7</code>, the reference profile, with one profile for each of
+its other hoops: <code>brother-pe800-4x4</code> (100 × 100 mm) and <code>brother-pe800-small</code> (20 × 60 mm).</p>
 <div class="table-wrapper">
 <table>
 <thead>
 <tr><th>Profile field</th><th>Value</th><th>Behaviour</th></tr>
 </thead>
 <tbody>
-<tr><td>Hoop (hard limit)</td><td>200 × 200 mm</td><td>Error <code>SC-E0701</code> if the plan does not fit</td></tr>
-<tr><td>Comfort zone</td><td>150 × 150 mm</td><td>Warning <code>SC-W0702</code> if the design is larger</td></tr>
+<tr><td>Hoop (hard limit)</td><td>130 × 180 mm</td><td>Error <code>SC-E0701</code> if the plan does not fit</td></tr>
+<tr><td>Comfort zone</td><td>none</td><td>A profile may have one: warning <code>SC-W0702</code> if the design is larger</td></tr>
 <tr><td>File format</td><td>PES v1 with PEC block</td><td>Changed only after a machine checkpoint proves another works</td></tr>
 <tr><td>Max stitch length</td><td>12.0 mm (split above)</td><td>Refined at MC-1</td></tr>
 <tr><td>Min stitch length</td><td>0.3 mm (merged below)</td><td>Refined at MC-2</td></tr>
@@ -318,8 +319,8 @@ identical to Ink/Stitch’s SVG attributes because that is the interoperability 
 <tr><td>NFR-ROB-1</td><td>No panics in shipped code; no <code>unsafe</code> outside the one audited plug-in ABI module</td></tr>
 <tr><td>NFR-ROB-2</td><td>All work is bounded by explicit budgets (stitches, iterations, input sizes); exceeding one is a diagnostic, never a hang</td></tr>
 <tr><td>NFR-DET-1</td><td>Same input and version ⇒ byte-identical output on every supported platform, including wasm32</td></tr>
-<tr><td>NFR-PERF-1</td><td>A 150 × 150 mm tatami fill at 0.4 mm spacing plans in ≤ 50 ms natively (baseline set at M5, then guarded)</td></tr>
-<tr><td>NFR-PERF-2</td><td>Live-effect previews fit VectorCraft’s v1 budget (≤ 50 M instructions, ≤ 5 s) for a 150 mm design</td></tr>
+<tr><td>NFR-PERF-1</td><td>A 130 × 180 mm tatami fill at 0.4 mm spacing, the reference hoop’s whole field, plans in ≤ 50 ms natively (baseline set at M5, then guarded)</td></tr>
+<tr><td>NFR-PERF-2</td><td>Live-effect previews fit VectorCraft’s v1 budget (≤ 50 M instructions, ≤ 5 s) for a 130 × 180 mm design</td></tr>
 <tr><td>NFR-PORT-1</td><td>Engine crates build for <code>wasm32-unknown-unknown</code> without WASI</td></tr>
 <tr><td>NFR-DOC-1</td><td>100 % of parameters, diagnostics, CLI commands and formats have generated reference pages</td></tr>
 <tr><td>NFR-TEST-1</td><td>Every requirement in <code>conformance/requirements.toml</code> has ≥ 1 passing case before its milestone closes</td></tr>
@@ -374,12 +375,13 @@ identical to Ink/Stitch’s SVG attributes because that is the interoperability 
 <tr><td><a href="adr/0004-determinism.html">0004</a></td><td>Determinism by construction: ordered collections, <code>libm</code>, seeded RNG, absolute quantization</td></tr>
 <tr><td><a href="adr/0005-geometry-stack.html">0005</a></td><td><code>kurbo</code> for curves, <code>i_overlay</code> for polygon booleans/offsets, <code>petgraph</code> + own Eulerian walk, <code>rstar</code></td></tr>
 <tr><td><a href="adr/0006-docs-mdbook-diataxis.html">0006</a></td><td>mdBook, Diátaxis structure, generated reference, CI-regenerated images</td></tr>
-<tr><td><a href="adr/0007-pes-first-brother-profile.html">0007</a></td><td>PES v1 first for the Brother 200 × 200 mm machine; DST second</td></tr>
+<tr><td><a href="adr/0007-pes-first-brother-profile.html">0007</a></td><td>PES v1 first for the Brother machine; DST second</td></tr>
 <tr><td><a href="adr/0008-conformance-first.html">0008</a></td><td>Conformance-first development: requirement IDs and cases before code</td></tr>
 <tr><td><a href="adr/0009-adopt-vectorcraft-conventions.html">0009</a></td><td>Adopt VectorCraft’s proven conventions; improve the ones that drift</td></tr>
 <tr><td><a href="adr/0010-diagnostics-with-codes.html">0010</a></td><td>Every user-facing problem is a coded diagnostic with an explanation page</td></tr>
 <tr><td><a href="adr/0011-movable-into-vectorcraft.html">0011</a></td><td>StitchCraft can move into VectorCraft’s repository as a folder</td></tr>
 <tr><td><a href="adr/0012-read-dont-copy.html">0012</a></td><td>Ink/Stitch’s source may be read, never copied</td></tr>
+<tr><td><a href="adr/0013-brother-pe800-reference-machine.html">0013</a></td><td>A Brother PE800 is the reference machine, with a profile for each of its 3 hoops</td></tr>
 </tbody>
 </table>
 </div>

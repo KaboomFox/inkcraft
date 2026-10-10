@@ -35,10 +35,10 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-c6836515.js";
+            window.path_to_searchindex_js = "../../searchindex-b55d5a7c.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../../toc-65a8af2a.js"></script>
+        <script src="../../toc-68c7fe35.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -181,27 +181,36 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="fit-a-design-to-the-hoop"><a class="header" href="#fit-a-design-to-the-hoop">Fit a design to the hoop</a></h1>
-<p>Each <a href="../reference/profiles.html">machine profile</a> has 2 sizes. The hoop is the largest area the machine
-sews. The comfort zone is the part of it where the fabric is held firmly enough for the stitches to land
-where they should. On the reference Brother the hoop is 200 × 200 mm and the comfort zone 150 × 150 mm.</p>
-<h2 id="larger-than-the-comfort-zone"><a class="header" href="#larger-than-the-comfort-zone">Larger than the comfort zone</a></h2>
-<p>StitchCraft writes the file and warns. Test sheet TS-10B is 190 × 150 mm on purpose:</p>
-<pre><code class="language-console">$ stitch testsheet TS-10B --profile brother-200x200 -o TS-10B.pes
-TS-10B · Hoop size: 190 × 150 mm frame
-  file      TS-10B.pes (PES v1, 1641 bytes)
-  sha256    468ae11b427c6eb442bd94f3fd8beae1cb13387aa733ece537bf21a47f426f88
-  profile   brother-200x200 (Brother, 200 × 200 mm hoop)
-  size      190.0 × 150.0 mm
-  stitches  307 stitches, 4 jumps, 4 trims, 0 colour changes, 0 stops
-  threads   1. Blue (#0a55a3), shown as Brother PEC 2 "Blue"
-after sewing, check:
-  - The machine accepts the file and shows the design (StitchCraft warns that it is larger than the comfort zone — expected).
-  - The frame measures 190.0 × 150.0 mm (± 0.5 mm), wide side left to right, the F at the top left.
-warning SC-W0702: The design is 190.0 × 150.0 mm, larger than the 150 × 150 mm comfort zone of Brother, 200 × 200 mm hoop.
-  hint: Use a firm stabilizer and hoop the fabric drum-tight, or scale the design down.
+<p>Each <a href="../reference/profiles.html">machine profile</a> is a machine with one of its hoops, and its hoop size is
+the largest area the machine sews in that hoop. The reference Brother PE800 has a profile for each of its
+3 hoops. The 5 × 7 in hoop sews 130 × 180 mm, the 4 × 4 in hoop 100 × 100 mm and the small hoop
+20 × 60 mm. Commands plan for the 5 × 7 in hoop unless <code>--profile</code> names another.</p>
+<h2 id="larger-than-the-hoop"><a class="header" href="#larger-than-the-hoop">Larger than the hoop</a></h2>
+<p>Here a border is 210 mm long, and <code>stitch plan</code> ends with an error instead of writing the file:</p>
+<pre><code class="language-console">$ stitch plan wide.svg -o wide.pes
+error SC-E0701: The design is 210.0 × 0.0 mm, but the Brother PE800 with its 5 × 7 in hoop sews at most 130 × 180 mm.
+  hint: Scale the design down, or split it into parts sewn in separate hoopings.
+  more: stitch explain SC-E0701
+nothing was written
+(exit status 1)
 </code></pre>
-<p>The design will sew, but near the hoop’s edge the fabric can shift and pucker. <code>stitch explain</code> says
-more about any code:</p>
+<p>The exit status is 1. Scale the design down, or split it into parts that are sewn in separate
+hoopings. When turning the design by 90° makes it fit, the error offers that instead.</p>
+<h2 id="a-smaller-hoop"><a class="header" href="#a-smaller-hoop">A smaller hoop</a></h2>
+<p>Name the hoop’s profile, and StitchCraft checks the design against that hoop. Test sheet TS-10B fills the
+5 × 7 in hoop, so the 4 × 4 in hoop is too small for it:</p>
+<pre><code class="language-console">$ stitch testsheet TS-10B --profile brother-pe800-4x4 -o TS-10B.pes
+error SC-E0701: The design is 130.0 × 180.0 mm, but the Brother PE800 with its 4 × 4 in hoop sews at most 100 × 100 mm.
+  hint: Scale the design down, or split it into parts sewn in separate hoopings.
+  more: stitch explain SC-E0701
+nothing was written
+(exit status 1)
+</code></pre>
+<p><code>stitch profiles</code> lists every profile with its hoop.</p>
+<h2 id="larger-than-the-comfort-zone"><a class="header" href="#larger-than-the-comfort-zone">Larger than the comfort zone</a></h2>
+<p>A profile may also have a comfort zone: the part of the hoop where the fabric is taut enough for the
+stitches to land where they should. A design larger than it is still written, with a warning.
+<code>stitch explain</code> says more about any code:</p>
 <pre><code class="language-console">$ stitch explain SC-W0702
 SC-W0702: Design is larger than the comfort zone
 
@@ -212,20 +221,8 @@ designs pucker and shift more.
 The file was written. Rotate the design if the message says that brings it inside the comfort
 zone, use a firmer stabilizer, or scale the design down.
 </code></pre>
-<p>Hoop the fabric drum-tight with a firm stabilizer, or scale the design down. When turning the design by
-90° brings it inside the comfort zone, the warning offers that instead.</p>
-<h2 id="larger-than-the-hoop"><a class="header" href="#larger-than-the-hoop">Larger than the hoop</a></h2>
-<p>Here a border is 210 mm long, and <code>stitch plan</code> ends with an error instead of writing the file:</p>
-<pre><code class="language-console">$ stitch plan wide.svg -o wide.pes
-error SC-E0701: The design is 210.0 × 0.0 mm; the hoop of Brother, 200 × 200 mm hoop is 200 × 200 mm.
-  hint: Scale the design down, or split it into parts sewn in separate hoopings.
-  more: stitch explain SC-E0701
-nothing was written
-(exit status 1)
-</code></pre>
-<p>The exit status is 1. Scale the design down, or split it into parts that are sewn in separate
-hoopings. When turning the design by 90° makes it fit, the error offers that
-instead.</p>
+<p>The built-in profiles have no comfort zone yet. A sew-out that shows a hoop’s edges sewing badly would
+give its profile one.</p>
 
                     </main>
 

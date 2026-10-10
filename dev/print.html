@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-c6836515.js";
+            window.path_to_searchindex_js = "searchindex-b55d5a7c.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-65a8af2a.js"></script>
+        <script src="toc-68c7fe35.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -250,22 +250,23 @@ cargo puts <code>stitch</code> in its <code>bin</code> folder, which rustup adds
 file</a>. The <a href="#command-line">command line</a> reference lists every command.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="your-first-sew-out-on-a-brother"><a class="header" href="#your-first-sew-out-on-a-brother">Your first sew-out on a Brother</a></h1>
-<p>You will sew StitchCraft’s orientation and scale sheet, TS-01, on a Brother machine with a 200 × 200 mm
-hoop, and check that its size and direction are exactly right. It takes about twenty minutes.</p>
+<p>You will sew StitchCraft’s orientation and scale sheet, TS-01, on a Brother machine such as the PE800,
+and check that its size and direction are exactly right. It takes about twenty minutes.</p>
 <h2 id="you-need"><a class="header" href="#you-need">You need</a></h2>
 <ul>
 <li>StitchCraft, <a href="#install-stitchcraft">installed</a>.</li>
-<li>A Brother embroidery machine that reads PES files from a USB stick, and its 200 × 200 mm hoop.</li>
+<li>A Brother embroidery machine that reads PES files from a USB stick, and a hoop that sews at least
+120 × 120 mm, such as the PE800’s 5 × 7 in hoop.</li>
 <li>Medium-weight woven cotton, medium tear-away stabilizer, a 75/11 embroidery needle, 40 wt polyester
 thread (black shows the lines best), white bobbin thread.</li>
 <li>A ruler or calipers with millimetres.</li>
 </ul>
 <h2 id="1-write-the-file"><a class="header" href="#1-write-the-file">1. Write the file</a></h2>
-<pre><code class="language-console">$ stitch testsheet TS-01 --profile brother-200x200 -o TS-01.pes
+<pre><code class="language-console">$ stitch testsheet TS-01 -o TS-01.pes
 TS-01 · Orientation and scale
   file      TS-01.pes (PES v1, 1587 bytes)
   sha256    854cde9f533e3b6567afb570a0eb3d4547e7813f5649da97d27be104f8cd18c6
-  profile   brother-200x200 (Brother, 200 × 200 mm hoop)
+  profile   brother-pe800-5x7 (Brother PE800 with its 5 × 7 in hoop)
   size      120.0 × 120.0 mm
   stitches  274 stitches, 7 jumps, 7 trims, 0 colour changes, 0 stops
   threads   1. Black (#000000), shown as Brother PEC 20 "Black"
@@ -330,7 +331,7 @@ order the file lists them, and the star comes first.</p>
 badge.svg
   file      badge.pes (PES v1, 1498 bytes)
   sha256    d9906494fa2d27dcfc71fe26e2eb89c9805078e5a24d896bef51bc98a707b4ef
-  profile   brother-200x200 (Brother, 200 × 200 mm hoop)
+  profile   brother-pe800-5x7 (Brother PE800 with its 5 × 7 in hoop)
   size      44.0 × 44.0 mm
   stitches  124 stitches, 2 jumps, 0 trims, 1 colour change, 0 stops
   threads   1. unnamed (#c8102e), shown as Brother PEC 5 "Red"
@@ -338,7 +339,7 @@ badge.svg
   preview   badge.png (384 × 384 pixels)
 </code></pre>
 <p><code>stitch plan</code> writes the machine file and, with <code>--preview</code>, a picture of it. It plans for the
-<code>brother-200x200</code> profile unless <code>--profile</code> names another machine. Each colour is a thread, and the
+<code>brother-pe800-5x7</code> profile, the PE800 with its 5 × 7 in hoop, unless <code>--profile</code> names another. Each colour is a thread, and the
 PES file shows it as the nearest Brother palette colour. The machine stops between the red and the blue
 for you to change the thread.</p>
 <h2 id="3-look-at-it"><a class="header" href="#3-look-at-it">3. Look at it</a></h2>
@@ -363,7 +364,7 @@ filled rectangle and 2 lines that nearly touch:</p>
 strokes.svg
   file      strokes.pes (PES v1, 1725 bytes)
   sha256    41a9620e08c4cc93d781b9e3aef9cd59b92444ad5ef3e20cd3be7304dc616d2c
-  profile   brother-200x200 (Brother, 200 × 200 mm hoop)
+  profile   brother-pe800-5x7 (Brother PE800 with its 5 × 7 in hoop)
   size      60.0 × 40.0 mm
   stitches  118 stitches, 4 jumps, 0 trims, 2 colour changes, 0 stops
   threads   1. unnamed (#c00000), shown as Brother PEC 5 "Red"
@@ -410,20 +411,20 @@ them all. <code>--report</code> writes the summary and the messages as JSON, for
 <h1 id="check-a-machine-file-before-sewing"><a class="header" href="#check-a-machine-file-before-sewing">Check a machine file before sewing</a></h1>
 <p>StitchCraft reads PES, PEC and DST files from any software. It can describe a file and draw what the
 machine will sew, before you spend thread on it. The examples use test sheet TS-02, written with
-<code>stitch testsheet TS-02 --profile brother-200x200 -o TS-02.pes</code>.</p>
+<code>stitch testsheet TS-02 -o TS-02.pes</code>.</p>
 <h2 id="describe-the-file"><a class="header" href="#describe-the-file">Describe the file</a></h2>
-<pre><code class="language-console">$ stitch inspect TS-02.pes --profile brother-200x200
+<pre><code class="language-console">$ stitch inspect TS-02.pes --profile brother-pe800-5x7
 TS-02.pes · PES (#PES0001) · "TS-02"
-  sha256    b69bba9dcf60bfbc9765c92991010f249f0d3c2d2946b945d1eecfc70b77abc3
-  size      140.0 × 70.0 mm
+  sha256    2307e37affc62e8326e7bf864f9ebda7a4abbc1283798e19a426e274c6024d57
+  size      120.0 × 70.0 mm
   stitches  93 stitches, 17 jumps, 7 trims, 2 colour changes, 1 stop
-  extent    x -70.0 to 70.0 mm, y -35.0 to 35.0 mm from where the machine starts
+  extent    x -60.0 to 60.0 mm, y -35.0 to 35.0 mm from where the machine starts
   lengths   stitches from 2.5 to 2.5 mm
   threads   1. Red (#ed171f), shown as Brother PEC 5 "Red"
             2. Blue (#0a55a3), shown as Brother PEC 2 "Blue"
             3. Emerald Green (#00673e), shown as Brother PEC 54 "Emerald Green"
             4. Emerald Green (#00673e), shown as Brother PEC 54 "Emerald Green" — a stop: keep the same thread
-  profile   brother-200x200 (Brother, 200 × 200 mm hoop)
+  profile   brother-pe800-5x7 (Brother PE800 with its 5 × 7 in hoop)
             0 stitches longer than 12 mm, 0 shorter than 0.3 mm
 </code></pre>
 <ul>
@@ -438,7 +439,7 @@ stitch and shorter than its shortest. <code>stitch profiles</code> lists the mac
 </ul>
 <h2 id="look-at-it"><a class="header" href="#look-at-it">Look at it</a></h2>
 <pre><code class="language-console">$ stitch preview TS-02.pes -o TS-02.png --style simple
-TS-02.png · 1152 × 592 pixels
+TS-02.png · 992 × 592 pixels
   from      TS-02.pes · PES (#PES0001) · "TS-02"
   style     simple, 8 pixels per millimetre
 </code></pre>
@@ -467,9 +468,9 @@ command says what changed.</p>
 read back:</p>
 <pre><code class="language-console">$ stitch convert TS-02.pes -o TS-02.dst
 TS-02.pes · PES (#PES0001) → DST
-  file      TS-02.dst (DST, 1016 bytes)
-  sha256    76071ad993041267b36785250d0930f4fdd6453561ec44b60b6ec4b2f6b13517
-  size      140.0 × 70.0 mm
+  file      TS-02.dst (DST, 1004 bytes)
+  sha256    c0b87bc2239989d29f8f107d1a61e861234e92be3782854b6133472eb9f965d7
+  size      120.0 × 70.0 mm
   stitches  93 stitches, 17 jumps, 7 trims, 2 colour changes, 1 stop
   threads   1. Red (#ed171f)
             2. Blue (#0a55a3)
@@ -478,10 +479,10 @@ TS-02.pes · PES (#PES0001) → DST
 info SC-I0605: The thread will be cut at 3 places the plan does not trim: DST machines cut it before 3 or more jump records in a row, and a jump longer than 24.2 mm takes that many.
 $ stitch inspect TS-02.dst
 TS-02.dst · DST · "TS-02"
-  sha256    76071ad993041267b36785250d0930f4fdd6453561ec44b60b6ec4b2f6b13517
-  size      140.0 × 70.0 mm
-  stitches  93 stitches, 50 jumps, 10 trims, 3 colour changes, 0 stops
-  extent    x -70.0 to 70.0 mm, y -35.0 to 35.0 mm from where the machine starts
+  sha256    c0b87bc2239989d29f8f107d1a61e861234e92be3782854b6133472eb9f965d7
+  size      120.0 × 70.0 mm
+  stitches  93 stitches, 46 jumps, 10 trims, 3 colour changes, 0 stops
+  extent    x -60.0 to 60.0 mm, y -35.0 to 35.0 mm from where the machine starts
   lengths   stitches from 2.5 to 2.5 mm
   threads   1. thread 1 (#000000)
             2. thread 2 (#000000)
@@ -508,27 +509,36 @@ between them as the DST file did.</p>
 <p>The <a href="#machine-formats">machine formats design</a> describes how each format is written and read.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="fit-a-design-to-the-hoop"><a class="header" href="#fit-a-design-to-the-hoop">Fit a design to the hoop</a></h1>
-<p>Each <a href="#machine-profiles">machine profile</a> has 2 sizes. The hoop is the largest area the machine
-sews. The comfort zone is the part of it where the fabric is held firmly enough for the stitches to land
-where they should. On the reference Brother the hoop is 200 × 200 mm and the comfort zone 150 × 150 mm.</p>
-<h2 id="larger-than-the-comfort-zone"><a class="header" href="#larger-than-the-comfort-zone">Larger than the comfort zone</a></h2>
-<p>StitchCraft writes the file and warns. Test sheet TS-10B is 190 × 150 mm on purpose:</p>
-<pre><code class="language-console">$ stitch testsheet TS-10B --profile brother-200x200 -o TS-10B.pes
-TS-10B · Hoop size: 190 × 150 mm frame
-  file      TS-10B.pes (PES v1, 1641 bytes)
-  sha256    468ae11b427c6eb442bd94f3fd8beae1cb13387aa733ece537bf21a47f426f88
-  profile   brother-200x200 (Brother, 200 × 200 mm hoop)
-  size      190.0 × 150.0 mm
-  stitches  307 stitches, 4 jumps, 4 trims, 0 colour changes, 0 stops
-  threads   1. Blue (#0a55a3), shown as Brother PEC 2 "Blue"
-after sewing, check:
-  - The machine accepts the file and shows the design (StitchCraft warns that it is larger than the comfort zone — expected).
-  - The frame measures 190.0 × 150.0 mm (± 0.5 mm), wide side left to right, the F at the top left.
-warning SC-W0702: The design is 190.0 × 150.0 mm, larger than the 150 × 150 mm comfort zone of Brother, 200 × 200 mm hoop.
-  hint: Use a firm stabilizer and hoop the fabric drum-tight, or scale the design down.
+<p>Each <a href="#machine-profiles">machine profile</a> is a machine with one of its hoops, and its hoop size is
+the largest area the machine sews in that hoop. The reference Brother PE800 has a profile for each of its
+3 hoops. The 5 × 7 in hoop sews 130 × 180 mm, the 4 × 4 in hoop 100 × 100 mm and the small hoop
+20 × 60 mm. Commands plan for the 5 × 7 in hoop unless <code>--profile</code> names another.</p>
+<h2 id="larger-than-the-hoop"><a class="header" href="#larger-than-the-hoop">Larger than the hoop</a></h2>
+<p>Here a border is 210 mm long, and <code>stitch plan</code> ends with an error instead of writing the file:</p>
+<pre><code class="language-console">$ stitch plan wide.svg -o wide.pes
+error SC-E0701: The design is 210.0 × 0.0 mm, but the Brother PE800 with its 5 × 7 in hoop sews at most 130 × 180 mm.
+  hint: Scale the design down, or split it into parts sewn in separate hoopings.
+  more: stitch explain SC-E0701
+nothing was written
+(exit status 1)
 </code></pre>
-<p>The design will sew, but near the hoop’s edge the fabric can shift and pucker. <code>stitch explain</code> says
-more about any code:</p>
+<p>The exit status is 1. Scale the design down, or split it into parts that are sewn in separate
+hoopings. When turning the design by 90° makes it fit, the error offers that instead.</p>
+<h2 id="a-smaller-hoop"><a class="header" href="#a-smaller-hoop">A smaller hoop</a></h2>
+<p>Name the hoop’s profile, and StitchCraft checks the design against that hoop. Test sheet TS-10B fills the
+5 × 7 in hoop, so the 4 × 4 in hoop is too small for it:</p>
+<pre><code class="language-console">$ stitch testsheet TS-10B --profile brother-pe800-4x4 -o TS-10B.pes
+error SC-E0701: The design is 130.0 × 180.0 mm, but the Brother PE800 with its 4 × 4 in hoop sews at most 100 × 100 mm.
+  hint: Scale the design down, or split it into parts sewn in separate hoopings.
+  more: stitch explain SC-E0701
+nothing was written
+(exit status 1)
+</code></pre>
+<p><code>stitch profiles</code> lists every profile with its hoop.</p>
+<h2 id="larger-than-the-comfort-zone"><a class="header" href="#larger-than-the-comfort-zone">Larger than the comfort zone</a></h2>
+<p>A profile may also have a comfort zone: the part of the hoop where the fabric is taut enough for the
+stitches to land where they should. A design larger than it is still written, with a warning.
+<code>stitch explain</code> says more about any code:</p>
 <pre><code class="language-console">$ stitch explain SC-W0702
 SC-W0702: Design is larger than the comfort zone
 
@@ -539,20 +549,8 @@ designs pucker and shift more.
 The file was written. Rotate the design if the message says that brings it inside the comfort
 zone, use a firmer stabilizer, or scale the design down.
 </code></pre>
-<p>Hoop the fabric drum-tight with a firm stabilizer, or scale the design down. When turning the design by
-90° brings it inside the comfort zone, the warning offers that instead.</p>
-<h2 id="larger-than-the-hoop"><a class="header" href="#larger-than-the-hoop">Larger than the hoop</a></h2>
-<p>Here a border is 210 mm long, and <code>stitch plan</code> ends with an error instead of writing the file:</p>
-<pre><code class="language-console">$ stitch plan wide.svg -o wide.pes
-error SC-E0701: The design is 210.0 × 0.0 mm; the hoop of Brother, 200 × 200 mm hoop is 200 × 200 mm.
-  hint: Scale the design down, or split it into parts sewn in separate hoopings.
-  more: stitch explain SC-E0701
-nothing was written
-(exit status 1)
-</code></pre>
-<p>The exit status is 1. Scale the design down, or split it into parts that are sewn in separate
-hoopings. When turning the design by 90° makes it fit, the error offers that
-instead.</p>
+<p>The built-in profiles have no comfort zone yet. A sew-out that shows a hoop’s edges sewing badly would
+give its profile one.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="report-a-bug"><a class="header" href="#report-a-bug">Report a bug</a></h1>
 <p>When StitchCraft gets a design wrong, a maintainer needs one file to see what you saw: a <strong>bug-report
@@ -564,7 +562,7 @@ bundle</strong>. Write one when:</p>
 </ul>
 <h2 id="write-the-bundle"><a class="header" href="#write-the-bundle">Write the bundle</a></h2>
 <p>Run <code>stitch bug-report</code> with the design, and the profile and format you sew with:</p>
-<pre><code class="language-sh">stitch bug-report design.svg --profile brother-200x200 --says "the zigzag's corners are rounded"
+<pre><code class="language-sh">stitch bug-report design.svg --profile brother-pe800-4x4 --says "the zigzag's corners are rounded"
 </code></pre>
 <p>It plans the design exactly as <code>stitch plan</code> does and writes <code>design.bug-report.json</code> next to it (<code>-o</code>
 names another file). The bundle holds:</p>
@@ -843,10 +841,12 @@ the design, not the setup.</p>
 <p>Moving from one place to another without sewing is a <strong>jump</strong>; cutting the thread is a <strong>trim</strong>. Before a
 trim or colour change the thread is secured with a <strong>lock stitch</strong> (tie-off), and after it with a tie-in, so
 nothing unravels. Short moves are cheaper sewn as <strong>travel</strong> stitches hidden under later stitching.</p>
-<h2 id="why-designs-stay-around-150-mm-on-an-8--8-hoop"><a class="header" href="#why-designs-stay-around-150-mm-on-an-8--8-hoop">Why designs stay around 150 mm on an 8 × 8 hoop</a></h2>
-<p>A 200 × 200 mm hoop can sew nearly 200 mm, but the fabric is most stable near the centre, large dense
-designs pull more, and a margin leaves room for hooping error. Keeping designs to about 150 mm gives
-cleaner results; StitchCraft warns beyond the profile’s comfort zone and refuses beyond the hoop.</p>
+<h2 id="hoops-and-their-fields"><a class="header" href="#hoops-and-their-fields">Hoops and their fields</a></h2>
+<p>A hoop keeps the fabric drum-tight, and the machine sews only inside the hoop’s field, which is smaller
+than its frame. The reference Brother PE800’s 5 × 7 in hoop sews at most 130 × 180 mm, and its 4 × 4 in
+hoop 100 × 100 mm. The fabric is most stable near the centre, and large dense designs pull more. A design
+sews best in the smallest hoop it fits. StitchCraft stops with an error at a design larger than the hoop
+it plans for, and warns beyond a profile’s comfort zone where the profile has one.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="reference"><a class="header" href="#reference">Reference</a></h1>
 <p>Most reference pages are generated from the code they describe, so they cannot drift from it: <code>cargo xtask docs</code> rewrites them, and CI fails when one is stale.</p>
@@ -917,7 +917,7 @@ Options:
   -p, --profile &lt;PROFILE&gt;
           The machine profile (see `stitch profiles`)
           
-          [default: brother-200x200]
+          [default: brother-pe800-5x7]
 
       --format &lt;FORMAT&gt;
           The file format; by default the output file's extension decides
@@ -949,7 +949,7 @@ Options:
           List the test sheets and exit
 
   -p, --profile &lt;PROFILE&gt;
-          The machine profile, such as brother-200x200 (see `stitch profiles`)
+          The machine profile to check the sheet against (see `stitch profiles`); by default the one for the hoop the sheet is sewn in
 
   -o, --output &lt;OUTPUT&gt;
           The file to write
@@ -975,7 +975,7 @@ Arguments:
 
 Options:
   -p, --profile &lt;PROFILE&gt;
-          Also check the design against a machine profile, such as brother-200x200 (see `stitch profiles`)
+          Also check the design against a machine profile (see `stitch profiles`)
 
   -h, --help
           Print help
@@ -1076,7 +1076,7 @@ Options:
   -p, --profile &lt;PROFILE&gt;
           The machine profile (see `stitch profiles`)
           
-          [default: brother-200x200]
+          [default: brother-pe800-5x7]
 
       --format &lt;FORMAT&gt;
           The file format; by default the profile's
@@ -1103,16 +1103,15 @@ Arguments:
 <div style="break-before: page; page-break-before: always;"></div><!-- Generated by `cargo xtask docs` from `stitchcraft-plan/src/profiles/`. Edit the source, not this page. -->
 <h1 id="machine-profiles"><a class="header" href="#machine-profiles">Machine profiles</a></h1>
 <p>A profile holds the facts about one machine and hoop that decide what StitchCraft may ask of it. Its values are machine facts: they change only with a sew-out report that justifies them, and each profile says where its values come from. <code>stitch profiles</code> prints the same list.</p>
-<h2 id="brother-200x200"><a class="header" href="#brother-200x200"><code>brother-200x200</code></a></h2>
-<p>Brother, 200 × 200 mm hoop</p>
+<h2 id="brother-pe800-5x7"><a class="header" href="#brother-pe800-5x7"><code>brother-pe800-5x7</code></a></h2>
+<p>Brother PE800 with its 5 × 7 in hoop</p>
 <div class="table-wrapper">
 <table>
 <thead>
 <tr><th>Fact</th><th>Value</th></tr>
 </thead>
 <tbody>
-<tr><td>Hoop (sewing field)</td><td>200 × 200 mm</td></tr>
-<tr><td>Comfort zone</td><td>150 × 150 mm — larger designs get <a href="#sc-w0702"><code>SC-W0702</code></a></td></tr>
+<tr><td>Hoop (sewing field)</td><td>130 × 180 mm</td></tr>
 <tr><td>File format</td><td>PES v1</td></tr>
 <tr><td>Stitch length</td><td>0.3 mm to 12 mm (lock stitches from 0.2 mm)</td></tr>
 <tr><td>Trims</td><td>the format’s trim command</td></tr>
@@ -1120,7 +1119,41 @@ Arguments:
 </tbody>
 </table>
 </div>
-<p><strong>Evidence.</strong> Hoop and comfort zone: the owner of the reference machine (2026-10-08). Stitch limits and trim support: common Brother home-machine values, to be confirmed by machine checkpoint MC-1 (test sheets TS-01, TS-02, TS-10).</p>
+<p><strong>Evidence.</strong> Machine: the owner of the reference machine (2026-10-10). Field: Brother’s 5 × 7 in hoop for the PE800, 130 × 180 mm. Stitch limits and trim support: common Brother home-machine values, to be confirmed by machine checkpoints MC-1 and MC-2 (test sheets TS-01 to TS-04 and TS-10).</p>
+<h2 id="brother-pe800-4x4"><a class="header" href="#brother-pe800-4x4"><code>brother-pe800-4x4</code></a></h2>
+<p>Brother PE800 with its 4 × 4 in hoop</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Fact</th><th>Value</th></tr>
+</thead>
+<tbody>
+<tr><td>Hoop (sewing field)</td><td>100 × 100 mm</td></tr>
+<tr><td>File format</td><td>PES v1</td></tr>
+<tr><td>Stitch length</td><td>0.3 mm to 12 mm (lock stitches from 0.2 mm)</td></tr>
+<tr><td>Trims</td><td>the format’s trim command</td></tr>
+<tr><td>Thread palette</td><td>Brother PEC</td></tr>
+</tbody>
+</table>
+</div>
+<p><strong>Evidence.</strong> Hoop: the owner’s (2026-10-10). Field: Brother’s 4 × 4 in hoop, 100 × 100 mm. The rest as for brother-pe800-5x7.</p>
+<h2 id="brother-pe800-small"><a class="header" href="#brother-pe800-small"><code>brother-pe800-small</code></a></h2>
+<p>Brother PE800 with its small hoop</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Fact</th><th>Value</th></tr>
+</thead>
+<tbody>
+<tr><td>Hoop (sewing field)</td><td>20 × 60 mm</td></tr>
+<tr><td>File format</td><td>PES v1</td></tr>
+<tr><td>Stitch length</td><td>0.3 mm to 12 mm (lock stitches from 0.2 mm)</td></tr>
+<tr><td>Trims</td><td>the format’s trim command</td></tr>
+<tr><td>Thread palette</td><td>Brother PEC</td></tr>
+</tbody>
+</table>
+</div>
+<p><strong>Evidence.</strong> Hoop: the owner’s, sold as 1 × 2.5 in (2026-10-10). Field: Brother’s small hoop, 2 × 6 cm, upright as the 5 × 7 in’s until test sheet TS-10C confirms it. The rest as for brother-pe800-5x7.</p>
 <div style="break-before: page; page-break-before: always;"></div><!-- Generated by `cargo xtask docs` from `FormatId` in `stitchcraft-plan` and the writers in `stitchcraft-formats`. Edit the source, not this page. -->
 <h1 id="file-formats"><a class="header" href="#file-formats">File formats</a></h1>
 <p>The machine-file formats StitchCraft writes. How each is encoded, and why, is in the <a href="#machine-formats">machine formats design</a>.</p>
@@ -1137,9 +1170,10 @@ Arguments:
 </div>
 <div style="break-before: page; page-break-before: always;"></div><!-- Generated by `cargo xtask docs` from `stitchcraft-engine/src/testsheets/` and the `stitch` shots in `docs/shots.toml`. Edit the source, not this page. -->
 <h1 id="test-sheets"><a class="header" href="#test-sheets">Test sheets</a></h1>
-<p>Designs drawn in code for the <a href="#machine-testing-protocol">machine checkpoints</a>. Write one with <code>stitch testsheet &lt;id&gt; --profile brother-200x200 -o &lt;id&gt;.pes</code>; the command also prints what to check after sewing it, as listed here. The pictures are previews: they show what the machine will sew, including jump threads it leaves for you to cut.</p>
+<p>Designs drawn in code for the <a href="#machine-testing-protocol">machine checkpoints</a>, each for one hoop of the reference machine. Write one with <code>stitch testsheet &lt;id&gt; -o &lt;id&gt;.pes</code>. The command checks it against the profile of that hoop, or the one <code>--profile</code> names, and prints what to check after sewing it, as listed here. The pictures are previews: they show what the machine will sew, including jump threads it leaves for you to cut.</p>
 <h2 id="ts-01--orientation-and-scale"><a class="header" href="#ts-01--orientation-and-scale">TS-01 — Orientation and scale</a></h2>
 <p>120.0 × 120.0 mm · 274 stitches, 7 jumps, 7 trims, 0 colour changes, 0 stops</p>
+<p>Hoop: the Brother PE800 with its 5 × 7 in hoop, profile <a href="#brother-pe800-5x7"><code>brother-pe800-5x7</code></a>.</p>
 <p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/generated/testsheet-ts-01.png" alt="TS-01 as it will sew, in black: a cross with arms 100 mm long and a tick every 10 mm, an upright F in the top-left quarter, and a 10 mm square in each corner."><span class="img-wrapper"><img src="images/generated/testsheet-ts-01.png" alt="TS-01 as it will sew, in black: a cross with arms 100 mm long and a tick every 10 mm, an upright F in the top-left quarter, and a 10 mm square in each corner."></span></label></p>
 <p>Threads: Black.</p>
 <p>After sewing, check:</p>
@@ -1150,32 +1184,35 @@ Arguments:
 <li>Ticks are 10 mm apart; the long ticks mark the ends and the centre.</li>
 </ul>
 <h2 id="ts-02--colour-changes-a-stop-jumps-and-trims"><a class="header" href="#ts-02--colour-changes-a-stop-jumps-and-trims">TS-02 — Colour changes, a stop, jumps and trims</a></h2>
-<p>140.0 × 70.0 mm · 93 stitches, 17 jumps, 8 trims, 2 colour changes, 1 stop</p>
+<p>120.0 × 70.0 mm · 93 stitches, 17 jumps, 8 trims, 2 colour changes, 1 stop</p>
+<p>Hoop: the Brother PE800 with its 5 × 7 in hoop, profile <a href="#brother-pe800-5x7"><code>brother-pe800-5x7</code></a>.</p>
 <p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/generated/testsheet-ts-02.png" alt="TS-02 as it will sew if the machine leaves plain jumps uncut: four red rows of two dashes with nothing between them, four blue rows whose dashes and rows are joined by loose threads, and a green line underneath."><span class="img-wrapper"><img src="images/generated/testsheet-ts-02.png" alt="TS-02 as it will sew if the machine leaves plain jumps uncut: four red rows of two dashes with nothing between them, four blue rows whose dashes and rows are joined by loose threads, and a green line underneath."></span></label></p>
 <p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/generated/testsheet-ts-02-simple.png" alt="TS-02 in the simple style. A red cross marks the trim after the first dash of each red row, and a blue square marks the stop in the middle of the green line. Grey dashes show moves after a cut, and blue dashes show jump threads left in place."><span class="img-wrapper"><img src="images/generated/testsheet-ts-02-simple.png" alt="TS-02 in the simple style. A red cross marks the trim after the first dash of each red row, and a blue square marks the stop in the middle of the green line. Grey dashes show moves after a cut, and blue dashes show jump threads left in place."></span></label></p>
 <p>Threads: Red, Blue, Emerald Green, Emerald Green (stop).</p>
 <p>After sewing, check:</p>
 <ul>
 <li>The machine stops for red → blue and blue → green, and once more in the middle of the green line (the stop).</li>
-<li>Left half (red, trim-flagged jumps): for each row (gaps of 2, 5, 15, 40 mm, top to bottom), was the thread between the two dashes cut?</li>
+<li>Left half (red, trim-flagged jumps): for each row (gaps of 2, 5, 15, 30 mm, top to bottom), was the thread between the two dashes cut?</li>
 <li>Right half (blue, plain jumps): the same question for each row, and for the jumps between rows.</li>
 <li>Any loose loops, knots or bird’s nests on the back, and where.</li>
 </ul>
 <h2 id="ts-02b--ts-02-drawn-as-a-design-trims-elements-ask-for"><a class="header" href="#ts-02b--ts-02-drawn-as-a-design-trims-elements-ask-for">TS-02B — TS-02 drawn as a design: trims elements ask for</a></h2>
-<p>140.0 × 70.0 mm · 230 stitches, 17 jumps, 8 trims, 2 colour changes, 1 stop</p>
+<p>120.0 × 70.0 mm · 230 stitches, 17 jumps, 8 trims, 2 colour changes, 1 stop</p>
+<p>Hoop: the Brother PE800 with its 5 × 7 in hoop, profile <a href="#brother-pe800-5x7"><code>brother-pe800-5x7</code></a>.</p>
 <p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/generated/testsheet-ts-02b.png" alt="TS-02B as it will sew if the machine leaves plain jumps uncut: four red rows of two dashes with nothing between them, four blue rows whose top row is one line and whose other dashes and rows are joined by loose threads, and a green line underneath."><span class="img-wrapper"><img src="images/generated/testsheet-ts-02b.png" alt="TS-02B as it will sew if the machine leaves plain jumps uncut: four red rows of two dashes with nothing between them, four blue rows whose top row is one line and whose other dashes and rows are joined by loose threads, and a green line underneath."></span></label></p>
 <p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/generated/testsheet-ts-02b-simple.png" alt="TS-02B in the simple style: a red cross marks the trim after every red dash but the last, grey dashes show moves after a cut, blue dashes show jump threads left in place, and a blue square marks the stop in the middle of the green line."><span class="img-wrapper"><img src="images/generated/testsheet-ts-02b-simple.png" alt="TS-02B in the simple style: a red cross marks the trim after every red dash but the last, grey dashes show moves after a cut, blue dashes show jump threads left in place, and a blue square marks the stop in the middle of the green line."></span></label></p>
 <p>Threads: Red, Blue, Emerald Green, Emerald Green (stop).</p>
 <p>After sewing, check:</p>
 <ul>
 <li>The machine stops for red → blue and blue → green, and once more in the middle of the green line (the stop).</li>
-<li>Left half (red; every dash but the last asks for a trim after it): for each row (gaps of 2, 5, 15, 40 mm, top to bottom), was the thread between the two dashes cut?</li>
+<li>Left half (red; every dash but the last asks for a trim after it): for each row (gaps of 2, 5, 15, 30 mm, top to bottom), was the thread between the two dashes cut?</li>
 <li>Right half (blue; no trims): the 2 mm gap is sewn across. For the other rows, and between rows, was the jump thread cut?</li>
 <li>Where the thread was cut, the stitching ends and starts again with a small lock: pull each tail gently. Does the dash hold?</li>
 <li>Any loose loops, knots or bird’s nests on the back, and where.</li>
 </ul>
 <h2 id="ts-03--running-stitch-lengths-bean-stitch-curves-the-shortest-stitch"><a class="header" href="#ts-03--running-stitch-lengths-bean-stitch-curves-the-shortest-stitch">TS-03 — Running stitch: lengths, bean stitch, curves, the shortest stitch</a></h2>
 <p>60.0 × 78.0 mm · 596 stitches, 15 jumps, 15 trims, 0 colour changes, 0 stops</p>
+<p>Hoop: the Brother PE800 with its 5 × 7 in hoop, profile <a href="#brother-pe800-5x7"><code>brother-pe800-5x7</code></a>.</p>
 <p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/generated/testsheet-ts-03.png" alt="TS-03 as it will sew, in blue: five long lines with stitches from 1.5 to 4 mm, two bolder bean-stitch lines, three small circles, the right-hand one visibly many-sided, and five short lines of tiny stitches growing longer towards the bottom."><span class="img-wrapper"><img src="images/generated/testsheet-ts-03.png" alt="TS-03 as it will sew, in blue: five long lines with stitches from 1.5 to 4 mm, two bolder bean-stitch lines, three small circles, the right-hand one visibly many-sided, and five short lines of tiny stitches growing longer towards the bottom."></span></label></p>
 <p>Threads: Blue.</p>
 <p>After sewing, check:</p>
@@ -1187,6 +1224,7 @@ Arguments:
 </ul>
 <h2 id="ts-04--lock-stitches-do-they-hold-and-do-they-show"><a class="header" href="#ts-04--lock-stitches-do-they-hold-and-do-they-show">TS-04 — Lock stitches: do they hold, and do they show?</a></h2>
 <p>110.0 × 64.5 mm · 600 stitches, 27 jumps, 27 trims, 0 colour changes, 0 stops</p>
+<p>Hoop: the Brother PE800 with its 5 × 7 in hoop, profile <a href="#brother-pe800-5x7"><code>brother-pe800-5x7</code></a>.</p>
 <p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/generated/testsheet-ts-04.png" alt="TS-04 as it will sew, in red: nine rows of three lines, each line ending in a small lock at both ends, the locks’ shapes differing from row to row and growing from left to right."><span class="img-wrapper"><img src="images/generated/testsheet-ts-04.png" alt="TS-04 as it will sew, in red: nine rows of three lines, each line ending in a small lock at both ends, the locks’ shapes differing from row to row and growing from left to right."></span></label></p>
 <p>Threads: Red.</p>
 <p>After sewing, check:</p>
@@ -1196,32 +1234,36 @@ Arguments:
 <li>Which locks show from the front, and how much (1 hidden to 5 obvious)?</li>
 <li>Any thread breaks or knots at the locks, and where.</li>
 </ul>
-<h2 id="ts-10a--hoop-size-150--150-mm-frame"><a class="header" href="#ts-10a--hoop-size-150--150-mm-frame">TS-10A — Hoop size: 150 × 150 mm frame</a></h2>
-<p>150.0 × 150.0 mm · 275 stitches, 4 jumps, 4 trims, 0 colour changes, 0 stops</p>
-<p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/generated/testsheet-ts-10a.png" alt="TS-10A as it will sew: a blue square frame 150 mm on each side, with an F at the top left and a small cross in the centre."><span class="img-wrapper"><img src="images/generated/testsheet-ts-10a.png" alt="TS-10A as it will sew: a blue square frame 150 mm on each side, with an F at the top left and a small cross in the centre."></span></label></p>
+<h2 id="ts-10a--hoop-size-the-4--4-in-hoop-a-100--100-mm-frame"><a class="header" href="#ts-10a--hoop-size-the-4--4-in-hoop-a-100--100-mm-frame">TS-10A — Hoop size: the 4 × 4 in hoop, a 100 × 100 mm frame</a></h2>
+<p>100.0 × 100.0 mm · 195 stitches, 4 jumps, 4 trims, 0 colour changes, 0 stops</p>
+<p>Hoop: the Brother PE800 with its 4 × 4 in hoop, profile <a href="#brother-pe800-4x4"><code>brother-pe800-4x4</code></a>.</p>
+<p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/generated/testsheet-ts-10a.png" alt="TS-10A as it will sew: a blue square frame 100 mm on each side, the 4 × 4 in hoop’s field, with an F at the top left and a small cross in the centre."><span class="img-wrapper"><img src="images/generated/testsheet-ts-10a.png" alt="TS-10A as it will sew: a blue square frame 100 mm on each side, the 4 × 4 in hoop’s field, with an F at the top left and a small cross in the centre."></span></label></p>
 <p>Threads: Blue.</p>
 <p>After sewing, check:</p>
 <ul>
-<li>The machine accepts the file and shows the design.</li>
-<li>The frame measures 150.0 × 150.0 mm (± 0.5 mm).</li>
+<li>With the 4 × 4 in hoop on the machine: does the machine take the file and sew it, without asking for a larger hoop?</li>
+<li>The frame measures 100.0 × 100.0 mm (± 0.5 mm), the F at the top left.</li>
 </ul>
-<h2 id="ts-10b--hoop-size-190--150-mm-frame"><a class="header" href="#ts-10b--hoop-size-190--150-mm-frame">TS-10B — Hoop size: 190 × 150 mm frame</a></h2>
-<p>190.0 × 150.0 mm · 307 stitches, 4 jumps, 4 trims, 0 colour changes, 0 stops</p>
-<p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/generated/testsheet-ts-10b.png" alt="TS-10B as it will sew: a blue frame 190 mm wide and 150 mm high, with an F at the top left and a small cross in the centre."><span class="img-wrapper"><img src="images/generated/testsheet-ts-10b.png" alt="TS-10B as it will sew: a blue frame 190 mm wide and 150 mm high, with an F at the top left and a small cross in the centre."></span></label></p>
+<h2 id="ts-10b--hoop-size-the-5--7-in-hoop-a-130--180-mm-frame"><a class="header" href="#ts-10b--hoop-size-the-5--7-in-hoop-a-130--180-mm-frame">TS-10B — Hoop size: the 5 × 7 in hoop, a 130 × 180 mm frame</a></h2>
+<p>130.0 × 180.0 mm · 283 stitches, 4 jumps, 4 trims, 0 colour changes, 0 stops</p>
+<p>Hoop: the Brother PE800 with its 5 × 7 in hoop, profile <a href="#brother-pe800-5x7"><code>brother-pe800-5x7</code></a>.</p>
+<p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/generated/testsheet-ts-10b.png" alt="TS-10B as it will sew: a blue frame 130 mm wide and 180 mm high, the 5 × 7 in hoop’s field, with an F at the top left and a small cross in the centre."><span class="img-wrapper"><img src="images/generated/testsheet-ts-10b.png" alt="TS-10B as it will sew: a blue frame 130 mm wide and 180 mm high, the 5 × 7 in hoop’s field, with an F at the top left and a small cross in the centre."></span></label></p>
 <p>Threads: Blue.</p>
 <p>After sewing, check:</p>
 <ul>
-<li>The machine accepts the file and shows the design (StitchCraft warns that it is larger than the comfort zone — expected).</li>
-<li>The frame measures 190.0 × 150.0 mm (± 0.5 mm), wide side left to right, the F at the top left.</li>
+<li>With the 5 × 7 in hoop on the machine: does the machine take the file and sew it?</li>
+<li>The frame measures 130.0 × 180.0 mm (± 0.5 mm), tall side top to bottom, the F at the top left.</li>
 </ul>
-<h2 id="ts-10c--hoop-size-150--190-mm-frame"><a class="header" href="#ts-10c--hoop-size-150--190-mm-frame">TS-10C — Hoop size: 150 × 190 mm frame</a></h2>
-<p>150.0 × 190.0 mm · 307 stitches, 4 jumps, 4 trims, 0 colour changes, 0 stops</p>
-<p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/generated/testsheet-ts-10c.png" alt="TS-10C as it will sew: a blue frame 150 mm wide and 190 mm high, with an F at the top left and a small cross in the centre."><span class="img-wrapper"><img src="images/generated/testsheet-ts-10c.png" alt="TS-10C as it will sew: a blue frame 150 mm wide and 190 mm high, with an F at the top left and a small cross in the centre."></span></label></p>
+<h2 id="ts-10c--hoop-size-the-small-hoop-a-20--60-mm-frame"><a class="header" href="#ts-10c--hoop-size-the-small-hoop-a-20--60-mm-frame">TS-10C — Hoop size: the small hoop, a 20 × 60 mm frame</a></h2>
+<p>20.0 × 60.0 mm · 92 stitches, 4 jumps, 4 trims, 0 colour changes, 0 stops</p>
+<p>Hoop: the Brother PE800 with its small hoop, profile <a href="#brother-pe800-small"><code>brother-pe800-small</code></a>.</p>
+<p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/generated/testsheet-ts-10c.png" alt="TS-10C as it will sew: a blue frame 20 mm wide and 60 mm high, the small hoop’s field, with a small F at the top left and a small cross in the middle."><span class="img-wrapper"><img src="images/generated/testsheet-ts-10c.png" alt="TS-10C as it will sew: a blue frame 20 mm wide and 60 mm high, the small hoop’s field, with a small F at the top left and a small cross in the middle."></span></label></p>
 <p>Threads: Blue.</p>
 <p>After sewing, check:</p>
 <ul>
-<li>The machine accepts the file and shows the design (StitchCraft warns that it is larger than the comfort zone — expected).</li>
-<li>The frame measures 150.0 × 190.0 mm (± 0.5 mm), tall side top to bottom, the F at the top left.</li>
+<li>With the small hoop on the machine: does the machine take the file and sew it, without asking for a larger hoop?</li>
+<li>If it asks for a larger hoop, turn the design a quarter turn on the machine’s screen. Does it take it then?</li>
+<li>The frame measures 20.0 × 60.0 mm (± 0.5 mm), tall side top to bottom, the F at the top left.</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><!-- Generated by `cargo xtask docs` from the registry in `stitchcraft-core/src/diag.rs`. Edit the source, not this page. -->
 <h1 id="diagnostic-codes"><a class="header" href="#diagnostic-codes">Diagnostic codes</a></h1>
@@ -1948,7 +1990,7 @@ percent of the spacing, longer or shorter.</p>
 <tr><td><strong>Bird’s nest</strong></td><td>A tangle of thread under the fabric, usually from bobbin or tension problems</td></tr>
 <tr><td><strong>Collapse length</strong></td><td>Moves shorter than this are sewn instead of jumped (default 3 mm)</td></tr>
 <tr><td><strong>Colour block</strong></td><td>A run of stitches in one thread colour; blocks are separated by colour changes</td></tr>
-<tr><td><strong>Comfort zone</strong></td><td>The design size a machine profile recommends (150 × 150 mm for <code>brother-200x200</code>); larger designs get a warning</td></tr>
+<tr><td><strong>Comfort zone</strong></td><td>The part of the hoop a machine profile may recommend keeping designs inside, with a warning for larger ones. No built-in profile has one yet</td></tr>
 <tr><td><strong>Contour fill</strong></td><td>A fill whose rows follow the shape’s outline inward</td></tr>
 <tr><td><strong>Density</strong></td><td>How close rows or zigzags are (row spacing / zigzag spacing)</td></tr>
 <tr><td><strong>Hoop</strong></td><td>The frame that holds fabric; its sewable field is a machine profile’s hard limit</td></tr>
@@ -2073,17 +2115,18 @@ and every behaviour is pinned by a conformance suite and by sew-outs on a real m
 <li>A standalone GUI. The GUI is VectorCraft; the CLI renders previews to PNG.</li>
 </ul>
 <h2 id="2-target-machine-and-the-first-user"><a class="header" href="#2-target-machine-and-the-first-user">2. Target machine and the first user</a></h2>
-<p>The first production target is a <strong>Brother home embroidery machine with a 200 × 200 mm (8 × 8 in)
-hoop</strong>, loading <strong>PES</strong> files. Designs are normally kept to <strong>about 150 mm (6 in)</strong>. This becomes the
-built-in profile <code>brother-200x200</code>:</p>
+<p>The first production target is a <strong>Brother PE800</strong>, a home embroidery machine whose largest hoop,
+5 × 7 in, sews at most <strong>130 × 180 mm</strong>, loading <strong>PES</strong> files (<a href="#adr-0013-the-reference-machine-is-a-brother-pe800-with-a-profile-for-each-of-its-hoops">ADR 0013</a>).
+It becomes the built-in profile <code>brother-pe800-5x7</code>, the reference profile, with one profile for each of
+its other hoops: <code>brother-pe800-4x4</code> (100 × 100 mm) and <code>brother-pe800-small</code> (20 × 60 mm).</p>
 <div class="table-wrapper">
 <table>
 <thead>
 <tr><th>Profile field</th><th>Value</th><th>Behaviour</th></tr>
 </thead>
 <tbody>
-<tr><td>Hoop (hard limit)</td><td>200 × 200 mm</td><td>Error <code>SC-E0701</code> if the plan does not fit</td></tr>
-<tr><td>Comfort zone</td><td>150 × 150 mm</td><td>Warning <code>SC-W0702</code> if the design is larger</td></tr>
+<tr><td>Hoop (hard limit)</td><td>130 × 180 mm</td><td>Error <code>SC-E0701</code> if the plan does not fit</td></tr>
+<tr><td>Comfort zone</td><td>none</td><td>A profile may have one: warning <code>SC-W0702</code> if the design is larger</td></tr>
 <tr><td>File format</td><td>PES v1 with PEC block</td><td>Changed only after a machine checkpoint proves another works</td></tr>
 <tr><td>Max stitch length</td><td>12.0 mm (split above)</td><td>Refined at MC-1</td></tr>
 <tr><td>Min stitch length</td><td>0.3 mm (merged below)</td><td>Refined at MC-2</td></tr>
@@ -2157,8 +2200,8 @@ identical to Ink/Stitch’s SVG attributes because that is the interoperability 
 <tr><td>NFR-ROB-1</td><td>No panics in shipped code; no <code>unsafe</code> outside the one audited plug-in ABI module</td></tr>
 <tr><td>NFR-ROB-2</td><td>All work is bounded by explicit budgets (stitches, iterations, input sizes); exceeding one is a diagnostic, never a hang</td></tr>
 <tr><td>NFR-DET-1</td><td>Same input and version ⇒ byte-identical output on every supported platform, including wasm32</td></tr>
-<tr><td>NFR-PERF-1</td><td>A 150 × 150 mm tatami fill at 0.4 mm spacing plans in ≤ 50 ms natively (baseline set at M5, then guarded)</td></tr>
-<tr><td>NFR-PERF-2</td><td>Live-effect previews fit VectorCraft’s v1 budget (≤ 50 M instructions, ≤ 5 s) for a 150 mm design</td></tr>
+<tr><td>NFR-PERF-1</td><td>A 130 × 180 mm tatami fill at 0.4 mm spacing, the reference hoop’s whole field, plans in ≤ 50 ms natively (baseline set at M5, then guarded)</td></tr>
+<tr><td>NFR-PERF-2</td><td>Live-effect previews fit VectorCraft’s v1 budget (≤ 50 M instructions, ≤ 5 s) for a 130 × 180 mm design</td></tr>
 <tr><td>NFR-PORT-1</td><td>Engine crates build for <code>wasm32-unknown-unknown</code> without WASI</td></tr>
 <tr><td>NFR-DOC-1</td><td>100 % of parameters, diagnostics, CLI commands and formats have generated reference pages</td></tr>
 <tr><td>NFR-TEST-1</td><td>Every requirement in <code>conformance/requirements.toml</code> has ≥ 1 passing case before its milestone closes</td></tr>
@@ -2213,12 +2256,13 @@ identical to Ink/Stitch’s SVG attributes because that is the interoperability 
 <tr><td><a href="#adr-0004-determinism-by-construction">0004</a></td><td>Determinism by construction: ordered collections, <code>libm</code>, seeded RNG, absolute quantization</td></tr>
 <tr><td><a href="#adr-0005-geometry-stack">0005</a></td><td><code>kurbo</code> for curves, <code>i_overlay</code> for polygon booleans/offsets, <code>petgraph</code> + own Eulerian walk, <code>rstar</code></td></tr>
 <tr><td><a href="#adr-0006-mdbook-diátaxis-generated-reference-ci-regenerated-images">0006</a></td><td>mdBook, Diátaxis structure, generated reference, CI-regenerated images</td></tr>
-<tr><td><a href="#adr-0007-pes-v1-first-for-the-brother-200--200-mm-machine">0007</a></td><td>PES v1 first for the Brother 200 × 200 mm machine; DST second</td></tr>
+<tr><td><a href="#adr-0007-pes-v1-first-for-the-brother-200--200-mm-machine">0007</a></td><td>PES v1 first for the Brother machine; DST second</td></tr>
 <tr><td><a href="#adr-0008-conformance-first-development">0008</a></td><td>Conformance-first development: requirement IDs and cases before code</td></tr>
 <tr><td><a href="#adr-0009-adopt-vectorcrafts-conventions-improve-the-ones-that-drift">0009</a></td><td>Adopt VectorCraft’s proven conventions; improve the ones that drift</td></tr>
 <tr><td><a href="#adr-0010-coded-diagnostics-with-explanation-pages">0010</a></td><td>Every user-facing problem is a coded diagnostic with an explanation page</td></tr>
 <tr><td><a href="#adr-0011-stitchcraft-can-move-into-vectorcrafts-repository">0011</a></td><td>StitchCraft can move into VectorCraft’s repository as a folder</td></tr>
 <tr><td><a href="#adr-0012-read-inkstitchs-source-never-copy-it">0012</a></td><td>Ink/Stitch’s source may be read, never copied</td></tr>
+<tr><td><a href="#adr-0013-the-reference-machine-is-a-brother-pe800-with-a-profile-for-each-of-its-hoops">0013</a></td><td>A Brother PE800 is the reference machine, with a profile for each of its 3 hoops</td></tr>
 </tbody>
 </table>
 </div>
@@ -2685,10 +2729,10 @@ MIT-licensed pyembroidery publishes, with the names of entries 62 and 63 from it
 catalogues (brand and number) arrive with M11.</p>
 <h2 id="machine-profiles-1"><a class="header" href="#machine-profiles-1">Machine profiles</a></h2>
 <pre><code class="language-rust ignore">pub struct MachineProfile {
-    pub id: &amp;'static str,            // "brother-200x200"
-    pub name: &amp;'static str,          // "Brother, 200 × 200 mm hoop"
-    pub hoop: Size,                  // 200 × 200 mm
-    pub comfort: Option&lt;Size&gt;,       // 150 × 150 mm — a warning beyond it, not an error
+    pub id: &amp;'static str,            // "brother-pe800-5x7"
+    pub name: &amp;'static str,          // "Brother PE800 with its 5 × 7 in hoop"
+    pub hoop: Size,                  // 130 × 180 mm
+    pub comfort: Option&lt;Size&gt;,       // None — a warning beyond it, not an error
     pub format: FormatId,            // PesV1 | Dst
     pub max_stitch: Mm,              // 12.0
     pub min_stitch: Mm,              // 0.3
@@ -2701,6 +2745,11 @@ generated reference pages. A profile’s values are <em>machine facts</em>: chan
 machine-testing record that justifies it (<a href="#machine-testing-protocol">machine testing</a>), and <code>evidence</code>
 says where each value comes from. Format limits that are not machine facts (the most colour changes a
 format records) live on <code>FormatId</code>, so the invariant checker and the encoders read the same number.</p>
+<p>A profile is a machine with one hoop, so a machine with 3 hoops has 3 profiles. <code>profiles::REFERENCE</code> is
+the reference machine’s, the Brother PE800 with its 5 × 7 in hoop
+(<a href="#adr-0013-the-reference-machine-is-a-brother-pe800-with-a-profile-for-each-of-its-hoops">ADR 0013</a>). Code that means the machine the checkpoints
+run on imports it rather than naming a hoop: the command line plans for it unless told otherwise. Each
+test sheet names the profile of the hoop it is sewn in.</p>
 <p><code>check_fit(bounds)</code> turns the design’s size into <code>SC-E0701</code> (larger than the hoop) or <code>SC-W0702</code> (larger
 than the comfort zone), with “rotate 90°” as a one-click fix when turning the design would fit
 (<code>REQ-PRF-002</code>).</p>
@@ -3757,7 +3806,7 @@ running stitch and emits <code>SC-W0305</code> — the user decides whether that
 <tr><td><code>REQ-FILL-TAT-006</code></td><td>Pull compensation preserves the number of holes and components</td></tr>
 <tr><td><code>REQ-FILL-TAT-007</code></td><td>All rows, including gap-fill rows, lie inside the region (± tolerance + compensation)</td></tr>
 <tr><td><code>REQ-FILL-TAT-008</code></td><td>Disconnected regions yield trims and <code>SC-W0307</code>, never long straight stitches</td></tr>
-<tr><td><code>REQ-FILL-TAT-009</code></td><td>A 150 × 150 mm square at 0.4 mm plans within the NFR-PERF-1 budget</td></tr>
+<tr><td><code>REQ-FILL-TAT-009</code></td><td>A 130 × 180 mm rectangle at 0.4 mm, the reference hoop’s whole field, plans within the NFR-PERF-1 budget</td></tr>
 </tbody>
 </table>
 </div>
@@ -4025,9 +4074,10 @@ trim-flagged jumps, and a long-jump-only variant for machines that trim on jump 
 records which one the machine honours.</li>
 <li><strong>Large designs hidden</strong> by an older Brother-family machine for PES v1 files beyond about 130 ×
 180 mm (root cause unknown). The PES v1 section carries a hoop indication, and pystitch sets it to
-the 130 × 180 mm class — our unconfirmed hypothesis for that report. For our 200 × 200 mm hoop, MC-1 sews TS-10 at <strong>150 mm and 190 mm</strong> widths from a PES v1
-file. If the machine refuses either, M1 adds a PES v6 writer with explicit hoop dimensions and repeats
-the test.</li>
+the 130 × 180 mm class, which is our unconfirmed hypothesis for that report. The reference PE800’s
+largest field is that class, 130 × 180 mm. MC-1 sews TS-10 at the whole field of each of its hoops from
+a PES v1 file. If one of them does not load, a PES v6 writer with explicit hoop dimensions follows, and
+the test is repeated.</li>
 <li><strong>Colour expectations:</strong> documented behaviour — what you see on the machine is the PEC
 palette colour; the thread chart in the report lists the source colour and the PEC match.</li>
 </ol>
@@ -4348,7 +4398,7 @@ an invalid manifest never reaches a user.</p>
 the generated dialog. The parameters are now stored on the object (undoable, saved in the
 <code>.vectorcraft</code> file) and the object shows a stitch preview.</li>
 <li>Save the document.</li>
-<li><code>stitch export design.vectorcraft --profile brother-200x200 -o design.pes</code> writes the machine file and
+<li><code>stitch export design.vectorcraft --profile brother-pe800-5x7 -o design.pes</code> writes the machine file and
 a report; <code>--preview design.png</code> renders what will sew.</li>
 </ol>
 <p>Stitching order is paint order (bottom first). Hidden objects are skipped (and listed in the report);
@@ -4703,11 +4753,11 @@ suite in-process. Unknown fields are errors, so a typo cannot silently switch a 
 requirements = ["REQ-PLAN-001", "REQ-PLAN-002", "REQ-PLAN-003", "REQ-PLAN-005", "REQ-PLAN-006", "REQ-PRF-002", "REQ-FMT-001"]
 kind = "testsheet"
 sheet = "TS-10B"
-profile = "brother-200x200"
+profile = "brother-pe800-5x7"
 
 [expect]
-size_mm = [190.0, 150.0]
-diagnostics = ["SC-W0702"]                       # exactly these codes, no others
+size_mm = [130.0, 180.0]
+diagnostics = []                                 # exactly these codes, here none
 golden = ["golden/testsheets/TS-10B.pes"]        # byte for byte; the format comes from the extension
 </code></pre>
 <p>The plan invariants run on the sheet’s plan before anything else. The golden files are the very bytes
@@ -4726,7 +4776,7 @@ without it the case is skipped locally (⏭ in the report) and fails in CI, like
 <pre><code class="language-toml">id = "fill-tatami-gap-preserved"
 requirements = ["REQ-FILL-TAT-006", "REQ-FILL-TAT-007"]
 input = "fixtures/fill/c-shape-gap-1mm.svg"     # or an inline design
-profile = "brother-200x200"
+profile = "brother-pe800-5x7"
 
 [params]
 fill_method = "tatami_fill"
@@ -5465,12 +5515,13 @@ supersedes the old one.</p>
 <tr><td><a href="#adr-0004-determinism-by-construction">0004</a></td><td>Determinism by construction</td><td>Accepted</td></tr>
 <tr><td><a href="#adr-0005-geometry-stack">0005</a></td><td>Geometry stack</td><td>Proposed (spike M0.7)</td></tr>
 <tr><td><a href="#adr-0006-mdbook-diátaxis-generated-reference-ci-regenerated-images">0006</a></td><td>mdBook, Diátaxis, generated reference, CI-regenerated images</td><td>Accepted</td></tr>
-<tr><td><a href="#adr-0007-pes-v1-first-for-the-brother-200--200-mm-machine">0007</a></td><td>PES v1 first, for the Brother 200 × 200 mm machine</td><td>Accepted</td></tr>
+<tr><td><a href="#adr-0007-pes-v1-first-for-the-brother-200--200-mm-machine">0007</a></td><td>PES v1 first, for the Brother 200 × 200 mm machine</td><td>Accepted (decisions 2 and 3 replaced by 0013)</td></tr>
 <tr><td><a href="#adr-0008-conformance-first-development">0008</a></td><td>Conformance-first development</td><td>Accepted</td></tr>
 <tr><td><a href="#adr-0009-adopt-vectorcrafts-conventions-improve-the-ones-that-drift">0009</a></td><td>Adopt VectorCraft’s conventions; improve the ones that drift</td><td>Accepted</td></tr>
 <tr><td><a href="#adr-0010-coded-diagnostics-with-explanation-pages">0010</a></td><td>Coded diagnostics with explanation pages</td><td>Accepted</td></tr>
 <tr><td><a href="#adr-0011-stitchcraft-can-move-into-vectorcrafts-repository">0011</a></td><td>StitchCraft can move into VectorCraft’s repository</td><td>Accepted</td></tr>
 <tr><td><a href="#adr-0012-read-inkstitchs-source-never-copy-it">0012</a></td><td>Read Ink/Stitch’s source, never copy it</td><td>Accepted</td></tr>
+<tr><td><a href="#adr-0013-the-reference-machine-is-a-brother-pe800-with-a-profile-for-each-of-its-hoops">0013</a></td><td>The reference machine is a Brother PE800, with a profile for each of its hoops</td><td>Accepted</td></tr>
 </tbody>
 </table>
 </div>
@@ -5661,7 +5712,10 @@ VectorCraft UI screenshots, photos — regenerated and compared in CI, refreshed
 </ul>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="adr-0007-pes-v1-first-for-the-brother-200--200-mm-machine"><a class="header" href="#adr-0007-pes-v1-first-for-the-brother-200--200-mm-machine">ADR-0007: PES v1 first, for the Brother 200 × 200 mm machine</a></h1>
-<p><strong>Status:</strong> Accepted · 2026-10-08</p>
+<!-- The status line, a label and its value, which the ADR index is checked against. -->
+<!-- vale ai-tells.ColonUsage = NO -->
+<p><strong>Status:</strong> Accepted · 2026-10-08 · decisions 2 and 3 replaced by <a href="#adr-0013-the-reference-machine-is-a-brother-pe800-with-a-profile-for-each-of-its-hoops">ADR-0013</a></p>
+<!-- vale ai-tells.ColonUsage = YES -->
 <h2 id="context-6"><a class="header" href="#context-6">Context</a></h2>
 <p>The first physical test machine is a Brother with a 200 × 200 mm (8 × 8 in) hoop; designs are kept to
 about 150 mm (6 in). Brother machines load PES. Embroiderers report PES pitfalls with other software:
@@ -5895,10 +5949,71 @@ but more process than VectorCraft asks for, and a link only helps where a statem
 again. Rejected: links are welcome, not required.</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div>
+<h1 id="adr-0013-the-reference-machine-is-a-brother-pe800-with-a-profile-for-each-of-its-hoops"><a class="header" href="#adr-0013-the-reference-machine-is-a-brother-pe800-with-a-profile-for-each-of-its-hoops">ADR-0013: The reference machine is a Brother PE800, with a profile for each of its hoops</a></h1>
+<!-- The status line, a label and its value, which the ADR index is checked against. -->
+<!-- vale ai-tells.ColonUsage = NO -->
+<p><strong>Status:</strong> Accepted · 2026-10-10</p>
+<!-- vale ai-tells.ColonUsage = YES -->
+<h2 id="context-12"><a class="header" href="#context-12">Context</a></h2>
+<p><a href="#adr-0007-pes-v1-first-for-the-brother-200--200-mm-machine">ADR-0007</a> took the first test machine to be a Brother with a
+200 × 200 mm (8 × 8 in) hoop, and gave it the profile <code>brother-200x200</code>, with a 150 × 150 mm comfort
+zone. The machine’s owner has since said what it is: a Brother PE800 (2026-10-10). Brother’s page for the
+PE800 gives a 5 × 7 in maximum embroidery area, and hoop sellers give the PE800’s 5 × 7 in hoop (SA444) a
+130 × 180 mm field, the size PES v1’s large-hoop indicator names.</p>
+<p>The owner has 3 hoops: the 5 × 7 in that comes with the machine, a 4 × 4 in (100 × 100 mm) and a small
+hoop sold as 1 × 2.5 in. That is the size Brother’s US site gives its small SA442 hoop. Brother’s Canadian
+site gives the same hoop as 3/4 × 2 3/8 in, and Brother’s small frames are sold in Europe as 2 × 6 cm.</p>
+<p>The old profile allowed designs the machine cannot sew. Test sheets TS-02 and TS-02B were 140 mm wide,
+and the TS-10 frames 150 and 190 mm. A profile is one machine with one hoop
+(<a href="#machine-profiles-1">data model</a>), so a machine with 3 hoops needs 3.</p>
+<h2 id="decision-11"><a class="header" href="#decision-11">Decision</a></h2>
+<ol>
+<li>Built-in profiles <code>brother-pe800-5x7</code> (130 × 180 mm), <code>brother-pe800-4x4</code> (100 × 100 mm) and
+<code>brother-pe800-small</code> (20 × 60 mm) replace <code>brother-200x200</code>. Everything but the hoop stays as it was.
+Those values were common Brother home-machine values rather than facts about an 8 × 8 in machine, and
+the checkpoints still confirm them.</li>
+<li><code>brother-pe800-5x7</code> is the reference profile, <code>profiles::REFERENCE</code>. The command line plans for it
+unless <code>--profile</code> names another, and code that means the machine the checkpoints run on imports it
+rather than naming a hoop.</li>
+<li>No profile has a comfort zone. The 150 × 150 mm zone belonged to the 8 × 8 in hoop, and nothing is
+known yet about where the PE800’s hoops hold the fabric less well. A sew-out report that
+shows it gives that hoop’s profile one.</li>
+<li>The small hoop’s field is 20 × 60 mm, the metric figure that both inch sizes round. A design that fits
+it fits the hoop. It stands upright, 20 mm across and 60 mm from back to front as the 5 × 7 in’s
+field does, until test sheet TS-10C shows which way the machine holds it.</li>
+<li>Test sheets fit the reference hoop. TS-02 and TS-02B narrow to 120 mm, with their longest jump 30 mm
+long where it was 40. The TS-10 sheets become frames filling each hoop’s field, 100 × 100 mm (A),
+130 × 180 mm (B) and 20 × 60 mm (C). Each test sheet names the profile of the hoop it is sewn in, and
+<code>stitch testsheet</code> checks the sheet against it unless <code>--profile</code> names another.</li>
+<li>This replaces decisions 2 and 3 of ADR-0007. Its first decision, PES v1 first and DST second, stands.</li>
+</ol>
+<h2 id="consequences-12"><a class="header" href="#consequences-12">Consequences</a></h2>
+<ul>
+<li>MC-1’s TS-02 and TS-10 files change, and so does MC-2’s TS-02B. The kits are rebuilt with new golden
+files. The other sheets’ files are the same, byte for byte.</li>
+<li>PES v1’s hoop indicator names the PE800’s 2 large fields, 100 × 100 and 130 × 180 mm. The question
+ADR-0007 left to MC-1, whether a machine takes larger designs from PES v1, does not arise for the
+reference machine. TS-10 still checks that each hoop takes a design as large as its profile allows.</li>
+<li>By default, designs must fit 130 × 180 mm. A larger one gets <code>SC-E0701</code>, which offers to turn it 90°
+when its sides fit the other way round.</li>
+<li><code>SC-W0702</code> stays in the code and its tests, though no built-in profile raises it.</li>
+</ul>
+<h2 id="alternatives-considered-7"><a class="header" href="#alternatives-considered-7">Alternatives considered</a></h2>
+<ul>
+<li><strong>Keep <code>brother-200x200</code> alongside</strong>, for 8 × 8 in machines: a profile for a machine nobody sews on is
+a guess. Rejected until someone does.</li>
+<li><strong>One PE800 profile, for the 5 × 7 in hoop only:</strong> the owner sews in all 3 hoops, and a design meant for
+the 4 × 4 in should be checked against it. Rejected.</li>
+<li><strong>The small hoop at its nominal 25.4 × 63.5 mm:</strong> designs up to that size may not fit its field.
+Rejected.</li>
+<li><strong>A comfort zone a margin inside each hoop</strong>, such as 120 × 170 mm: no evidence for any number yet.
+Rejected until a sew-out report gives one.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div>
 <h1 id="roadmap-small-steps-to-the-final-project"><a class="header" href="#roadmap-small-steps-to-the-final-project">Roadmap: small steps to the final project</a></h1>
 <p>Each <strong>step</strong> is one pull request: small, reviewable, with its tests, conformance cases and docs. Each
 <strong>milestone</strong> ends with green gates and, where it produces something sewable, a <strong>machine checkpoint</strong>
-(MC) on the Brother 200 × 200 mm machine with photos and measurements filed through the sew-out report
+(MC) on the reference Brother PE800 with photos and measurements filed through the sew-out report
 form (<a href="#machine-testing-protocol">machine testing</a>).</p>
 <p>Step ids are stable (<code>M3.4</code>); PR titles start with them. Status lives in <code>ROADMAP.md</code> at the repository
 root and is updated in the same PR that completes a step.</p>
@@ -5935,7 +6050,7 @@ of code) · 🧵 machine checkpoint · 👤 owner action</p>
 <tbody>
 <tr><td>M1.1 ✅</td><td><code>stitchcraft-core</code>: <code>Budget</code> and the diagnostics model (<code>Mm</code>, <code>Point</code>, <code>math</code> and <code>SplitMix64</code> with frozen reference values are already in the bootstrap)</td><td>unit tests; budget exhaustion is a diagnostic</td></tr>
 <tr><td>M1.2 ✅</td><td><code>stitchcraft-plan</code>: <code>Stitch</code>, <code>StitchKind</code>, <code>ColorBlock</code>, <code>StitchPlan</code>; invariant checker (<code>REQ-PLAN-001..007</code>)</td><td>each invariant has a violating and a passing case</td></tr>
-<tr><td>M1.3 ✅</td><td>Machine profiles + <code>brother-200x200</code>; hoop and comfort diagnostics <code>SC-E0701</code>/<code>SC-W0702</code> with rotate hint</td><td><code>REQ-PRF-001</code>, <code>REQ-PRF-002</code> active</td></tr>
+<tr><td>M1.3 ✅</td><td>Machine profiles + <code>brother-200x200</code> (since replaced by the PE800’s, <a href="#adr-0013-the-reference-machine-is-a-brother-pe800-with-a-profile-for-each-of-its-hoops">ADR 0013</a>); hoop and comfort diagnostics <code>SC-E0701</code>/<code>SC-W0702</code> with rotate hint</td><td><code>REQ-PRF-001</code>, <code>REQ-PRF-002</code> active</td></tr>
 <tr><td>M1.4 ✅</td><td>Quantization (absolute, round-half-even); PEC stitch encoder with spec vectors</td><td><code>REQ-FMT-002</code> partial; encoder unit tests</td></tr>
 <tr><td>M1.5 ✅</td><td>PES v1 writer: header, PEC header, palette indices, thumbnails</td><td>golden files (<code>REQ-FMT-001</code>)</td></tr>
 <tr><td>M1.6 ✅</td><td>Brother PEC palette table + CIEDE2000 nearest colour</td><td><code>REQ-THREAD-001</code> spot checks</td></tr>
@@ -5943,7 +6058,7 @@ of code) · 🧵 machine checkpoint · 👤 owner action</p>
 <tr><td>M1.8 ✅</td><td><code>stitch testsheet &lt;TS-xx&gt; --profile … -o file</code> (and <code>--list</code>), <code>stitch profiles</code>, <code>stitch explain</code>; the CLI moves to <code>clap</code> (<code>stitch inspect</code> needs the readers: M2.1)</td><td><code>trycmd</code> examples in the docs</td></tr>
 <tr><td>M1.9 ✅</td><td>Conformance runner v1: requirements × cases matrix, L0 + L1 goldens, job summary</td><td>report visible on PRs</td></tr>
 <tr><td>M1.10 ✅</td><td>Docs: profile, format, test-sheet, diagnostics and command-line reference generated; tutorial “Your first sew-out” with real output</td><td>docs check green</td></tr>
-<tr><td>MC-1 🧵</td><td>Sew <strong>TS-01</strong> (orientation, scale), <strong>TS-02</strong> (colour changes, stops, both trim encodings, jumps), <strong>TS-10A/B/C</strong> (150 and 190 mm frames) from PES v1; same TS-01 from DST if the machine reads DST</td><td>Sew-out report filed; profile values confirmed or changed; PES v6 decision made</td></tr>
+<tr><td>MC-1 🧵</td><td>Sew <strong>TS-01</strong> (orientation, scale), <strong>TS-02</strong> (colour changes, stops, both trim encodings, jumps), <strong>TS-10A/B/C</strong> (a frame filling each of the PE800’s 3 hoops) from PES v1; same TS-01 from DST if the machine reads DST</td><td>Sew-out report filed; profile values confirmed or changed; PES v6 decision made</td></tr>
 </tbody>
 </table>
 </div>
@@ -6087,12 +6202,15 @@ in-tree VectorCraft crate if wanted.</p>
 <h1 id="machine-testing-protocol"><a class="header" href="#machine-testing-protocol">Machine testing protocol</a></h1>
 <!-- implements: crates/stitchcraft-engine/src/testsheets/**, apps/stitchcraft-cli/src/commands/testsheet.rs -->
 <p>Automated tests prove the files are what we intend. Only a machine proves they sew well. This page is
-the protocol for <strong>machine checkpoints</strong> (MC-1 … MC-7) on the reference machine: a Brother home
-embroidery machine with a 200 × 200 mm (8 × 8 in) hoop, designs normally kept to about 150 mm (6 in).</p>
+the protocol for <strong>machine checkpoints</strong> (MC-1 … MC-7) on the reference machine: a Brother PE800, whose
+5 × 7 in hoop sews at most 130 × 180 mm. Its 4 × 4 in and small hoops have profiles too, and the TS-10
+sheets test them (<a href="#adr-0013-the-reference-machine-is-a-brother-pe800-with-a-profile-for-each-of-its-hoops">ADR 0013</a>).</p>
 <h2 id="roles"><a class="header" href="#roles">Roles</a></h2>
 <ul>
-<li><strong>StitchCraft generates</strong> each test sheet deterministically: <code>stitch testsheet TS-xx --profile brother-200x200 -o TS-xx.pes</code> prints the file’s SHA-256, its size and counts, the threads the machine
-will ask for (with the Brother palette name it will show) and what to check after sewing. From M2.7 it
+<li><strong>StitchCraft generates</strong> each test sheet deterministically: <code>stitch testsheet TS-xx -o TS-xx.pes</code>
+checks it against the profile of the hoop it is for. It prints that profile, the file’s SHA-256, its
+size and counts, the threads in the order they are sewn (with the Brother palette name the machine
+shows for each) and what to check after sewing. From M2.7 it
 also writes a picture of the expected result; until then, previews are drawn by the conformance tooling.
 <code>stitch testsheet --list</code> lists the sheets. The MC-1 sheets are drawn stitch by stitch, to test the
 machine and the file formats; from MC-2, sheets are drawn as designs and planned by the engine, so
@@ -6115,7 +6233,7 @@ cases, or bugs. Every profile change links its report.</li>
 <tr><td>Needle</td><td>75/11 embroidery needle, fresh at each checkpoint</td></tr>
 <tr><td>Top thread</td><td>40 wt polyester embroidery thread; colours as listed on the expected-result sheet (any brand)</td></tr>
 <tr><td>Bobbin</td><td>60 wt (90 wt) bobbin thread, white</td></tr>
-<tr><td>Hoop</td><td>The 200 × 200 mm hoop, fabric drum-tight, design centred</td></tr>
+<tr><td>Hoop</td><td>The 5 × 7 in hoop, unless the sheet names another; fabric drum-tight, design centred</td></tr>
 <tr><td>Machine settings</td><td>Note the machine’s speed and its own trim/jump settings (some Brother models trim automatically on long jumps)</td></tr>
 </tbody>
 </table>
@@ -6136,8 +6254,8 @@ cases, or bugs. Every profile change links its report.</li>
 </thead>
 <tbody>
 <tr><td><strong>TS-01</strong> Orientation &amp; scale</td><td>An asymmetric “F”, a 100 mm cross with 10 mm ticks, 10 mm squares in the corners (120 × 120 mm)</td><td>F not mirrored or rotated; 100 mm line = 100.0 ± 0.5 mm in X and Y; squares square</td><td>MC-1</td></tr>
-<tr><td><strong>TS-02</strong> Commands</td><td>Three colour blocks; a stop; rows of two dashes separated by jumps of 2, 5, 15, 40 mm; trims encoded as trim-flagged jumps on the left half (red) and as plain jumps only on the right (blue) (140 × 70 mm)</td><td>The machine stops for colours and the stop; which jumps were trimmed on each half; any loose loops</td><td>MC-1, MC-2</td></tr>
-<tr><td><strong>TS-02B</strong> Commands, from elements</td><td>TS-02 drawn as a design and planned by the engine. Each red dash but the last sets a trim after it (<code>trim_after</code>). The blue ones set none, and the 2 mm gap between them is sewn across, because it is within the 3 mm collapse length. The green line stops halfway (<code>stop_after</code>). The stitching has a lock wherever it starts or ends (140 × 70 mm)</td><td>The same as TS-02, and whether the thread of each dash pulls out where it was cut</td><td>MC-2</td></tr>
+<tr><td><strong>TS-02</strong> Commands</td><td>3 colour blocks, a stop, and rows of 2 dashes separated by jumps of 2, 5, 15 and 30 mm. Trims are encoded as trim-flagged jumps on the left half (red), and the right half (blue) has plain jumps only (120 × 70 mm)</td><td>The machine stops for colours and the stop; which jumps were trimmed on each half; any loose loops</td><td>MC-1, MC-2</td></tr>
+<tr><td><strong>TS-02B</strong> Commands, from elements</td><td>TS-02 drawn as a design and planned by the engine. Each red dash but the last sets a trim after it (<code>trim_after</code>). The blue ones set none, and the 2 mm gap between them is sewn across, because it is within the 3 mm collapse length. The green line stops halfway (<code>stop_after</code>). The stitching has a lock wherever it starts or ends (120 × 70 mm)</td><td>The same as TS-02, and whether the thread of each dash pulls out where it was cut</td><td>MC-2</td></tr>
 <tr><td><strong>TS-03</strong> Running stitch</td><td>Lines at 1.5, 2.0, 2.5, 3.0 and 4.0 mm stitch length, bean 1× and 2×, circles at tolerances of 0.1, 0.2 and 0.5 mm, and 20 stitches placed by hand at 0.3, 0.4, 0.5, 0.7 and 1.0 mm (60 × 78 mm)</td><td>Even stitches, smooth curves, solid bean lines, and the shortest hand-placed stitch that sews cleanly</td><td>MC-2</td></tr>
 <tr><td><strong>TS-04</strong> Lock stitches</td><td>Lines about 30 mm long with every lock shape but custom at both ends, trimmed after: the half stitch on first stitches of 1.5, 2.5 and 4 mm, back-and-forth at 0.5, 0.7 and 1.0 mm, drawn shapes at 70, 100 and 150 % (110 × 65 mm)</td><td>Pull each tail gently: does the lock stay, or does the thread pull out? Is the lock visible from the front?</td><td>MC-2</td></tr>
 <tr><td><strong>TS-05</strong> Satin width ladder</td><td>Columns 1–10 mm wide at three spacings (0.3, 0.4, 0.5 mm)</td><td>Coverage, fabric showing between stitches, edges straight, long stitches loose</td><td>MC-3</td></tr>
@@ -6145,9 +6263,9 @@ cases, or bugs. Every profile change links its report.</li>
 <tr><td><strong>TS-07</strong> Registration</td><td>A 60 mm tatami circle with a running-stitch outline; at three pull-compensation values</td><td>Gap or overlap between fill and outline at 12 points around the circle</td><td>MC-4</td></tr>
 <tr><td><strong>TS-08</strong> Fill density &amp; angle</td><td>30 mm squares at spacing 0.25–0.6 mm and angles 0°, 45°, 90°</td><td>Coverage, stiffness, puckering, visible furrows</td><td>MC-4</td></tr>
 <tr><td><strong>TS-09</strong> Fill underlay &amp; travel</td><td>A shape with holes and a separated part; with and without underlay</td><td>Travel hidden? Trims between parts? Holes clean?</td><td>MC-4</td></tr>
-<tr><td><strong>TS-10A/B/C</strong> Hoop size</td><td>Frames of 150 × 150 mm (A), 190 × 150 mm (B) and 150 × 190 mm (C), each with a centre cross and an “F” in the top-left corner</td><td>The machine accepts and shows each design; sews to size; landscape and portrait the right way round</td><td>MC-1, MC-5</td></tr>
+<tr><td><strong>TS-10A/B/C</strong> Hoop size</td><td>Frames of 100 × 100 mm (A, the 4 × 4 in hoop), 130 × 180 mm (B, the 5 × 7 in) and 20 × 60 mm (C, the small hoop), each as large as its hoop’s field, with a centre cross and an “F” in the top-left corner</td><td>The machine takes each design in its hoop without asking for a larger one, and sews it to size. The small hoop’s field is the right way round</td><td>MC-1, MC-5</td></tr>
 <tr><td><strong>TS-11</strong> New stitch types</td><td>Samples of the milestone’s new types</td><td>Per type, as listed on its expected-result sheet</td><td>MC-6</td></tr>
-<tr><td><strong>TS-12</strong> Real design</td><td>A 140 mm design authored in VectorCraft with fill, satin, running stitch and three colours</td><td>Overall quality; registration between colours; time vs. estimate</td><td>MC-5, MC-7</td></tr>
+<tr><td><strong>TS-12</strong> Real design</td><td>A design up to 130 × 180 mm authored in VectorCraft with fill, satin, running stitch and 3 colours</td><td>Overall quality, registration between colours, and time against the estimate</td><td>MC-5, MC-7</td></tr>
 </tbody>
 </table>
 </div>
@@ -6158,7 +6276,7 @@ cases, or bugs. Every profile change links its report.</li>
 <tr><th>Checkpoint</th><th>After</th><th>Sheets</th><th>Questions it must answer</th></tr>
 </thead>
 <tbody>
-<tr><td>MC-1</td><td>M1</td><td>TS-01, TS-02, TS-10A/B/C</td><td>Does the machine read our PES? Right size and orientation? Which trim encoding works? Are 150 and 190 mm designs accepted from PES v1?</td></tr>
+<tr><td>MC-1</td><td>M1</td><td>TS-01, TS-02, TS-10A/B/C</td><td>Does the machine read our PES? Right size and orientation? Which trim encoding works? Does each hoop take a design as large as its profile allows, from PES v1?</td></tr>
 <tr><td>MC-2</td><td>M3</td><td>TS-03, TS-04, TS-02B</td><td>Minimum stitch length and lock defaults? Does the machine trim where an element asks?</td></tr>
 <tr><td>MC-3</td><td>M4</td><td>TS-05, TS-06</td><td>Satin spacing, width limits, underlay defaults, pull compensation</td></tr>
 <tr><td>MC-4</td><td>M5</td><td>TS-07, TS-08, TS-09</td><td>Fill spacing, compensation, underlay and travel defaults</td></tr>

@@ -35,10 +35,10 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-c6836515.js";
+            window.path_to_searchindex_js = "../../searchindex-b55d5a7c.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../../toc-65a8af2a.js"></script>
+        <script src="../../toc-68c7fe35.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -181,22 +181,23 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="your-first-sew-out-on-a-brother"><a class="header" href="#your-first-sew-out-on-a-brother">Your first sew-out on a Brother</a></h1>
-<p>You will sew StitchCraft’s orientation and scale sheet, TS-01, on a Brother machine with a 200 × 200 mm
-hoop, and check that its size and direction are exactly right. It takes about twenty minutes.</p>
+<p>You will sew StitchCraft’s orientation and scale sheet, TS-01, on a Brother machine such as the PE800,
+and check that its size and direction are exactly right. It takes about twenty minutes.</p>
 <h2 id="you-need"><a class="header" href="#you-need">You need</a></h2>
 <ul>
 <li>StitchCraft, <a href="../install.html">installed</a>.</li>
-<li>A Brother embroidery machine that reads PES files from a USB stick, and its 200 × 200 mm hoop.</li>
+<li>A Brother embroidery machine that reads PES files from a USB stick, and a hoop that sews at least
+120 × 120 mm, such as the PE800’s 5 × 7 in hoop.</li>
 <li>Medium-weight woven cotton, medium tear-away stabilizer, a 75/11 embroidery needle, 40 wt polyester
 thread (black shows the lines best), white bobbin thread.</li>
 <li>A ruler or calipers with millimetres.</li>
 </ul>
 <h2 id="1-write-the-file"><a class="header" href="#1-write-the-file">1. Write the file</a></h2>
-<pre><code class="language-console">$ stitch testsheet TS-01 --profile brother-200x200 -o TS-01.pes
+<pre><code class="language-console">$ stitch testsheet TS-01 -o TS-01.pes
 TS-01 · Orientation and scale
   file      TS-01.pes (PES v1, 1587 bytes)
   sha256    854cde9f533e3b6567afb570a0eb3d4547e7813f5649da97d27be104f8cd18c6
-  profile   brother-200x200 (Brother, 200 × 200 mm hoop)
+  profile   brother-pe800-5x7 (Brother PE800 with its 5 × 7 in hoop)
   size      120.0 × 120.0 mm
   stitches  274 stitches, 7 jumps, 7 trims, 0 colour changes, 0 stops
   threads   1. Black (#000000), shown as Brother PEC 20 "Black"

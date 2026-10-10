@@ -35,10 +35,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-c6836515.js";
+            window.path_to_searchindex_js = "../searchindex-b55d5a7c.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-65a8af2a.js"></script>
+        <script src="../toc-68c7fe35.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -243,11 +243,11 @@ suite in-process. Unknown fields are errors, so a typo cannot silently switch a 
 requirements = ["REQ-PLAN-001", "REQ-PLAN-002", "REQ-PLAN-003", "REQ-PLAN-005", "REQ-PLAN-006", "REQ-PRF-002", "REQ-FMT-001"]
 kind = "testsheet"
 sheet = "TS-10B"
-profile = "brother-200x200"
+profile = "brother-pe800-5x7"
 
 [expect]
-size_mm = [190.0, 150.0]
-diagnostics = ["SC-W0702"]                       # exactly these codes, no others
+size_mm = [130.0, 180.0]
+diagnostics = []                                 # exactly these codes, here none
 golden = ["golden/testsheets/TS-10B.pes"]        # byte for byte; the format comes from the extension
 </code></pre>
 <p>The plan invariants run on the sheet’s plan before anything else. The golden files are the very bytes
@@ -266,7 +266,7 @@ without it the case is skipped locally (⏭ in the report) and fails in CI, like
 <pre><code class="language-toml">id = "fill-tatami-gap-preserved"
 requirements = ["REQ-FILL-TAT-006", "REQ-FILL-TAT-007"]
 input = "fixtures/fill/c-shape-gap-1mm.svg"     # or an inline design
-profile = "brother-200x200"
+profile = "brother-pe800-5x7"
 
 [params]
 fill_method = "tatami_fill"

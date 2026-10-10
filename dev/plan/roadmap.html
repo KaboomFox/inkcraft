@@ -35,10 +35,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-c6836515.js";
+            window.path_to_searchindex_js = "../searchindex-b55d5a7c.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-65a8af2a.js"></script>
+        <script src="../toc-68c7fe35.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -183,7 +183,7 @@
                         <h1 id="roadmap-small-steps-to-the-final-project"><a class="header" href="#roadmap-small-steps-to-the-final-project">Roadmap: small steps to the final project</a></h1>
 <p>Each <strong>step</strong> is one pull request: small, reviewable, with its tests, conformance cases and docs. Each
 <strong>milestone</strong> ends with green gates and, where it produces something sewable, a <strong>machine checkpoint</strong>
-(MC) on the Brother 200 × 200 mm machine with photos and measurements filed through the sew-out report
+(MC) on the reference Brother PE800 with photos and measurements filed through the sew-out report
 form (<a href="machine-testing.html">machine testing</a>).</p>
 <p>Step ids are stable (<code>M3.4</code>); PR titles start with them. Status lives in <code>ROADMAP.md</code> at the repository
 root and is updated in the same PR that completes a step.</p>
@@ -220,7 +220,7 @@ of code) · 🧵 machine checkpoint · 👤 owner action</p>
 <tbody>
 <tr><td>M1.1 ✅</td><td><code>stitchcraft-core</code>: <code>Budget</code> and the diagnostics model (<code>Mm</code>, <code>Point</code>, <code>math</code> and <code>SplitMix64</code> with frozen reference values are already in the bootstrap)</td><td>unit tests; budget exhaustion is a diagnostic</td></tr>
 <tr><td>M1.2 ✅</td><td><code>stitchcraft-plan</code>: <code>Stitch</code>, <code>StitchKind</code>, <code>ColorBlock</code>, <code>StitchPlan</code>; invariant checker (<code>REQ-PLAN-001..007</code>)</td><td>each invariant has a violating and a passing case</td></tr>
-<tr><td>M1.3 ✅</td><td>Machine profiles + <code>brother-200x200</code>; hoop and comfort diagnostics <code>SC-E0701</code>/<code>SC-W0702</code> with rotate hint</td><td><code>REQ-PRF-001</code>, <code>REQ-PRF-002</code> active</td></tr>
+<tr><td>M1.3 ✅</td><td>Machine profiles + <code>brother-200x200</code> (since replaced by the PE800’s, <a href="../design/adr/0013-brother-pe800-reference-machine.html">ADR 0013</a>); hoop and comfort diagnostics <code>SC-E0701</code>/<code>SC-W0702</code> with rotate hint</td><td><code>REQ-PRF-001</code>, <code>REQ-PRF-002</code> active</td></tr>
 <tr><td>M1.4 ✅</td><td>Quantization (absolute, round-half-even); PEC stitch encoder with spec vectors</td><td><code>REQ-FMT-002</code> partial; encoder unit tests</td></tr>
 <tr><td>M1.5 ✅</td><td>PES v1 writer: header, PEC header, palette indices, thumbnails</td><td>golden files (<code>REQ-FMT-001</code>)</td></tr>
 <tr><td>M1.6 ✅</td><td>Brother PEC palette table + CIEDE2000 nearest colour</td><td><code>REQ-THREAD-001</code> spot checks</td></tr>
@@ -228,7 +228,7 @@ of code) · 🧵 machine checkpoint · 👤 owner action</p>
 <tr><td>M1.8 ✅</td><td><code>stitch testsheet &lt;TS-xx&gt; --profile … -o file</code> (and <code>--list</code>), <code>stitch profiles</code>, <code>stitch explain</code>; the CLI moves to <code>clap</code> (<code>stitch inspect</code> needs the readers: M2.1)</td><td><code>trycmd</code> examples in the docs</td></tr>
 <tr><td>M1.9 ✅</td><td>Conformance runner v1: requirements × cases matrix, L0 + L1 goldens, job summary</td><td>report visible on PRs</td></tr>
 <tr><td>M1.10 ✅</td><td>Docs: profile, format, test-sheet, diagnostics and command-line reference generated; tutorial “Your first sew-out” with real output</td><td>docs check green</td></tr>
-<tr><td>MC-1 🧵</td><td>Sew <strong>TS-01</strong> (orientation, scale), <strong>TS-02</strong> (colour changes, stops, both trim encodings, jumps), <strong>TS-10A/B/C</strong> (150 and 190 mm frames) from PES v1; same TS-01 from DST if the machine reads DST</td><td>Sew-out report filed; profile values confirmed or changed; PES v6 decision made</td></tr>
+<tr><td>MC-1 🧵</td><td>Sew <strong>TS-01</strong> (orientation, scale), <strong>TS-02</strong> (colour changes, stops, both trim encodings, jumps), <strong>TS-10A/B/C</strong> (a frame filling each of the PE800’s 3 hoops) from PES v1; same TS-01 from DST if the machine reads DST</td><td>Sew-out report filed; profile values confirmed or changed; PES v6 decision made</td></tr>
 </tbody>
 </table>
 </div>
@@ -373,7 +373,7 @@ in-tree VectorCraft crate if wanted.</p>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../design/adr/0012-read-dont-copy.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../design/adr/0013-brother-pe800-reference-machine.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
@@ -387,7 +387,7 @@ in-tree VectorCraft crate if wanted.</p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../design/adr/0012-read-dont-copy.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../design/adr/0013-brother-pe800-reference-machine.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 

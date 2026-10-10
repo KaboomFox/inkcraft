@@ -35,10 +35,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-29d6be49.js";
+            window.path_to_searchindex_js = "../searchindex-a86c36e3.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-89d89d66.js"></script>
+        <script src="../toc-2b55582f.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -181,22 +181,26 @@
                 <div id="mdbook-content" class="content">
                     <main>
                         <h1 id="user-guide"><a class="header" href="#user-guide">User guide</a></h1>
-<p>The user guide grows with each milestone. It follows the <a href="https://diataxis.fr/">Diátaxis</a> structure:</p>
+<p>StitchCraft writes machine embroidery files from SVG designs. It also reads, draws and converts the
+files of other embroidery software. The guide follows the <a href="https://diataxis.fr/">Diátaxis</a> structure,
+with a section for each stitch type.</p>
 <div class="table-wrapper">
 <table>
 <thead>
-<tr><th>Section</th><th>Use it to</th><th>Available now</th></tr>
+<tr><th>Section</th><th>Use it to</th><th>Pages</th></tr>
 </thead>
 <tbody>
-<tr><td>Tutorials</td><td>Learn by doing, start to finish</td><td><a href="tutorials/first-sew-out.html">Your first sew-out on a Brother</a> (planned for M1)</td></tr>
-<tr><td>How-to guides</td><td>Solve one specific problem</td><td><a href="how-to/README.html">planned list</a></td></tr>
-<tr><td>Reference</td><td>Look up parameters, diagnostics, commands, profiles</td><td><a href="reference/README.html">reference index</a></td></tr>
+<tr><td><a href="install.html">Install</a></td><td>Build the <code>stitch</code> command</td><td></td></tr>
+<tr><td>Tutorials</td><td>Learn by doing, start to finish</td><td><a href="tutorials/first-sew-out.html">Your first sew-out on a Brother</a>, <a href="tutorials/svg-to-pes.html">Turn an SVG into a PES file</a></td></tr>
+<tr><td><a href="how-to/README.html">How-to guides</a></td><td>Solve one problem</td><td>Check a file, convert it, fit the hoop, report a bug</td></tr>
+<tr><td><a href="stitches/README.html">Stitch types</a></td><td>See what each stitch does and what its parameters change</td><td>Running stitch, lock stitches</td></tr>
+<tr><td><a href="reference/README.html">Reference</a></td><td>Look up commands, parameters, messages and machines</td><td></td></tr>
 <tr><td>Explanation</td><td>Understand why embroidery behaves as it does</td><td><a href="explanation/embroidery-basics.html">Embroidery basics</a></td></tr>
 </tbody>
 </table>
 </div>
-<p>Reference pages for parameters, diagnostics, the CLI and machine profiles are <strong>generated from the code</strong>
-and appear as the features land; they cannot fall out of date.</p>
+<p>StitchCraft makes the pictures and the command output in this guide when the docs are built. The
+reference pages are generated from its code, and CI fails when any of them is out of date.</p>
 
                     </main>
 
@@ -206,7 +210,7 @@ and appear as the features land; they cannot fall out of date.</p>
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
-                            <a rel="next prefetch" href="../user/tutorials/first-sew-out.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="../user/install.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                             </a>
 
@@ -220,7 +224,7 @@ and appear as the features land; they cannot fall out of date.</p>
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 
-                    <a rel="next prefetch" href="../user/tutorials/first-sew-out.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="../user/install.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z"/></svg></span>
                     </a>
             </nav>

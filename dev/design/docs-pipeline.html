@@ -35,10 +35,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-29d6be49.js";
+            window.path_to_searchindex_js = "../searchindex-a86c36e3.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-89d89d66.js"></script>
+        <script src="../toc-2b55582f.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -233,7 +233,7 @@ reference <code>images/generated/&lt;id&gt;.png</code>. An image without a decla
 <tr><th>Kind</th><th>Made by</th><th>Compared by</th><th>Notes</th></tr>
 </thead>
 <tbody>
-<tr><td><code>stitch</code></td><td><code>stitchcraft-render</code> (<a href="rendering.html">rendering</a>) from a conformance fixture + parameters</td><td><strong>exact bytes</strong> (rendering is deterministic)</td><td>Stitch-type illustrations, parameter “before/after” pairs, diagnostics examples</td></tr>
+<tr><td><code>stitch</code></td><td><code>stitchcraft-render</code> (<a href="rendering.html">rendering</a>) from a test sheet, or from an SVG design the engine plans</td><td><strong>exact bytes</strong> (rendering is deterministic)</td><td>Stitch-type illustrations, parameter comparisons, diagnostics examples</td></tr>
 <tr><td><code>vectorcraft-render</code></td><td><code>vectorcraft-cli run --in fixture --cmd plugin.install … --cmd effect.apply … --export x.png</code></td><td>exact bytes, or tight tolerance if VectorCraft’s renderer changes</td><td>How a preview looks in VectorCraft’s canvas, headless</td></tr>
 <tr><td><code>vectorcraft-ui</code></td><td>VectorCraft (pinned stable) driven over its control channel: open fixture, install plug-ins, select, open the dialog, set fields, <code>ui.screenshot</code>, crop</td><td>perceptual tolerance (≤ 0.2 % of pixels differing by more than 8/255 per channel)</td><td>Dialogs, menus, the workflow; runs under Xvfb with Mesa software rendering in a pinned container</td></tr>
 <tr><td><code>photo</code></td><td>a person, of a real sew-out</td><td>presence + metadata record (machine, fabric, commit, checkpoint)</td><td>Never regenerated; listed with their sew-out report</td></tr>
@@ -242,14 +242,32 @@ reference <code>images/generated/&lt;id&gt;.png</code>. An image without a decla
 </div>
 <p>A shot declaration:</p>
 <pre><code class="language-toml">[[shot]]
-id = "tatami-staggers-1-vs-4"
+id = "running-length"
 kind = "stitch"
-fixture = "conformance/fixtures/fill/square-40mm.svg"
-params = [{ staggers = 1 }, { staggers = 4 }]   # two panels side by side
-render = { style = "realistic", width = 960, background = "#f4efe6" }
-alt = "Two 40 mm tatami squares: with one stagger the needle points form straight furrows; with four they disappear."
+fixture = "docs/fixtures/wave.svg"   # planned by the engine for the reference machine, as `stitch plan` plans it
+style = "simple"
+scale = 8.0                          # pixels per millimetre
+alt = "A wave in running stitch"
+panels = [
+  { caption = "1.5 mm", params = { running_stitch_length_mm = "1.5" } },
+  { caption = "4 mm", params = { running_stitch_length_mm = "4" } },
+]
 </code></pre>
-<p>The <code>alt</code> text is mandatory (accessibility), and the docs check fails on images without it.</p>
+<p>Each panel sets its parameters on every element of the design and becomes one image, <code>running-length-1.png</code>
+and so on. The plan may report only the codes the shot lists in <code>allow</code>, and a shot fails on any other:
+a picture never shows a design that the engine changed without the page saying so. The <code>alt</code> text is
+mandatory (accessibility), and the docs check fails on images without it.</p>
+<p>A page shows a shot between the lines <code>&lt;!-- shot: running-length --&gt;</code> and <code>&lt;!-- /shot --&gt;</code>. <code>cargo xtask docs</code> writes the figure there. Without panels the figure is one image. With panels it is a table with a
+column per panel, its caption on top and its image below it. Each image’s alternative text is the shot’s,
+followed by the panel’s caption. The page
+cannot show an image under any other text, and a stale figure fails <code>--check</code> like a stale page.</p>
+<h2 id="command-line-examples"><a class="header" href="#command-line-examples">Command-line examples</a></h2>
+<p>Pages show what a command prints by including it from <code>docs/src/user/reference/generated/</code>. The commands
+are declared in <code>docs/examples.toml</code>, and <code>cargo xtask docs</code> runs each one with the <code>stitch</code> binary in an
+empty directory. A declaration can copy files of the repository into that directory and run commands
+that are not shown first. The output is the binary’s own, standard output then standard error, with the
+exit status when it is not 0. When a command prints something new, <code>--check</code> fails until the output is
+written again. Pages show what the command prints today.</p>
 <p>The <code>vectorcraft-ui</code> kind depends on running VectorCraft’s window in CI; spike <strong>M0.8</strong> proves it
 (Xvfb + Mesa llvmpipe through wgpu’s GL backend). Until it lands, UI images are limited to
 <code>vectorcraft-render</code> shots, and VectorCraft’s own approach — semantic headless frame tests — covers the
@@ -264,7 +282,7 @@ dialogs’ contents.</p>
 <tbody>
 <tr><td><code>book</code></td><td><code>mdbook build</code> fails, or any page is missing from <code>SUMMARY.md</code></td></tr>
 <tr><td><code>check</code></td><td>generated pages are stale; a relative link or <code>#anchor</code> is broken; a doc mentions a <code>cargo xtask</code> subcommand that does not exist (the drift we found in VectorCraft’s own <code>AGENTS.md</code>); a <code>REQ-…</code> or <code>SC-…</code> id does not exist; an image lacks a declaration or alt text</td></tr>
-<tr><td><code>examples</code></td><td>a CLI example in the docs (<code>trycmd</code>, from M1.8) prints something different from what the page shows; a Rust snippet does not compile (<code>cargo test --doc</code>)</td></tr>
+<tr><td><code>examples</code></td><td>a Rust snippet does not compile (<code>cargo test --doc</code>). Command-line examples are generated pages, which <code>check</code> covers</td></tr>
 <tr><td><code>shots</code></td><td><code>cargo xtask shots --check</code>: a declared image is missing, has no alt text, or regenerates differently from the committed file — byte-exact for <code>stitch</code> shots, within tolerance for <code>vectorcraft-ui</code> and <code>vectorcraft-render</code> shots (generators in M6.7; a separate job with Xvfb and Mesa)</td></tr>
 <tr><td><code>spelling</code></td><td><code>typos</code> finds a misspelling (allow-list in <code>typos.toml</code>)</td></tr>
 <tr><td><code>links</code></td><td>an internal link is broken (<code>lychee --offline</code>); external links are checked nightly, not per PR</td></tr>

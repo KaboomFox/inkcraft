@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-29d6be49.js";
+            window.path_to_searchindex_js = "searchindex-a86c36e3.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-89d89d66.js"></script>
+        <script src="toc-2b55582f.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -200,33 +200,59 @@ every pull request.</li>
 <li><strong>Contributing?</strong> See <a href="contributing/README.html">contributing</a>.</li>
 </ul>
 <blockquote>
-<p><strong>Status (2026-10-08):</strong> design complete for the first milestones; repository bootstrapped with its
-guardrails (milestone M0). The first sewable output is milestone M1.</p>
+<p><strong>Status:</strong> StitchCraft sews the strokes of an SVG design and writes PES and DST files. A stroke is
+sewn in running stitch or manual stitch, with bean stitch where it is set. Satin columns come in
+milestone M4 and fills in M5. The <a href="#roadmap-small-steps-to-the-final-project">roadmap</a> has every step.</p>
 </blockquote>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="user-guide"><a class="header" href="#user-guide">User guide</a></h1>
-<p>The user guide grows with each milestone. It follows the <a href="https://diataxis.fr/">Diátaxis</a> structure:</p>
+<p>StitchCraft writes machine embroidery files from SVG designs. It also reads, draws and converts the
+files of other embroidery software. The guide follows the <a href="https://diataxis.fr/">Diátaxis</a> structure,
+with a section for each stitch type.</p>
 <div class="table-wrapper">
 <table>
 <thead>
-<tr><th>Section</th><th>Use it to</th><th>Available now</th></tr>
+<tr><th>Section</th><th>Use it to</th><th>Pages</th></tr>
 </thead>
 <tbody>
-<tr><td>Tutorials</td><td>Learn by doing, start to finish</td><td><a href="#your-first-sew-out-on-a-brother">Your first sew-out on a Brother</a> (planned for M1)</td></tr>
-<tr><td>How-to guides</td><td>Solve one specific problem</td><td><a href="user/how-to/README.html">planned list</a></td></tr>
-<tr><td>Reference</td><td>Look up parameters, diagnostics, commands, profiles</td><td><a href="user/reference/README.html">reference index</a></td></tr>
+<tr><td><a href="#install-stitchcraft">Install</a></td><td>Build the <code>stitch</code> command</td><td></td></tr>
+<tr><td>Tutorials</td><td>Learn by doing, start to finish</td><td><a href="#your-first-sew-out-on-a-brother">Your first sew-out on a Brother</a>, <a href="#turn-an-svg-into-a-pes-file">Turn an SVG into a PES file</a></td></tr>
+<tr><td><a href="user/how-to/README.html">How-to guides</a></td><td>Solve one problem</td><td>Check a file, convert it, fit the hoop, report a bug</td></tr>
+<tr><td><a href="user/stitches/README.html">Stitch types</a></td><td>See what each stitch does and what its parameters change</td><td>Running stitch, lock stitches</td></tr>
+<tr><td><a href="user/reference/README.html">Reference</a></td><td>Look up commands, parameters, messages and machines</td><td></td></tr>
 <tr><td>Explanation</td><td>Understand why embroidery behaves as it does</td><td><a href="#embroidery-basics">Embroidery basics</a></td></tr>
 </tbody>
 </table>
 </div>
-<p>Reference pages for parameters, diagnostics, the CLI and machine profiles are <strong>generated from the code</strong>
-and appear as the features land; they cannot fall out of date.</p>
+<p>StitchCraft makes the pictures and the command output in this guide when the docs are built. The
+reference pages are generated from its code, and CI fails when any of them is out of date.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="install-stitchcraft"><a class="header" href="#install-stitchcraft">Install StitchCraft</a></h1>
+<p>StitchCraft has no packaged releases yet. Build the <code>stitch</code> command from its source on Linux, macOS or
+Windows. It takes a few minutes.</p>
+<h2 id="build-it"><a class="header" href="#build-it">Build it</a></h2>
+<p>Install Rust with <a href="https://rustup.rs/">rustup</a>, then get the source and build it:</p>
+<pre><code class="language-sh">git clone https://github.com/KaboomFox/stitchcraft
+cd stitchcraft
+cargo install --locked --path apps/stitchcraft-cli
+</code></pre>
+<p>The repository names the Rust version it is built with, and rustup fetches that version the first time.
+cargo puts <code>stitch</code> in its <code>bin</code> folder, which rustup adds to your <code>PATH</code>.</p>
+<h2 id="check-it"><a class="header" href="#check-it">Check it</a></h2>
+<pre><code class="language-sh">stitch --version
+</code></pre>
+<p>It prints <code>stitch</code> and its version number.</p>
+<p>To update StitchCraft, run <code>git pull</code> in the <code>stitchcraft</code> folder and the <code>cargo install</code> line again.</p>
+<h2 id="next"><a class="header" href="#next">Next</a></h2>
+<p><a href="#your-first-sew-out-on-a-brother">Sew your first test sheet</a>, or <a href="#turn-an-svg-into-a-pes-file">turn an SVG into a PES
+file</a>. The <a href="#command-line">command line</a> reference lists every command.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="your-first-sew-out-on-a-brother"><a class="header" href="#your-first-sew-out-on-a-brother">Your first sew-out on a Brother</a></h1>
 <p>You will sew StitchCraft’s orientation and scale sheet, TS-01, on a Brother machine with a 200 × 200 mm
 hoop, and check that its size and direction are exactly right. It takes about twenty minutes.</p>
 <h2 id="you-need"><a class="header" href="#you-need">You need</a></h2>
 <ul>
+<li>StitchCraft, <a href="#install-stitchcraft">installed</a>.</li>
 <li>A Brother embroidery machine that reads PES files from a USB stick, and its 200 × 200 mm hoop.</li>
 <li>Medium-weight woven cotton, medium tear-away stabilizer, a 75/11 embroidery needle, 40 wt polyester
 thread (black shows the lines best), white bobbin thread.</li>
@@ -275,22 +301,102 @@ the cross first, then the “F”, then the four corner squares, trimming betwee
 <p>File a <strong>Sew-out report</strong> on GitHub with photos of the front and back (a ruler in view), your measurements,
 and anything odd (<a href="#machine-testing-protocol">machine testing</a>).</p>
 <div style="break-before: page; page-break-before: always;"></div>
-<h1 id="how-to-guides"><a class="header" href="#how-to-guides">How-to guides</a></h1>
-<p>Task-focused guides, each written in the release that brings its feature:</p>
+<h1 id="turn-an-svg-into-a-pes-file"><a class="header" href="#turn-an-svg-into-a-pes-file">Turn an SVG into a PES file</a></h1>
+<p>In this tutorial you save a small design as SVG and plan it for a Brother machine. Then you look at what
+it will sew, and sew it. The design is a red star inside a blue ring, 44 mm across.</p>
+<h2 id="you-need-1"><a class="header" href="#you-need-1">You need</a></h2>
 <ul>
+<li>StitchCraft, <a href="#install-stitchcraft">installed</a>.</li>
+<li>A text editor, or a drawing program that saves SVG, such as Inkscape.</li>
+<li>To sew it: the machine and materials of <a href="#you-need">your first sew-out</a>.</li>
+</ul>
+<h2 id="1-save-the-design"><a class="header" href="#1-save-the-design">1. Save the design</a></h2>
+<p>Save this text as <code>badge.svg</code>:</p>
+<pre><code class="language-xml">&lt;svg xmlns="http://www.w3.org/2000/svg" width="50mm" height="50mm" viewBox="0 0 50 50"&gt;
+  &lt;!-- A red star inside a blue ring, 44 mm across. The star sews first. --&gt;
+  &lt;polygon id="star" fill="none" stroke="#c8102e" stroke-width="0.4"
+           points="25,10 28.53,20.15 39.27,20.36 30.71,26.85 33.82,37.14
+                   25,31 16.18,37.14 19.29,26.85 10.73,20.36 21.47,20.15"/&gt;
+  &lt;circle id="ring" cx="25" cy="25" r="22" fill="none" stroke="#1f4e9c" stroke-width="0.4"/&gt;
+&lt;/svg&gt;
+</code></pre>
+<p>StitchCraft sews each shape’s stroke as a line of running stitch, in the stroke’s colour. It reads the
+design’s size from <code>width</code>, <code>height</code> and <code>viewBox</code>, and here one unit is 1 mm. Shapes are sewn in the
+order the file lists them, and the star comes first.</p>
+<h2 id="2-plan-it"><a class="header" href="#2-plan-it">2. Plan it</a></h2>
+<pre><code class="language-console">$ stitch plan badge.svg -o badge.pes --preview badge.png
+badge.svg
+  file      badge.pes (PES v1, 1498 bytes)
+  sha256    d9906494fa2d27dcfc71fe26e2eb89c9805078e5a24d896bef51bc98a707b4ef
+  profile   brother-200x200 (Brother, 200 × 200 mm hoop)
+  size      44.0 × 44.0 mm
+  stitches  124 stitches, 2 jumps, 0 trims, 1 colour change, 0 stops
+  threads   1. unnamed (#c8102e), shown as Brother PEC 5 "Red"
+            2. unnamed (#1f4e9c), shown as Brother PEC 2 "Blue"
+  preview   badge.png (384 × 384 pixels)
+</code></pre>
+<p><code>stitch plan</code> writes the machine file and, with <code>--preview</code>, a picture of it. It plans for the
+<code>brother-200x200</code> profile unless <code>--profile</code> names another machine. Each colour is a thread, and the
+PES file shows it as the nearest Brother palette colour. The machine stops between the red and the blue
+for you to change the thread.</p>
+<h2 id="3-look-at-it"><a class="header" href="#3-look-at-it">3. Look at it</a></h2>
+<p>The preview shows the embroidery as it will sew:</p>
+<!-- shot: badge -->
+<p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/generated/badge.png" alt="A red star inside a blue ring, as the badge will sew"><span class="img-wrapper"><img src="images/generated/badge.png" alt="A red star inside a blue ring, as the badge will sew"></span></label></p>
+<!-- /shot -->
+<p>The simple style, from <code>stitch preview badge.pes -o badge-simple.png --style simple</code>, shows each needle
+point:</p>
+<!-- shot: badge-simple -->
+<p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/generated/badge-simple.png" alt="The badge in the simple style: the needle points of the star and the ring, and grey dashes where the frame moves from the star to the ring after the colour change"><span class="img-wrapper"><img src="images/generated/badge-simple.png" alt="The badge in the simple style: the needle points of the star and the ring, and grey dashes where the frame moves from the star to the ring after the colour change"></span></label></p>
+<!-- /shot -->
+<p>The stitches are spread evenly along each straight edge, and every corner of the star has a needle point.
+The grey dashes are the frame’s move from the star to the ring, after the colour change.</p>
+<h2 id="4-sew-it"><a class="header" href="#4-sew-it">4. Sew it</a></h2>
+<p>Load <code>badge.pes</code> and sew it as in <a href="#3-load-it-on-the-machine">your first sew-out</a>. Thread
+red first, and blue when the machine stops.</p>
+<h2 id="when-stitchcraft-warns"><a class="header" href="#when-stitchcraft-warns">When StitchCraft warns</a></h2>
+<p>StitchCraft says what it changes or leaves out of a design. This one from StitchCraft’s tests has a
+filled rectangle and 2 lines that nearly touch:</p>
+<pre><code class="language-console">$ stitch plan strokes.svg -o strokes.pes --preview strokes.png --report strokes.json
+strokes.svg
+  file      strokes.pes (PES v1, 1725 bytes)
+  sha256    41a9620e08c4cc93d781b9e3aef9cd59b92444ad5ef3e20cd3be7304dc616d2c
+  profile   brother-200x200 (Brother, 200 × 200 mm hoop)
+  size      60.0 × 40.0 mm
+  stitches  118 stitches, 4 jumps, 0 trims, 2 colour changes, 0 stops
+  threads   1. unnamed (#c00000), shown as Brother PEC 5 "Red"
+            2. unnamed (#0040c0), shown as Brother PEC 21 "Ultramarine"
+            3. unnamed (#c00000), shown as Brother PEC 5 "Red"
+  preview   strokes.png (512 × 352 pixels)
+  report    strokes.json
+warning SC-W0011 (svg:patch:fill): This element is a fill, and this version of StitchCraft does not sew fills yet, so it is skipped.
+info SC-I0504: A needle point less than the shortest stitch (0.3 mm) from the one before was left out.
+</code></pre>
+<ul>
+<li><code>SC-W0011</code> names the fill. Fills are sewn from milestone M5, and until then the rest of the design is
+sewn without it.</li>
+<li><code>SC-I0504</code> says a needle point too close to the one before was left out, where the lines nearly touch.</li>
+</ul>
+<p><code>stitch explain</code> with a code tells you more, and <a href="#diagnostic-codes">diagnostic codes</a> lists
+them all. <code>--report</code> writes the summary and the messages as JSON, for scripts.</p>
+<h2 id="next-1"><a class="header" href="#next-1">Next</a></h2>
+<p><a href="user/stitches/README.html">Stitch types</a> shows what each stitch type does and the parameters that change it.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="how-to-guides"><a class="header" href="#how-to-guides">How-to guides</a></h1>
+<p>Each guide solves one problem:</p>
+<ul>
+<li><a href="#check-a-machine-file-before-sewing">Check a machine file before sewing</a> with <code>stitch inspect</code> and <code>stitch preview</code></li>
+<li><a href="#convert-between-machine-formats">Convert between machine formats</a> with <code>stitch convert</code></li>
+<li><a href="#fit-a-design-to-the-hoop">Fit a design to the hoop</a> when it is larger than the hoop or the comfort zone</li>
 <li><a href="#report-a-bug">Report a bug</a> with a bundle that reproduces it (<code>stitch bug-report</code>)</li>
 </ul>
-<p>Planned:</p>
+<p>Planned, each with the milestone that brings its feature:</p>
 <div class="table-wrapper">
 <table>
 <thead>
 <tr><th>Guide</th><th>Milestone</th></tr>
 </thead>
 <tbody>
-<tr><td>Check a machine file before sewing (<code>stitch inspect</code>, <code>stitch preview</code>)</td><td>M2</td></tr>
-<tr><td>Convert between machine formats</td><td>M2</td></tr>
-<tr><td>Fix “design larger than the comfort zone”</td><td>M1</td></tr>
-<tr><td>Turn an SVG into a PES file</td><td>M3</td></tr>
 <tr><td>Make lettering-style satin borders</td><td>M4</td></tr>
 <tr><td>Stop a fill from puckering (density, underlay, compensation)</td><td>M5</td></tr>
 <tr><td>Embroider a VectorCraft design</td><td>M6</td></tr>
@@ -298,6 +404,153 @@ and anything odd (<a href="#machine-testing-protocol">machine testing</a>).</p>
 </tbody>
 </table>
 </div>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="check-a-machine-file-before-sewing"><a class="header" href="#check-a-machine-file-before-sewing">Check a machine file before sewing</a></h1>
+<p>StitchCraft reads PES, PEC and DST files from any software. It can describe a file and draw what the
+machine will sew, before you spend thread on it. The examples use test sheet TS-02, written with
+<code>stitch testsheet TS-02 --profile brother-200x200 -o TS-02.pes</code>.</p>
+<h2 id="describe-the-file"><a class="header" href="#describe-the-file">Describe the file</a></h2>
+<pre><code class="language-console">$ stitch inspect TS-02.pes --profile brother-200x200
+TS-02.pes · PES (#PES0001) · "TS-02"
+  sha256    b69bba9dcf60bfbc9765c92991010f249f0d3c2d2946b945d1eecfc70b77abc3
+  size      140.0 × 70.0 mm
+  stitches  93 stitches, 17 jumps, 7 trims, 2 colour changes, 1 stop
+  extent    x -70.0 to 70.0 mm, y -35.0 to 35.0 mm from where the machine starts
+  lengths   stitches from 2.5 to 2.5 mm
+  threads   1. Red (#ed171f), shown as Brother PEC 5 "Red"
+            2. Blue (#0a55a3), shown as Brother PEC 2 "Blue"
+            3. Emerald Green (#00673e), shown as Brother PEC 54 "Emerald Green"
+            4. Emerald Green (#00673e), shown as Brother PEC 54 "Emerald Green" — a stop: keep the same thread
+  profile   brother-200x200 (Brother, 200 × 200 mm hoop)
+            0 stitches longer than 12 mm, 0 shorter than 0.3 mm
+</code></pre>
+<ul>
+<li><strong>size</strong> is the width and height of the stitching.</li>
+<li><strong>stitches</strong> counts the needle points, and the jumps, trims, colour changes and stops between them.</li>
+<li><strong>extent</strong> gives the lowest and highest x and y of the stitching, from where the machine starts.</li>
+<li><strong>lengths</strong> gives the shortest and the longest stitch.</li>
+<li><strong>threads</strong> lists the colour blocks in sewing order. Each colour is stored as a Brother palette colour
+in a PES file, which the line names. After a stop you sew on with the same thread.</li>
+<li><strong>profile</strong> appears with <code>--profile</code>, with the number of stitches longer than the machine’s longest
+stitch and shorter than its shortest. <code>stitch profiles</code> lists the machines.</li>
+</ul>
+<h2 id="look-at-it"><a class="header" href="#look-at-it">Look at it</a></h2>
+<pre><code class="language-console">$ stitch preview TS-02.pes -o TS-02.png --style simple
+TS-02.png · 1152 × 592 pixels
+  from      TS-02.pes · PES (#PES0001) · "TS-02"
+  style     simple, 8 pixels per millimetre
+</code></pre>
+<p>The simple style draws each stitch as a thin line with a dot at each needle point. A red cross marks a
+trim and a blue square a stop. Grey dashes show where the frame travels after a cut, and dashes in the
+thread’s colour show a jump thread left on the fabric.</p>
+<!-- shot: testsheet-ts-02-simple -->
+<p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/generated/testsheet-ts-02-simple.png" alt="TS-02 in the simple style. A red cross marks the trim after the first dash of each red row, and a blue square marks the stop in the middle of the green line. Grey dashes show moves after a cut, and blue dashes show jump threads left in place."><span class="img-wrapper"><img src="images/generated/testsheet-ts-02-simple.png" alt="TS-02 in the simple style. A red cross marks the trim after the first dash of each red row, and a blue square marks the stop in the middle of the green line. Grey dashes show moves after a cut, and blue dashes show jump threads left in place."></span></label></p>
+<!-- /shot -->
+<p>Without <code>--style simple</code>, the picture shows the finished embroidery, with loose jump threads where they
+will be. The <a href="#styles">rendering design</a> has the whole legend.</p>
+<h2 id="what-to-look-for"><a class="header" href="#what-to-look-for">What to look for</a></h2>
+<ul>
+<li>A design larger than the hoop, or than the machine’s comfort zone: see <a href="#fit-a-design-to-the-hoop">fit the hoop</a>.</li>
+<li>Jump threads where you expected trims. Each one has to be cut by hand after sewing.</li>
+<li>Thread colours. The machine shows each block in its palette colour, and it sews whichever thread you
+load.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="convert-between-machine-formats"><a class="header" href="#convert-between-machine-formats">Convert between machine formats</a></h1>
+<p><code>stitch convert</code> reads a PES, PEC or DST file and writes it as PES or DST. The output file’s extension
+picks the format, or <code>--format</code> names it. Each format records some things the other cannot, and the
+command says what changed.</p>
+<h2 id="pes-to-dst"><a class="header" href="#pes-to-dst">PES to DST</a></h2>
+<p>DST is the format most commercial machines read. Here test sheet TS-02 is converted and the new file
+read back:</p>
+<pre><code class="language-console">$ stitch convert TS-02.pes -o TS-02.dst
+TS-02.pes · PES (#PES0001) → DST
+  file      TS-02.dst (DST, 1016 bytes)
+  sha256    76071ad993041267b36785250d0930f4fdd6453561ec44b60b6ec4b2f6b13517
+  size      140.0 × 70.0 mm
+  stitches  93 stitches, 17 jumps, 7 trims, 2 colour changes, 1 stop
+  threads   1. Red (#ed171f)
+            2. Blue (#0a55a3)
+            3. Emerald Green (#00673e)
+            4. Emerald Green (#00673e) — a stop: keep the same thread
+info SC-I0605: The thread will be cut at 3 places the plan does not trim: DST machines cut it before 3 or more jump records in a row, and a jump longer than 24.2 mm takes that many.
+$ stitch inspect TS-02.dst
+TS-02.dst · DST · "TS-02"
+  sha256    76071ad993041267b36785250d0930f4fdd6453561ec44b60b6ec4b2f6b13517
+  size      140.0 × 70.0 mm
+  stitches  93 stitches, 50 jumps, 10 trims, 3 colour changes, 0 stops
+  extent    x -70.0 to 70.0 mm, y -35.0 to 35.0 mm from where the machine starts
+  lengths   stitches from 2.5 to 2.5 mm
+  threads   1. thread 1 (#000000)
+            2. thread 2 (#000000)
+            3. thread 3 (#000000)
+            4. thread 4 (#000000)
+            (DST stores no colours: each block is a pause for the next thread)
+</code></pre>
+<ul>
+<li><strong>Colours.</strong> A DST file records where the colour changes are, without the colours. The machine pauses
+at each colour change, and you load the next thread yourself. Note the thread list before you convert.</li>
+<li><strong>Stops.</strong> DST has one pause command, for colour changes and stops alike. The stop in TS-02 reads back
+as a third colour change.</li>
+<li><strong>Trims.</strong> DST has no trim command either. StitchCraft writes a trim as 3 short jumps that end where
+they started, and a machine set to cut at 3 jumps in a row cuts there.</li>
+<li><strong>Long jumps.</strong> A DST record moves the frame at most 12.1 mm, and a longer jump takes several records.
+A jump longer than 24.2 mm takes 3 or more, and a machine set to 3 cuts the thread there too.
+<code>SC-I0605</code> counts these extra cuts. After a tie-off they save you cutting the jump thread by hand.
+Without one, the end of the stitching can pull out.</li>
+</ul>
+<h2 id="dst-to-pes"><a class="header" href="#dst-to-pes">DST to PES</a></h2>
+<p>A PES file needs a colour for each thread, and a DST file has none to give. Each thread becomes a black
+placeholder, and <code>SC-W0604</code> says so. The machine shows every colour block as black, and it pauses
+between them as the DST file did.</p>
+<p>The <a href="#machine-formats">machine formats design</a> describes how each format is written and read.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="fit-a-design-to-the-hoop"><a class="header" href="#fit-a-design-to-the-hoop">Fit a design to the hoop</a></h1>
+<p>Each <a href="#machine-profiles">machine profile</a> has 2 sizes. The hoop is the largest area the machine
+sews. The comfort zone is the part of it where the fabric is held firmly enough for the stitches to land
+where they should. On the reference Brother the hoop is 200 × 200 mm and the comfort zone 150 × 150 mm.</p>
+<h2 id="larger-than-the-comfort-zone"><a class="header" href="#larger-than-the-comfort-zone">Larger than the comfort zone</a></h2>
+<p>StitchCraft writes the file and warns. Test sheet TS-10B is 190 × 150 mm on purpose:</p>
+<pre><code class="language-console">$ stitch testsheet TS-10B --profile brother-200x200 -o TS-10B.pes
+TS-10B · Hoop size: 190 × 150 mm frame
+  file      TS-10B.pes (PES v1, 1641 bytes)
+  sha256    468ae11b427c6eb442bd94f3fd8beae1cb13387aa733ece537bf21a47f426f88
+  profile   brother-200x200 (Brother, 200 × 200 mm hoop)
+  size      190.0 × 150.0 mm
+  stitches  307 stitches, 4 jumps, 4 trims, 0 colour changes, 0 stops
+  threads   1. Blue (#0a55a3), shown as Brother PEC 2 "Blue"
+after sewing, check:
+  - The machine accepts the file and shows the design (StitchCraft warns that it is larger than the comfort zone — expected).
+  - The frame measures 190.0 × 150.0 mm (± 0.5 mm), wide side left to right, the F at the top left.
+warning SC-W0702: The design is 190.0 × 150.0 mm, larger than the 150 × 150 mm comfort zone of Brother, 200 × 200 mm hoop.
+  hint: Use a firm stabilizer and hoop the fabric drum-tight, or scale the design down.
+</code></pre>
+<p>The design will sew, but near the hoop’s edge the fabric can shift and pucker. <code>stitch explain</code> says
+more about any code:</p>
+<pre><code class="language-console">$ stitch explain SC-W0702
+SC-W0702: Design is larger than the comfort zone
+
+The design fits the hoop but is larger than the profile's comfort zone: the area where this
+machine and hoop sew most accurately. Near the hoop's edge fabric is held less firmly, so large
+designs pucker and shift more.
+
+The file was written. Rotate the design if the message says that brings it inside the comfort
+zone, use a firmer stabilizer, or scale the design down.
+</code></pre>
+<p>Hoop the fabric drum-tight with a firm stabilizer, or scale the design down. When turning the design by
+90° brings it inside the comfort zone, the warning offers that instead.</p>
+<h2 id="larger-than-the-hoop"><a class="header" href="#larger-than-the-hoop">Larger than the hoop</a></h2>
+<p>Here a border is 210 mm long, and <code>stitch plan</code> ends with an error instead of writing the file:</p>
+<pre><code class="language-console">$ stitch plan wide.svg -o wide.pes
+error SC-E0701: The design is 210.0 × 0.0 mm; the hoop of Brother, 200 × 200 mm hoop is 200 × 200 mm.
+  hint: Scale the design down, or split it into parts sewn in separate hoopings.
+  more: stitch explain SC-E0701
+nothing was written
+(exit status 1)
+</code></pre>
+<p>The exit status is 1. Scale the design down, or split it into parts that are sewn in separate
+hoopings. When turning the design by 90° makes it fit, the error offers that
+instead.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="report-a-bug"><a class="header" href="#report-a-bug">Report a bug</a></h1>
 <p>When StitchCraft gets a design wrong, a maintainer needs one file to see what you saw: a <strong>bug-report
@@ -347,6 +600,204 @@ platform, so with the version that wrote the bundle, the replay reproduces it. W
 differs is listed under <code>then:</code> and <code>now:</code>: that is how to tell whether a bug is fixed. The exit status is
 1 when the bundle does not reproduce. The design is in the bundle’s <code>design.svg</code> field, ready to save and
 open.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="stitch-types"><a class="header" href="#stitch-types">Stitch types</a></h1>
+<p>StitchCraft turns each element of a design into stitches of one type. In an SVG file an element is the
+stroke or the fill of a shape, and each sews in its own thread colour.</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Stitch type</th><th>Sews</th><th>Available</th></tr>
+</thead>
+<tbody>
+<tr><td><a href="#running-stitch">Running stitch</a></td><td>strokes: outlines, details, lettering at small sizes</td><td>now</td></tr>
+<tr><td><a href="#bean-stitch-and-repeats">Bean stitch</a></td><td>strokes, each stitch sewn 3 times or more</td><td>now</td></tr>
+<tr><td><a href="#manual-stitch">Manual stitch</a></td><td>strokes whose nodes are the needle points</td><td>now</td></tr>
+<tr><td>Satin column</td><td>wide strokes and borders</td><td>milestone M4</td></tr>
+<tr><td>Fill</td><td>areas</td><td>milestone M5</td></tr>
+</tbody>
+</table>
+</div>
+<p>Every element also gets <a href="#lock-stitches-trims-and-stops">lock stitches</a> where its stitching starts and ends, and a trim or a
+stop after it when it asks for one. An element of a type that is not sewn yet is left out, and <code>SC-W0011</code>
+names it. The <a href="#roadmap-small-steps-to-the-final-project">roadmap</a> says what each milestone adds.</p>
+<h2 id="setting-parameters"><a class="header" href="#setting-parameters">Setting parameters</a></h2>
+<p>A parameter belongs to one element. Ink/Stitch stores parameters in the SVG file as attributes, such as
+<code>inkstitch:running_stitch_length_mm="1.5"</code>, and StitchCraft’s parameters have the same names and
+defaults.</p>
+<p><code>stitch plan</code> does not read these attributes yet, and every element sews with the defaults. <code>SC-W0802</code>
+says so when a file has them. The SVG reader reads them from milestone M8, and the VectorCraft plug-in
+sets them from M6. Ink/Stitch’s trim and stop commands are read today.</p>
+<p>The pictures on these pages set parameters on the engine directly, to show what each one does.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="running-stitch"><a class="header" href="#running-stitch">Running stitch</a></h1>
+<p>A running stitch is a line of single stitches along a path. StitchCraft sews each stroke of an SVG design
+with it, unless the stroke’s <code>stroke_method</code> names another stitch. Use it for outlines, fine details and
+lettering at small sizes.</p>
+<p>The pictures on this page are drawn by StitchCraft’s own engine and renderer, from the designs in
+<code>docs/fixtures/</code>. Each dot is a needle point, and orange rings mark the lock stitches at each end. Each
+parameter is set per element, and <a href="user/stitches/README.html#setting-parameters">setting parameters</a> says what
+<code>stitch plan</code> reads today.</p>
+<h2 id="stitch-length"><a class="header" href="#stitch-length">Stitch length</a></h2>
+<p><code>running_stitch_length_mm</code> sets how long each stitch is, 2.5 mm by default. Between 2 corners the stitches
+are spread evenly, and none is longer than the stitch length.</p>
+<!-- shot: running-length -->
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: center">1.5 mm</th><th style="text-align: center">2.5 mm</th><th style="text-align: center">4 mm</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align: center"><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/generated/running-length-1.png" alt="A wave in running stitch, its needle points dotted along it, 1.5 mm"><span class="img-wrapper"><img src="images/generated/running-length-1.png" alt="A wave in running stitch, its needle points dotted along it, 1.5 mm"></span></label></td><td style="text-align: center"><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/generated/running-length-2.png" alt="A wave in running stitch, its needle points dotted along it, 2.5 mm"><span class="img-wrapper"><img src="images/generated/running-length-2.png" alt="A wave in running stitch, its needle points dotted along it, 2.5 mm"></span></label></td><td style="text-align: center"><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/generated/running-length-3.png" alt="A wave in running stitch, its needle points dotted along it, 4 mm"><span class="img-wrapper"><img src="images/generated/running-length-3.png" alt="A wave in running stitch, its needle points dotted along it, 4 mm"></span></label></td></tr>
+</tbody>
+</table>
+</div>
+<!-- /shot -->
+<p>Short stitches follow a curve closely and make more needle holes. Long stitches are quicker to sew and
+show more of each stitch. With a list of lengths, such as <code>2.5 1</code>, the stitches take the lengths one after another along the
+path.</p>
+<h2 id="corners-and-curves"><a class="header" href="#corners-and-curves">Corners and curves</a></h2>
+<p>Where the path turns by more than 30°, StitchCraft puts a needle point on the corner, and the line keeps
+its shape. Along a curve, a stitch strays from the curve by at most <code>running_stitch_tolerance_mm</code>, 0.2 mm
+by default. With a long stitch length the tolerance shows: here the stitches are 6 mm long.</p>
+<!-- shot: running-tolerance -->
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: center">0.1 mm</th><th style="text-align: center">0.5 mm</th><th style="text-align: center">2 mm</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align: center"><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/generated/running-tolerance-1.png" alt="A wave in 6 mm running stitch, 0.1 mm"><span class="img-wrapper"><img src="images/generated/running-tolerance-1.png" alt="A wave in 6 mm running stitch, 0.1 mm"></span></label></td><td style="text-align: center"><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/generated/running-tolerance-2.png" alt="A wave in 6 mm running stitch, 0.5 mm"><span class="img-wrapper"><img src="images/generated/running-tolerance-2.png" alt="A wave in 6 mm running stitch, 0.5 mm"></span></label></td><td style="text-align: center"><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/generated/running-tolerance-3.png" alt="A wave in 6 mm running stitch, 2 mm"><span class="img-wrapper"><img src="images/generated/running-tolerance-3.png" alt="A wave in 6 mm running stitch, 2 mm"></span></label></td></tr>
+</tbody>
+</table>
+</div>
+<!-- /shot -->
+<p>At 2 mm the stitches cut across the curve. At 0.1 mm StitchCraft shortens them where the curve bends.</p>
+<h2 id="bean-stitch-and-repeats"><a class="header" href="#bean-stitch-and-repeats">Bean stitch and repeats</a></h2>
+<p><code>bean_stitch_repeats</code> sews each stitch more than once, for a bolder line. At 1 each stitch is sewn 3
+times, there, back and there again, and at 2 it is sewn 5 times. With a list such as <code>1 0</code>, the stitches
+alternate between bold and plain.</p>
+<p><code>repeats</code> sews the whole path more than once. At 2 the needle goes there and back, and at 3 there, back
+and there again. With an even number the stitching ends where it started.</p>
+<h2 id="random-stitch-length"><a class="header" href="#random-stitch-length">Random stitch length</a></h2>
+<p>Rows of running stitch close together line their needle points up across the rows, and the eye sees
+stripes. <code>enable_random_stitch_length</code> varies each stitch’s length by up to
+<code>random_stitch_length_jitter_percent</code>, 10 % by default, and the stripes go.</p>
+<!-- shot: random-length -->
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: center">even</th><th style="text-align: center">random</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align: center"><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/generated/random-length-1.png" alt="6 rows of running stitch 1.6 mm apart, sewn back and forth as one path, even"><span class="img-wrapper"><img src="images/generated/random-length-1.png" alt="6 rows of running stitch 1.6 mm apart, sewn back and forth as one path, even"></span></label></td><td style="text-align: center"><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/generated/random-length-2.png" alt="6 rows of running stitch 1.6 mm apart, sewn back and forth as one path, random"><span class="img-wrapper"><img src="images/generated/random-length-2.png" alt="6 rows of running stitch 1.6 mm apart, sewn back and forth as one path, random"></span></label></td></tr>
+</tbody>
+</table>
+</div>
+<!-- /shot -->
+<p>The stitching still ends on each corner. <code>random_seed</code> sets where the random lengths start. The same
+element and seed give the same stitches every time, on every computer.</p>
+<h2 id="manual-stitch"><a class="header" href="#manual-stitch">Manual stitch</a></h2>
+<p>With <code>stroke_method</code> set to <code>manual_stitch</code>, each node of the path is a needle point and nothing else is.
+A curve gives only its end node. Use it to place stitches by hand, or to sew a stitch file that was
+traced as a path.</p>
+<!-- shot: manual -->
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: center">running stitch</th><th style="text-align: center">manual stitch</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align: center"><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/generated/manual-1.png" alt="A path of straight lines and one curve, running stitch"><span class="img-wrapper"><img src="images/generated/manual-1.png" alt="A path of straight lines and one curve, running stitch"></span></label></td><td style="text-align: center"><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/generated/manual-2.png" alt="A path of straight lines and one curve, manual stitch"><span class="img-wrapper"><img src="images/generated/manual-2.png" alt="A path of straight lines and one curve, manual stitch"></span></label></td></tr>
+</tbody>
+</table>
+</div>
+<!-- /shot -->
+<p><code>max_stitch_length_mm</code> splits a hand-placed stitch that is longer into equal parts. Bean stitch applies
+to manual stitch, and repeats do not.</p>
+<h2 id="the-shortest-stitch"><a class="header" href="#the-shortest-stitch">The shortest stitch</a></h2>
+<p>A stitch shorter than the shortest stitch the machine sews well hammers one hole. StitchCraft never sews
+one. The shortest stitch is the machine profile’s, 0.3 mm on the reference Brother, or the element’s own
+<code>min_stitch_length_mm</code> when that is longer. A part of the path too short for a stitch is left out, and
+<code>SC-W0401</code> names it. A stitch length below twice the shortest stitch is raised to that, and <code>SC-W0402</code>
+says so.</p>
+<h2 id="parameters"><a class="header" href="#parameters">Parameters</a></h2>
+<p>The reference lists each parameter with its range and default, on a page for each group:</p>
+<ul>
+<li><a href="#running-parameters">running stitch</a></li>
+<li><a href="#repeat-parameters">repeats and bean stitch</a></li>
+<li><a href="#manual-parameters">manual stitch</a></li>
+<li><a href="#stroke-parameters">the stroke method</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="lock-stitches-trims-and-stops"><a class="header" href="#lock-stitches-trims-and-stops">Lock stitches, trims and stops</a></h1>
+<p>A lock, or tie, is a few small stitches where stitching starts (the tie-in) or ends (the tie-off). It
+stops the thread from pulling out when the machine cuts it or jumps to the next part. StitchCraft adds
+the locks an element’s settings call for, and a trim or a stop after an element that sets <code>trim_after</code> or
+<code>stop_after</code>.</p>
+<h2 id="where-locks-go"><a class="header" href="#where-locks-go">Where locks go</a></h2>
+<p>The needle sews straight on from one part of a design to the next when nothing separates them: the same
+thread, and a gap of at most 3 mm (the collapse length) or the element’s <code>min_jump_stitch_length_mm</code>.
+There it sews no locks. Anywhere else the stitching ends with a tie-off, the needle jumps, and the next
+part starts with a tie-in.</p>
+<ul>
+<li><code>ties</code> chooses which ends get a lock. By default both ends do. It can also choose the start or the
+end alone, or neither.</li>
+<li><code>force_lock_stitches</code> adds the tie-off at the end of each part, even where the next part is close
+enough to sew on.</li>
+<li>Manual stitch gets locks only when <code>force_lock_stitches</code> is set, because its needle points are placed
+by hand.</li>
+</ul>
+<h2 id="lock-shapes"><a class="header" href="#lock-shapes">Lock shapes</a></h2>
+<p><code>lock_start</code> and <code>lock_end</code> choose the shape at each end. The default, the half stitch, goes forth and
+back twice over half the first stitch, and the stitching covers it. <code>back_forth</code> does the same over steps
+of <code>lock_start_scale_mm</code> and <code>lock_end_scale_mm</code>, 0.7 mm by default.</p>
+<p>The drawn shapes are larger. <code>lock_start_scale_percent</code> and <code>lock_end_scale_percent</code> size
+them, 100 % by default. Each picture shows an 8 mm line with the shape at both ends:</p>
+<!-- shot: lock-drawn -->
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: center">arrow</th><th style="text-align: center">bowtie</th><th style="text-align: center">cross</th><th style="text-align: center">star</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align: center"><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/generated/lock-drawn-1.png" alt="An 8 mm line with a lock at each end, arrow"><span class="img-wrapper"><img src="images/generated/lock-drawn-1.png" alt="An 8 mm line with a lock at each end, arrow"></span></label></td><td style="text-align: center"><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/generated/lock-drawn-2.png" alt="An 8 mm line with a lock at each end, bowtie"><span class="img-wrapper"><img src="images/generated/lock-drawn-2.png" alt="An 8 mm line with a lock at each end, bowtie"></span></label></td><td style="text-align: center"><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/generated/lock-drawn-3.png" alt="An 8 mm line with a lock at each end, cross"><span class="img-wrapper"><img src="images/generated/lock-drawn-3.png" alt="An 8 mm line with a lock at each end, cross"></span></label></td><td style="text-align: center"><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/generated/lock-drawn-4.png" alt="An 8 mm line with a lock at each end, star"><span class="img-wrapper"><img src="images/generated/lock-drawn-4.png" alt="An 8 mm line with a lock at each end, star"></span></label></td></tr>
+</tbody>
+</table>
+</div>
+<!-- /shot -->
+<!-- shot: lock-drawn-2 -->
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th style="text-align: center">simple</th><th style="text-align: center">triangle</th><th style="text-align: center">zigzag</th><th style="text-align: center">half_stitch</th></tr>
+</thead>
+<tbody>
+<tr><td style="text-align: center"><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/generated/lock-drawn-2-1.png" alt="An 8 mm line with a lock at each end, simple"><span class="img-wrapper"><img src="images/generated/lock-drawn-2-1.png" alt="An 8 mm line with a lock at each end, simple"></span></label></td><td style="text-align: center"><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/generated/lock-drawn-2-2.png" alt="An 8 mm line with a lock at each end, triangle"><span class="img-wrapper"><img src="images/generated/lock-drawn-2-2.png" alt="An 8 mm line with a lock at each end, triangle"></span></label></td><td style="text-align: center"><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/generated/lock-drawn-2-3.png" alt="An 8 mm line with a lock at each end, zigzag"><span class="img-wrapper"><img src="images/generated/lock-drawn-2-3.png" alt="An 8 mm line with a lock at each end, zigzag"></span></label></td><td style="text-align: center"><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/generated/lock-drawn-2-4.png" alt="An 8 mm line with a lock at each end, half_stitch"><span class="img-wrapper"><img src="images/generated/lock-drawn-2-4.png" alt="An 8 mm line with a lock at each end, half_stitch"></span></label></td></tr>
+</tbody>
+</table>
+</div>
+<!-- /shot -->
+<p>The shapes are StitchCraft’s own designs, sized to hide under the stitching they secure. A file from
+Ink/Stitch that names a shape gets StitchCraft’s shape of that name.</p>
+<p>A custom lock (<code>custom</code>) is your own steps, written in <code>lock_custom_start</code> and <code>lock_custom_end</code> as
+numbers in sizes of the scale in millimetres. Positive steps go into the stitching. <code>1 -1 1 -1</code> goes forth
+and back twice, as <code>back_forth</code> does. The steps follow the stitching round its corners.</p>
+<p>Every lock stitch is at least 0.2 mm long, to keep the needle out of the hole it has just left.
+StitchCraft lengthens a step or enlarges a drawn lock that would be smaller, and <code>SC-W0502</code> says so.</p>
+<h2 id="trims-and-stops"><a class="header" href="#trims-and-stops">Trims and stops</a></h2>
+<ul>
+<li><code>trim_after</code> cuts the thread after the element, with a tie-off before the cut.</li>
+<li><code>stop_after</code> pauses the machine after the element, while you place appliqué fabric or check the
+work. When the design has a stop position, the frame moves there before each stop.</li>
+</ul>
+<p>A PES file marks a trim on the jump after it. Some Brother machines are reported to ignore that mark, and
+test sheet TS-02 checks what the reference machine does. DST has no trim command. StitchCraft writes a trim
+there as 3 short jumps that end where they started, and a DST machine set to cut at 3 jumps in a row
+cuts there. The <a href="#machine-formats">machine formats</a> design says how each format records a trim.</p>
+<h2 id="parameters-1"><a class="header" href="#parameters-1">Parameters</a></h2>
+<p><a href="#common-parameters">Common parameters</a> lists each of these settings with its range and
+default.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="embroidery-basics"><a class="header" href="#embroidery-basics">Embroidery basics</a></h1>
 <p>Machine embroidery is drawing with thread under tension on fabric that moves. Almost every setting in
@@ -699,7 +1150,7 @@ Arguments:
 <h2 id="ts-02--colour-changes-a-stop-jumps-and-trims"><a class="header" href="#ts-02--colour-changes-a-stop-jumps-and-trims">TS-02 — Colour changes, a stop, jumps and trims</a></h2>
 <p>140.0 × 70.0 mm · 93 stitches, 17 jumps, 8 trims, 2 colour changes, 1 stop</p>
 <p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/generated/testsheet-ts-02.png" alt="TS-02 as it will sew if the machine leaves plain jumps uncut: four red rows of two dashes with nothing between them, four blue rows whose dashes and rows are joined by loose threads, and a green line underneath."><span class="img-wrapper"><img src="images/generated/testsheet-ts-02.png" alt="TS-02 as it will sew if the machine leaves plain jumps uncut: four red rows of two dashes with nothing between them, four blue rows whose dashes and rows are joined by loose threads, and a green line underneath."></span></label></p>
-<p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/generated/testsheet-ts-02-simple.png" alt="TS-02 in the simple style: a red cross marks the trim after the first dash of each red row, grey dashes show moves after a cut, blue dashes show jump threads left in place, and a blue square marks the stop in the middle of the green line."><span class="img-wrapper"><img src="images/generated/testsheet-ts-02-simple.png" alt="TS-02 in the simple style: a red cross marks the trim after the first dash of each red row, grey dashes show moves after a cut, blue dashes show jump threads left in place, and a blue square marks the stop in the middle of the green line."></span></label></p>
+<p><label class="checkbox-label"><input class="checkbox-img" type="checkbox"><img src="images/generated/testsheet-ts-02-simple.png" alt="TS-02 in the simple style. A red cross marks the trim after the first dash of each red row, and a blue square marks the stop in the middle of the green line. Grey dashes show moves after a cut, and blue dashes show jump threads left in place."><span class="img-wrapper"><img src="images/generated/testsheet-ts-02-simple.png" alt="TS-02 in the simple style. A red cross marks the trim after the first dash of each red row, and a blue square marks the stop in the middle of the green line. Grey dashes show moves after a cut, and blue dashes show jump threads left in place."></span></label></p>
 <p>Threads: Red, Blue, Emerald Green, Emerald Green (stop).</p>
 <p>After sewing, check:</p>
 <ul>
@@ -1013,7 +1464,7 @@ machine files can record (it is skipped).</p>
 <p>The message names the element. Check its path data and transform, or remove stray objects far from
 the design.</p>
 <div style="break-before: page; page-break-before: always;"></div><!-- Generated by `cargo xtask docs` from the parameter registry (`stitchcraft-engine/src/registry.rs`). Edit the declaration, not this page. -->
-<h1 id="parameters"><a class="header" href="#parameters">Parameters</a></h1>
+<h1 id="parameters-2"><a class="header" href="#parameters-2">Parameters</a></h1>
 <p>Every setting a design element can carry, by the key a design stores it under. A parameter that Ink/Stitch
 also has keeps Ink/Stitch’s key, meaning and default, so files move between the two tools unchanged
 (<a href="#inkstitch-compatibility-contract">compatibility contract</a>).</p>
@@ -1180,7 +1631,7 @@ along the stitching.</p>
 <li><strong>Shown when</strong> <a href="#lock_end"><code>lock_end</code></a> is <code>arrow</code>, <code>bowtie</code>, <code>cross</code>, <code>star</code>, <code>simple</code>, <code>triangle</code>, <code>zigzag</code> or <code>custom</code></li>
 <li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
 </ul>
-<h2 id="trims-and-stops"><a class="header" href="#trims-and-stops">Trims and stops</a></h2>
+<h2 id="trims-and-stops-1"><a class="header" href="#trims-and-stops-1">Trims and stops</a></h2>
 <h3 id="trim_after"><a class="header" href="#trim_after"><code>trim_after</code></a></h3>
 <p><strong>Trim after.</strong> Cut the thread after this element, even if the next one starts close by.</p>
 <ul>
@@ -1230,7 +1681,7 @@ element set to one is skipped (<code>SC-W0011</code>).</p>
 <h1 id="running-parameters"><a class="header" href="#running-parameters">Running parameters</a></h1>
 <p>Running stitch: single stitches along the path, for outlines, details and travel.</p>
 <p>Applies to Running stitch, Ripple stitch.</p>
-<h2 id="running-stitch"><a class="header" href="#running-stitch">Running stitch</a></h2>
+<h2 id="running-stitch-1"><a class="header" href="#running-stitch-1">Running stitch</a></h2>
 <h3 id="running_stitch_length_mm"><a class="header" href="#running_stitch_length_mm"><code>running_stitch_length_mm</code></a></h3>
 <p><strong>Stitch length.</strong> How long each stitch is. Between corners the stitches are spread evenly, so each one is at most
 this long. Several lengths separated by spaces sew as a repeating pattern: “2.5 1” sews long,
@@ -1299,7 +1750,7 @@ the stitches: “1 0” makes every other stitch bold.</p>
 <h1 id="manual-parameters"><a class="header" href="#manual-parameters">Manual parameters</a></h1>
 <p>Manual stitch: a needle point on every node of the path, for stitches placed by hand.</p>
 <p>Applies to Manual stitch.</p>
-<h2 id="manual-stitch"><a class="header" href="#manual-stitch">Manual stitch</a></h2>
+<h2 id="manual-stitch-1"><a class="header" href="#manual-stitch-1">Manual stitch</a></h2>
 <h3 id="max_stitch_length_mm"><a class="header" href="#max_stitch_length_mm"><code>max_stitch_length_mm</code></a></h3>
 <p><strong>Longest stitch.</strong> Split stitches longer than this into equal parts. Empty, every stitch is sewn as drawn.</p>
 <ul>
@@ -1980,7 +2431,7 @@ tolerance before booleans. Rings with area below <code>min_region_area</code> (d
     Centerline { path: Polyline, width: Mm },   // single-path satin
 }</code></pre>
 <p>How rails and rungs are recognised from a host path is part of the <a href="#satin-generators">satin design</a>.</p>
-<h2 id="parameters-1"><a class="header" href="#parameters-1">Parameters</a></h2>
+<h2 id="parameters-3"><a class="header" href="#parameters-3">Parameters</a></h2>
 <p><code>ParamSet</code> maps registry keys to typed values; generators receive <em>typed views</em>
 (<code>TatamiParams { row_spacing: Mm, angle: Deg, … }</code>) produced by the registry. See
 <a href="#parameter-registry">parameter registry</a>.</p>
@@ -2223,7 +2674,7 @@ by key and stitch type: <code>find</code> by key alone returns the first declara
 <tr><th>Output</th><th>Generated by</th><th>Checked by</th></tr>
 </thead>
 <tbody>
-<tr><td>Reference pages: the <a href="#parameters">index</a> and <code>docs/src/user/reference/params/*.md</code>, one per declaration</td><td><code>cargo xtask docs</code></td><td><code>cargo xtask docs --check</code> (CI fails if stale; pages no declaration produces are deleted)</td></tr>
+<tr><td>Reference pages: the <a href="#parameters-2">index</a> and <code>docs/src/user/reference/params/*.md</code>, one per declaration</td><td><code>cargo xtask docs</code></td><td><code>cargo xtask docs --check</code> (CI fails if stale; pages no declaration produces are deleted)</td></tr>
 <tr><td><code>docs/src/user/reference/params.schema.json</code>: the parameters as JSON values (numbers, booleans, strings, arrays, <code>null</code> for empty), for editors, presets and JSON hosts</td><td><code>cargo xtask docs</code></td><td>same</td></tr>
 <tr><td>The <em>StitchCraft</em> column of the <a href="#inkstitch-compatibility-contract">Ink/Stitch compatibility contract</a></td><td><code>cargo xtask docs</code></td><td>same, plus the cross-checks above</td></tr>
 <tr><td>VectorCraft manifests (embedded in each <code>.wasm</code>)</td><td><code>build.rs</code> of the plug-in crate, from the registry</td><td>plug-in tests validate them against VectorCraft’s manifest rules</td></tr>
@@ -2728,7 +3179,7 @@ rests on is welcome when it helps the next reader check it again
 <!-- implements: crates/stitchcraft-engine/src/generators/**, crates/stitchcraft-engine/src/normalize/stroke.rs -->
 <p>Strokes follow a path. Shape: <code>StrokePath</code> (an ordered list of polylines, corners marked, from the
 normalizer). Phase P1 (M3) unless noted.</p>
-<h2 id="running-stitch-1"><a class="header" href="#running-stitch-1">Running stitch</a></h2>
+<h2 id="running-stitch-2"><a class="header" href="#running-stitch-2">Running stitch</a></h2>
 <p>The workhorse: outlines, details, travel, underlay.</p>
 <p><strong>Parameters:</strong> <code>running_stitch_length_mm</code> (one length or a repeating pattern of lengths, <code>LengthList</code>),
 <code>running_stitch_tolerance_mm</code>, <code>repeats</code>, <code>bean_stitch_repeats</code>, <code>enable_random_stitch_length</code>,
@@ -2815,7 +3266,7 @@ vary (<code>REQ-RUN-007</code>).</li>
 <h3 id="diagnostics-1"><a class="header" href="#diagnostics-1">Diagnostics</a></h3>
 <p><code>SC-W0401</code> part of the path too small for the shortest stitch (skipped); <code>SC-W0402</code> stitch length below
 twice the shortest stitch (raised).</p>
-<h2 id="manual-stitch-1"><a class="header" href="#manual-stitch-1">Manual stitch</a></h2>
+<h2 id="manual-stitch-2"><a class="header" href="#manual-stitch-2">Manual stitch</a></h2>
 <p>Every node of the path is a needle penetration, in order — for hand-placed stitches and imported stitch
 files. A curve gives only its end node: its control points are not stitched and it is not flattened. A
 node where the needle already is counts once, and a closed path comes back to its start. Segments longer
@@ -4349,7 +4800,7 @@ reference <code>images/generated/&lt;id&gt;.png</code>. An image without a decla
 <tr><th>Kind</th><th>Made by</th><th>Compared by</th><th>Notes</th></tr>
 </thead>
 <tbody>
-<tr><td><code>stitch</code></td><td><code>stitchcraft-render</code> (<a href="#rendering-previews">rendering</a>) from a conformance fixture + parameters</td><td><strong>exact bytes</strong> (rendering is deterministic)</td><td>Stitch-type illustrations, parameter “before/after” pairs, diagnostics examples</td></tr>
+<tr><td><code>stitch</code></td><td><code>stitchcraft-render</code> (<a href="#rendering-previews">rendering</a>) from a test sheet, or from an SVG design the engine plans</td><td><strong>exact bytes</strong> (rendering is deterministic)</td><td>Stitch-type illustrations, parameter comparisons, diagnostics examples</td></tr>
 <tr><td><code>vectorcraft-render</code></td><td><code>vectorcraft-cli run --in fixture --cmd plugin.install … --cmd effect.apply … --export x.png</code></td><td>exact bytes, or tight tolerance if VectorCraft’s renderer changes</td><td>How a preview looks in VectorCraft’s canvas, headless</td></tr>
 <tr><td><code>vectorcraft-ui</code></td><td>VectorCraft (pinned stable) driven over its control channel: open fixture, install plug-ins, select, open the dialog, set fields, <code>ui.screenshot</code>, crop</td><td>perceptual tolerance (≤ 0.2 % of pixels differing by more than 8/255 per channel)</td><td>Dialogs, menus, the workflow; runs under Xvfb with Mesa software rendering in a pinned container</td></tr>
 <tr><td><code>photo</code></td><td>a person, of a real sew-out</td><td>presence + metadata record (machine, fabric, commit, checkpoint)</td><td>Never regenerated; listed with their sew-out report</td></tr>
@@ -4358,14 +4809,32 @@ reference <code>images/generated/&lt;id&gt;.png</code>. An image without a decla
 </div>
 <p>A shot declaration:</p>
 <pre><code class="language-toml">[[shot]]
-id = "tatami-staggers-1-vs-4"
+id = "running-length"
 kind = "stitch"
-fixture = "conformance/fixtures/fill/square-40mm.svg"
-params = [{ staggers = 1 }, { staggers = 4 }]   # two panels side by side
-render = { style = "realistic", width = 960, background = "#f4efe6" }
-alt = "Two 40 mm tatami squares: with one stagger the needle points form straight furrows; with four they disappear."
+fixture = "docs/fixtures/wave.svg"   # planned by the engine for the reference machine, as `stitch plan` plans it
+style = "simple"
+scale = 8.0                          # pixels per millimetre
+alt = "A wave in running stitch"
+panels = [
+  { caption = "1.5 mm", params = { running_stitch_length_mm = "1.5" } },
+  { caption = "4 mm", params = { running_stitch_length_mm = "4" } },
+]
 </code></pre>
-<p>The <code>alt</code> text is mandatory (accessibility), and the docs check fails on images without it.</p>
+<p>Each panel sets its parameters on every element of the design and becomes one image, <code>running-length-1.png</code>
+and so on. The plan may report only the codes the shot lists in <code>allow</code>, and a shot fails on any other:
+a picture never shows a design that the engine changed without the page saying so. The <code>alt</code> text is
+mandatory (accessibility), and the docs check fails on images without it.</p>
+<p>A page shows a shot between the lines <code>&lt;!-- shot: running-length --&gt;</code> and <code>&lt;!-- /shot --&gt;</code>. <code>cargo xtask docs</code> writes the figure there. Without panels the figure is one image. With panels it is a table with a
+column per panel, its caption on top and its image below it. Each image’s alternative text is the shot’s,
+followed by the panel’s caption. The page
+cannot show an image under any other text, and a stale figure fails <code>--check</code> like a stale page.</p>
+<h2 id="command-line-examples"><a class="header" href="#command-line-examples">Command-line examples</a></h2>
+<p>Pages show what a command prints by including it from <code>docs/src/user/reference/generated/</code>. The commands
+are declared in <code>docs/examples.toml</code>, and <code>cargo xtask docs</code> runs each one with the <code>stitch</code> binary in an
+empty directory. A declaration can copy files of the repository into that directory and run commands
+that are not shown first. The output is the binary’s own, standard output then standard error, with the
+exit status when it is not 0. When a command prints something new, <code>--check</code> fails until the output is
+written again. Pages show what the command prints today.</p>
 <p>The <code>vectorcraft-ui</code> kind depends on running VectorCraft’s window in CI; spike <strong>M0.8</strong> proves it
 (Xvfb + Mesa llvmpipe through wgpu’s GL backend). Until it lands, UI images are limited to
 <code>vectorcraft-render</code> shots, and VectorCraft’s own approach — semantic headless frame tests — covers the
@@ -4380,7 +4849,7 @@ dialogs’ contents.</p>
 <tbody>
 <tr><td><code>book</code></td><td><code>mdbook build</code> fails, or any page is missing from <code>SUMMARY.md</code></td></tr>
 <tr><td><code>check</code></td><td>generated pages are stale; a relative link or <code>#anchor</code> is broken; a doc mentions a <code>cargo xtask</code> subcommand that does not exist (the drift we found in VectorCraft’s own <code>AGENTS.md</code>); a <code>REQ-…</code> or <code>SC-…</code> id does not exist; an image lacks a declaration or alt text</td></tr>
-<tr><td><code>examples</code></td><td>a CLI example in the docs (<code>trycmd</code>, from M1.8) prints something different from what the page shows; a Rust snippet does not compile (<code>cargo test --doc</code>)</td></tr>
+<tr><td><code>examples</code></td><td>a Rust snippet does not compile (<code>cargo test --doc</code>). Command-line examples are generated pages, which <code>check</code> covers</td></tr>
 <tr><td><code>shots</code></td><td><code>cargo xtask shots --check</code>: a declared image is missing, has no alt text, or regenerates differently from the committed file — byte-exact for <code>stitch</code> shots, within tolerance for <code>vectorcraft-ui</code> and <code>vectorcraft-render</code> shots (generators in M6.7; a separate job with Xvfb and Mesa)</td></tr>
 <tr><td><code>spelling</code></td><td><code>typos</code> finds a misspelling (allow-list in <code>typos.toml</code>)</td></tr>
 <tr><td><code>links</code></td><td>an internal link is broken (<code>lychee --offline</code>); external links are checked nightly, not per PR</td></tr>
@@ -4433,7 +4902,7 @@ and are not copied; StitchCraft’s own help text lives in the <a href="#paramet
 from the parameter registry by <code>cargo xtask docs</code>, and <code>cargo xtask docs --check</code> fails if they disagree:
 a parameter declared with an Ink/Stitch origin must be listed here with a compatible type and the same
 default.</li>
-<li><strong>StitchCraft</strong> says whether the <a href="#parameters">parameter registry</a> declares the
+<li><strong>StitchCraft</strong> says whether the <a href="#parameters-2">parameter registry</a> declares the
 parameter. <em>planned</em>: not yet; a design that sets it keeps it unchanged and gets <code>SC-W0105</code>.
 <em>registered</em>: StitchCraft reads and checks it under the same key, meaning and default; it changes the
 stitches once its stitch type or feature lands (see <em>Phase</em> and the parameter’s reference entry).

@@ -35,7 +35,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4623099b.js";
+            window.path_to_searchindex_js = "../searchindex-c6836515.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-65a8af2a.js"></script>
@@ -240,8 +240,9 @@ this one should start (nearest point to its exit hint); the generator never wait
 element’s stitches. This makes generation independent, cacheable and parallel, so large designs
 stay fast, and honours explicit
 start/end commands (<code>REQ-GEN-001</code>).</li>
-<li><strong>Seeded randomness:</strong> seed = <code>random_seed</code> parameter if set, else a hash of the element id; the PRNG
-is SplitMix64 from <code>stitchcraft-core</code> (<a href="determinism.html">determinism</a>).</li>
+<li><strong>Seeded randomness:</strong> each element’s generator is seeded from a hash of its id mixed with its
+<code>random_seed</code>, one of the settings every stitch type shares. The PRNG is SplitMix64 from
+<code>stitchcraft-core</code> (<a href="determinism.html">determinism</a>).</li>
 <li><strong>Budgeted:</strong> every inner loop charges work units. Each element has the budget’s work to itself. One
 that runs out (<code>SC-E0004</code>) is skipped, and the others still plan. The stitch limit is for the whole
 design.</li>

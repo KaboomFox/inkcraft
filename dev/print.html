@@ -36,7 +36,7 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-4623099b.js";
+            window.path_to_searchindex_js = "searchindex-c6836515.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="toc-65a8af2a.js"></script>
@@ -202,8 +202,9 @@ every pull request.</li>
 <blockquote>
 <p><strong>Status:</strong> StitchCraft sews the strokes of an SVG design and writes PES and DST files. A stroke is
 sewn in running stitch or manual stitch, with bean stitch where it is set. Milestone M4 is under way:
-the engine places a satin column’s top stitches, and <code>stitch plan</code> sews the satins of an SVG from M8,
-when it reads Ink/Stitch’s settings. Fills come in M5. The <a href="#roadmap-small-steps-to-the-final-project">roadmap</a> has every step.</p>
+the engine places and compensates a satin column’s top stitches, and <code>stitch plan</code> sews the satins of
+an SVG from M8, when it reads Ink/Stitch’s settings. Fills come in M5. The
+<a href="#roadmap-small-steps-to-the-final-project">roadmap</a> has every step.</p>
 </blockquote>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="user-guide"><a class="header" href="#user-guide">User guide</a></h1>
@@ -1246,6 +1247,7 @@ Arguments:
 <tr><td><a href="#sc-w0205"><code>SC-W0205</code></a></td><td>Warning</td><td>Satin subpath is one point; left out</td></tr>
 <tr><td><a href="#sc-w0207"><code>SC-W0207</code></a></td><td>Warning</td><td>Satin rung crosses a rail more than once; left out</td></tr>
 <tr><td><a href="#sc-w0210"><code>SC-W0210</code></a></td><td>Warning</td><td>Satin rails without rungs have different numbers of nodes</td></tr>
+<tr><td><a href="#sc-w0211"><code>SC-W0211</code></a></td><td>Warning</td><td>Satin push compensation too long for a rail; that rail keeps its length</td></tr>
 <tr><td><a href="#sc-w0401"><code>SC-W0401</code></a></td><td>Warning</td><td>Path too small for the shortest stitch; skipped</td></tr>
 <tr><td><a href="#sc-w0402"><code>SC-W0402</code></a></td><td>Warning</td><td>Stitch length below twice the shortest stitch; raised</td></tr>
 <tr><td><a href="#sc-w0403"><code>SC-W0403</code></a></td><td>Warning</td><td>Hand-placed stitch shorter than the shortest stitch; point left out</td></tr>
@@ -1371,6 +1373,13 @@ of nodes, so the rail with more has nodes that pair with none, and between them 
 follow the rails’ lengths alone.</p>
 <p>The message gives both counts. Add rungs across the column, or give both rails the same number of
 nodes.</p>
+<h2 id="sc-w0211"><a class="header" href="#sc-w0211">SC-W0211</a></h2>
+<p><strong>Warning</strong> — Satin push compensation too long for a rail; that rail keeps its length</p>
+<p>A satin column’s push compensation, taken off a rail at the column’s start and end, would leave less
+than half a CSS pixel (0.13 mm) of it, so that rail keeps its length, as in Ink/Stitch. A negative
+value at the other end still lengthens it.</p>
+<p>The message gives the push compensation at each end. Lower <code>push_compensation_mm</code>, or lengthen the
+column.</p>
 <h2 id="sc-w0401"><a class="header" href="#sc-w0401">SC-W0401</a></h2>
 <p><strong>Warning</strong> — Path too small for the shortest stitch; skipped</p>
 <p>A part of a stroke is too small for the shortest stitch the machine sews well, so it was left out:
@@ -1539,12 +1548,12 @@ numbers, <code>true</code>/<code>false</code>, strings and arrays instead, and <
 <tr><th>Group</th><th>Parameters</th><th>Applies to</th></tr>
 </thead>
 <tbody>
-<tr><td><a href="#common-parameters">Common parameters</a></td><td>14</td><td>every stitch type</td></tr>
+<tr><td><a href="#common-parameters">Common parameters</a></td><td>15</td><td>every stitch type</td></tr>
 <tr><td><a href="#stroke-parameters">Stroke parameters</a></td><td>1</td><td>Running stitch, Ripple stitch, Zigzag stitch, Manual stitch</td></tr>
-<tr><td><a href="#running-parameters">Running parameters</a></td><td>5</td><td>Running stitch, Ripple stitch</td></tr>
+<tr><td><a href="#running-parameters">Running parameters</a></td><td>4</td><td>Running stitch, Ripple stitch</td></tr>
 <tr><td><a href="#repeat-parameters">Repeat parameters</a></td><td>2</td><td>Running stitch, Ripple stitch, Zigzag stitch, Manual stitch</td></tr>
 <tr><td><a href="#manual-parameters">Manual parameters</a></td><td>1</td><td>Manual stitch</td></tr>
-<tr><td><a href="#satin-parameters">Satin parameters</a></td><td>5</td><td>Satin column, E-stitch, S-stitch, Zigzag satin</td></tr>
+<tr><td><a href="#satin-parameters">Satin parameters</a></td><td>11</td><td>Satin column, E-stitch, S-stitch, Zigzag satin</td></tr>
 </tbody>
 </table>
 </div>
@@ -1569,8 +1578,14 @@ numbers, <code>true</code>/<code>false</code>, strings and arrays instead, and <
 <tr><td><a href="#max_stitch_length_mm"><code>max_stitch_length_mm</code></a></td><td>Longest stitch</td><td>Manual parameters</td></tr>
 <tr><td><a href="#min_jump_stitch_length_mm"><code>min_jump_stitch_length_mm</code></a></td><td>Shortest jump</td><td>Common parameters</td></tr>
 <tr><td><a href="#min_stitch_length_mm"><code>min_stitch_length_mm</code></a></td><td>Shortest stitch</td><td>Common parameters</td></tr>
-<tr><td><a href="#random_seed"><code>random_seed</code></a></td><td>Random seed</td><td>Running parameters</td></tr>
+<tr><td><a href="#pull_compensation_mm"><code>pull_compensation_mm</code></a></td><td>Pull compensation</td><td>Satin parameters</td></tr>
+<tr><td><a href="#pull_compensation_percent"><code>pull_compensation_percent</code></a></td><td>Pull compensation (% of width)</td><td>Satin parameters</td></tr>
+<tr><td><a href="#push_compensation_mm"><code>push_compensation_mm</code></a></td><td>Push compensation</td><td>Satin parameters</td></tr>
+<tr><td><a href="#random_seed"><code>random_seed</code></a></td><td>Random seed</td><td>Common parameters</td></tr>
 <tr><td><a href="#random_stitch_length_jitter_percent"><code>random_stitch_length_jitter_percent</code></a></td><td>Length variation</td><td>Running parameters</td></tr>
+<tr><td><a href="#random_width_decrease_percent"><code>random_width_decrease_percent</code></a></td><td>Random width decrease</td><td>Satin parameters</td></tr>
+<tr><td><a href="#random_width_increase_percent"><code>random_width_increase_percent</code></a></td><td>Random width increase</td><td>Satin parameters</td></tr>
+<tr><td><a href="#random_zigzag_spacing_percent"><code>random_zigzag_spacing_percent</code></a></td><td>Random zigzag spacing</td><td>Satin parameters</td></tr>
 <tr><td><a href="#repeats"><code>repeats</code></a></td><td>Repeats</td><td>Repeat parameters</td></tr>
 <tr><td><a href="#reverse_rails"><code>reverse_rails</code></a></td><td>Reverse rails</td><td>Satin parameters</td></tr>
 <tr><td><a href="#running_stitch_length_mm"><code>running_stitch_length_mm</code></a></td><td>Stitch length</td><td>Running parameters</td></tr>
@@ -1589,7 +1604,7 @@ numbers, <code>true</code>/<code>false</code>, strings and arrays instead, and <
 <div style="break-before: page; page-break-before: always;"></div><!-- Generated by `cargo xtask docs` from `CommonParams` in the parameter registry. Edit the declaration, not this page. -->
 <h1 id="common-parameters"><a class="header" href="#common-parameters">Common parameters</a></h1>
 <p>Settings every stitch type shares: lock stitches where the element’s stitching starts and
-ends, a trim or a stop after it, and the shortest stitch and jump.</p>
+ends, a trim or a stop after it, the shortest stitch and jump, and where random variation starts.</p>
 <p>StitchCraft reads and checks them today; they change the stitches as plan assembly arrives
 (roadmap steps M3.7 to M3.9).</p>
 <p>Applies to every stitch type.</p>
@@ -1716,6 +1731,17 @@ jump. Empty: the document’s setting.</p>
 <li><strong>Default:</strong> empty</li>
 <li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
 </ul>
+<h2 id="random-variation"><a class="header" href="#random-variation">Random variation</a></h2>
+<h3 id="random_seed"><a class="header" href="#random_seed"><code>random_seed</code></a></h3>
+<p><strong>Random seed.</strong> Where random variation starts: a running stitch’s random lengths, and a satin column’s random
+widths and spacing. The same seed gives the same stitches, another seed others. Empty, each
+element gets its own.</p>
+<ul>
+<li><strong>Accepts:</strong> a number or any text, or empty to derive it from the element</li>
+<li><strong>Default:</strong> empty</li>
+<li><strong>Applies to:</strong> Running stitch, Ripple stitch, Satin column, E-stitch, S-stitch, Zigzag satin</li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
 <div style="break-before: page; page-break-before: always;"></div><!-- Generated by `cargo xtask docs` from `StrokeParams` in the parameter registry. Edit the declaration, not this page. -->
 <h1 id="stroke-parameters"><a class="header" href="#stroke-parameters">Stroke parameters</a></h1>
 <p>How a stroke is sewn.</p>
@@ -1761,19 +1787,12 @@ then do not line their needle holes up, which avoids moiré patterns.</p>
 <li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
 </ul>
 <h3 id="random_stitch_length_jitter_percent"><a class="header" href="#random_stitch_length_jitter_percent"><code>random_stitch_length_jitter_percent</code></a></h3>
-<p><strong>Length variation.</strong> How much each stitch may be longer or shorter than the stitch length, in percent of it.</p>
+<p><strong>Length variation.</strong> How much each stitch may be longer or shorter than the stitch length, in percent of it. Where the
+random lengths start is the element’s <code>random_seed</code>.</p>
 <ul>
 <li><strong>Accepts:</strong> a percentage from 0 to 100</li>
 <li><strong>Default:</strong> <code>10</code></li>
 <li><strong>Shown when</strong> <a href="#enable_random_stitch_length"><code>enable_random_stitch_length</code></a> is <code>true</code></li>
-<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
-</ul>
-<h3 id="random_seed"><a class="header" href="#random_seed"><code>random_seed</code></a></h3>
-<p><strong>Random seed.</strong> Where the random stitch lengths start: the same seed gives the same stitches, another seed others.
-Empty, each element gets its own.</p>
-<ul>
-<li><strong>Accepts:</strong> a number or any text, or empty to derive it from the element</li>
-<li><strong>Default:</strong> empty</li>
 <li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div><!-- Generated by `cargo xtask docs` from `RepeatParams` in the parameter registry. Edit the declaration, not this page. -->
@@ -1860,6 +1879,61 @@ goes from the first rail to the second.</p>
 <ul>
 <li><strong>Accepts:</strong> true or false</li>
 <li><strong>Default:</strong> <code>false</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h2 id="compensation"><a class="header" href="#compensation">Compensation</a></h2>
+<h3 id="pull_compensation_mm"><a class="header" href="#pull_compensation_mm"><code>pull_compensation_mm</code></a></h3>
+<p><strong>Pull compensation.</strong> How far each end of every stitch reaches past its rail. The thread pulls the fabric in across the
+column as it sews, so a satin comes out narrower than drawn, and this makes up for it. Negative
+values make the column narrower. 2 values set the first rail’s side, then the second’s.</p>
+<ul>
+<li><strong>Accepts:</strong> a length from -10 to 10 mm, or 2 separated by a space</li>
+<li><strong>Default:</strong> <code>0</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="pull_compensation_percent"><a class="header" href="#pull_compensation_percent"><code>pull_compensation_percent</code></a></h3>
+<p><strong>Pull compensation (% of width).</strong> More pull compensation, in percent of the column’s width at each stitch, added to the length
+above: wide parts of a column reach out further than narrow ones. 2 values set the first rail’s
+side, then the second’s.</p>
+<ul>
+<li><strong>Accepts:</strong> a percentage from -100 to 100, or 2 separated by a space</li>
+<li><strong>Default:</strong> <code>0</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="push_compensation_mm"><a class="header" href="#push_compensation_mm"><code>push_compensation_mm</code></a></h3>
+<p><strong>Push compensation.</strong> How much shorter the column is made at its start and its end. Satin stitches push the fabric out
+along the column, so it comes out longer than drawn, and this makes up for it. Negative values
+lengthen the column. 2 values set the start, then the end.</p>
+<ul>
+<li><strong>Accepts:</strong> a length from -10 to 10 mm, or 2 separated by a space</li>
+<li><strong>Default:</strong> <code>0</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h2 id="random-variation-1"><a class="header" href="#random-variation-1">Random variation</a></h2>
+<h3 id="random_width_decrease_percent"><a class="header" href="#random_width_decrease_percent"><code>random_width_decrease_percent</code></a></h3>
+<p><strong>Random width decrease.</strong> How much narrower than the compensated column a stitch may come out on each side, chosen at
+random for each stitch, in percent of the column’s width there. A ragged edge looks like fur or
+grass. 2 values set the first rail’s side, then the second’s.</p>
+<ul>
+<li><strong>Accepts:</strong> a percentage from 0 to 100, or 2 separated by a space</li>
+<li><strong>Default:</strong> <code>0</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="random_width_increase_percent"><a class="header" href="#random_width_increase_percent"><code>random_width_increase_percent</code></a></h3>
+<p><strong>Random width increase.</strong> How much wider than the compensated column a stitch may come out on each side, chosen at random
+for each stitch, in percent of the column’s width there. 2 values set the first rail’s side, then
+the second’s.</p>
+<ul>
+<li><strong>Accepts:</strong> a percentage from 0 to 100, or 2 separated by a space</li>
+<li><strong>Default:</strong> <code>0</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="random_zigzag_spacing_percent"><a class="header" href="#random_zigzag_spacing_percent"><code>random_zigzag_spacing_percent</code></a></h3>
+<p><strong>Random zigzag spacing.</strong> How much the distance to each stitch may differ from the zigzag spacing, chosen at random, in
+percent of the spacing, longer or shorter.</p>
+<ul>
+<li><strong>Accepts:</strong> a percentage from 0 to 100</li>
+<li><strong>Default:</strong> <code>0</code></li>
 <li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div>
@@ -2732,7 +2806,9 @@ version and a registry schema version arrive with the first release, together wi
 <tr><td><code>Toggle</code></td><td><code>bool</code></td><td><code>true</code>/<code>false</code> (also <code>yes</code>/<code>no</code>, <code>on</code>/<code>off</code>, <code>1</code>/<code>0</code>)</td><td><code>boolean</code>, <code>toggle</code></td></tr>
 <tr><td><code>Choice</code></td><td><code>&amp;'static str</code> (the id)</td><td>one of the declared ids; unknown ids are a diagnostic, not a default</td><td><code>combo</code>, <code>dropdown</code></td></tr>
 <tr><td><code>Seed</code></td><td><code>Option&lt;u64&gt;</code></td><td>any; empty means “derive from the element”; text that is not a number is hashed (FNV-1a)</td><td><code>random_seed</code></td></tr>
-<tr><td><code>LengthList</code></td><td><code>Vec&lt;Mm&gt;</code></td><td>1–16 values, each in range (patterns like <code>"2.5 1.0"</code>, per-side values)</td><td><code>string</code>/<code>float</code> lists</td></tr>
+<tr><td><code>LengthList</code></td><td><code>Vec&lt;Mm&gt;</code></td><td>1 to 16 values, each in range (patterns like <code>"2.5 1.0"</code>)</td><td><code>string</code>/<code>float</code> lists</td></tr>
+<tr><td><code>LengthPair</code></td><td><code>[Mm; 2]</code></td><td>1 value for both sides, or 2 for the first side and the second (a satin’s rails, or its start and end). Each is in range, with units as for <code>Length</code></td><td><code>float</code>, unit <code>mm (each side)</code></td></tr>
+<tr><td><code>PercentPair</code></td><td><code>[f64; 2]</code></td><td>as <code>LengthPair</code>, in percent</td><td><code>float</code>, unit <code>% (each side)</code></td></tr>
 <tr><td><code>CountList</code></td><td><code>Vec&lt;u32&gt;</code></td><td>1–16 whole numbers, each in range</td><td><code>string</code>/<code>int</code> lists</td></tr>
 <tr><td><code>Text</code></td><td><code>String</code></td><td>≤ 4,096 bytes; kind-specific grammar (e.g. a custom lock path) is checked by its user</td><td><code>string</code></td></tr>
 </tbody>
@@ -2897,6 +2973,7 @@ another.</p>
 <tr><td><code>SC-W0208</code></td><td>Warning</td><td>Satin stitches skew more than 45° from the column; add a rung here</td><td>M4</td></tr>
 <tr><td><code>SC-W0209</code></td><td>Warning</td><td>Satin wider than 12 mm; long stitches may snag</td><td>M4</td></tr>
 <tr><td><code>SC-W0210</code></td><td>Warning</td><td>Satin rails without rungs have different numbers of nodes (some pair with none)</td><td>M4</td></tr>
+<tr><td><code>SC-W0211</code></td><td>Warning</td><td>Satin push compensation too long for a rail; that rail keeps its length</td><td>M4</td></tr>
 <tr><td><code>SC-W0303</code></td><td>Warning</td><td>Tiny ring dropped from fill region</td><td>M5</td></tr>
 <tr><td><code>SC-W0305</code></td><td>Warning</td><td>Region too small for fill rows; outlined with running stitch instead</td><td>M5</td></tr>
 <tr><td><code>SC-W0307</code></td><td>Warning</td><td>Region split into parts that are not connected; parts joined with trims</td><td>M5</td></tr>
@@ -3072,8 +3149,9 @@ this one should start (nearest point to its exit hint); the generator never wait
 element’s stitches. This makes generation independent, cacheable and parallel, so large designs
 stay fast, and honours explicit
 start/end commands (<code>REQ-GEN-001</code>).</li>
-<li><strong>Seeded randomness:</strong> seed = <code>random_seed</code> parameter if set, else a hash of the element id; the PRNG
-is SplitMix64 from <code>stitchcraft-core</code> (<a href="#determinism-1">determinism</a>).</li>
+<li><strong>Seeded randomness:</strong> each element’s generator is seeded from a hash of its id mixed with its
+<code>random_seed</code>, one of the settings every stitch type shares. The PRNG is SplitMix64 from
+<code>stitchcraft-core</code> (<a href="#determinism-1">determinism</a>).</li>
 <li><strong>Budgeted:</strong> every inner loop charges work units. Each element has the budget’s work to itself. One
 that runs out (<code>SC-E0004</code>) is skipped, and the others still plan. The stitch limit is for the whole
 design.</li>
@@ -3329,8 +3407,9 @@ visual error by <code>running_stitch_tolerance_mm</code> on any curve whose deta
 stitch.</li>
 <li><strong>Random length.</strong> With <code>enable_random_stitch_length</code>, each stitch length is drawn uniformly from
 <code>s × (1 ± jitter)</code>, the first of each span a random fraction of that (a random phase, below), then the
-span is rescaled to end on its corner. The element’s own generator draws them, seeded with
-<code>random_seed</code>, so the same element and seed always give the same stitches.</li>
+span is rescaled to end on its corner. The element’s own generator draws them, seeded with its
+<code>random_seed</code> (a setting every stitch type that varies at random shares), and the same element and
+seed always give the same stitches.</li>
 </ol>
 <p><strong>When the rules disagree,</strong> the shortest stitch wins (a shorter stitch hammers one spot and can break the
 thread), then corners, then the tolerance. A part of the path that is a single point, shorter than the
@@ -3479,6 +3558,32 @@ starts, and sew as one section. The cut on each rail is where the point 0.2 CSS 
 line from its first node to its last lies along it, as Ink/Stitch places the rung it adds there.</p>
 <p>When the resulting stitch directions deviate from the local column normal by more than 45° somewhere,
 the element gets <code>SC-W0208</code> (“add a rung here”) with the location.</p>
+<h2 id="compensation-1"><a class="header" href="#compensation-1">Compensation</a></h2>
+<p>Thread under tension pulls the fabric in across a satin column, which then sews narrower than it is
+drawn. The stitches also push the fabric out at the column’s ends, and it sews longer. StitchCraft makes
+up for both as Ink/Stitch does.</p>
+<ul>
+<li><strong>Push compensation</strong> (<code>push_compensation_mm</code>) acts on the rails after any reversal, before they are
+cut into sections. It takes its length off each rail at the column’s start and end, or adds it where
+negative, straight on from the rail’s first or last segment. 2 values set the start, then the end.
+The points that say where to cut come from the rails as drawn, so a rung in a part taken off cuts the
+rail at its end and leaves its section out. A rail the shortening would leave shorter than half a CSS
+pixel keeps its length (<code>SC-W0211</code>), and a lengthening at its other end still applies.</li>
+<li><strong>Pull compensation</strong> acts on each pair as it is placed. Both ends move outward along the line through
+the pair, each by <code>pull_compensation_mm</code> plus <code>pull_compensation_percent</code> of the pair’s width, and 2
+values set the first rail’s side, then the second’s. Negative values move the ends inward. Ends that
+would cross meet instead, where their moves divide the width. A pair whose ends are closer than a
+ten-thousandth of a CSS pixel has no direction to move them in, and stays as it is.</li>
+<li><strong>Random variation</strong> comes from the element’s generator, seeded with <code>random_seed</code>
+(<a href="#determinism-1">determinism</a>). Each pair’s share of the width on each side is drawn between
+<code>pull_compensation_percent</code> less <code>random_width_decrease_percent</code> and plus
+<code>random_width_increase_percent</code>. Each step’s spacing is drawn between the zigzag spacing less and plus
+<code>random_zigzag_spacing_percent</code> of it, and never below a hundredth of it. As in Ink/Stitch, a spacing
+is drawn at each section’s start and after each pair, and the widths with each pair. Ink/Stitch draws
+from another generator, and its random values differ (<code>DEV-SAT-002</code>).</li>
+</ul>
+<p>Pairs are placed and measured from each other before pull compensation, which leaves each pair’s place
+along the column as it was.</p>
 <h2 id="top-stitches-method-satin_column"><a class="header" href="#top-stitches-method-satin_column">Top stitches (method <code>satin_column</code>)</a></h2>
 <ol>
 <li><strong>Place pairs along the sections,</strong> as Ink/Stitch places them. A pair of needle points goes across
@@ -3494,15 +3599,12 @@ is. It moves at most twice, and the first move stops at the section’s end.</li
 pair is short of the spacing.</li>
 <li>The column starts with a pair at its start and ends with one at its end, unless the last pair is
 within 0.1 mm of it.</li>
-<li><code>random_zigzag_spacing_percent</code> jitters each step (seeded, M4.3).</li>
+<li>With <code>random_zigzag_spacing_percent</code>, each step’s spacing is drawn at random (<em>Compensation</em>), and
+a pair moves to lie that spacing from the one before.</li>
 </ul>
 </li>
-<li><strong>Compensate width.</strong> For each pair, move both ends outward along the A–B line by
-<code>pull_compensation_mm + pull_compensation_percent × width</code> per side; one value applies to both sides,
-two values (<code>"0.2 0.4"</code>) apply per rail. <code>random_width_increase_percent</code> and
-<code>random_width_decrease_percent</code> add per-side jitter. Push compensation (<code>push_compensation_mm</code>)
-pulls the column’s two ends inward along the column, because the fabric pushes satin stitches
-outward at the ends.</li>
+<li><strong>Compensate width.</strong> Each pair is widened by pull compensation as it is placed, with its random
+share (<em>Compensation</em>).</li>
 <li><strong>Short stitches on curves.</strong> Where consecutive points on the inner rail are closer than
 <code>short_stitch_distance_mm</code>, every other stitch ends <code>short_stitch_inset</code> percent of the width short of
 that rail, so the inner edge does not pile up.</li>
@@ -3558,21 +3660,22 @@ override both (<code>REQ-GEN-001</code>). Travel between underlay passes uses <c
 <tr><th>Requirement</th><th>Property</th></tr>
 </thead>
 <tbody>
-<tr><td><code>REQ-SAT-001</code></td><td>Every top stitch end lies on its rail, offset outward by exactly the compensation (± 0.01 mm)</td></tr>
+<tr><td><code>REQ-SAT-001</code></td><td>Pull compensation moves both ends of every top stitch outward along it, by <code>pull_compensation_mm</code> plus <code>pull_compensation_percent</code> of its width (± 0.01 mm). Ends moved past each other meet</td></tr>
 <tr><td><code>REQ-SAT-002</code></td><td>Consecutive pairs are the zigzag spacing apart, measured across the previous pair at its farther end, exactly so between straight parallel rails and within 5 % on curves. The last pair is at most a spacing on</td></tr>
 <tr><td><code>REQ-SAT-003</code></td><td>No top stitch exceeds <code>max_stitch_length_mm</code> after splitting; split seams follow the chosen method</td></tr>
 <tr><td><code>REQ-SAT-004</code></td><td>Underlays lie inside the inset band and precede the top stitches</td></tr>
 <tr><td><code>REQ-SAT-005</code></td><td>Rails and rungs are told apart as Ink/Stitch tells them, in any drawing order. A path with no subpath longer than a point produces <code>SC-E0201</code> and no stitches, and a rung that misses a rail joins the rail’s nearest point (<code>SC-W0203</code>)</td></tr>
-<tr><td><code>REQ-SAT-006</code></td><td>Asymmetric parameters affect only their side</td></tr>
-<tr><td><code>REQ-SAT-007</code></td><td>Random parameters are reproducible from the seed</td></tr>
+<tr><td><code>REQ-SAT-006</code></td><td>A parameter with a value for each side changes only its own side: a rail’s stitch ends, or the column’s start or end</td></tr>
+<tr><td><code>REQ-SAT-007</code></td><td>Random widths and spacing are reproducible from the element and its seed, and stay within their ranges</td></tr>
+<tr><td><code>REQ-SAT-008</code></td><td>Push compensation shortens the rails at the column’s start and end before they are cut, or lengthens them where negative. A rail it would leave shorter than half a CSS pixel keeps its length (<code>SC-W0211</code>)</td></tr>
 </tbody>
 </table>
 </div>
 <p>Machine checkpoint MC-3 sews a width ladder (1–10 mm) and an underlay comparison to tune defaults
 (<a href="#machine-testing-protocol">machine testing</a>).</p>
 <h2 id="diagnostics-2"><a class="header" href="#diagnostics-2">Diagnostics</a></h2>
-<p><code>SC-E0201</code>, <code>SC-W0202</code>, <code>SC-W0203</code>, <code>SC-W0205</code>, <code>SC-W0206</code>, <code>SC-W0207</code>, <code>SC-W0208</code>, and <code>SC-W0209</code> (a satin
-wider than 12 mm risks snagging: consider split stitches or a fill).</p>
+<p><code>SC-E0201</code>, <code>SC-W0202</code>, <code>SC-W0203</code>, <code>SC-W0205</code>, <code>SC-W0206</code>, <code>SC-W0207</code>, <code>SC-W0208</code>, <code>SC-W0209</code> (a satin
+wider than 12 mm risks snagging: consider split stitches or a fill), <code>SC-W0210</code> and <code>SC-W0211</code>.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="fill-generators"><a class="header" href="#fill-generators">Fill generators</a></h1>
 <p>Fills cover a <code>Region</code> (valid polygons with holes, from the normalizer). Tatami is P1 (M5); contour,
@@ -4644,7 +4747,8 @@ origin and licence). Large real-world corpora live in a separate repository pinn
 SHA-256, downloaded by <code>cargo xtask corpus</code> — the same policy VectorCraft follows for its corpora.</p>
 <p>The engine’s cases build their small designs with <code>stitchcraft_testkit::designs</code>. It also reads a plan’s
 shape at a glance: <code>J L4 S5 L4</code> is a jump, 4 lock stitches, 5 needle points of stitching and 4 more lock
-stitches.</p>
+stitches. The satin cases sew their columns with <code>stitchcraft_testkit::satins</code>, as an element is sewn, and
+read the needle points back in pairs across the column.</p>
 <h2 id="levels"><a class="header" href="#levels">Levels</a></h2>
 <h3 id="l0--plan-invariants-every-pr"><a class="header" href="#l0--plan-invariants-every-pr">L0 — Plan invariants (every PR)</a></h3>
 <p>The <a href="#plan-invariants">plan invariants</a> run on <em>every</em> plan the
@@ -5144,9 +5248,9 @@ stitches once its stitch type or feature lands (see <em>Phase</em> and the param
 <tbody>
 <tr><td><code>satin_column</code></td><td>toggle</td><td>—</td><td>—</td><td>all</td><td>P1 (M4)</td><td><a href="#satin_column">registered</a></td></tr>
 <tr><td><code>satin_method</code></td><td>combo</td><td>—</td><td>0</td><td>all</td><td>P1 (M4)</td><td><a href="#satin_method">registered</a></td></tr>
-<tr><td><code>random_width_decrease_percent</code></td><td>float</td><td>% (each side)</td><td>0</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
-<tr><td><code>random_width_increase_percent</code></td><td>float</td><td>% (each side)</td><td>0</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
-<tr><td><code>random_zigzag_spacing_percent</code></td><td>float</td><td>± %</td><td>0</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>random_width_decrease_percent</code></td><td>float</td><td>% (each side)</td><td>0</td><td>all</td><td>P1 (M4)</td><td><a href="#random_width_decrease_percent">registered</a></td></tr>
+<tr><td><code>random_width_increase_percent</code></td><td>float</td><td>% (each side)</td><td>0</td><td>all</td><td>P1 (M4)</td><td><a href="#random_width_increase_percent">registered</a></td></tr>
+<tr><td><code>random_zigzag_spacing_percent</code></td><td>float</td><td>± %</td><td>0</td><td>all</td><td>P1 (M4)</td><td><a href="#random_zigzag_spacing_percent">registered</a></td></tr>
 <tr><td><code>split_method</code></td><td>combo</td><td>—</td><td>0</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
 <tr><td><code>max_stitch_length_mm</code></td><td>float</td><td>mm</td><td>—</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
 <tr><td><code>random_split_jitter_percent</code></td><td>float</td><td>± %</td><td>0</td><td><code>default</code></td><td>P1 (M4)</td><td>planned</td></tr>
@@ -5156,9 +5260,9 @@ stitches once its stitch type or feature lands (see <em>Phase</em> and the param
 <tr><td><code>short_stitch_inset</code></td><td>float</td><td>%</td><td>15</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
 <tr><td><code>short_stitch_distance_mm</code></td><td>float</td><td>mm</td><td>0.25</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
 <tr><td><code>zigzag_spacing_mm</code></td><td>float</td><td>mm/cycle</td><td>0.4</td><td>all</td><td>P1 (M4)</td><td><a href="#zigzag_spacing_mm">registered</a></td></tr>
-<tr><td><code>pull_compensation_percent</code></td><td>float</td><td>% (each side)</td><td>0</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
-<tr><td><code>pull_compensation_mm</code></td><td>float</td><td>mm (each side)</td><td>0</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
-<tr><td><code>push_compensation_mm</code></td><td>float</td><td>mm (each side)</td><td>0</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>pull_compensation_percent</code></td><td>float</td><td>% (each side)</td><td>0</td><td>all</td><td>P1 (M4)</td><td><a href="#pull_compensation_percent">registered</a></td></tr>
+<tr><td><code>pull_compensation_mm</code></td><td>float</td><td>mm (each side)</td><td>0</td><td>all</td><td>P1 (M4)</td><td><a href="#pull_compensation_mm">registered</a></td></tr>
+<tr><td><code>push_compensation_mm</code></td><td>float</td><td>mm (each side)</td><td>0</td><td>all</td><td>P1 (M4)</td><td><a href="#push_compensation_mm">registered</a></td></tr>
 <tr><td><code>reverse_rails</code></td><td>combo</td><td>—</td><td>automatic</td><td>all</td><td>P1 (M4)</td><td><a href="#reverse_rails">registered</a></td></tr>
 <tr><td><code>swap_satin_rails</code></td><td>boolean</td><td>—</td><td>false</td><td>all</td><td>P1 (M4)</td><td><a href="#swap_satin_rails">registered</a></td></tr>
 <tr><td><code>running_stitch_length_mm</code></td><td>float</td><td>mm</td><td>2.5</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
@@ -5181,7 +5285,7 @@ stitches once its stitch type or feature lands (see <em>Phase</em> and the param
 <tr><td><code>zigzag_underlay_inset_mm</code></td><td>float</td><td>mm (each side)</td><td>—</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
 <tr><td><code>zigzag_underlay_inset_percent</code></td><td>float</td><td>% (each side)</td><td>—</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
 <tr><td><code>zigzag_underlay_max_stitch_length_mm</code></td><td>float</td><td>mm</td><td>—</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
-<tr><td><code>random_seed</code></td><td>random_seed</td><td>—</td><td>—</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>random_seed</code></td><td>random_seed</td><td>—</td><td>—</td><td>all</td><td>P1 (M4)</td><td><a href="#random_seed">registered</a></td></tr>
 </tbody>
 </table>
 </div>
@@ -5343,7 +5447,7 @@ patterns, stitch plan or sew stack, and legacy names Ink/Stitch’s updater rewr
 </tbody>
 </table>
 </div>
-<p><em>145 parameter declarations, 29 registered in StitchCraft.</em></p>
+<p><em>145 parameter declarations, 36 registered in StitchCraft.</em></p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="architecture-decision-records"><a class="header" href="#architecture-decision-records">Architecture decision records</a></h1>
 <p>Short records of decisions that shape the code, with their context and the alternatives we rejected.
@@ -5891,7 +5995,7 @@ of code) · 🧵 machine checkpoint · 👤 owner action</p>
 <tbody>
 <tr><td>M4.1 ✅</td><td>Satin shape: rails and rungs told apart as Ink/Stitch tells them, diagnostics <code>SC-E0201</code>, <code>SC-W0202</code>, <code>SC-W0203</code>, <code>SC-W0205</code>, <code>SC-W0207</code></td><td><code>REQ-SAT-005</code></td></tr>
 <tr><td>M4.2 ✅</td><td>Correspondence and stitch placement as in Ink/Stitch (rails turned, sections at the rungs or the nodes), <code>SC-W0210</code>. Satin columns are sewn</td><td><code>REQ-SAT-002</code></td></tr>
-<tr><td>M4.3</td><td>Pull and push compensation (symmetric/asymmetric), random width</td><td><code>REQ-SAT-001</code>, <code>REQ-SAT-006</code>, <code>REQ-SAT-007</code></td></tr>
+<tr><td>M4.3 ✅</td><td>Pull and push compensation (symmetric/asymmetric), random width and spacing, <code>SC-W0211</code></td><td><code>REQ-SAT-001</code>, <code>REQ-SAT-006</code> to <code>REQ-SAT-008</code></td></tr>
 <tr><td>M4.4</td><td>Short stitches on curves</td><td>case set on tight curves</td></tr>
 <tr><td>M4.5</td><td>Split stitches (simple, staggered, random)</td><td><code>REQ-SAT-003</code></td></tr>
 <tr><td>M4.6</td><td>Underlays: centre walk, contour, zigzag</td><td><code>REQ-SAT-004</code></td></tr>

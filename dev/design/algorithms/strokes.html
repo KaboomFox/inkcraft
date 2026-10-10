@@ -35,7 +35,7 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-4623099b.js";
+            window.path_to_searchindex_js = "../../searchindex-c6836515.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-65a8af2a.js"></script>
@@ -224,8 +224,9 @@ visual error by <code>running_stitch_tolerance_mm</code> on any curve whose deta
 stitch.</li>
 <li><strong>Random length.</strong> With <code>enable_random_stitch_length</code>, each stitch length is drawn uniformly from
 <code>s × (1 ± jitter)</code>, the first of each span a random fraction of that (a random phase, below), then the
-span is rescaled to end on its corner. The element’s own generator draws them, seeded with
-<code>random_seed</code>, so the same element and seed always give the same stitches.</li>
+span is rescaled to end on its corner. The element’s own generator draws them, seeded with its
+<code>random_seed</code> (a setting every stitch type that varies at random shares), and the same element and
+seed always give the same stitches.</li>
 </ol>
 <p><strong>When the rules disagree,</strong> the shortest stitch wins (a shorter stitch hammers one spot and can break the
 thread), then corners, then the tolerance. A part of the path that is a single point, shorter than the

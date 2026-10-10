@@ -35,7 +35,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-4623099b.js";
+            window.path_to_searchindex_js = "../searchindex-c6836515.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-65a8af2a.js"></script>
@@ -273,7 +273,9 @@ version and a registry schema version arrive with the first release, together wi
 <tr><td><code>Toggle</code></td><td><code>bool</code></td><td><code>true</code>/<code>false</code> (also <code>yes</code>/<code>no</code>, <code>on</code>/<code>off</code>, <code>1</code>/<code>0</code>)</td><td><code>boolean</code>, <code>toggle</code></td></tr>
 <tr><td><code>Choice</code></td><td><code>&amp;'static str</code> (the id)</td><td>one of the declared ids; unknown ids are a diagnostic, not a default</td><td><code>combo</code>, <code>dropdown</code></td></tr>
 <tr><td><code>Seed</code></td><td><code>Option&lt;u64&gt;</code></td><td>any; empty means “derive from the element”; text that is not a number is hashed (FNV-1a)</td><td><code>random_seed</code></td></tr>
-<tr><td><code>LengthList</code></td><td><code>Vec&lt;Mm&gt;</code></td><td>1–16 values, each in range (patterns like <code>"2.5 1.0"</code>, per-side values)</td><td><code>string</code>/<code>float</code> lists</td></tr>
+<tr><td><code>LengthList</code></td><td><code>Vec&lt;Mm&gt;</code></td><td>1 to 16 values, each in range (patterns like <code>"2.5 1.0"</code>)</td><td><code>string</code>/<code>float</code> lists</td></tr>
+<tr><td><code>LengthPair</code></td><td><code>[Mm; 2]</code></td><td>1 value for both sides, or 2 for the first side and the second (a satin’s rails, or its start and end). Each is in range, with units as for <code>Length</code></td><td><code>float</code>, unit <code>mm (each side)</code></td></tr>
+<tr><td><code>PercentPair</code></td><td><code>[f64; 2]</code></td><td>as <code>LengthPair</code>, in percent</td><td><code>float</code>, unit <code>% (each side)</code></td></tr>
 <tr><td><code>CountList</code></td><td><code>Vec&lt;u32&gt;</code></td><td>1–16 whole numbers, each in range</td><td><code>string</code>/<code>int</code> lists</td></tr>
 <tr><td><code>Text</code></td><td><code>String</code></td><td>≤ 4,096 bytes; kind-specific grammar (e.g. a custom lock path) is checked by its user</td><td><code>string</code></td></tr>
 </tbody>

@@ -35,7 +35,7 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-4623099b.js";
+            window.path_to_searchindex_js = "../../searchindex-c6836515.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-65a8af2a.js"></script>
@@ -254,6 +254,32 @@ starts, and sew as one section. The cut on each rail is where the point 0.2 CSS 
 line from its first node to its last lies along it, as Ink/Stitch places the rung it adds there.</p>
 <p>When the resulting stitch directions deviate from the local column normal by more than 45° somewhere,
 the element gets <code>SC-W0208</code> (“add a rung here”) with the location.</p>
+<h2 id="compensation"><a class="header" href="#compensation">Compensation</a></h2>
+<p>Thread under tension pulls the fabric in across a satin column, which then sews narrower than it is
+drawn. The stitches also push the fabric out at the column’s ends, and it sews longer. StitchCraft makes
+up for both as Ink/Stitch does.</p>
+<ul>
+<li><strong>Push compensation</strong> (<code>push_compensation_mm</code>) acts on the rails after any reversal, before they are
+cut into sections. It takes its length off each rail at the column’s start and end, or adds it where
+negative, straight on from the rail’s first or last segment. 2 values set the start, then the end.
+The points that say where to cut come from the rails as drawn, so a rung in a part taken off cuts the
+rail at its end and leaves its section out. A rail the shortening would leave shorter than half a CSS
+pixel keeps its length (<code>SC-W0211</code>), and a lengthening at its other end still applies.</li>
+<li><strong>Pull compensation</strong> acts on each pair as it is placed. Both ends move outward along the line through
+the pair, each by <code>pull_compensation_mm</code> plus <code>pull_compensation_percent</code> of the pair’s width, and 2
+values set the first rail’s side, then the second’s. Negative values move the ends inward. Ends that
+would cross meet instead, where their moves divide the width. A pair whose ends are closer than a
+ten-thousandth of a CSS pixel has no direction to move them in, and stays as it is.</li>
+<li><strong>Random variation</strong> comes from the element’s generator, seeded with <code>random_seed</code>
+(<a href="../determinism.html">determinism</a>). Each pair’s share of the width on each side is drawn between
+<code>pull_compensation_percent</code> less <code>random_width_decrease_percent</code> and plus
+<code>random_width_increase_percent</code>. Each step’s spacing is drawn between the zigzag spacing less and plus
+<code>random_zigzag_spacing_percent</code> of it, and never below a hundredth of it. As in Ink/Stitch, a spacing
+is drawn at each section’s start and after each pair, and the widths with each pair. Ink/Stitch draws
+from another generator, and its random values differ (<code>DEV-SAT-002</code>).</li>
+</ul>
+<p>Pairs are placed and measured from each other before pull compensation, which leaves each pair’s place
+along the column as it was.</p>
 <h2 id="top-stitches-method-satin_column"><a class="header" href="#top-stitches-method-satin_column">Top stitches (method <code>satin_column</code>)</a></h2>
 <ol>
 <li><strong>Place pairs along the sections,</strong> as Ink/Stitch places them. A pair of needle points goes across
@@ -269,15 +295,12 @@ is. It moves at most twice, and the first move stops at the section’s end.</li
 pair is short of the spacing.</li>
 <li>The column starts with a pair at its start and ends with one at its end, unless the last pair is
 within 0.1 mm of it.</li>
-<li><code>random_zigzag_spacing_percent</code> jitters each step (seeded, M4.3).</li>
+<li>With <code>random_zigzag_spacing_percent</code>, each step’s spacing is drawn at random (<em>Compensation</em>), and
+a pair moves to lie that spacing from the one before.</li>
 </ul>
 </li>
-<li><strong>Compensate width.</strong> For each pair, move both ends outward along the A–B line by
-<code>pull_compensation_mm + pull_compensation_percent × width</code> per side; one value applies to both sides,
-two values (<code>"0.2 0.4"</code>) apply per rail. <code>random_width_increase_percent</code> and
-<code>random_width_decrease_percent</code> add per-side jitter. Push compensation (<code>push_compensation_mm</code>)
-pulls the column’s two ends inward along the column, because the fabric pushes satin stitches
-outward at the ends.</li>
+<li><strong>Compensate width.</strong> Each pair is widened by pull compensation as it is placed, with its random
+share (<em>Compensation</em>).</li>
 <li><strong>Short stitches on curves.</strong> Where consecutive points on the inner rail are closer than
 <code>short_stitch_distance_mm</code>, every other stitch ends <code>short_stitch_inset</code> percent of the width short of
 that rail, so the inner edge does not pile up.</li>
@@ -333,21 +356,22 @@ override both (<code>REQ-GEN-001</code>). Travel between underlay passes uses <c
 <tr><th>Requirement</th><th>Property</th></tr>
 </thead>
 <tbody>
-<tr><td><code>REQ-SAT-001</code></td><td>Every top stitch end lies on its rail, offset outward by exactly the compensation (± 0.01 mm)</td></tr>
+<tr><td><code>REQ-SAT-001</code></td><td>Pull compensation moves both ends of every top stitch outward along it, by <code>pull_compensation_mm</code> plus <code>pull_compensation_percent</code> of its width (± 0.01 mm). Ends moved past each other meet</td></tr>
 <tr><td><code>REQ-SAT-002</code></td><td>Consecutive pairs are the zigzag spacing apart, measured across the previous pair at its farther end, exactly so between straight parallel rails and within 5 % on curves. The last pair is at most a spacing on</td></tr>
 <tr><td><code>REQ-SAT-003</code></td><td>No top stitch exceeds <code>max_stitch_length_mm</code> after splitting; split seams follow the chosen method</td></tr>
 <tr><td><code>REQ-SAT-004</code></td><td>Underlays lie inside the inset band and precede the top stitches</td></tr>
 <tr><td><code>REQ-SAT-005</code></td><td>Rails and rungs are told apart as Ink/Stitch tells them, in any drawing order. A path with no subpath longer than a point produces <code>SC-E0201</code> and no stitches, and a rung that misses a rail joins the rail’s nearest point (<code>SC-W0203</code>)</td></tr>
-<tr><td><code>REQ-SAT-006</code></td><td>Asymmetric parameters affect only their side</td></tr>
-<tr><td><code>REQ-SAT-007</code></td><td>Random parameters are reproducible from the seed</td></tr>
+<tr><td><code>REQ-SAT-006</code></td><td>A parameter with a value for each side changes only its own side: a rail’s stitch ends, or the column’s start or end</td></tr>
+<tr><td><code>REQ-SAT-007</code></td><td>Random widths and spacing are reproducible from the element and its seed, and stay within their ranges</td></tr>
+<tr><td><code>REQ-SAT-008</code></td><td>Push compensation shortens the rails at the column’s start and end before they are cut, or lengthens them where negative. A rail it would leave shorter than half a CSS pixel keeps its length (<code>SC-W0211</code>)</td></tr>
 </tbody>
 </table>
 </div>
 <p>Machine checkpoint MC-3 sews a width ladder (1–10 mm) and an underlay comparison to tune defaults
 (<a href="../../plan/machine-testing.html">machine testing</a>).</p>
 <h2 id="diagnostics"><a class="header" href="#diagnostics">Diagnostics</a></h2>
-<p><code>SC-E0201</code>, <code>SC-W0202</code>, <code>SC-W0203</code>, <code>SC-W0205</code>, <code>SC-W0206</code>, <code>SC-W0207</code>, <code>SC-W0208</code>, and <code>SC-W0209</code> (a satin
-wider than 12 mm risks snagging: consider split stitches or a fill).</p>
+<p><code>SC-E0201</code>, <code>SC-W0202</code>, <code>SC-W0203</code>, <code>SC-W0205</code>, <code>SC-W0206</code>, <code>SC-W0207</code>, <code>SC-W0208</code>, <code>SC-W0209</code> (a satin
+wider than 12 mm risks snagging: consider split stitches or a fill), <code>SC-W0210</code> and <code>SC-W0211</code>.</p>
 
                     </main>
 

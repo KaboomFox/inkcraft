@@ -35,7 +35,7 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-4623099b.js";
+            window.path_to_searchindex_js = "../../searchindex-c6836515.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-65a8af2a.js"></script>
@@ -204,6 +204,7 @@
 <tr><td><a href="#sc-w0205"><code>SC-W0205</code></a></td><td>Warning</td><td>Satin subpath is one point; left out</td></tr>
 <tr><td><a href="#sc-w0207"><code>SC-W0207</code></a></td><td>Warning</td><td>Satin rung crosses a rail more than once; left out</td></tr>
 <tr><td><a href="#sc-w0210"><code>SC-W0210</code></a></td><td>Warning</td><td>Satin rails without rungs have different numbers of nodes</td></tr>
+<tr><td><a href="#sc-w0211"><code>SC-W0211</code></a></td><td>Warning</td><td>Satin push compensation too long for a rail; that rail keeps its length</td></tr>
 <tr><td><a href="#sc-w0401"><code>SC-W0401</code></a></td><td>Warning</td><td>Path too small for the shortest stitch; skipped</td></tr>
 <tr><td><a href="#sc-w0402"><code>SC-W0402</code></a></td><td>Warning</td><td>Stitch length below twice the shortest stitch; raised</td></tr>
 <tr><td><a href="#sc-w0403"><code>SC-W0403</code></a></td><td>Warning</td><td>Hand-placed stitch shorter than the shortest stitch; point left out</td></tr>
@@ -329,6 +330,13 @@ of nodes, so the rail with more has nodes that pair with none, and between them 
 follow the rails’ lengths alone.</p>
 <p>The message gives both counts. Add rungs across the column, or give both rails the same number of
 nodes.</p>
+<h2 id="sc-w0211"><a class="header" href="#sc-w0211">SC-W0211</a></h2>
+<p><strong>Warning</strong> — Satin push compensation too long for a rail; that rail keeps its length</p>
+<p>A satin column’s push compensation, taken off a rail at the column’s start and end, would leave less
+than half a CSS pixel (0.13 mm) of it, so that rail keeps its length, as in Ink/Stitch. A negative
+value at the other end still lengthens it.</p>
+<p>The message gives the push compensation at each end. Lower <code>push_compensation_mm</code>, or lengthen the
+column.</p>
 <h2 id="sc-w0401"><a class="header" href="#sc-w0401">SC-W0401</a></h2>
 <p><strong>Warning</strong> — Path too small for the shortest stitch; skipped</p>
 <p>A part of a stroke is too small for the shortest stitch the machine sews well, so it was left out:

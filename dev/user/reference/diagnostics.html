@@ -35,10 +35,10 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-a86c36e3.js";
+            window.path_to_searchindex_js = "../../searchindex-30ea70a6.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../../toc-2b55582f.js"></script>
+        <script src="../../toc-65a8af2a.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -198,6 +198,11 @@
 <tr><td><a href="#sc-e0101"><code>SC-E0101</code></a></td><td>Error</td><td>Parameter has the wrong type or an unknown choice</td></tr>
 <tr><td><a href="#sc-w0102"><code>SC-W0102</code></a></td><td>Warning</td><td>Parameter clamped to its allowed range</td></tr>
 <tr><td><a href="#sc-w0105"><code>SC-W0105</code></a></td><td>Warning</td><td>Unknown parameter preserved but ignored</td></tr>
+<tr><td><a href="#sc-e0201"><code>SC-E0201</code></a></td><td>Error</td><td>Satin column has no rails</td></tr>
+<tr><td><a href="#sc-w0202"><code>SC-W0202</code></a></td><td>Warning</td><td>Satin rails taken as the two longest subpaths</td></tr>
+<tr><td><a href="#sc-w0203"><code>SC-W0203</code></a></td><td>Warning</td><td>Satin rung does not cross both rails</td></tr>
+<tr><td><a href="#sc-w0205"><code>SC-W0205</code></a></td><td>Warning</td><td>Satin subpath is one point; left out</td></tr>
+<tr><td><a href="#sc-w0207"><code>SC-W0207</code></a></td><td>Warning</td><td>Satin rung crosses a rail more than once; left out</td></tr>
 <tr><td><a href="#sc-w0401"><code>SC-W0401</code></a></td><td>Warning</td><td>Path too small for the shortest stitch; skipped</td></tr>
 <tr><td><a href="#sc-w0402"><code>SC-W0402</code></a></td><td>Warning</td><td>Stitch length below twice the shortest stitch; raised</td></tr>
 <tr><td><a href="#sc-w0403"><code>SC-W0403</code></a></td><td>Warning</td><td>Hand-placed stitch shorter than the shortest stitch; point left out</td></tr>
@@ -283,6 +288,38 @@ warning.</p>
 or Ink/Stitch, or one for a stitch type StitchCraft does not support yet. It was kept, so saving
 the design does not lose it, but it does not change the stitches.</p>
 <p>The Ink/Stitch compatibility page says when each Ink/Stitch parameter is supported.</p>
+<h2 id="sc-e0201"><a class="header" href="#sc-e0201">SC-E0201</a></h2>
+<p><strong>Error</strong> — Satin column has no rails</p>
+<p>A satin column’s path has no subpath longer than a point, so it has no rails to sew between. The
+element was not stitched.</p>
+<p>Draw the column as two rails, its edges, with rungs across both.</p>
+<h2 id="sc-w0202"><a class="header" href="#sc-w0202">SC-W0202</a></h2>
+<p><strong>Warning</strong> — Satin rails taken as the two longest subpaths</p>
+<p>Where the subpaths of a satin column meet does not say which two are its rails, so the two
+longest were taken as the rails. The rule is Ink/Stitch’s: with one rung, the rails are the two
+subpaths that meet only one other, and with more rungs, the two that meet more than two others.
+With exactly two rungs across two rails, each of the four meets two others, as the strokes of a
+<code>#</code> do, and the rule cannot tell rails from rungs.</p>
+<p>The message names the two subpaths taken, numbered from 1 in the order the path draws them. If
+they are not the rails, use three rungs or more, each crossing both rails once.</p>
+<h2 id="sc-w0203"><a class="header" href="#sc-w0203">SC-W0203</a></h2>
+<p><strong>Warning</strong> — Satin rung does not cross both rails</p>
+<p>A rung of a satin column misses one of the rails, or both. It still says which points go together:
+where it misses a rail, the point of that rail nearest the rung is used, as in Ink/Stitch.</p>
+<p>The message names the rung, numbered from 1 in the order the path draws it. Extend it across both
+rails, so that where it joins them is what you drew.</p>
+<h2 id="sc-w0205"><a class="header" href="#sc-w0205">SC-W0205</a></h2>
+<p><strong>Warning</strong> — Satin subpath is one point; left out</p>
+<p>A subpath of a satin column is one point, a stray node, so it is neither a rail nor a rung. It was
+left out.</p>
+<p>The message names the subpath, numbered from 1 in the order the path draws it. Delete the node, or
+if it was meant as a rung, draw the rung across both rails.</p>
+<h2 id="sc-w0207"><a class="header" href="#sc-w0207">SC-W0207</a></h2>
+<p><strong>Warning</strong> — Satin rung crosses a rail more than once; left out</p>
+<p>A rung of a satin column crosses a rail more than once, so it does not say which point of one rail
+goes with which point of the other, and it was left out. The column is sewn without it.</p>
+<p>The message names the subpath, numbered from 1 in the order the path draws it. Redraw the rung as a
+straight line across both rails.</p>
 <h2 id="sc-w0401"><a class="header" href="#sc-w0401">SC-W0401</a></h2>
 <p><strong>Warning</strong> — Path too small for the shortest stitch; skipped</p>
 <p>A part of a stroke is too small for the shortest stitch the machine sews well, so it was left out:

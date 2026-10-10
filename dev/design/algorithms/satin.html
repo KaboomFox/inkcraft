@@ -35,7 +35,7 @@
             const path_to_root = "../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../searchindex-623d53c3.js";
+            window.path_to_searchindex_js = "../../searchindex-df24d111.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../../toc-67ac7601.js"></script>
@@ -195,7 +195,7 @@ matter most. Phase P1 (M4); the E, S and zigzag variants are P2 (M7).</p>
 <li><strong>Rails</strong> are the two edges. They run in the same general direction.</li>
 <li><strong>Rungs</strong> are short segments crossing both rails; they pin which point on rail A corresponds to which
 point on rail B, controlling the stitch angle through curves.</li>
-<li><strong>Single-path satin</strong>: a centre line with a width (the stroke width, or a parameter), for quick borders.</li>
+<li><strong>Single-path satin</strong>: a centre line whose stroke gives the width (<a href="#single-path-satin">below</a>). It makes quick borders.</li>
 </ul>
 <h2 id="recognizing-rails-and-rungs"><a class="header" href="#recognizing-rails-and-rungs">Recognizing rails and rungs</a></h2>
 <p>An element is a satin column when its <code>satin_column</code> setting is on, whatever its <code>stroke_method</code> says.
@@ -204,8 +204,8 @@ touching. A point the two share counts once, and a rung that ends exactly on a r
 <p>StitchCraft tells rails from rungs as Ink/Stitch does, and a file sews the same in both.</p>
 <ol>
 <li>A subpath that is one point is left out, with <code>SC-W0205</code>.</li>
-<li>With 1 subpath left, the path is the column’s centre line, sewn from M4.8 on. With 2, they are the
-rails, and their nodes pair up in place of rungs (see Correspondence). With none, the element gets
+<li>With 1 subpath left, the path is the column’s centre line (<a href="#single-path-satin">below</a>). With 2, they
+are the rails, and their nodes pair up in place of rungs (see Correspondence). With none, the element gets
 <code>SC-E0201</code> and no stitches.</li>
 <li>With 3 subpaths, the rails are the 2 that meet exactly 1 other subpath. With 4 or more, the rails are
 the 2 that meet more than 2 others. This step takes only subpaths longer than a tenth of a CSS pixel.</li>
@@ -229,6 +229,20 @@ draws them, and the rails keep that order.</p>
 the other, or that runs along a rail for a while, at one of its crossings. StitchCraft leaves it out.
 Ink/Stitch also counts a line of zero length among the subpaths in step 3, where StitchCraft leaves it
 out as a point.</p>
+<h2 id="single-path-satin"><a class="header" href="#single-path-satin">Single-path satin</a></h2>
+<p>A satin column drawn as one subpath is its centre line. Its stroke gives the column its width and its
+corners: the stroke’s width as the transforms scale it, and its join
+(<a href="../svg-input.html#stroke-width-and-join">SVG input</a>).</p>
+<p>A column no wider than the design’s narrowest satin stroke is too narrow to stitch across
+(<code>REQ-SAT-015</code>). That limit is <code>DesignSettings::min_satin_stroke_width</code>, Ink/Stitch’s
+<code>min_satin_stroke_width_mm</code>, and it is 1 mm unless the design sets it. Such a column is sewn as the
+element’s stroke settings sew a stroke, by default in running stitch. <code>SC-W0212</code> gives its width and the
+limit. As a stroke, it offers the element before it its first point.</p>
+<p>The rule counts the subpaths drawn, as Ink/Stitch counts them. A path of 2 subpaths, one of them a point,
+is never sewn as a stroke for its width. Recognition leaves the point out and reads the other subpath as a
+centre line.</p>
+<p>A wider column becomes 2 rails along its centre line from M4.9 on. Until then it is skipped, and
+<code>SC-W0011</code> says so.</p>
 <h2 id="orientation"><a class="header" href="#orientation">Orientation</a></h2>
 <ul>
 <li><code>swap_satin_rails</code> makes the second rail the first, before any reversal. The first rail sews first in
@@ -460,6 +474,7 @@ end command, read from M8, would replace the needle point or the next stitch.</p
 <tr><td><code>REQ-SAT-012</code></td><td>The zigzag goes through one end of each pair, the rails taking turns, and back through the others. Its insets are half the contour’s when left empty, and its long stitches split into equal parts</td></tr>
 <tr><td><code>REQ-SAT-013</code></td><td>Starting at its nearest point, a column begins on the line between its rails nearest the needle, or on its outline when only that is within the jump length, and follows the line to its first stitch</td></tr>
 <tr><td><code>REQ-SAT-014</code></td><td>Ending at its nearest point, a column ends on its outline nearest the next stitch. Every part is cut in 2 there. The column sews the first halves, then the second halves from the line’s end, and stitches the end last</td></tr>
+<tr><td><code>REQ-SAT-015</code></td><td>A column drawn as one subpath whose stroke is no wider than the design’s narrowest satin stroke sews as a stroke would, with <code>SC-W0212</code>. It offers its first point, as a stroke does</td></tr>
 </tbody>
 </table>
 </div>
@@ -468,7 +483,7 @@ end command, read from M8, would replace the needle point or the next stitch.</p
 <h2 id="diagnostics"><a class="header" href="#diagnostics">Diagnostics</a></h2>
 <p><code>SC-E0201</code>, <code>SC-W0202</code>, <code>SC-W0203</code>, <code>SC-W0205</code>, <code>SC-W0206</code> (a contour underlay too short for its insets
 keeps its length), <code>SC-W0207</code>, <code>SC-W0208</code>, <code>SC-W0209</code> (a satin wider than 12 mm risks snagging: consider
-split stitches or a fill), <code>SC-W0210</code> and <code>SC-W0211</code>.</p>
+split stitches or a fill), <code>SC-W0210</code>, <code>SC-W0211</code> and <code>SC-W0212</code>.</p>
 
                     </main>
 

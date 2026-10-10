@@ -35,7 +35,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-623d53c3.js";
+            window.path_to_searchindex_js = "../searchindex-df24d111.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-67ac7601.js"></script>
@@ -228,8 +228,10 @@ recognition finds is reported, and its <code>satin_method</code> picks the gener
 M4.2. A satin column also reads the running stitch’s length (<code>running_stitch_length_mm</code>): the stitches
 that join its underlays are no longer than the first value. For any other stroke the generator is its
 <code>stroke_method</code>. <code>running_stitch</code> (the default) and
-<code>manual_stitch</code> are sewn from M3. The other stroke and satin methods, satin columns drawn as their centre
-line, and fills are skipped with <code>SC-W0011</code> until their milestones. An element whose parameters are
+<code>manual_stitch</code> are sewn from M3. A satin column drawn as one path no wider than the design’s
+<code>min_satin_stroke_width</code> is sewn as a stroke, with <code>SC-W0212</code>, as in Ink/Stitch (<code>REQ-SAT-015</code>). The other
+stroke and satin methods, wider satin columns drawn as their centre line, and fills are skipped with
+<code>SC-W0011</code> until their milestones. An element whose parameters are
 wrong (<code>SC-E0101</code>) is skipped too, and the rest of the design still plans.</p>
 <p>Each element is generated with the shortest stitch for it: the larger of the machine’s (the profile’s
 <code>min_stitch</code>) and the element’s <code>min_stitch_length_mm</code>, or the design’s shortest stitch when the element
@@ -242,7 +244,8 @@ which its split stitches keep to.</p>
 (<a href="adr/0014-generators-see-their-neighbours.html">ADR 0014</a>, <code>REQ-GEN-003</code>). Each is given the last
 needle point of the elements before it, whatever their thread, and what the next element offers to
 end near: its first point, or its shape when it starts at its own nearest point. The offer comes from
-the next element’s shape and settings, never its stitches, so nothing waits for a later element. A
+the next element’s shape and settings and the design’s, never its stitches, so nothing waits for a
+later element. A
 satin column starts and ends by them (<a href="algorithms/satin.html#start-and-end">satin</a>), and explicit
 start and end commands will override them (<code>REQ-GEN-001</code>).</li>
 <li><strong>Seeded randomness:</strong> each element’s generator is seeded from a hash of its id mixed with its

@@ -35,7 +35,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-623d53c3.js";
+            window.path_to_searchindex_js = "../searchindex-df24d111.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-67ac7601.js"></script>
@@ -287,10 +287,11 @@ origin and licence). Large real-world corpora live in a separate repository pinn
 SHA-256, downloaded by <code>cargo xtask corpus</code> — the same policy VectorCraft follows for its corpora.</p>
 <p>The engine’s cases build their small designs with <code>stitchcraft_testkit::designs</code>. It also reads a plan’s
 shape at a glance: <code>J L4 S5 L4</code> is a jump, 4 lock stitches, 5 needle points of stitching and 4 more lock
-stitches. The satin cases sew their columns with <code>stitchcraft_testkit::satins</code>, as an element is sewn on
-the reference machine, with the stitch lengths the engine gives it there (<code>satin_lengths</code>), and read the
-needle points back in pairs across the column. A column is sewn alone (<code>sewn_satin</code>) or between the
-neighbours a case gives it (<code>sewn_between</code>).</p>
+stitches. Its strokes are as wide as an SVG stroke whose style says nothing, and <code>widened</code> gives one a
+width. The satin cases sew their columns with <code>stitchcraft_testkit::satins</code>, as an element is sewn on the
+reference machine, with the stitch lengths the engine gives it there (<code>satin_lengths</code>), and read the needle
+points back in pairs across the column. A column is sewn alone (<code>sewn_satin</code>) or between the neighbours a
+case gives it (<code>sewn_between</code>).</p>
 <h2 id="levels"><a class="header" href="#levels">Levels</a></h2>
 <h3 id="l0--plan-invariants-every-pr"><a class="header" href="#l0--plan-invariants-every-pr">L0 — Plan invariants (every PR)</a></h3>
 <p>The <a href="data-model.html#plan-invariants">plan invariants</a> run on <em>every</em> plan the

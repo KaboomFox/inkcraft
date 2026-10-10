@@ -35,7 +35,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-623d53c3.js";
+            window.path_to_searchindex_js = "../searchindex-df24d111.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-67ac7601.js"></script>
@@ -227,6 +227,26 @@ stays, and <code>SC-W0802</code> names the value.</li>
 out, as a viewer leaves it out. The insides of <code>&lt;defs&gt;</code>, <code>&lt;symbol&gt;</code>, <code>&lt;marker&gt;</code>, <code>&lt;pattern&gt;</code>,
 <code>&lt;clipPath&gt;</code> and <code>&lt;mask&gt;</code> are never drawn.</li>
 </ul>
+<h2 id="stroke-width-and-join"><a class="header" href="#stroke-width-and-join">Stroke width and join</a></h2>
+<p>A stroke’s width and join give a satin column drawn as one path its width and its corners
+(<a href="algorithms/satin.html#single-path-satin">single-path satin</a>). Other strokes are sewn along their paths,
+however wide they are drawn. Both are read as Ink/Stitch reads them (<code>REQ-SVG-004</code>).</p>
+<ul>
+<li><strong>Width.</strong> The width is <code>stroke-width</code>, inherited, 1 user unit when nothing sets it. It is a length in
+the shape’s own user units, as in a viewer, and a percentage is of the viewport’s diagonal over √2.
+The transforms down to the shape scale it by the average of how far they stretch the x and y axes.
+That is exact when they scale both axes alike. Under an uneven scale or a skew, a viewer draws the
+stroke wider one way than the other, and the average is the middle way. The transforms scale a stroke
+with <code>vector-effect: non-scaling-stroke</code> too, as Ink/Stitch scales it, though a viewer does not.</li>
+<li><strong>Join.</strong> <code>round</code> and <code>bevel</code> are read as they are named. A <code>miter</code> join is limited by
+<code>stroke-miterlimit</code>, 4 when nothing sets it, as SVG says. Any other join, or none, is a miter limited
+at 5, as in Ink/Stitch. SVG 2’s <code>miter-clip</code> and <code>arcs</code> count as other joins.</li>
+<li><strong>Values that do not read.</strong> A width, join or limit that does not read is ignored, as a viewer
+ignores it, and <code>SC-W0804</code> names it. A negative width and a limit below 1 do not read. A stroke too
+wide to measure, such as <code>1e308in</code>, is left out with <code>SC-W0804</code>. Its fill is still sewn.</li>
+</ul>
+<p>Ink/Stitch reads a width in <code>%</code>, <code>em</code> or <code>ex</code> as 0, and a join written in capitals as no join at all. The
+adapter reads them as a viewer draws them (<code>DEV-SVG-001</code>).</p>
 <h2 id="inkstitch-objects"><a class="header" href="#inkstitch-objects">Ink/Stitch objects</a></h2>
 <p>An Ink/Stitch SVG has 3 kinds of object that Ink/Stitch reads and does not sew. The adapter sews none of
 them (<code>REQ-SVG-003</code>).</p>
@@ -242,6 +262,13 @@ them (<code>REQ-SVG-003</code>).</p>
 <p><code>SC-W0802</code> reports a connector that ties no command, a helper path, and a command that the adapter does
 not apply yet. The module docs of <code>crates/stitchcraft-svg/src/inkstitch.rs</code> describe how the adapter
 finds these objects, with the Ink/Stitch files they were read from.</p>
+<h2 id="design-settings"><a class="header" href="#design-settings">Design settings</a></h2>
+<p>Ink/Stitch keeps 3 settings for the whole design in the file’s first <code>&lt;metadata&gt;</code> element:
+<code>collapse_len_mm</code>, <code>min_stitch_len_mm</code> and <code>min_satin_stroke_width_mm</code>. Each is an element of
+Ink/Stitch’s namespace whose text is the value in millimetres, and the first of each name counts. They
+become the design’s collapse length, shortest stitch and narrowest satin stroke (<code>REQ-SVG-005</code>).
+<code>SC-W0802</code> names a value that is not a number of 0 or more, and the design keeps its default. The
+defaults are in the <a href="data-model.html#engine-input-design-stitchcraft-engine">data model</a>.</p>
 <h2 id="reports"><a class="header" href="#reports">Reports</a></h2>
 <ul>
 <li><code>SC-W0802</code> reports a feature that is not stitched. Text, images, clones, nested <code>&lt;svg&gt;</code> elements and
@@ -253,6 +280,7 @@ that are not read yet.</li>
 <li>a transform that does not parse, left out with its contents</li>
 <li>an element that draws nothing</li>
 <li>a point more than 10 m from the origin</li>
+<li>a stroke width, join or miter limit that does not read, and a stroke too wide to measure</li>
 </ul>
 </li>
 <li><code>SC-E0801</code> refuses a file that is not SVG, or that is larger than the adapter reads.</li>

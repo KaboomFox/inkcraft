@@ -35,7 +35,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-623d53c3.js";
+            window.path_to_searchindex_js = "../searchindex-df24d111.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-67ac7601.js"></script>
@@ -273,6 +273,7 @@ another.</p>
 <tr><td><code>SC-W0209</code></td><td>Warning</td><td>Satin wider than 12 mm; long stitches may snag</td><td>M4</td></tr>
 <tr><td><code>SC-W0210</code></td><td>Warning</td><td>Satin rails without rungs have different numbers of nodes (some pair with none)</td><td>M4</td></tr>
 <tr><td><code>SC-W0211</code></td><td>Warning</td><td>Satin push compensation too long for a rail; that rail keeps its length</td><td>M4</td></tr>
+<tr><td><code>SC-W0212</code></td><td>Warning</td><td>Satin column drawn as one path too narrow; sewn as a stroke</td><td>M4</td></tr>
 <tr><td><code>SC-W0303</code></td><td>Warning</td><td>Tiny ring dropped from fill region</td><td>M5</td></tr>
 <tr><td><code>SC-W0305</code></td><td>Warning</td><td>Region too small for fill rows; outlined with running stitch instead</td><td>M5</td></tr>
 <tr><td><code>SC-W0307</code></td><td>Warning</td><td>Region split into parts that are not connected; parts joined with trims</td><td>M5</td></tr>
@@ -296,7 +297,7 @@ another.</p>
 <tr><td><code>SC-E0801</code></td><td>Error</td><td>SVG could not be read (with the parser’s position)</td><td>M3</td></tr>
 <tr><td><code>SC-W0802</code></td><td>Warning</td><td>SVG feature ignored (e.g. raster image, text not converted to paths)</td><td>M3</td></tr>
 <tr><td><code>SC-W0803</code></td><td>Warning</td><td><code>.vectorcraft</code> file from a newer VectorCraft format version; read best-effort</td><td>M6</td></tr>
-<tr><td><code>SC-W0804</code></td><td>Warning</td><td>Element geometry invalid or out of range (path data error, invalid transform, draws nothing, beyond 10 m); the usable part is stitched</td><td>M3</td></tr>
+<tr><td><code>SC-W0804</code></td><td>Warning</td><td>Element geometry invalid or out of range (path data error, invalid transform, draws nothing, beyond 10 m, a stroke’s width, join or miter limit that does not read); the usable part is stitched</td><td>M3</td></tr>
 <tr><td><code>SC-I0805</code></td><td>Info</td><td>Object left out, as the file asks (Ink/Stitch’s ignore commands and <code>ignore_object</code> setting)</td><td>M3</td></tr>
 </tbody>
 </table>

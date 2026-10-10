@@ -35,10 +35,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-f5cee43d.js";
+            window.path_to_searchindex_js = "../searchindex-623d53c3.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-c8bf69c1.js"></script>
+        <script src="../toc-67ac7601.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -237,12 +237,14 @@ sets none. A satin column is given its longest stitch as well, the element’s <
 which its split stitches keep to.</p>
 <p>Rules every generator follows:</p>
 <ul>
-<li><strong>Pure:</strong> output depends only on (normalized shape, typed params, hints, seed, budget).</li>
-<li><strong>Entry and exit hints, not neighbours’ stitches.</strong> The previous element’s <em>geometry</em> suggests where
-this one should start (nearest point to its exit hint); the generator never waits for another
-element’s stitches. This makes generation independent, cacheable and parallel, so large designs
-stay fast, and honours explicit
-start/end commands (<code>REQ-GEN-001</code>).</li>
+<li><strong>Pure:</strong> output depends only on (normalized shape, typed params, neighbours, seed, budget).</li>
+<li><strong>The needle before, the next element after.</strong> Elements are generated in sewing order
+(<a href="adr/0014-generators-see-their-neighbours.html">ADR 0014</a>, <code>REQ-GEN-003</code>). Each is given the last
+needle point of the elements before it, whatever their thread, and what the next element offers to
+end near: its first point, or its shape when it starts at its own nearest point. The offer comes from
+the next element’s shape and settings, never its stitches, so nothing waits for a later element. A
+satin column starts and ends by them (<a href="algorithms/satin.html#start-and-end">satin</a>), and explicit
+start and end commands will override them (<code>REQ-GEN-001</code>).</li>
 <li><strong>Seeded randomness:</strong> each element’s generator is seeded from a hash of its id mixed with its
 <code>random_seed</code>, one of the settings every stitch type shares. The PRNG is SplitMix64 from
 <code>stitchcraft-core</code> (<a href="determinism.html">determinism</a>).</li>
@@ -374,11 +376,13 @@ validates the result. A violation is a bug in StitchCraft: <code>plan</code> ret
 It writes a bug-report bundle that reproduces the failure (<code>REQ-CLI-002</code>). The conformance suite has a case for every invariant.</p>
 <h2 id="7-incremental-and-parallel-planning"><a class="header" href="#7-incremental-and-parallel-planning">7. Incremental and parallel planning</a></h2>
 <ul>
-<li><strong>Cache:</strong> a group is keyed by (element shape hash, params hash, hints, seed, engine version). The
+<li><strong>Cache:</strong> a group is keyed by (element shape hash, params hash, neighbours, seed, engine version). The
 VectorCraft live effects already cache per object; the CLI and future panels reuse the same key.</li>
-<li><strong>Parallelism (native only):</strong> generation fans out over elements with <code>rayon</code> behind the CLI’s
-<code>parallel</code> feature; results are joined in document order, so output is identical to a sequential run.
-The wasm plug-in stays single-threaded.</li>
+<li><strong>Parallelism (native only):</strong> elements are generated in sewing order, each seeing its neighbours
+(<a href="adr/0014-generators-see-their-neighbours.html">ADR 0014</a>). Reading parameters and recognizing shapes
+depend on the element alone. That work may run in parallel with <code>rayon</code> behind the CLI’s <code>parallel</code>
+feature. Its results are joined in document order, and the output is then identical to a sequential run. The wasm
+plug-in stays single-threaded.</li>
 </ul>
 <h2 id="8-outputs"><a class="header" href="#8-outputs">8. Outputs</a></h2>
 <div class="table-wrapper">

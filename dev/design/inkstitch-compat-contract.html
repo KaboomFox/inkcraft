@@ -35,10 +35,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-f5cee43d.js";
+            window.path_to_searchindex_js = "../searchindex-623d53c3.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-c8bf69c1.js"></script>
+        <script src="../toc-67ac7601.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -239,7 +239,7 @@ stitches once its stitch type or feature lands (see <em>Phase</em> and the param
 <tr><td><code>bean_stitch_repeats</code></td><td>str</td><td>—</td><td>0</td><td><code>running_stitch</code>, <code>ripple_stitch</code>, <code>manual_stitch</code>, <code>zigzag_stitch</code></td><td>P1 (M3)</td><td><a href="../user/reference/params/repeat.html#bean_stitch_repeats">registered</a></td></tr>
 <tr><td><code>manual_pattern_placement</code></td><td>boolean</td><td>—</td><td>false</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td><td>planned</td></tr>
 <tr><td><code>running_stitch_length_mm</code></td><td>string</td><td>mm</td><td>2.5</td><td><code>running_stitch</code>, <code>ripple_stitch</code></td><td>P1 (M3)</td><td><a href="../user/reference/params/running.html#running_stitch_length_mm">registered</a></td></tr>
-<tr><td><code>running_stitch_tolerance_mm</code></td><td>float</td><td>mm</td><td>0.2</td><td><code>running_stitch</code>, <code>ripple_stitch</code></td><td>P1 (M3)</td><td><a href="../user/reference/params/running.html#running_stitch_tolerance_mm">registered</a></td></tr>
+<tr><td><code>running_stitch_tolerance_mm</code></td><td>float</td><td>mm</td><td>0.2</td><td><code>running_stitch</code>, <code>ripple_stitch</code></td><td>P1 (M3)</td><td><a href="../user/reference/params/running.html#running_stitch_tolerance_mm">deviates</a></td></tr>
 <tr><td><code>enable_random_stitch_length</code></td><td>boolean</td><td>—</td><td>false</td><td><code>running_stitch</code>, <code>ripple_stitch</code></td><td>P1 (M3)</td><td><a href="../user/reference/params/running.html#enable_random_stitch_length">registered</a></td></tr>
 <tr><td><code>random_stitch_length_jitter_percent</code></td><td>float</td><td>± %</td><td>10</td><td><code>running_stitch</code>, <code>ripple_stitch</code></td><td>P1 (M3)</td><td><a href="../user/reference/params/running.html#random_stitch_length_jitter_percent">registered</a></td></tr>
 <tr><td><code>max_stitch_length_mm</code></td><td>float</td><td>mm</td><td>—</td><td><code>manual_stitch</code></td><td>P1 (M3)</td><td><a href="../user/reference/params/common.html#max_stitch_length_mm">registered</a></td></tr>
@@ -296,10 +296,10 @@ stitches once its stitch type or feature lands (see <em>Phase</em> and the param
 <tr><td><code>reverse_rails</code></td><td>combo</td><td>—</td><td>automatic</td><td>all</td><td>P1 (M4)</td><td><a href="../user/reference/params/satin.html#reverse_rails">registered</a></td></tr>
 <tr><td><code>swap_satin_rails</code></td><td>boolean</td><td>—</td><td>false</td><td>all</td><td>P1 (M4)</td><td><a href="../user/reference/params/satin.html#swap_satin_rails">registered</a></td></tr>
 <tr><td><code>running_stitch_length_mm</code></td><td>float</td><td>mm</td><td>2.5</td><td>all</td><td>P1 (M4)</td><td><a href="../user/reference/params/running.html#running_stitch_length_mm">registered</a></td></tr>
-<tr><td><code>running_stitch_tolerance_mm</code></td><td>float</td><td>mm</td><td>0.1</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
-<tr><td><code>running_stitch_position</code></td><td>float</td><td>%</td><td>50</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
-<tr><td><code>start_at_nearest_point</code></td><td>boolean</td><td>—</td><td>true</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
-<tr><td><code>end_at_nearest_point</code></td><td>boolean</td><td>—</td><td>true</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>running_stitch_tolerance_mm</code></td><td>float</td><td>mm</td><td>0.1</td><td>all</td><td>P1 (M4)</td><td><a href="../user/reference/params/running.html#running_stitch_tolerance_mm">deviates</a></td></tr>
+<tr><td><code>running_stitch_position</code></td><td>float</td><td>%</td><td>50</td><td>all</td><td>P1 (M4)</td><td><a href="../user/reference/params/satin.html#running_stitch_position">registered</a></td></tr>
+<tr><td><code>start_at_nearest_point</code></td><td>boolean</td><td>—</td><td>true</td><td>all</td><td>P1 (M4)</td><td><a href="../user/reference/params/satin.html#start_at_nearest_point">registered</a></td></tr>
+<tr><td><code>end_at_nearest_point</code></td><td>boolean</td><td>—</td><td>true</td><td>all</td><td>P1 (M4)</td><td><a href="../user/reference/params/satin.html#end_at_nearest_point">registered</a></td></tr>
 <tr><td><code>contour_underlay</code></td><td>toggle</td><td>—</td><td>—</td><td>all</td><td>P1 (M4)</td><td><a href="../user/reference/params/satin.html#contour_underlay">registered</a></td></tr>
 <tr><td><code>contour_underlay_stitch_length_mm</code></td><td>float</td><td>mm</td><td>3</td><td>all</td><td>P1 (M4)</td><td><a href="../user/reference/params/satin.html#contour_underlay_stitch_length_mm">registered</a></td></tr>
 <tr><td><code>contour_underlay_stitch_tolerance_mm</code></td><td>float</td><td>mm</td><td>0.2</td><td>all</td><td>P1 (M4)</td><td><a href="../user/reference/params/satin.html#contour_underlay_stitch_tolerance_mm">registered</a></td></tr>
@@ -477,7 +477,7 @@ patterns, stitch plan or sew stack, and legacy names Ink/Stitch’s updater rewr
 </tbody>
 </table>
 </div>
-<p><em>145 parameter declarations, 60 registered in StitchCraft.</em></p>
+<p><em>145 parameter declarations, 64 registered in StitchCraft.</em></p>
 
                     </main>
 

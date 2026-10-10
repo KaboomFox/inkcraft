@@ -35,10 +35,10 @@
             const path_to_root = "../../../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../../../searchindex-f5cee43d.js";
+            window.path_to_searchindex_js = "../../../searchindex-623d53c3.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../../../toc-c8bf69c1.js"></script>
+        <script src="../../../toc-67ac7601.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -229,6 +229,32 @@ goes from the first rail to the second.</p>
 <ul>
 <li><strong>Accepts:</strong> true or false</li>
 <li><strong>Default:</strong> <code>false</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h2 id="start-and-end"><a class="header" href="#start-and-end">Start and end</a></h2>
+<h3 id="start_at_nearest_point"><a class="header" href="#start_at_nearest_point"><code>start_at_nearest_point</code></a></h3>
+<p><strong>Start at nearest point.</strong> Start near where the elements before left the needle: on the line between the rails, or on the
+column’s edge when only that is close, then along the line under the column to its start. It
+saves a jump and a trim.</p>
+<ul>
+<li><strong>Accepts:</strong> true or false</li>
+<li><strong>Default:</strong> <code>true</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="end_at_nearest_point"><a class="header" href="#end_at_nearest_point"><code>end_at_nearest_point</code></a></h3>
+<p><strong>End at nearest point.</strong> End near where the next element starts: the column is sewn up to the end point, along the line
+under it to its end, and back, and ends on its edge nearest the next element.</p>
+<ul>
+<li><strong>Accepts:</strong> true or false</li>
+<li><strong>Default:</strong> <code>true</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="running_stitch_position"><a class="header" href="#running_stitch_position"><code>running_stitch_position</code></a></h3>
+<p><strong>Running stitch position.</strong> Where the line the needle follows to the start and to the end runs, in percent of the way from
+the first rail to the second: 50 is the middle.</p>
+<ul>
+<li><strong>Accepts:</strong> a percentage from 0 to 100</li>
+<li><strong>Default:</strong> <code>50</code></li>
 <li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
 </ul>
 <h2 id="compensation"><a class="header" href="#compensation">Compensation</a></h2>

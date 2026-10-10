@@ -36,10 +36,10 @@
             const path_to_root = "";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "searchindex-f5cee43d.js";
+            window.path_to_searchindex_js = "searchindex-623d53c3.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="toc-c8bf69c1.js"></script>
+        <script src="toc-67ac7601.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -1629,7 +1629,7 @@ numbers, <code>true</code>/<code>false</code>, strings and arrays instead, and <
 <tr><td><a href="#stroke-parameters">Stroke parameters</a></td><td>1</td><td>Running stitch, Ripple stitch, Zigzag stitch, Manual stitch</td></tr>
 <tr><td><a href="#running-parameters">Running parameters</a></td><td>4</td><td>Running stitch, Ripple stitch</td></tr>
 <tr><td><a href="#repeat-parameters">Repeat parameters</a></td><td>2</td><td>Running stitch, Ripple stitch, Zigzag stitch, Manual stitch</td></tr>
-<tr><td><a href="#satin-parameters">Satin parameters</a></td><td>33</td><td>Satin column, E-stitch, S-stitch, Zigzag satin</td></tr>
+<tr><td><a href="#satin-parameters">Satin parameters</a></td><td>36</td><td>Satin column, E-stitch, S-stitch, Zigzag satin</td></tr>
 </tbody>
 </table>
 </div>
@@ -1652,6 +1652,7 @@ numbers, <code>true</code>/<code>false</code>, strings and arrays instead, and <
 <tr><td><a href="#contour_underlay_stitch_length_mm"><code>contour_underlay_stitch_length_mm</code></a></td><td>Contour stitch length</td><td>Satin parameters</td></tr>
 <tr><td><a href="#contour_underlay_stitch_tolerance_mm"><code>contour_underlay_stitch_tolerance_mm</code></a></td><td>Contour tolerance</td><td>Satin parameters</td></tr>
 <tr><td><a href="#enable_random_stitch_length"><code>enable_random_stitch_length</code></a></td><td>Random stitch length</td><td>Running parameters</td></tr>
+<tr><td><a href="#end_at_nearest_point"><code>end_at_nearest_point</code></a></td><td>End at nearest point</td><td>Satin parameters</td></tr>
 <tr><td><a href="#force_lock_stitches"><code>force_lock_stitches</code></a></td><td>Always lock</td><td>Common parameters</td></tr>
 <tr><td><a href="#lock_custom_end"><code>lock_custom_end</code></a></td><td>Custom end lock</td><td>Common parameters</td></tr>
 <tr><td><a href="#lock_custom_start"><code>lock_custom_start</code></a></td><td>Custom start lock</td><td>Common parameters</td></tr>
@@ -1678,6 +1679,7 @@ numbers, <code>true</code>/<code>false</code>, strings and arrays instead, and <
 <tr><td><a href="#repeats"><code>repeats</code></a></td><td>Repeats</td><td>Repeat parameters</td></tr>
 <tr><td><a href="#reverse_rails"><code>reverse_rails</code></a></td><td>Reverse rails</td><td>Satin parameters</td></tr>
 <tr><td><a href="#running_stitch_length_mm"><code>running_stitch_length_mm</code></a></td><td>Stitch length</td><td>Running parameters</td></tr>
+<tr><td><a href="#running_stitch_position"><code>running_stitch_position</code></a></td><td>Running stitch position</td><td>Satin parameters</td></tr>
 <tr><td><a href="#running_stitch_tolerance_mm"><code>running_stitch_tolerance_mm</code></a></td><td>Curve tolerance</td><td>Running parameters</td></tr>
 <tr><td><a href="#satin_column"><code>satin_column</code></a></td><td>Satin column</td><td>Satin parameters</td></tr>
 <tr><td><a href="#satin_method"><code>satin_method</code></a></td><td>Method</td><td>Satin parameters</td></tr>
@@ -1685,6 +1687,7 @@ numbers, <code>true</code>/<code>false</code>, strings and arrays instead, and <
 <tr><td><a href="#short_stitch_inset"><code>short_stitch_inset</code></a></td><td>Short stitch inset</td><td>Satin parameters</td></tr>
 <tr><td><a href="#split_method"><code>split_method</code></a></td><td>Split method</td><td>Satin parameters</td></tr>
 <tr><td><a href="#split_staggers"><code>split_staggers</code></a></td><td>Staggers</td><td>Satin parameters</td></tr>
+<tr><td><a href="#start_at_nearest_point"><code>start_at_nearest_point</code></a></td><td>Start at nearest point</td><td>Satin parameters</td></tr>
 <tr><td><a href="#stop_after"><code>stop_after</code></a></td><td>Stop after</td><td>Common parameters</td></tr>
 <tr><td><a href="#stroke_method"><code>stroke_method</code></a></td><td>Method</td><td>Stroke parameters</td></tr>
 <tr><td><a href="#swap_satin_rails"><code>swap_satin_rails</code></a></td><td>Swap rails</td><td>Satin parameters</td></tr>
@@ -1883,11 +1886,12 @@ first length.</p>
 </ul>
 <h3 id="running_stitch_tolerance_mm"><a class="header" href="#running_stitch_tolerance_mm"><code>running_stitch_tolerance_mm</code></a></h3>
 <p><strong>Curve tolerance.</strong> How far a stitch may stray from a curve. A smaller tolerance follows curves more closely, with
-more and shorter stitches.</p>
+more and shorter stitches. A satin column’s way to its start and from its end keeps to it too.</p>
 <ul>
 <li><strong>Accepts:</strong> a length from 0.01 to 5 mm</li>
 <li><strong>Default:</strong> <code>0.2</code></li>
-<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+<li><strong>Applies to:</strong> Running stitch, Ripple stitch, Satin column, E-stitch, S-stitch, Zigzag satin</li>
+<li><strong>Ink/Stitch:</strong> same key; StitchCraft differs (DEV-SAT-006): A satin column’s running_stitch_tolerance_mm defaults to 0.2 mm, the value Ink/Stitch sews when a file sets none. Ink/Stitch’s settings window shows 0.1 mm.</li>
 </ul>
 <h3 id="enable_random_stitch_length"><a class="header" href="#enable_random_stitch_length"><code>enable_random_stitch_length</code></a></h3>
 <p><strong>Random stitch length.</strong> Vary the stitch lengths at random instead of spreading them evenly. Lines sewn close together
@@ -1978,6 +1982,32 @@ goes from the first rail to the second.</p>
 <ul>
 <li><strong>Accepts:</strong> true or false</li>
 <li><strong>Default:</strong> <code>false</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h2 id="start-and-end"><a class="header" href="#start-and-end">Start and end</a></h2>
+<h3 id="start_at_nearest_point"><a class="header" href="#start_at_nearest_point"><code>start_at_nearest_point</code></a></h3>
+<p><strong>Start at nearest point.</strong> Start near where the elements before left the needle: on the line between the rails, or on the
+column’s edge when only that is close, then along the line under the column to its start. It
+saves a jump and a trim.</p>
+<ul>
+<li><strong>Accepts:</strong> true or false</li>
+<li><strong>Default:</strong> <code>true</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="end_at_nearest_point"><a class="header" href="#end_at_nearest_point"><code>end_at_nearest_point</code></a></h3>
+<p><strong>End at nearest point.</strong> End near where the next element starts: the column is sewn up to the end point, along the line
+under it to its end, and back, and ends on its edge nearest the next element.</p>
+<ul>
+<li><strong>Accepts:</strong> true or false</li>
+<li><strong>Default:</strong> <code>true</code></li>
+<li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
+</ul>
+<h3 id="running_stitch_position"><a class="header" href="#running_stitch_position"><code>running_stitch_position</code></a></h3>
+<p><strong>Running stitch position.</strong> Where the line the needle follows to the start and to the end runs, in percent of the way from
+the first rail to the second: 50 is the middle.</p>
+<ul>
+<li><strong>Accepts:</strong> a percentage from 0 to 100</li>
+<li><strong>Default:</strong> <code>50</code></li>
 <li><strong>Ink/Stitch:</strong> same key, meaning and default</li>
 </ul>
 <h2 id="compensation"><a class="header" href="#compensation">Compensation</a></h2>
@@ -2510,6 +2540,7 @@ identical to Ink/Stitch’s SVG attributes because that is the interoperability 
 <tr><td><a href="#adr-0011-stitchcraft-can-move-into-vectorcrafts-repository">0011</a></td><td>StitchCraft can move into VectorCraft’s repository as a folder</td></tr>
 <tr><td><a href="#adr-0012-read-inkstitchs-source-never-copy-it">0012</a></td><td>Ink/Stitch’s source may be read, never copied</td></tr>
 <tr><td><a href="#adr-0013-the-reference-machine-is-a-brother-pe800-with-a-profile-for-each-of-its-hoops">0013</a></td><td>A Brother PE800 is the reference machine, with a profile for each of its 3 hoops</td></tr>
+<tr><td><a href="#adr-0014-generators-see-their-neighbours-the-needle-before-the-next-element-after">0014</a></td><td>Elements are generated in order, each seeing the needle before it and the next element</td></tr>
 </tbody>
 </table>
 </div>
@@ -3445,12 +3476,14 @@ sets none. A satin column is given its longest stitch as well, the element’s <
 which its split stitches keep to.</p>
 <p>Rules every generator follows:</p>
 <ul>
-<li><strong>Pure:</strong> output depends only on (normalized shape, typed params, hints, seed, budget).</li>
-<li><strong>Entry and exit hints, not neighbours’ stitches.</strong> The previous element’s <em>geometry</em> suggests where
-this one should start (nearest point to its exit hint); the generator never waits for another
-element’s stitches. This makes generation independent, cacheable and parallel, so large designs
-stay fast, and honours explicit
-start/end commands (<code>REQ-GEN-001</code>).</li>
+<li><strong>Pure:</strong> output depends only on (normalized shape, typed params, neighbours, seed, budget).</li>
+<li><strong>The needle before, the next element after.</strong> Elements are generated in sewing order
+(<a href="#adr-0014-generators-see-their-neighbours-the-needle-before-the-next-element-after">ADR 0014</a>, <code>REQ-GEN-003</code>). Each is given the last
+needle point of the elements before it, whatever their thread, and what the next element offers to
+end near: its first point, or its shape when it starts at its own nearest point. The offer comes from
+the next element’s shape and settings, never its stitches, so nothing waits for a later element. A
+satin column starts and ends by them (<a href="#start-and-end-1">satin</a>), and explicit
+start and end commands will override them (<code>REQ-GEN-001</code>).</li>
 <li><strong>Seeded randomness:</strong> each element’s generator is seeded from a hash of its id mixed with its
 <code>random_seed</code>, one of the settings every stitch type shares. The PRNG is SplitMix64 from
 <code>stitchcraft-core</code> (<a href="#determinism-1">determinism</a>).</li>
@@ -3582,11 +3615,13 @@ validates the result. A violation is a bug in StitchCraft: <code>plan</code> ret
 It writes a bug-report bundle that reproduces the failure (<code>REQ-CLI-002</code>). The conformance suite has a case for every invariant.</p>
 <h2 id="7-incremental-and-parallel-planning"><a class="header" href="#7-incremental-and-parallel-planning">7. Incremental and parallel planning</a></h2>
 <ul>
-<li><strong>Cache:</strong> a group is keyed by (element shape hash, params hash, hints, seed, engine version). The
+<li><strong>Cache:</strong> a group is keyed by (element shape hash, params hash, neighbours, seed, engine version). The
 VectorCraft live effects already cache per object; the CLI and future panels reuse the same key.</li>
-<li><strong>Parallelism (native only):</strong> generation fans out over elements with <code>rayon</code> behind the CLI’s
-<code>parallel</code> feature; results are joined in document order, so output is identical to a sequential run.
-The wasm plug-in stays single-threaded.</li>
+<li><strong>Parallelism (native only):</strong> elements are generated in sewing order, each seeing its neighbours
+(<a href="#adr-0014-generators-see-their-neighbours-the-needle-before-the-next-element-after">ADR 0014</a>). Reading parameters and recognizing shapes
+depend on the element alone. That work may run in parallel with <code>rayon</code> behind the CLI’s <code>parallel</code>
+feature. Its results are joined in document order, and the output is then identical to a sequential run. The wasm
+plug-in stays single-threaded.</li>
 </ul>
 <h2 id="8-outputs"><a class="header" href="#8-outputs">8. Outputs</a></h2>
 <div class="table-wrapper">
@@ -3669,6 +3704,9 @@ rests on is welcome when it helps the next reader check it again
 <!-- implements: crates/stitchcraft-engine/src/generators/mod.rs, crates/stitchcraft-engine/src/generators/running/**, crates/stitchcraft-engine/src/generators/manual.rs, crates/stitchcraft-engine/src/generators/passes.rs, crates/stitchcraft-engine/src/normalize/stroke.rs, crates/stitchcraft-engine/src/normalize/along.rs -->
 <p>Strokes follow a path. Shape: <code>StrokePath</code> (an ordered list of polylines, corners marked, from the
 normalizer). Phase P1 (M3) unless noted.</p>
+<p>A stroke starts where it is drawn and ends where it is drawn, as in Ink/Stitch. Its generator is given its
+neighbours, as every generator is (<a href="#adr-0014-generators-see-their-neighbours-the-needle-before-the-next-element-after">ADR 0014</a>), and a
+stroke sews the same whatever they are. The column before a stroke ends near the stroke’s first point.</p>
 <h2 id="running-stitch-2"><a class="header" href="#running-stitch-2">Running stitch</a></h2>
 <p>The workhorse: outlines, details, travel, underlay.</p>
 <p><strong>Parameters:</strong> <code>running_stitch_length_mm</code> (one length or a repeating pattern of lengths, <code>LengthList</code>),
@@ -3792,7 +3830,7 @@ properties will include “lines never cross the target point” and “each lin
 interpolated curve”.</p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="satin-generators"><a class="header" href="#satin-generators">Satin generators</a></h1>
-<!-- implements: crates/stitchcraft-engine/src/normalize/satin.rs, crates/stitchcraft-engine/src/generators/satin/** -->
+<!-- implements: crates/stitchcraft-engine/src/normalize/satin.rs, crates/stitchcraft-engine/src/normalize/near.rs, crates/stitchcraft-engine/src/generators/satin/** -->
 <p>A satin column is a band of closely spaced stitches that swing from one edge to the other. It is the
 signature look of lettering and borders, and the stitch type where pull compensation and underlay
 matter most. Phase P1 (M4); the E, S and zigzag variants are P2 (M7).</p>
@@ -3976,13 +4014,67 @@ narrow column, a pair’s ends meet as pull compensation’s do, and the contour
 line. StitchCraft differs from Ink/Stitch in 2 more places. The centre walk keeps to its own tolerance,
 where Ink/Stitch uses the satin’s running stitch tolerance (<code>DEV-SAT-004</code>). A running stitch length of
 several values gives the travel its first, where Ink/Stitch falls back to 2.5 mm (<code>DEV-SAT-005</code>).</p>
-<h2 id="start-and-end"><a class="header" href="#start-and-end">Start and end</a></h2>
-<p>With <code>start_at_nearest_point</code>, the column begins at whichever end is nearest the previous element’s
-exit; with <code>end_at_nearest_point</code>, the top stitching finishes at the end nearest the next element’s
-entry, which may mean the underlay runs one way and the top the other. Explicit start/end commands
-override both (<code>REQ-GEN-001</code>). The stitches that join the underlays are no longer than
-<code>running_stitch_length_mm</code> (see <em>Underlays</em>). The way to the start and from the end follows the line at
-<code>running_stitch_position</code> between the rails, within <code>running_stitch_tolerance_mm</code>.</p>
+<h2 id="start-and-end-1"><a class="header" href="#start-and-end-1">Start and end</a></h2>
+<p>A column starts near where the elements before it left the needle, and ends near where the next element
+starts, as in Ink/Stitch, which does both by default. The engine gives each element 2 neighbours
+(<a href="#adr-0014-generators-see-their-neighbours-the-needle-before-the-next-element-after">ADR 0014</a>). The first is the last needle point of the
+elements before it, whatever their thread. The second is what the next element offers to end near. Strokes
+offer their first point. Satin columns that start at their own nearest point offer their rails, and
+others the start of their first rail. Either way the rails are as they are sewn, after any swap and
+reversal. Fills offer nothing until they are sewn (M5).</p>
+<p><strong>The line.</strong> The way to the start and the way to the end follow a line between the rails,
+<code>running_stitch_position</code> percent of the way from the first rail to the second (50 is the middle). It is
+built as the centre walk’s is. Pairs are placed every <code>running_stitch_tolerance_mm</code> and moved in until
+their ends meet the line. A running stitch of the first of the running stitch’s lengths
+(<code>running_stitch_length_mm</code>) goes through them within the same tolerance.</p>
+<p><strong>Cuts.</strong> A place on the column is found by its cut, one of the pairs placed at the zigzag spacing with
+no compensation and nothing random. The cut is the pair with the point nearest the place. Where the
+needle enters the line for a place is the line’s point nearest that cut. A part of the column is cut in 2
+at its own point nearest the cut. When the cut’s 2 points coincide, where the rails meet, a part is not
+cut: it is all first, or all second when its start is within 0.1 CSS pixels of the place.</p>
+<p><strong>Starting at the nearest point</strong> (<code>start_at_nearest_point</code>). With a needle point before it, the column
+starts at the point of the line nearest that needle point. When that point is farther from the needle
+than the jump length, and the compensated outline is nearer than the jump length, it starts at the
+outline’s point nearest the needle instead. The jump length is the element’s <code>min_jump_stitch_length_mm</code>,
+or the design’s collapse length when the element sets none or 0. The compensated outline is the 2
+polylines through the ends of the top stitches’ pairs, after pull compensation and random width, before
+short stitches. From its start, the needle enters the line where the start’s cut says and follows it to
+where the first stitch’s cut says, and the column goes on from its first stitch as before.</p>
+<p><strong>Ending at the nearest point</strong> (<code>end_at_nearest_point</code>). With an element after it, the column ends at
+the point of its compensated outline nearest the next stitch. The next stitch is the point of the
+column’s rails nearest the next element’s first point, or nearest its rails when it offers them. The
+column’s rails are measured as they are sewn. The column ignores an end less than 5 CSS pixels (1.32 mm)
+from the line’s end, and ends as if it were the last element. Otherwise every part of the column is cut
+in 2 at the end’s cut. The centre walk is cut before its repeats, and the zigzag’s ways before their long
+stitches are split. The contour’s sides and the top stitches are cut too. The column sews every part’s
+first half in order. Then the needle follows the line from the end’s cut to the line’s end, and the
+column sews every part’s second half in order and stitches the end last.</p>
+<p>The halves follow each part’s direction. The centre walk’s second half is turned to run from the
+column’s end, and each half is sewn its repeats. The contour’s first pass is its first side up to the cut
+and its second side from the cut back to the start, and its second pass the rest of the second side, then
+the rest of the first. The zigzag’s first pass goes to the cut and back, and its second goes from the end
+to the cut and back to the end. The top stitches’ second half is turned to run from the column’s end to
+the cut.</p>
+<p><strong>After an odd centre walk,</strong> which brings the needle to the column’s end, the column’s start and end
+trade places in the halves above. The first pass works from the column’s end towards the cut, and the
+second from its start. The centre walk’s halves are its part from the cut to the end and its part from
+the cut to the start, each sewn its repeats. The first pass begins at the cut. Between the passes the
+needle goes to the line at the cut, where the second pass begins.</p>
+<p><strong>Equally near points.</strong> Shapes are often equally near at several points, as rails side by side are. The
+column takes the point Ink/Stitch takes, found in the order its geometry library, shapely, finds them.
+Shapes are measured from one to the other, polyline by polyline and side by side. Sides that cross or
+touch meet exactly where they do, and distances are measured as that library measures them, so equal
+distances compare as equal. A cut is measured from the part it cuts, and the line is entered measuring
+from the cut. The engine’s tests check its answers against shapely’s for 1,600 random cases on coarse
+grids, where ties are common (<code>conformance/fixtures/geometry/shapely-nearest.txt</code>, written by
+<code>conformance/oracle/nearest.py</code>). Shapely computes a crossing point in extended precision, so where that
+point also lies on another side, the 2 can differ in which side they find it on.</p>
+<p>Straight stitches join each piece to the next as between underlays, no longer than the travel length. A
+point of the line within the shortest stitch of the needle only routes it, and is left out. An end within
+the shortest stitch of the column’s last needle point moves that point to the end. The column’s last
+stitch, often a top stitch, then goes to the end in one stitch. Ink/Stitch sews the end as a stitch of
+its own, which its stitch plan drops when it is no longer than its shortest stitch. An explicit start or
+end command, read from M8, would replace the needle point or the next stitch.</p>
 <h2 id="variants-p2-m7"><a class="header" href="#variants-p2-m7">Variants (P2, M7)</a></h2>
 <div class="table-wrapper">
 <table>
@@ -4015,6 +4107,8 @@ override both (<code>REQ-GEN-001</code>). The stitches that join the underlays a
 <tr><td><code>REQ-SAT-010</code></td><td>The centre walk follows the line at its position between the rails within its tolerance, in stitches no longer than its length, there and back its repeats</td></tr>
 <tr><td><code>REQ-SAT-011</code></td><td>The contour runs along each rail at its insets, towards the end on the first rail’s side and back on the second’s. It stops short of the column’s start and end by the rails’ insets in millimetres</td></tr>
 <tr><td><code>REQ-SAT-012</code></td><td>The zigzag goes through one end of each pair, the rails taking turns, and back through the others. Its insets are half the contour’s when left empty, and its long stitches split into equal parts</td></tr>
+<tr><td><code>REQ-SAT-013</code></td><td>Starting at its nearest point, a column begins on the line between its rails nearest the needle, or on its outline when only that is within the jump length, and follows the line to its first stitch</td></tr>
+<tr><td><code>REQ-SAT-014</code></td><td>Ending at its nearest point, a column ends on its outline nearest the next stitch. Every part is cut in 2 there. The column sews the first halves, then the second halves from the line’s end, and stitches the end last</td></tr>
 </tbody>
 </table>
 </div>
@@ -5098,7 +5192,8 @@ SHA-256, downloaded by <code>cargo xtask corpus</code> — the same policy Vecto
 shape at a glance: <code>J L4 S5 L4</code> is a jump, 4 lock stitches, 5 needle points of stitching and 4 more lock
 stitches. The satin cases sew their columns with <code>stitchcraft_testkit::satins</code>, as an element is sewn on
 the reference machine, with the stitch lengths the engine gives it there (<code>satin_lengths</code>), and read the
-needle points back in pairs across the column.</p>
+needle points back in pairs across the column. A column is sewn alone (<code>sewn_satin</code>) or between the
+neighbours a case gives it (<code>sewn_between</code>).</p>
 <h2 id="levels"><a class="header" href="#levels">Levels</a></h2>
 <h3 id="l0--plan-invariants-every-pr"><a class="header" href="#l0--plan-invariants-every-pr">L0 — Plan invariants (every PR)</a></h3>
 <p>The <a href="#plan-invariants">plan invariants</a> run on <em>every</em> plan the
@@ -5559,7 +5654,7 @@ stitches once its stitch type or feature lands (see <em>Phase</em> and the param
 <tr><td><code>bean_stitch_repeats</code></td><td>str</td><td>—</td><td>0</td><td><code>running_stitch</code>, <code>ripple_stitch</code>, <code>manual_stitch</code>, <code>zigzag_stitch</code></td><td>P1 (M3)</td><td><a href="#bean_stitch_repeats">registered</a></td></tr>
 <tr><td><code>manual_pattern_placement</code></td><td>boolean</td><td>—</td><td>false</td><td><code>ripple_stitch</code></td><td>P3 (M10)</td><td>planned</td></tr>
 <tr><td><code>running_stitch_length_mm</code></td><td>string</td><td>mm</td><td>2.5</td><td><code>running_stitch</code>, <code>ripple_stitch</code></td><td>P1 (M3)</td><td><a href="#running_stitch_length_mm">registered</a></td></tr>
-<tr><td><code>running_stitch_tolerance_mm</code></td><td>float</td><td>mm</td><td>0.2</td><td><code>running_stitch</code>, <code>ripple_stitch</code></td><td>P1 (M3)</td><td><a href="#running_stitch_tolerance_mm">registered</a></td></tr>
+<tr><td><code>running_stitch_tolerance_mm</code></td><td>float</td><td>mm</td><td>0.2</td><td><code>running_stitch</code>, <code>ripple_stitch</code></td><td>P1 (M3)</td><td><a href="#running_stitch_tolerance_mm">deviates</a></td></tr>
 <tr><td><code>enable_random_stitch_length</code></td><td>boolean</td><td>—</td><td>false</td><td><code>running_stitch</code>, <code>ripple_stitch</code></td><td>P1 (M3)</td><td><a href="#enable_random_stitch_length">registered</a></td></tr>
 <tr><td><code>random_stitch_length_jitter_percent</code></td><td>float</td><td>± %</td><td>10</td><td><code>running_stitch</code>, <code>ripple_stitch</code></td><td>P1 (M3)</td><td><a href="#random_stitch_length_jitter_percent">registered</a></td></tr>
 <tr><td><code>max_stitch_length_mm</code></td><td>float</td><td>mm</td><td>—</td><td><code>manual_stitch</code></td><td>P1 (M3)</td><td><a href="#max_stitch_length_mm">registered</a></td></tr>
@@ -5616,10 +5711,10 @@ stitches once its stitch type or feature lands (see <em>Phase</em> and the param
 <tr><td><code>reverse_rails</code></td><td>combo</td><td>—</td><td>automatic</td><td>all</td><td>P1 (M4)</td><td><a href="#reverse_rails">registered</a></td></tr>
 <tr><td><code>swap_satin_rails</code></td><td>boolean</td><td>—</td><td>false</td><td>all</td><td>P1 (M4)</td><td><a href="#swap_satin_rails">registered</a></td></tr>
 <tr><td><code>running_stitch_length_mm</code></td><td>float</td><td>mm</td><td>2.5</td><td>all</td><td>P1 (M4)</td><td><a href="#running_stitch_length_mm">registered</a></td></tr>
-<tr><td><code>running_stitch_tolerance_mm</code></td><td>float</td><td>mm</td><td>0.1</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
-<tr><td><code>running_stitch_position</code></td><td>float</td><td>%</td><td>50</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
-<tr><td><code>start_at_nearest_point</code></td><td>boolean</td><td>—</td><td>true</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
-<tr><td><code>end_at_nearest_point</code></td><td>boolean</td><td>—</td><td>true</td><td>all</td><td>P1 (M4)</td><td>planned</td></tr>
+<tr><td><code>running_stitch_tolerance_mm</code></td><td>float</td><td>mm</td><td>0.1</td><td>all</td><td>P1 (M4)</td><td><a href="#running_stitch_tolerance_mm">deviates</a></td></tr>
+<tr><td><code>running_stitch_position</code></td><td>float</td><td>%</td><td>50</td><td>all</td><td>P1 (M4)</td><td><a href="#running_stitch_position">registered</a></td></tr>
+<tr><td><code>start_at_nearest_point</code></td><td>boolean</td><td>—</td><td>true</td><td>all</td><td>P1 (M4)</td><td><a href="#start_at_nearest_point">registered</a></td></tr>
+<tr><td><code>end_at_nearest_point</code></td><td>boolean</td><td>—</td><td>true</td><td>all</td><td>P1 (M4)</td><td><a href="#end_at_nearest_point">registered</a></td></tr>
 <tr><td><code>contour_underlay</code></td><td>toggle</td><td>—</td><td>—</td><td>all</td><td>P1 (M4)</td><td><a href="#contour_underlay">registered</a></td></tr>
 <tr><td><code>contour_underlay_stitch_length_mm</code></td><td>float</td><td>mm</td><td>3</td><td>all</td><td>P1 (M4)</td><td><a href="#contour_underlay_stitch_length_mm">registered</a></td></tr>
 <tr><td><code>contour_underlay_stitch_tolerance_mm</code></td><td>float</td><td>mm</td><td>0.2</td><td>all</td><td>P1 (M4)</td><td><a href="#contour_underlay_stitch_tolerance_mm">registered</a></td></tr>
@@ -5797,7 +5892,7 @@ patterns, stitch plan or sew stack, and legacy names Ink/Stitch’s updater rewr
 </tbody>
 </table>
 </div>
-<p><em>145 parameter declarations, 60 registered in StitchCraft.</em></p>
+<p><em>145 parameter declarations, 64 registered in StitchCraft.</em></p>
 <div style="break-before: page; page-break-before: always;"></div>
 <h1 id="architecture-decision-records"><a class="header" href="#architecture-decision-records">Architecture decision records</a></h1>
 <p>Short records of decisions that shape the code, with their context and the alternatives we rejected.
@@ -5822,6 +5917,7 @@ supersedes the old one.</p>
 <tr><td><a href="#adr-0011-stitchcraft-can-move-into-vectorcrafts-repository">0011</a></td><td>StitchCraft can move into VectorCraft’s repository</td><td>Accepted</td></tr>
 <tr><td><a href="#adr-0012-read-inkstitchs-source-never-copy-it">0012</a></td><td>Read Ink/Stitch’s source, never copy it</td><td>Accepted</td></tr>
 <tr><td><a href="#adr-0013-the-reference-machine-is-a-brother-pe800-with-a-profile-for-each-of-its-hoops">0013</a></td><td>The reference machine is a Brother PE800, with a profile for each of its hoops</td><td>Accepted</td></tr>
+<tr><td><a href="#adr-0014-generators-see-their-neighbours-the-needle-before-the-next-element-after">0014</a></td><td>Generators see their neighbours: the needle before, the next element after</td><td>Accepted</td></tr>
 </tbody>
 </table>
 </div>
@@ -6310,6 +6406,51 @@ Rejected.</li>
 Rejected until a sew-out report gives one.</li>
 </ul>
 <div style="break-before: page; page-break-before: always;"></div>
+<h1 id="adr-0014-generators-see-their-neighbours-the-needle-before-the-next-element-after"><a class="header" href="#adr-0014-generators-see-their-neighbours-the-needle-before-the-next-element-after">ADR-0014: Generators see their neighbours: the needle before, the next element after</a></h1>
+<!-- The status line, a label and its value, which the ADR index is checked against. -->
+<!-- vale ai-tells.ColonUsage = NO -->
+<p><strong>Status:</strong> Accepted · 2026-10-10</p>
+<!-- vale ai-tells.ColonUsage = YES -->
+<h2 id="context-13"><a class="header" href="#context-13">Context</a></h2>
+<p>The engine pipeline’s design generated each element on its own. The previous element’s geometry was to
+suggest where the next one starts, and no generator was to wait for another’s stitches, so elements could
+be generated in parallel and cached (<a href="#engine-pipeline">engine pipeline</a>).</p>
+<p>Ink/Stitch, whose files StitchCraft sews alike, does otherwise. A satin column starts at the point of its
+line nearest where the elements before it left the needle: their last stitch, which only generating them
+gives. It ends at the point of its outline nearest where the next element starts, which the next
+element’s shape and settings say. Both are on by default (<code>start_at_nearest_point</code>,
+<code>end_at_nearest_point</code>), and fills do the same from M5. A start taken from the previous element’s
+geometry differs from Ink/Stitch’s whenever that element ends somewhere its geometry does not say. A satin
+column that ends at its nearest point is one such element. Fills and running stitches sewn there and back
+are others.</p>
+<h2 id="decision-12"><a class="header" href="#decision-12">Decision</a></h2>
+<ol>
+<li>Elements are generated in sewing order. Each is given the last needle point of the elements before it
+that sew any, whatever their thread.</li>
+<li>Each is also given what the next element in the design offers to end near: its first point, or its
+shape when it starts at its own nearest point. The offer depends on the next element’s shape and
+settings only, never on its stitches, so no element waits for a later one.</li>
+<li>Generators are pure functions of their shape, parameters, these 2 neighbours, seed and budget.</li>
+<li>Where an element’s stitch type is known, it offers what Ink/Stitch’s would, even before StitchCraft
+sews that type. Fills offer nothing until they are sewn (M5), and the column before a fill ends as if
+it were the last element.</li>
+</ol>
+<h2 id="consequences-13"><a class="header" href="#consequences-13">Consequences</a></h2>
+<ul>
+<li>Generation is sequential. Each element still has its own budget, and a cache keyed on an element’s
+inputs includes its 2 neighbours.</li>
+<li>Moving, adding or removing an element can change the stitches of the elements beside it, as in
+Ink/Stitch.</li>
+<li>Start and end commands, read from M8, take the place of the neighbours they override.</li>
+</ul>
+<h2 id="alternatives-considered-8"><a class="header" href="#alternatives-considered-8">Alternatives considered</a></h2>
+<ul>
+<li><strong>Start from the previous element’s geometry:</strong> keeps generation parallel, but sews differently from
+Ink/Stitch wherever an element does not end where its shape suggests. Rejected: files must sew alike.</li>
+<li><strong>Generate twice,</strong> first in parallel without neighbours and then again with them. Every element whose
+start depends on the one before still waits for it. The second pass is sequential anyway. Rejected.</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div>
 <h1 id="roadmap-small-steps-to-the-final-project"><a class="header" href="#roadmap-small-steps-to-the-final-project">Roadmap: small steps to the final project</a></h1>
 <p>Each <strong>step</strong> is one pull request: small, reviewable, with its tests, conformance cases and docs. Each
 <strong>milestone</strong> ends with green gates and, where it produces something sewable, a <strong>machine checkpoint</strong>
@@ -6414,7 +6555,7 @@ of code) · 🧵 machine checkpoint · 👤 owner action</p>
 <tr><td>M4.4 ✅</td><td>Short stitches on curves</td><td><code>REQ-SAT-009</code>, a case set on tight curves</td></tr>
 <tr><td>M4.5 ✅</td><td>Split stitches (simple, staggered, random)</td><td><code>REQ-SAT-003</code></td></tr>
 <tr><td>M4.6 ✅</td><td>Underlays: centre walk, contour, zigzag</td><td><code>REQ-SAT-004</code>, <code>REQ-SAT-010</code> to <code>REQ-SAT-012</code></td></tr>
-<tr><td>M4.7</td><td>Start/end nearest point; hints</td><td><code>REQ-GEN-001</code> for satin</td></tr>
+<tr><td>M4.7 ✅</td><td>Start/end nearest point; generators see their neighbours (ADR 0014)</td><td><code>REQ-GEN-003</code>, <code>REQ-SAT-013</code>, <code>REQ-SAT-014</code></td></tr>
 <tr><td>M4.8</td><td>Single-path satin (centre line + width)</td><td>cases</td></tr>
 <tr><td>MC-3 🧵</td><td><strong>TS-05</strong> (width ladder 1 to 10 mm × 3 densities), <strong>TS-06</strong> (underlay comparison); kit: <code>stitch testsheet</code> for each, sewable from M4.6</td><td>report filed; satin defaults tuned</td></tr>
 </tbody>
@@ -6558,14 +6699,14 @@ cases, or bugs. Every profile change links its report.</li>
 <tr><td><strong>TS-02B</strong> Commands, from elements</td><td>TS-02 drawn as a design and planned by the engine. Each red dash but the last sets a trim after it (<code>trim_after</code>). The blue ones set none, and the 2 mm gap between them is sewn across, because it is within the 3 mm collapse length. The green line stops halfway (<code>stop_after</code>). The stitching has a lock wherever it starts or ends (120 × 70 mm)</td><td>The same as TS-02, and whether the thread of each dash pulls out where it was cut</td><td>MC-2</td></tr>
 <tr><td><strong>TS-03</strong> Running stitch</td><td>Lines at 1.5, 2.0, 2.5, 3.0 and 4.0 mm stitch length, bean 1× and 2×, circles at tolerances of 0.1, 0.2 and 0.5 mm, and 20 stitches placed by hand at 0.3, 0.4, 0.5, 0.7 and 1.0 mm (60 × 78 mm)</td><td>Even stitches, smooth curves, solid bean lines, and the shortest hand-placed stitch that sews cleanly</td><td>MC-2</td></tr>
 <tr><td><strong>TS-04</strong> Lock stitches</td><td>Lines about 30 mm long with every lock shape but custom at both ends, trimmed after: the half stitch on first stitches of 1.5, 2.5 and 4 mm, back-and-forth at 0.5, 0.7 and 1.0 mm, drawn shapes at 70, 100 and 150 % (110 × 65 mm)</td><td>Pull each tail gently: does the lock stay, or does the thread pull out? Is the lock visible from the front?</td><td>MC-2</td></tr>
-<tr><td><strong>TS-05</strong> Satin width ladder</td><td>3 rows at zigzag spacings of 0.3, 0.4 and 0.5 mm, each of 10 columns 20 mm tall and 1 to 10 mm wide, with no underlay (91 × 76 mm)</td><td>Coverage, fabric showing between stitches, edges straight, long stitches loose, how much narrower than drawn</td><td>MC-3</td></tr>
-<tr><td><strong>TS-06</strong> Satin underlays</td><td>The same column, 6 mm wide and 30 mm tall, with no underlay, a centre walk, a contour, a zigzag, and a contour with a zigzag (62 × 30 mm)</td><td>Edge sharpness, loft, puckering, underlay showing</td><td>MC-3</td></tr>
+<tr><td><strong>TS-05</strong> Satin width ladder</td><td>3 rows at zigzag spacings of 0.3, 0.4 and 0.5 mm, each of 10 columns 20 mm tall and 1 to 10 mm wide, with no underlay (91 × 76 mm). Each column is sewn as drawn, from its top, and trimmed after</td><td>Coverage, fabric showing between stitches, edges straight, long stitches loose, how much narrower than drawn</td><td>MC-3</td></tr>
+<tr><td><strong>TS-06</strong> Satin underlays</td><td>The same column, 6 mm wide and 30 mm tall, with no underlay, a centre walk, a contour, a zigzag, and a contour with a zigzag (62 × 30 mm). Each column is sewn as drawn, from its top, and trimmed after</td><td>Edge sharpness, loft, puckering, underlay showing</td><td>MC-3</td></tr>
 <tr><td><strong>TS-07</strong> Registration</td><td>A 60 mm tatami circle with a running-stitch outline; at three pull-compensation values</td><td>Gap or overlap between fill and outline at 12 points around the circle</td><td>MC-4</td></tr>
 <tr><td><strong>TS-08</strong> Fill density &amp; angle</td><td>30 mm squares at spacing 0.25–0.6 mm and angles 0°, 45°, 90°</td><td>Coverage, stiffness, puckering, visible furrows</td><td>MC-4</td></tr>
 <tr><td><strong>TS-09</strong> Fill underlay &amp; travel</td><td>A shape with holes and a separated part; with and without underlay</td><td>Travel hidden? Trims between parts? Holes clean?</td><td>MC-4</td></tr>
 <tr><td><strong>TS-10A/B/C</strong> Hoop size</td><td>Frames of 100 × 100 mm (A, the 4 × 4 in hoop), 130 × 180 mm (B, the 5 × 7 in) and 20 × 60 mm (C, the small hoop), each as large as its hoop’s field, with a centre cross and an “F” in the top-left corner</td><td>The machine takes each design in its hoop without asking for a larger one, and sews it to size. The small hoop’s field is the right way round</td><td>MC-1, MC-5</td></tr>
 <tr><td><strong>TS-11</strong> New stitch types</td><td>Samples of the milestone’s new types</td><td>Per type, as listed on its expected-result sheet</td><td>MC-6</td></tr>
-<tr><td><strong>TS-12</strong> Real design</td><td>A design up to 130 × 180 mm authored in VectorCraft with fill, satin, running stitch and 3 colours</td><td>Overall quality, registration between colours, and time against the estimate</td><td>MC-5, MC-7</td></tr>
+<tr><td><strong>TS-12</strong> Real design</td><td>A design up to 130 × 180 mm authored in VectorCraft with fill, satin, running stitch and 3 colours</td><td>Overall quality, registration between colours, and time against the estimate. Satin columns start and end at their nearest points: is the way the needle takes under them hidden?</td><td>MC-5, MC-7</td></tr>
 </tbody>
 </table>
 </div>

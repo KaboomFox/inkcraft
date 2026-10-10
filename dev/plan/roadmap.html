@@ -35,10 +35,10 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-f5cee43d.js";
+            window.path_to_searchindex_js = "../searchindex-623d53c3.js";
         </script>
         <!-- Start loading toc.js asap -->
-        <script src="../toc-c8bf69c1.js"></script>
+        <script src="../toc-67ac7601.js"></script>
     </head>
     <body>
     <div id="mdbook-help-container">
@@ -284,7 +284,7 @@ of code) · 🧵 machine checkpoint · 👤 owner action</p>
 <tr><td>M4.4 ✅</td><td>Short stitches on curves</td><td><code>REQ-SAT-009</code>, a case set on tight curves</td></tr>
 <tr><td>M4.5 ✅</td><td>Split stitches (simple, staggered, random)</td><td><code>REQ-SAT-003</code></td></tr>
 <tr><td>M4.6 ✅</td><td>Underlays: centre walk, contour, zigzag</td><td><code>REQ-SAT-004</code>, <code>REQ-SAT-010</code> to <code>REQ-SAT-012</code></td></tr>
-<tr><td>M4.7</td><td>Start/end nearest point; hints</td><td><code>REQ-GEN-001</code> for satin</td></tr>
+<tr><td>M4.7 ✅</td><td>Start/end nearest point; generators see their neighbours (ADR 0014)</td><td><code>REQ-GEN-003</code>, <code>REQ-SAT-013</code>, <code>REQ-SAT-014</code></td></tr>
 <tr><td>M4.8</td><td>Single-path satin (centre line + width)</td><td>cases</td></tr>
 <tr><td>MC-3 🧵</td><td><strong>TS-05</strong> (width ladder 1 to 10 mm × 3 densities), <strong>TS-06</strong> (underlay comparison); kit: <code>stitch testsheet</code> for each, sewable from M4.6</td><td>report filed; satin defaults tuned</td></tr>
 </tbody>
@@ -373,7 +373,7 @@ in-tree VectorCraft crate if wanted.</p>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="../design/adr/0013-brother-pe800-reference-machine.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../design/adr/0014-generators-see-their-neighbours.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                             </a>
 
@@ -387,7 +387,7 @@ in-tree VectorCraft crate if wanted.</p>
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="../design/adr/0013-brother-pe800-reference-machine.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../design/adr/0014-generators-see-their-neighbours.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z"/></svg></span>
                     </a>
 

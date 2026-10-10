@@ -35,7 +35,7 @@
             const path_to_root = "../";
             const default_light_theme = "light";
             const default_dark_theme = "navy";
-            window.path_to_searchindex_js = "../searchindex-ae51b88f.js";
+            window.path_to_searchindex_js = "../searchindex-29d6be49.js";
         </script>
         <!-- Start loading toc.js asap -->
         <script src="../toc-89d89d66.js"></script>
@@ -190,7 +190,9 @@ embroidery machine with a 200 × 200 mm (8 × 8 in) hoop, designs normally kept 
 <li><strong>StitchCraft generates</strong> each test sheet deterministically: <code>stitch testsheet TS-xx --profile brother-200x200 -o TS-xx.pes</code> prints the file’s SHA-256, its size and counts, the threads the machine
 will ask for (with the Brother palette name it will show) and what to check after sewing. From M2.7 it
 also writes a picture of the expected result; until then, previews are drawn by the conformance tooling.
-<code>stitch testsheet --list</code> lists the sheets.</li>
+<code>stitch testsheet --list</code> lists the sheets. The MC-1 sheets are drawn stitch by stitch, to test the
+machine and the file formats; from MC-2, sheets are drawn as designs and planned by the engine, so
+sewing them tests its stitches, locks and plan assembly too.</li>
 <li><strong>The tester sews</strong> it with the standard setup below, photographs it, measures it, and files a
 <strong>Sew-out report</strong> issue (the form asks for everything on this page).</li>
 <li><strong>A maintainer turns the report into changes</strong>: profile values, parameter defaults, new conformance
@@ -231,8 +233,9 @@ cases, or bugs. Every profile change links its report.</li>
 <tbody>
 <tr><td><strong>TS-01</strong> Orientation &amp; scale</td><td>An asymmetric “F”, a 100 mm cross with 10 mm ticks, 10 mm squares in the corners (120 × 120 mm)</td><td>F not mirrored or rotated; 100 mm line = 100.0 ± 0.5 mm in X and Y; squares square</td><td>MC-1</td></tr>
 <tr><td><strong>TS-02</strong> Commands</td><td>Three colour blocks; a stop; rows of two dashes separated by jumps of 2, 5, 15, 40 mm; trims encoded as trim-flagged jumps on the left half (red) and as plain jumps only on the right (blue) (140 × 70 mm)</td><td>The machine stops for colours and the stop; which jumps were trimmed on each half; any loose loops</td><td>MC-1, MC-2</td></tr>
-<tr><td><strong>TS-03</strong> Running stitch</td><td>Lines at 1.5, 2.0, 2.5, 3.0, 4.0 mm stitch length; bean 1×, 2×; curves at three tolerances</td><td>Even stitches; curves smooth; bean lines solid</td><td>MC-2</td></tr>
-<tr><td><strong>TS-04</strong> Lock stitches</td><td>Short lines with every lock shape at both ends, trimmed after: the half stitch on first stitches of 1.5, 2.5 and 4 mm, back-and-forth at 0.5, 0.7 and 1.0 mm, drawn shapes at 70, 100 and 150 %</td><td>Pull each tail gently: does the lock stay, or does the thread pull out? Is the lock visible from the front?</td><td>MC-2</td></tr>
+<tr><td><strong>TS-02B</strong> Commands, from elements</td><td>TS-02 drawn as a design and planned by the engine. Each red dash but the last sets a trim after it (<code>trim_after</code>). The blue ones set none, and the 2 mm gap between them is sewn across, because it is within the 3 mm collapse length. The green line stops halfway (<code>stop_after</code>). The stitching has a lock wherever it starts or ends (140 × 70 mm)</td><td>The same as TS-02, and whether the thread of each dash pulls out where it was cut</td><td>MC-2</td></tr>
+<tr><td><strong>TS-03</strong> Running stitch</td><td>Lines at 1.5, 2.0, 2.5, 3.0 and 4.0 mm stitch length, bean 1× and 2×, circles at tolerances of 0.1, 0.2 and 0.5 mm, and 20 stitches placed by hand at 0.3, 0.4, 0.5, 0.7 and 1.0 mm (60 × 78 mm)</td><td>Even stitches, smooth curves, solid bean lines, and the shortest hand-placed stitch that sews cleanly</td><td>MC-2</td></tr>
+<tr><td><strong>TS-04</strong> Lock stitches</td><td>Lines about 30 mm long with every lock shape but custom at both ends, trimmed after: the half stitch on first stitches of 1.5, 2.5 and 4 mm, back-and-forth at 0.5, 0.7 and 1.0 mm, drawn shapes at 70, 100 and 150 % (110 × 65 mm)</td><td>Pull each tail gently: does the lock stay, or does the thread pull out? Is the lock visible from the front?</td><td>MC-2</td></tr>
 <tr><td><strong>TS-05</strong> Satin width ladder</td><td>Columns 1–10 mm wide at three spacings (0.3, 0.4, 0.5 mm)</td><td>Coverage, fabric showing between stitches, edges straight, long stitches loose</td><td>MC-3</td></tr>
 <tr><td><strong>TS-06</strong> Satin underlays</td><td>The same 6 mm column with no underlay, centre walk, contour, zigzag, contour+zigzag</td><td>Edge sharpness, loft, puckering</td><td>MC-3</td></tr>
 <tr><td><strong>TS-07</strong> Registration</td><td>A 60 mm tatami circle with a running-stitch outline; at three pull-compensation values</td><td>Gap or overlap between fill and outline at 12 points around the circle</td><td>MC-4</td></tr>
@@ -252,7 +255,7 @@ cases, or bugs. Every profile change links its report.</li>
 </thead>
 <tbody>
 <tr><td>MC-1</td><td>M1</td><td>TS-01, TS-02, TS-10A/B/C</td><td>Does the machine read our PES? Right size and orientation? Which trim encoding works? Are 150 and 190 mm designs accepted from PES v1?</td></tr>
-<tr><td>MC-2</td><td>M3</td><td>TS-03, TS-04, TS-02</td><td>Minimum stitch length and lock defaults?</td></tr>
+<tr><td>MC-2</td><td>M3</td><td>TS-03, TS-04, TS-02B</td><td>Minimum stitch length and lock defaults? Does the machine trim where an element asks?</td></tr>
 <tr><td>MC-3</td><td>M4</td><td>TS-05, TS-06</td><td>Satin spacing, width limits, underlay defaults, pull compensation</td></tr>
 <tr><td>MC-4</td><td>M5</td><td>TS-07, TS-08, TS-09</td><td>Fill spacing, compensation, underlay and travel defaults</td></tr>
 <tr><td>MC-5</td><td>M6</td><td>TS-12, TS-10</td><td>Is the VectorCraft workflow complete and correct?</td></tr>
